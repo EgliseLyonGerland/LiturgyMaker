@@ -1,15 +1,38 @@
 import React from "react";
-import * as firebase from "firebase/app";
-import withFirebaseAuth from "react-with-firebase-auth";
-import firebaseConfig from "./config/firebase.json";
-import "firebase/auth";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
 
 import Auth from "./components/Auth";
+import Form from "./components/Form";
+import FirebaseContext from "./components/FirebaseContext";
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const firebaseAppAuth = firebaseApp.auth();
+const useStyles = makeStyles(theme => ({
+  root: {
+    marginBottom: theme.spacing(6)
+  },
+  header: {
+    background: "linear-gradient(344deg, #0077d1 0%, #0091ff 100%)",
+    height: 184,
+    marginBottom: -48
+  },
+  content: {
+    maxWidth: 770,
+    margin: [[0, "auto"]]
+  },
+  pageTitle: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 32
+  },
+  inner: {
+    padding: theme.spacing(6, 0)
+  }
+}));
 
 function App({ user, signInWithEmailAndPassword, signOut }) {
+  const classes = useStyles();
+
   if (typeof user === "undefined") {
     return null;
   }
@@ -18,7 +41,30 @@ function App({ user, signInWithEmailAndPassword, signOut }) {
     return <Auth onSubmit={signInWithEmailAndPassword} />;
   }
 
-  return <div>Logged</div>;
+  return (
+    <FirebaseContext.Consumer>
+      {firebase => (
+        <div className={classes.root}>
+          <div className={classes.header}>
+            <div className={classes.content}>
+              <Typography
+                color="inherit"
+                className={classes.pageTitle}
+                variant="h4"
+              ></Typography>
+            </div>
+          </div>
+          <div className={classes.content}>
+            <Paper elevation={5} square>
+              <div className={classes.inner}>
+                <Form firebase={firebase} />
+              </div>
+            </Paper>
+          </div>
+        </div>
+      )}
+    </FirebaseContext.Consumer>
+  );
 }
 
-export default withFirebaseAuth({ firebaseAppAuth })(App);
+export default App;
