@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 
 export default ({ block, onChange }) => {
   const classes = useStyles();
-  let items = block.value;
+  let items = block.data;
 
   const getDefaultItem = () => ({ title: "", detail: "" });
 

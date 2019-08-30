@@ -10,23 +10,23 @@ const useStyles = makeStyles(theme => ({
 
 export default ({ block, onChange }) => {
   const classes = useStyles();
-  const { value } = block;
-  const { title = "", bibleRefs = [] } = value;
+  const { data } = block;
+  const { title = "", bibleRefs = [] } = data;
 
-  const getDefaultItem = () => ({ bibleRef: "", excerpt: "" });
+  const getDefaultItem = () => ({ ref: "", excerpt: "" });
 
   const handleChange = (key, index, value) => {
-    value.bibleRefs[index][key] = value;
-    onChange(value);
+    data.bibleRefs[index][key] = value;
+    onChange(data);
   };
 
   const renderItem = (item, index) => (
     <div className={classes.item}>
       <TextField
         label="Référence biblique"
-        value={item.bibleRef}
-        onChange={event => {
-          handleChange("bibleRef", index, event.target.value);
+        value={item.ref}
+        onChange={({ target }) => {
+          handleChange("ref", index, target.value);
         }}
         variant="filled"
         margin="dense"
@@ -35,8 +35,8 @@ export default ({ block, onChange }) => {
       <TextField
         label="Extrait"
         value={item.excerpt}
-        onChange={event => {
-          handleChange("excerpt", index, event.target.value);
+        onChange={({ target }) => {
+          handleChange("excerpt", index, target.value);
         }}
         variant="filled"
         margin="dense"
@@ -53,10 +53,10 @@ export default ({ block, onChange }) => {
         items={bibleRefs}
         renderItem={renderItem}
         onChange={refs => {
-          value.bibleRefs = refs;
-          onChange(value);
+          data.bibleRefs = refs;
+          onChange(data);
         }}
-        isItemEmpty={item => !item.bibleRef && !item.excerpt}
+        isItemEmpty={item => !item.ref && !item.excerpt}
         getDefaultItem={getDefaultItem}
         gutters={2}
         neverEmpty

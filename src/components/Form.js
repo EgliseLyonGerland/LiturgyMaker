@@ -31,58 +31,58 @@ const defaultBlocks = [
   {
     id: uuid(),
     type: "announcements",
-    value: []
+    data: []
   },
   {
     id: uuid(),
     type: "reading",
-    value: {
+    data: {
       title: "Ouverture"
     }
   },
   {
     id: uuid(),
     type: "songs",
-    value: []
+    data: []
   },
   {
     id: uuid(),
     type: "reading",
-    value: {
+    data: {
       title: "Loi de Dieu"
     }
   },
   {
     id: uuid(),
     type: "songs",
-    value: []
+    data: []
   },
   {
     id: uuid(),
     type: "reading",
-    value: {
+    data: {
       title: "Grâce de Dieu"
     }
   },
   {
     id: uuid(),
     type: "songs",
-    value: []
+    data: []
   },
   {
     id: uuid(),
     type: "sermon",
-    value: {}
+    data: {}
   },
   {
     id: uuid(),
     type: "songs",
-    value: []
+    data: []
   },
   {
     id: uuid(),
     type: "reading",
-    value: {
+    data: {
       title: "Envois"
     }
   }
@@ -105,8 +105,8 @@ export default ({ firebase }) => {
     return (
       <Component
         block={block}
-        onChange={value => {
-          blocks[index].value = value;
+        onChange={data => {
+          blocks[index].data = data;
           setBlocks([...blocks]);
         }}
       />

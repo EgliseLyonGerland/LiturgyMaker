@@ -18,8 +18,8 @@ const useStyles = makeStyles(theme => ({
 
 export default ({ block, onChange }) => {
   const classes = useStyles();
-  const { value } = block;
-  const { title, author, bibleRefs = [], plan = [] } = value;
+  const { data } = block;
+  const { title, author, bibleRefs = [], plan = [] } = data;
 
   const getDefaultBibleRef = () => "";
 
@@ -29,8 +29,8 @@ export default ({ block, onChange }) => {
         label="Référence biblique"
         value={ref}
         onChange={({ target }) => {
-          value.bibleRefs[index] = target.value;
-          onChange(value);
+          data.bibleRefs[index] = target.value;
+          onChange(data);
         }}
         variant="filled"
         margin="dense"
@@ -45,8 +45,8 @@ export default ({ block, onChange }) => {
         label="Title"
         defaultValue={title}
         onChange={({ target }) => {
-          value.title = target.value;
-          onChange(value);
+          data.title = target.value;
+          onChange(data);
         }}
         variant="filled"
         margin="dense"
@@ -56,8 +56,8 @@ export default ({ block, onChange }) => {
         label="Auteur"
         defaultValue={author}
         onChange={({ target }) => {
-          value.author = target.value;
-          onChange(value);
+          data.author = target.value;
+          onChange(data);
         }}
         variant="filled"
         margin="dense"
@@ -72,8 +72,8 @@ export default ({ block, onChange }) => {
         items={bibleRefs}
         renderItem={renderBibleRef}
         onChange={refs => {
-          value.bibleRefs = refs;
-          onChange(value);
+          data.bibleRefs = refs;
+          onChange(data);
         }}
         isItemEmpty={ref => !!ref}
         getDefaultItem={getDefaultBibleRef}
@@ -87,8 +87,8 @@ export default ({ block, onChange }) => {
       <SermonPlanPicker
         items={plan}
         onChange={items => {
-          value.plan = items;
-          onChange(value);
+          data.plan = items;
+          onChange(data);
         }}
       />
     </Block>
