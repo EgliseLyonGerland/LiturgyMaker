@@ -48,7 +48,7 @@ const defaultBlocks = [
   {
     id: uuid(),
     type: "songs",
-    value: [{ title: "Nous t'adorons, ô père", number: 123 }]
+    value: [{ title: "Nous t'adorons, ô père (107)" }]
   }
 ];
 
@@ -78,8 +78,6 @@ export default ({ firebase }) => {
   const renderDivider = () => {
     return <div className={classes.divider} />;
   };
-
-  console.log(blocks);
 
   return (
     <div>

@@ -10,14 +10,18 @@ import {
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
 import Block from "../Block";
+import TextFieldSuggest from "../TextFieldSuggest";
+
+import songs from "../../config/songs.json";
 
 const useStyles = makeStyles(theme => ({
   root: {},
   item: {
     display: "grid",
-    gridTemplateColumns: "auto 1fr 100px auto",
+    gridTemplateColumns: "auto 1fr auto",
     gridColumnGap: theme.spacing(2),
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: theme.spacing(2)
   }
 }));
 
@@ -38,7 +42,7 @@ export default ({ block, onChange }) => {
   let items = block.value;
 
   const isItemEmpty = item => {
-    return !item.title && !item.number;
+    return !item.title && !item.comments;
   };
 
   const isLastItemEmpty = items$ => {
@@ -46,7 +50,7 @@ export default ({ block, onChange }) => {
   };
 
   if (!isLastItemEmpty(items)) {
-    items = [...items, { title: "", number: "" }];
+    items = [...items, { title: "", comments: "" }];
   }
 
   const sendChange = newItems => {
@@ -76,24 +80,16 @@ export default ({ block, onChange }) => {
       <SortableContainer onSortEnd={handleSortEnd} useDragHandle>
         {items.map((item, index) => (
           <SortableItem key={index} index={index} classes={classes}>
-            <TextField
+            <TextFieldSuggest
               label="Titre"
               value={item.title}
-              onChange={event =>
-                handleChange("title", index, event.target.value)
-              }
+              onChange={value => {
+                handleChange("title", index, value);
+              }}
               variant="filled"
               margin="dense"
-              fullWidth
-            />
-            <TextField
-              label="Numéro"
-              value={item.number}
-              onChange={event =>
-                handleChange("number", index, event.target.value)
-              }
-              variant="filled"
-              margin="dense"
+              items={songs}
+              field="title"
               fullWidth
             />
             {index === items.length - 1 && isItemEmpty(item) ? (
@@ -104,6 +100,19 @@ export default ({ block, onChange }) => {
                 onClick={() => handleDelete(index)}
               />
             )}
+            <div />
+            <TextField
+              label="Commentaires"
+              value={item.comments}
+              onChange={event => {
+                handleChange("comments", index, event.target.value);
+              }}
+              variant="filled"
+              margin="dense"
+              fullWidth
+              multiline
+            />
+            <div />
           </SortableItem>
         ))}
       </SortableContainer>

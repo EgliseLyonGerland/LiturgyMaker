@@ -9,7 +9,7 @@ import FirebaseContext from "./components/FirebaseContext";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginBottom: theme.spacing(6)
+    marginBottom: theme.spacing(20)
   },
   header: {
     background: "linear-gradient(344deg, #0077d1 0%, #0091ff 100%)",
