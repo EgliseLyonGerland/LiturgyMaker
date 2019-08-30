@@ -59,6 +59,7 @@ export default ({ block, onChange }) => {
         onChange={onChange}
         isItemEmpty={item => !item.bibleRef && !item.excerpt}
         getDefaultItem={getDefaultItem}
+        gutters={2}
       />
     </Block>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {
@@ -13,7 +13,6 @@ const useStyles = makeStyles(theme => ({
   root: {},
   item: {
     position: "relative",
-    marginBottom: theme.spacing(2),
     display: "grid",
     gridTemplateColumns: "1fr auto",
     gridColumnGap: theme.spacing(2)
@@ -37,8 +36,8 @@ const DragHandle = sortableHandle(({ classes }) => (
   <DragHandleIcon color="disabled" className={classes.handle} />
 ));
 
-const SortableItem = sortableElement(({ children, classes }) => (
-  <div className={classes.item}>
+const SortableItem = sortableElement(({ children, style, classes }) => (
+  <div className={classes.item} style={style}>
     <DragHandle classes={classes} />
     {children}
   </div>
@@ -49,9 +48,11 @@ export default ({
   renderItem,
   onChange,
   isItemEmpty,
-  getDefaultItem
+  getDefaultItem,
+  gutters = 0
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
 
   const isLastItemEmpty = items$ => {
     return isItemEmpty(items$[items$.length - 1]);
@@ -81,7 +82,14 @@ export default ({
   return (
     <SortableContainer onSortEnd={handleSortEnd} useDragHandle>
       {items.map((item, index) => (
-        <SortableItem key={index} index={index} classes={classes}>
+        <SortableItem
+          key={index}
+          index={index}
+          classes={classes}
+          style={{
+            marginBottom: theme.spacing(gutters)
+          }}
+        >
           {renderItem(item, index)}
 
           {index === items.length - 1 && isItemEmpty(item) ? (

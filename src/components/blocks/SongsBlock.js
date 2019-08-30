@@ -47,6 +47,7 @@ export default ({ block, onChange }) => {
         }}
         variant="filled"
         margin="dense"
+        gutters={2}
         fullWidth
         multiline
       />
