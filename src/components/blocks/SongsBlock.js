@@ -49,7 +49,7 @@ export default ({ block, onChange }) => {
     return isItemEmpty(items$[items$.length - 1]);
   };
 
-  if (!isLastItemEmpty(items)) {
+  if (!items.length || !isLastItemEmpty(items)) {
     items = [...items, { title: "", comments: "" }];
   }
 

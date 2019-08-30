@@ -26,29 +26,31 @@ const defaultBlocks = [
     id: uuid(),
     type: "announcements",
     value: [
-      {
-        title: "Dimanche 8 septembre",
-        detail: "Culte à 10h au théâtre « Lulu sur la colline »"
-      },
-      {
-        title: "Groupes de maison",
-        detail: "Reprise la semaine du 16 septembre"
-      },
-      {
-        title: "Retraite de rentrée au Chatelard",
-        detail:
-          "Samedi 14 septembre, accueil/café à 9h30.\nPlus d’info sur http://www.chatelard-sj.org"
-      },
-      {
-        title: "Groupe d’ados",
-        detail: "Dimanche 22 septembre à 12h30"
-      }
+      // {
+      //   title: "Dimanche 8 septembre",
+      //   detail: "Culte à 10h au théâtre « Lulu sur la colline »"
+      // },
+      // {
+      //   title: "Groupes de maison",
+      //   detail: "Reprise la semaine du 16 septembre"
+      // },
+      // {
+      //   title: "Retraite de rentrée au Chatelard",
+      //   detail:
+      //     "Samedi 14 septembre, accueil/café à 9h30.\nPlus d’info sur http://www.chatelard-sj.org"
+      // },
+      // {
+      //   title: "Groupe d’ados",
+      //   detail: "Dimanche 22 septembre à 12h30"
+      // }
     ]
   },
   {
     id: uuid(),
     type: "songs",
-    value: [{ title: "Nous t'adorons, ô père (107)" }]
+    value: [
+      // { title: "Nous t'adorons, ô père (107)" }
+    ]
   }
 ];
 
