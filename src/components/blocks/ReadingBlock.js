@@ -16,10 +16,6 @@ export default ({ block, onChange }) => {
   const getDefaultItem = () => ({ bibleRef: "", excerpt: "" });
 
   const handleChange = (key, index, value) => {
-    if (!value.bibleRefs[index]) {
-      value.bibleRefs[index] = getDefaultItem();
-    }
-
     value.bibleRefs[index][key] = value;
     onChange(value);
   };
@@ -56,10 +52,14 @@ export default ({ block, onChange }) => {
       <Sortable
         items={bibleRefs}
         renderItem={renderItem}
-        onChange={onChange}
+        onChange={refs => {
+          value.bibleRefs = refs;
+          onChange(value);
+        }}
         isItemEmpty={item => !item.bibleRef && !item.excerpt}
         getDefaultItem={getDefaultItem}
         gutters={2}
+        neverEmpty
       />
     </Block>
   );
