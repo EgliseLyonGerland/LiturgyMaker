@@ -11,21 +11,20 @@ import {
 import arrayMove from "array-move";
 
 const useStyles = makeStyles(theme => ({
-  root: {},
   item: {
-    position: "relative",
-    display: "grid",
-    gridTemplateColumns: "1fr auto",
-    gridColumnGap: theme.spacing(2)
-    // alignItems: "center"
+    position: "relative"
   },
   handle: {
     position: "absolute",
+    top: theme.spacing(2),
     right: "100%",
-    margin: theme.spacing(2, 2, 0, 0)
+    marginRight: theme.spacing(2)
   },
   trash: {
-    marginTop: theme.spacing(2)
+    position: "absolute",
+    top: theme.spacing(2),
+    left: "100%",
+    marginLeft: theme.spacing(2)
   },
   add: {
     marginTop: theme.spacing(2)
