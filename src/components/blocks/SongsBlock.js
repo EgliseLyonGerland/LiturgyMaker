@@ -14,7 +14,7 @@ export default ({ block, onChange }) => {
   const classes = useStyles();
   let items = block.value;
 
-  const getDefaultItem = () => ({ title: "", comments: "" });
+  const getDefaultItem = () => ({ title: "", infos: "" });
 
   const handleChange = (key, index, value) => {
     if (!items[index]) {
@@ -40,10 +40,10 @@ export default ({ block, onChange }) => {
         fullWidth
       />
       <TextField
-        label="Commentaires"
-        value={item.comments}
+        label="Informations"
+        value={item.infos}
         onChange={event => {
-          handleChange("comments", index, event.target.value);
+          handleChange("infos", index, event.target.value);
         }}
         variant="filled"
         margin="dense"
@@ -61,7 +61,7 @@ export default ({ block, onChange }) => {
         items={items}
         renderItem={renderItem}
         onChange={onChange}
-        isItemEmpty={item => !item.title && !item.comments}
+        isItemEmpty={item => !item.title && !item.infos}
         getDefaultItem={getDefaultItem}
       />
     </Block>
