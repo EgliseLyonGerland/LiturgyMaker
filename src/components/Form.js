@@ -59,8 +59,10 @@ const defaultBlocks = [
   {
     id: uuid(),
     type: "reading",
-    title: "Grâce de Dieu",
-    value: []
+    value: {
+      title: "Grâce de Dieu",
+      biblesRefs: []
+    }
   },
   {
     id: uuid(),

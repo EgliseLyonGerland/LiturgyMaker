@@ -2,9 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Block from "../Block";
-// import TextFieldSuggest from "../TextFieldSuggest";
 import Sortable from "../Sortable";
-import songs from "../../config/songs.json";
 
 const useStyles = makeStyles(theme => ({
   item: {}
@@ -12,17 +10,18 @@ const useStyles = makeStyles(theme => ({
 
 export default ({ block, onChange }) => {
   const classes = useStyles();
-  let items = block.value;
+  const { value } = block;
+  const { title = "", bibleRefs = [] } = value;
 
   const getDefaultItem = () => ({ bibleRef: "", excerpt: "" });
 
   const handleChange = (key, index, value) => {
-    if (!items[index]) {
-      items[index] = getDefaultItem();
+    if (!value.bibleRefs[index]) {
+      value.bibleRefs[index] = getDefaultItem();
     }
 
-    items[index][key] = value;
-    onChange(items);
+    value.bibleRefs[index][key] = value;
+    onChange(value);
   };
 
   const renderItem = (item, index) => (
@@ -53,9 +52,9 @@ export default ({ block, onChange }) => {
   );
 
   return (
-    <Block className={classes.root} title={block.title}>
+    <Block className={classes.root} title={title}>
       <Sortable
-        items={items}
+        items={bibleRefs}
         renderItem={renderItem}
         onChange={onChange}
         isItemEmpty={item => !item.bibleRef && !item.excerpt}
