@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import _ from "lodash";
 import uuid from "uuid/v1";
 
 import AnnouncementsBlock from "./blocks/AnnouncementsBlock";
 import SongsBlock from "./blocks/SongsBlock";
+import ReadingBlock from "./blocks/ReadingBlock";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    marginBottom: theme.spacing(6)
+  root: {},
+  block: {
+    marginLeft: theme.spacing(4)
   },
   divider: {
     margin: theme.spacing(4, 0),
@@ -25,38 +27,52 @@ const defaultBlocks = [
   {
     id: uuid(),
     type: "announcements",
+    value: []
+  },
+  {
+    id: uuid(),
+    type: "reading",
+    title: "Ouverture",
     value: [
       // {
-      //   title: "Dimanche 8 septembre",
-      //   detail: "Culte à 10h au théâtre « Lulu sur la colline »"
-      // },
-      // {
-      //   title: "Groupes de maison",
-      //   detail: "Reprise la semaine du 16 septembre"
-      // },
-      // {
-      //   title: "Retraite de rentrée au Chatelard",
-      //   detail:
-      //     "Samedi 14 septembre, accueil/café à 9h30.\nPlus d’info sur http://www.chatelard-sj.org"
-      // },
-      // {
-      //   title: "Groupe d’ados",
-      //   detail: "Dimanche 22 septembre à 12h30"
+      //   bibleRef: "Ésaïe 55.1-3a",
+      //   excerpt: "Ô vous tous qui avez soif, venez vers les eaux."
       // }
     ]
   },
   {
     id: uuid(),
     type: "songs",
-    value: [
-      // { title: "Nous t'adorons, ô père (107)" }
-    ]
+    value: []
+  },
+  {
+    id: uuid(),
+    type: "reading",
+    title: "Loi de Dieu",
+    value: []
+  },
+  {
+    id: uuid(),
+    type: "songs",
+    value: []
+  },
+  {
+    id: uuid(),
+    type: "reading",
+    title: "Grâce de Dieu",
+    value: []
+  },
+  {
+    id: uuid(),
+    type: "songs",
+    value: []
   }
 ];
 
 const components = {
   AnnouncementsBlock,
-  SongsBlock
+  SongsBlock,
+  ReadingBlock
 };
 
 export default ({ firebase }) => {
@@ -82,12 +98,12 @@ export default ({ firebase }) => {
   };
 
   return (
-    <div>
+    <div className={classes.root}>
       {blocks.map((block, index) => (
-        <div key={block.id}>
-          {renderBlock(block, index)}
+        <Fragment key={block.id}>
+          <div className={classes.block}>{renderBlock(block, index)}</div>
           {index + 1 < blocks.length && renderDivider()}
-        </div>
+        </Fragment>
       ))}
     </div>
   );
