@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import _ from "lodash";
 import uuid from "uuid/v1";
+import classnames from "classnames";
 
 import AnnouncementsBlock from "./blocks/AnnouncementsBlock";
 import SongsBlock from "./blocks/SongsBlock";
@@ -10,13 +11,15 @@ import ReadingBlock from "./blocks/ReadingBlock";
 const useStyles = makeStyles(theme => ({
   root: {},
   block: {
-    marginLeft: theme.spacing(4)
+    padding: theme.spacing(6, 8)
+  },
+  odd: {
+    background: "#F5F5F5"
   },
   divider: {
-    margin: theme.spacing(4, 0),
     height: 1,
     backgroundImage:
-      "linear-gradient(to right, #DDD 40%, rgba(255,255,255,0) 0%)",
+      "linear-gradient(to right, #ccc 40%, rgba(255,255,255,0) 0%)",
     backgroundPosition: "bottom",
     backgroundSize: [[15, 1]],
     backgroundRepeat: "repeat-x"
@@ -103,7 +106,13 @@ export default ({ firebase }) => {
     <div className={classes.root}>
       {blocks.map((block, index) => (
         <Fragment key={block.id}>
-          <div className={classes.block}>{renderBlock(block, index)}</div>
+          <div
+            className={classnames(classes.block, {
+              [classes.odd]: index % 2
+            })}
+          >
+            {renderBlock(block, index)}
+          </div>
           {index + 1 < blocks.length && renderDivider()}
         </Fragment>
       ))}

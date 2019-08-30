@@ -24,9 +24,6 @@ const useStyles = makeStyles(theme => ({
     color: "white",
     fontWeight: "bold",
     fontSize: 32
-  },
-  inner: {
-    padding: theme.spacing(6, 0)
   }
 }));
 
@@ -56,9 +53,7 @@ function App({ user, signInWithEmailAndPassword, signOut }) {
           </div>
           <div className={classes.content}>
             <Paper elevation={5} square>
-              <div className={classes.inner}>
-                <Form firebase={firebase} />
-              </div>
+              <Form firebase={firebase} />
             </Paper>
           </div>
         </div>
