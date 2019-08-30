@@ -7,6 +7,7 @@ import classnames from "classnames";
 import AnnouncementsBlock from "./blocks/AnnouncementsBlock";
 import SongsBlock from "./blocks/SongsBlock";
 import ReadingBlock from "./blocks/ReadingBlock";
+import SermonBlock from "./blocks/SermonBlock";
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -35,24 +36,9 @@ const defaultBlocks = [
   {
     id: uuid(),
     type: "reading",
-    title: "Ouverture",
-    value: [
-      // {
-      //   bibleRef: "Ésaïe 55.1-3a",
-      //   excerpt: "Ô vous tous qui avez soif, venez vers les eaux."
-      // }
-    ]
-  },
-  {
-    id: uuid(),
-    type: "songs",
-    value: []
-  },
-  {
-    id: uuid(),
-    type: "reading",
-    title: "Loi de Dieu",
-    value: []
+    value: {
+      title: "Ouverture"
+    }
   },
   {
     id: uuid(),
@@ -63,21 +49,50 @@ const defaultBlocks = [
     id: uuid(),
     type: "reading",
     value: {
-      title: "Grâce de Dieu",
-      biblesRefs: []
+      title: "Loi de Dieu"
     }
   },
   {
     id: uuid(),
     type: "songs",
     value: []
+  },
+  {
+    id: uuid(),
+    type: "reading",
+    value: {
+      title: "Grâce de Dieu"
+    }
+  },
+  {
+    id: uuid(),
+    type: "songs",
+    value: []
+  },
+  {
+    id: uuid(),
+    type: "sermon",
+    value: {}
+  },
+  {
+    id: uuid(),
+    type: "songs",
+    value: []
+  },
+  {
+    id: uuid(),
+    type: "reading",
+    value: {
+      title: "Envois"
+    }
   }
 ];
 
 const components = {
   AnnouncementsBlock,
   SongsBlock,
-  ReadingBlock
+  ReadingBlock,
+  SermonBlock
 };
 
 export default ({ firebase }) => {
