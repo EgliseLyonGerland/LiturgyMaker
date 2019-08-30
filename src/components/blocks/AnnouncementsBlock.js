@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
@@ -37,35 +37,42 @@ const SortableItem = sortableElement(({ children, classes }) => (
 const SortableContainer = sortableContainer(({ children }) => {
   return <div>{children}</div>;
 });
-export default ({ block }) => {
+export default ({ block, onChange }) => {
   const classes = useStyles();
-  const [items, setItems] = useState(block.items);
+  let items = block.value;
 
   const isItemEmpty = item => {
     return !item.title && !item.detail;
   };
 
-  const needsEmpty = items.reduce(
-    (acc, item) => (isItemEmpty(item) ? false : acc),
-    true
-  );
+  const isLastItemEmpty = items$ => {
+    return isItemEmpty(items$[items$.length - 1]);
+  };
 
-  if (needsEmpty) {
-    setItems([...items, { title: "", detail: "" }]);
+  if (!isLastItemEmpty(items)) {
+    items = [...items, { title: "", detail: "" }];
   }
 
+  const sendChange = newItems => {
+    if (isLastItemEmpty(newItems)) {
+      newItems.pop();
+    }
+
+    onChange([...newItems]);
+  };
+
   const handleSortEnd = ({ oldIndex, newIndex }) => {
-    setItems(arrayMove(items, oldIndex, newIndex));
+    sendChange(arrayMove(items, oldIndex, newIndex));
   };
 
   const handleChange = (key, index, value) => {
     items[index][key] = value;
-    setItems([...items]);
+    sendChange(items);
   };
 
   const handleDelete = index => {
     items.splice(index, 1);
-    setItems([...items]);
+    sendChange(items);
   };
 
   return (
@@ -83,13 +90,13 @@ export default ({ block }) => {
               margin="dense"
               fullWidth
             />
-            {!isItemEmpty(item) ? (
+            {index === items.length - 1 && isItemEmpty(item) ? (
+              <DeleteIcon color="disabled" style={{ opacity: 0.2 }} />
+            ) : (
               <DeleteIcon
                 color="disabled"
                 onClick={() => handleDelete(index)}
               />
-            ) : (
-              <DeleteIcon color="disabled" style={{ opacity: 0.2 }} />
             )}
             <div />
             <TextField

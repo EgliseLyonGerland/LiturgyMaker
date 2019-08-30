@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import _ from "lodash";
 import uuid from "uuid/v1";
@@ -20,11 +20,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const blocks = [
+const defaultBlocks = [
   {
     id: uuid(),
     type: "announcements",
-    items: [
+    value: [
       {
         title: "Dimanche 8 septembre",
         detail: "Culte à 10h au théâtre « Lulu sur la colline »"
@@ -52,22 +52,33 @@ const components = {
 
 export default ({ firebase }) => {
   const classes = useStyles();
+  const [blocks, setBlocks] = useState(defaultBlocks);
 
-  const renderBlock = block => {
+  const renderBlock = (block, index) => {
     const Component = components[`${_.capitalize(block.type)}Block`];
 
-    return <Component block={block} />;
+    return (
+      <Component
+        block={block}
+        onChange={value => {
+          blocks[index].value = value;
+          setBlocks([...blocks]);
+        }}
+      />
+    );
   };
 
   const renderDivider = () => {
     return <div className={classes.divider} />;
   };
 
+  console.log(blocks);
+
   return (
     <div>
       {blocks.map((block, index) => (
         <div key={block.id}>
-          {renderBlock(block)}
+          {renderBlock(block, index)}
           {index + 1 < blocks.length && renderDivider()}
         </div>
       ))}
