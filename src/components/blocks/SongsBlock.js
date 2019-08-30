@@ -15,9 +15,8 @@ const useStyles = makeStyles(theme => ({
   root: {},
   item: {
     display: "grid",
-    gridTemplateColumns: "auto 1fr auto",
+    gridTemplateColumns: "auto 1fr 100px auto",
     gridColumnGap: theme.spacing(2),
-    marginBottom: theme.spacing(2),
     alignItems: "center"
   }
 }));
@@ -39,7 +38,7 @@ export default ({ block, onChange }) => {
   let items = block.value;
 
   const isItemEmpty = item => {
-    return !item.title && !item.detail;
+    return !item.title && !item.number;
   };
 
   const isLastItemEmpty = items$ => {
@@ -47,7 +46,7 @@ export default ({ block, onChange }) => {
   };
 
   if (!isLastItemEmpty(items)) {
-    items = [...items, { title: "", detail: "" }];
+    items = [...items, { title: "", number: "" }];
   }
 
   const sendChange = newItems => {
@@ -73,7 +72,7 @@ export default ({ block, onChange }) => {
   };
 
   return (
-    <Block className={classes.root} title="Annonces">
+    <Block className={classes.root} title="Chants">
       <SortableContainer onSortEnd={handleSortEnd} useDragHandle>
         {items.map((item, index) => (
           <SortableItem key={index} index={index} classes={classes}>
@@ -87,6 +86,16 @@ export default ({ block, onChange }) => {
               margin="dense"
               fullWidth
             />
+            <TextField
+              label="Numéro"
+              value={item.number}
+              onChange={event =>
+                handleChange("number", index, event.target.value)
+              }
+              variant="filled"
+              margin="dense"
+              fullWidth
+            />
             {index === items.length - 1 && isItemEmpty(item) ? (
               <DeleteIcon color="disabled" style={{ opacity: 0.2 }} />
             ) : (
@@ -95,19 +104,6 @@ export default ({ block, onChange }) => {
                 onClick={() => handleDelete(index)}
               />
             )}
-            <div />
-            <TextField
-              label="Détail"
-              value={item.detail}
-              onChange={event =>
-                handleChange("detail", index, event.target.value)
-              }
-              variant="filled"
-              margin="dense"
-              multiline
-              fullWidth
-            />
-            <div />
           </SortableItem>
         ))}
       </SortableContainer>

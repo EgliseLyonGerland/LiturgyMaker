@@ -4,6 +4,7 @@ import _ from "lodash";
 import uuid from "uuid/v1";
 
 import AnnouncementsBlock from "./blocks/AnnouncementsBlock";
+import SongsBlock from "./blocks/SongsBlock";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,11 +44,17 @@ const defaultBlocks = [
         detail: "Dimanche 22 septembre à 12h30"
       }
     ]
+  },
+  {
+    id: uuid(),
+    type: "songs",
+    value: [{ title: "Nous t'adorons, ô père", number: 123 }]
   }
 ];
 
 const components = {
-  AnnouncementsBlock
+  AnnouncementsBlock,
+  SongsBlock
 };
 
 export default ({ firebase }) => {
