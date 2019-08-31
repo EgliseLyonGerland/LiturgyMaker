@@ -7,11 +7,13 @@ import IconButton from "@material-ui/core/IconButton";
 import ArrowLeftIcon from "@material-ui/icons/ArrowLeft";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import SaveIcon from "@material-ui/icons/Save";
+import CheckIcon from "@material-ui/icons/Check";
 import Zoom from "@material-ui/core/Zoom";
-import PacmanLoader from "react-spinners/PacmanLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 import { format, endOfWeek, subDays, addDays } from "date-fns";
 import locale from "date-fns/locale/fr";
 import capitalize from "lodash/capitalize";
+import classnames from "classnames";
 import Form from "../components/Form";
 import createDefaultLiturgy from "../config/defaultLiturgy";
 
@@ -41,10 +43,23 @@ const useStyles = makeStyles(theme => ({
     display: "grid",
     minHeight: "80vh"
   },
-  save: {
+  cta: {
     position: "fixed",
     bottom: theme.spacing(4),
-    right: theme.spacing(4)
+    left: "50%",
+    width: 200,
+    marginLeft: -200 / 2,
+    transition: "background .3s"
+  },
+  ctaDisabled: {
+    background: `${theme.palette.secondary.main} !important`,
+    color: "white !important"
+  },
+  ctaSaved: {
+    background: `#17d86d !important`
+  },
+  ctaIcon: {
+    marginRight: theme.spacing(1)
   },
   spinner: {
     display: "flex",
@@ -72,25 +87,24 @@ export default ({ firebase }) => {
   const [currentDate, setCurrentDate] = useState(getNextSundayDate(new Date()));
   const [loaded, setLoaded] = useState(false);
   const [changed, setChanged] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [doc, setDoc] = useState({ blocks: [] });
   const timer = useRef(null);
 
   const db = firebase.firestore();
   const id = format(currentDate, "yMMdd");
 
-  const createDoc = () => {
-    db.collection("liturgies")
-      .doc(id)
-      .set(createDefaultLiturgy())
-      .then(() => {
-        fetchDoc();
-      });
-  };
-
   const updateDoc = () => {
+    setSaving(true);
+
     db.collection("liturgies")
       .doc(id)
-      .set(doc);
+      .set(doc)
+      .then(() => {
+        setSaved(true);
+        setSaving(false);
+      });
   };
 
   const fetchDoc = () => {
@@ -115,6 +129,12 @@ export default ({ firebase }) => {
     if (!loaded) {
       timer.current = setTimeout(fetchDoc, 500);
     }
+
+    if (saved) {
+      setTimeout(() => {
+        setSaved(false);
+      }, 2000);
+    }
   });
 
   const handleBlocksChange = blocks => {
@@ -125,6 +145,56 @@ export default ({ firebase }) => {
   const transitionDuration = {
     enter: theme.transitions.duration.enteringScreen,
     exit: theme.transitions.duration.leavingScreen
+  };
+
+  const renderButton = () => {
+    if (saved) {
+      return (
+        <Fab
+          variant="extended"
+          className={classnames(classes.cta, {
+            [classes.ctaSaved]: saved
+          })}
+          color="secondary"
+          disabled
+          classes={{ disabled: classes.ctaDisabled }}
+        >
+          <CheckIcon className={classes.ctaIcon} />
+          Enregistré
+        </Fab>
+      );
+    }
+
+    if (saving) {
+      return (
+        <Fab
+          variant="extended"
+          className={classnames(classes.cta, {
+            [classes.ctaSaved]: saved
+          })}
+          color="secondary"
+          disabled
+          classes={{ disabled: classes.ctaDisabled }}
+        >
+          <BeatLoader key="saving" color="white" size={8} sizeUnit="px" />
+        </Fab>
+      );
+    }
+
+    return (
+      <Fab
+        aria-label="Sauvegarder"
+        variant="extended"
+        className={classnames(classes.cta, {
+          [classes.ctaSaved]: saved
+        })}
+        color="secondary"
+        onClick={updateDoc}
+      >
+        <SaveIcon className={classes.ctaIcon} />
+        Enregistrer
+      </Fab>
+    );
   };
 
   return (
@@ -164,13 +234,14 @@ export default ({ firebase }) => {
             <Form blocks={doc.blocks} onChange={handleBlocksChange} />
           ) : (
             <div className={classes.spinner}>
-              <PacmanLoader color="#DDD" />
+              <BeatLoader color="#DDD" />
             </div>
           )}
         </Paper>
       </div>
 
       <Zoom
+        key={0 + saved}
         in={changed}
         timeout={200}
         style={{
@@ -178,14 +249,7 @@ export default ({ firebase }) => {
         }}
         unmountOnExit
       >
-        <Fab
-          aria-label="Sauvegarder"
-          className={classes.save}
-          color="secondary"
-          onClick={updateDoc}
-        >
-          <SaveIcon />
-        </Fab>
+        {renderButton()}
       </Zoom>
     </div>
   );
