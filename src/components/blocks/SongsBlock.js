@@ -47,7 +47,7 @@ export default ({ block, onChange }) => {
         }}
         variant="filled"
         margin="dense"
-        gutters={2}
+        gutters={3}
         fullWidth
         multiline
       />
@@ -63,7 +63,7 @@ export default ({ block, onChange }) => {
         onChange={onChange}
         isItemEmpty={item => !item.title && !item.infos}
         getDefaultItem={getDefaultItem}
-        gutters={2}
+        gutters={3}
       />
     </Block>
   );

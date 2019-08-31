@@ -54,7 +54,7 @@ export default ({ block, onChange }) => {
         onChange={onChange}
         isItemEmpty={item => !item.title && !item.detail}
         getDefaultItem={getDefaultItem}
-        gutters={2}
+        gutters={3}
         neverEmpty
       />
     </Block>

@@ -58,7 +58,7 @@ export default ({ block, onChange }) => {
         }}
         isItemEmpty={item => !item.ref && !item.excerpt}
         getDefaultItem={getDefaultItem}
-        gutters={2}
+        gutters={3}
         neverEmpty
       />
     </Block>
