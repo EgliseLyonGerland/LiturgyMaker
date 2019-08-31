@@ -7,6 +7,7 @@ import AnnouncementsBlock from "./blocks/AnnouncementsBlock";
 import SongsBlock from "./blocks/SongsBlock";
 import ReadingBlock from "./blocks/ReadingBlock";
 import SermonBlock from "./blocks/SermonBlock";
+import SectionBlock from "./blocks/SectionBlock";
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -30,7 +31,8 @@ const components = {
   AnnouncementsBlock,
   SongsBlock,
   ReadingBlock,
-  SermonBlock
+  SermonBlock,
+  SectionBlock
 };
 
 export default ({ blocks, onChange }) => {

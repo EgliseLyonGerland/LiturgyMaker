@@ -14,9 +14,11 @@ export default ({ title = null, children }) => {
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.title} variant="h6">
-        {title}
-      </Typography>
+      {title && (
+        <Typography className={classes.title} variant="h6">
+          {title}
+        </Typography>
+      )}
 
       {children}
     </div>
