@@ -1,4 +1,4 @@
-import uuid from "uuid/v1";
+import uuid from "uuid/v4";
 
 export default () => ({
   blocks: [
@@ -45,8 +45,32 @@ export default () => ({
     },
     {
       id: uuid(),
+      type: "reading",
+      data: {
+        title: "Lecture inter-chants"
+      }
+    },
+    {
+      id: uuid(),
+      type: "songs",
+      data: []
+    },
+    {
+      id: uuid(),
       type: "sermon",
       data: {}
+    },
+    {
+      id: uuid(),
+      type: "songs",
+      data: []
+    },
+    {
+      id: uuid(),
+      type: "section",
+      data: {
+        title: "Sainte cène"
+      }
     },
     {
       id: uuid(),
