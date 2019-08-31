@@ -1,63 +1,21 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
 
-import Auth from "./components/Auth";
-import Form from "./components/Form";
 import FirebaseContext from "./components/FirebaseContext";
+import AuthPage from "./pages/Auth";
+import MainPage from "./pages/Main";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    marginBottom: theme.spacing(20)
-  },
-  header: {
-    background: "linear-gradient(344deg, #0077d1 0%, #0091ff 100%)",
-    height: 184,
-    marginBottom: -48
-  },
-  content: {
-    maxWidth: 770,
-    margin: [[0, "auto"]]
-  },
-  pageTitle: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 32
-  }
-}));
-
-function App({ user, signInWithEmailAndPassword, signOut }) {
-  const classes = useStyles();
-
+function App({ user, signInWithEmailAndPassword, signOut, ...rest }) {
   if (typeof user === "undefined") {
     return null;
   }
 
   if (user === null) {
-    return <Auth onSubmit={signInWithEmailAndPassword} />;
+    return <AuthPage onSubmit={signInWithEmailAndPassword} />;
   }
 
   return (
     <FirebaseContext.Consumer>
-      {firebase => (
-        <div className={classes.root}>
-          <div className={classes.header}>
-            <div className={classes.content}>
-              <Typography
-                color="inherit"
-                className={classes.pageTitle}
-                variant="h4"
-              ></Typography>
-            </div>
-          </div>
-          <div className={classes.content}>
-            <Paper elevation={5} square>
-              <Form firebase={firebase} />
-            </Paper>
-          </div>
-        </div>
-      )}
+      {firebase => <MainPage firebase={firebase} />}
     </FirebaseContext.Consumer>
   );
 }

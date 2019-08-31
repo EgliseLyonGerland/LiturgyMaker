@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import _ from "lodash";
-import uuid from "uuid/v1";
+import capitalize from "lodash/capitalize";
 import classnames from "classnames";
 
 import AnnouncementsBlock from "./blocks/AnnouncementsBlock";
@@ -27,67 +26,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const defaultBlocks = [
-  {
-    id: uuid(),
-    type: "announcements",
-    data: []
-  },
-  {
-    id: uuid(),
-    type: "reading",
-    data: {
-      title: "Ouverture"
-    }
-  },
-  {
-    id: uuid(),
-    type: "songs",
-    data: []
-  },
-  {
-    id: uuid(),
-    type: "reading",
-    data: {
-      title: "Loi de Dieu"
-    }
-  },
-  {
-    id: uuid(),
-    type: "songs",
-    data: []
-  },
-  {
-    id: uuid(),
-    type: "reading",
-    data: {
-      title: "Grâce de Dieu"
-    }
-  },
-  {
-    id: uuid(),
-    type: "songs",
-    data: []
-  },
-  {
-    id: uuid(),
-    type: "sermon",
-    data: {}
-  },
-  {
-    id: uuid(),
-    type: "songs",
-    data: []
-  },
-  {
-    id: uuid(),
-    type: "reading",
-    data: {
-      title: "Envois"
-    }
-  }
-];
-
 const components = {
   AnnouncementsBlock,
   SongsBlock,
@@ -95,19 +33,18 @@ const components = {
   SermonBlock
 };
 
-export default ({ firebase }) => {
+export default ({ blocks, onChange }) => {
   const classes = useStyles();
-  const [blocks, setBlocks] = useState(defaultBlocks);
 
   const renderBlock = (block, index) => {
-    const Component = components[`${_.capitalize(block.type)}Block`];
+    const Component = components[`${capitalize(block.type)}Block`];
 
     return (
       <Component
         block={block}
         onChange={data => {
           blocks[index].data = data;
-          setBlocks([...blocks]);
+          onChange([...blocks]);
         }}
       />
     );
