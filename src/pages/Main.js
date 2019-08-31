@@ -13,6 +13,9 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { format, endOfWeek, subDays, addDays } from "date-fns";
 import locale from "date-fns/locale/fr";
 import capitalize from "lodash/capitalize";
+import isEqual from "lodash/isEqual";
+import debounce from "lodash/debounce";
+import cloneDeep from "lodash/cloneDeep";
 import classnames from "classnames";
 import Form from "../components/Form";
 import createDefaultLiturgy from "../config/defaultLiturgy";
@@ -92,6 +95,13 @@ export default ({ firebase }) => {
   const [doc, setDoc] = useState({ blocks: [] });
   const timer = useRef(null);
 
+  const originalDoc = useRef(null);
+  const checkChanges = useRef(
+    debounce(blocks => {
+      setChanged(!isEqual(originalDoc.current.blocks, blocks));
+    }, 500)
+  );
+
   const db = firebase.firestore();
   const id = format(currentDate, "yMMdd");
 
@@ -114,10 +124,12 @@ export default ({ firebase }) => {
         setLoaded(true);
 
         if (!doc.exists) {
-          setDoc(createDefaultLiturgy());
+          originalDoc.current = createDefaultLiturgy();
         } else {
-          setDoc(doc.data());
+          originalDoc.current = doc.data();
         }
+
+        setDoc(cloneDeep(originalDoc.current));
       });
   };
 
@@ -135,11 +147,14 @@ export default ({ firebase }) => {
         setSaved(false);
       }, 2000);
     }
+
+    if (originalDoc.current) {
+      checkChanges.current(doc.blocks);
+    }
   });
 
   const handleBlocksChange = blocks => {
     setDoc({ ...doc, blocks });
-    setChanged(true);
   };
 
   const transitionDuration = {
