@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Block from "../Block";
 import Sortable from "../Sortable";
 import SermonPlanPicker from "../SermonPlanPicker";
+import BibleRefPicker from "../BibleRefPicker";
 
 const useStyles = makeStyles(theme => ({
   item: {},
@@ -25,16 +26,13 @@ export default ({ block, onChange }) => {
 
   const renderBibleRef = (ref, index) => (
     <div className={classes.item}>
-      <TextField
-        label="Référence biblique"
-        value={ref}
-        onChange={({ target }) => {
-          data.bibleRefs[index] = target.value;
+      <BibleRefPicker
+        data={{ ref }}
+        onChange={({ ref }) => {
+          data.bibleRefs[index] = ref;
           onChange(data);
         }}
-        variant="filled"
-        margin="dense"
-        fullWidth
+        withExcerpt={false}
       />
     </div>
   );

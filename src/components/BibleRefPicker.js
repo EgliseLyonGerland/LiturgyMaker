@@ -1,36 +1,51 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
+import TextFieldSuggest from "./TextFieldSuggest";
+import { validate } from "../utils/bibleRef";
 
 import books from "../config/bibleBooks.json";
 
-export default () => {
+export default ({ data, onChange, withExcerpt = true }) => {
+  let error = "";
+  if (data.ref) {
+    error = validate(data.ref);
+  }
+
+  const handleChange = (key, value) => {
+    data[key] = value;
+
+    onChange(data);
+  };
+
   return (
     <div>
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <TextField select label="Livre" fullWidth>
-            {books.map(book => (
-              <MenuItem key={book.id} value={book.name}>
-                {book.name}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-        <Grid item xs={2}>
-          <TextField type="number" label="Du chapitre" />
-        </Grid>
-        <Grid item xs={2}>
-          <TextField type="number" label="Du verset" />
-        </Grid>
-        <Grid item xs={2}>
-          <TextField type="number" label="Au chapitre" />
-        </Grid>
-        <Grid item xs={2}>
-          <TextField type="number" label="Au verset" />
-        </Grid>
-      </Grid>
+      <TextFieldSuggest
+        label="Référence biblique"
+        value={data.ref}
+        onChange={value => {
+          handleChange("ref", value);
+        }}
+        variant="filled"
+        margin="dense"
+        error={!!error}
+        helperText={error}
+        fullWidth
+        items={books}
+        field="name"
+      />
+      {withExcerpt && (
+        <TextField
+          label="Extrait"
+          value={data.excerpt}
+          onChange={({ target }) => {
+            handleChange("excerpt", target.value);
+          }}
+          variant="filled"
+          margin="dense"
+          fullWidth
+          multiline
+        />
+      )}
     </div>
   );
 };
