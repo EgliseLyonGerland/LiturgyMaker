@@ -7,12 +7,14 @@ const deepDiff = require("deep-diff");
 
 admin.initializeApp();
 
+const { gmail } = functions.config();
+
 function formatDate(date) {
   if (date.getDate() === 1) {
-    return format(date, "EEEE '1er' MMMM", { locale });
+    return format(date, "'1er' MMMM y", { locale });
   }
 
-  return format(date, "EEEE d MMMM", { locale });
+  return format(date, "d MMMM y", { locale });
 }
 
 exports.notifyChanges = functions.firestore
@@ -22,7 +24,6 @@ exports.notifyChanges = functions.firestore
     const data = change.after.data();
     const date = toDate(data.date);
     const formattedDate = formatDate(date);
-    const { gmail } = functions.config();
 
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",

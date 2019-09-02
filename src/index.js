@@ -7,7 +7,7 @@ import "firebase/firestore";
 
 import App from "./App";
 import FirebaseContext from "./components/FirebaseContext";
-import firebaseConfig from "./config/firebase.json";
+import firebaseConfig from "./config/firebase";
 import * as serviceWorker from "./serviceWorker";
 
 import "./index.css";
