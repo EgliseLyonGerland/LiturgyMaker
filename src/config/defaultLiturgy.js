@@ -1,6 +1,7 @@
 import uuid from "uuid/v4";
 
-export default () => ({
+export default ({ date }) => ({
+  date: +date,
   blocks: [
     {
       id: uuid(),

@@ -124,7 +124,9 @@ export default ({ firebase }) => {
         setLoaded(true);
 
         if (!doc.exists) {
-          originalDoc.current = createDefaultLiturgy();
+          originalDoc.current = createDefaultLiturgy({
+            date: +currentDate
+          });
         } else {
           originalDoc.current = doc.data();
         }
