@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const nodemailer = require("nodemailer");
+const smtpTransport = require("nodemailer-smtp-transport");
 const { format, toDate } = require("date-fns");
 const locale = require("date-fns/locale/fr");
 const deepDiff = require("deep-diff");
@@ -25,15 +26,18 @@ exports.notifyChanges = functions.firestore
     const date = toDate(data.date);
     const formattedDate = formatDate(date);
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "egliselyongerland@gmail.com",
-        pass: gmail.pass
-      }
-    });
+    const transporter = nodemailer.createTransport(
+      smtpTransport({
+        // host: "smtp.gmail.com",
+        // port: 465,
+        // secure: true,
+        service: "gmail",
+        auth: {
+          user: "egliselyongerland@gmail.com",
+          pass: gmail.pass
+        }
+      })
+    );
 
     const from = "Eglise Lyon Gerland <egliselyongerland@gmail.com>";
 
