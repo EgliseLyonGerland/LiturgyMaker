@@ -2,6 +2,7 @@ import superagent from "superagent";
 import trim from "lodash/trim";
 import deburr from "lodash/deburr";
 import find from "lodash/find";
+import slugify from "./slugify";
 
 import books from "../config/bibleBooks.json";
 
@@ -96,7 +97,7 @@ export function getPassage(ref) {
 
   if (!data || !data.chapterStart) return;
 
-  const book = find(books, ["name", data.book]);
+  const book = find(books, ["slug", slugify(data.book)]);
 
   if (!book) return;
 

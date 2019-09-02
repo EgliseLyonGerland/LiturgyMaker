@@ -2,331 +2,397 @@
   {
     "id": "GEN",
     "name": "Genèse",
-    "nameLong": "Genèse"
+    "nameLong": "Genèse",
+    "slug": "genese"
   },
   {
     "id": "EXO",
     "name": "Exode",
-    "nameLong": "Exode"
+    "nameLong": "Exode",
+    "slug": "exode"
   },
   {
     "id": "LEV",
     "name": "Lévitique",
-    "nameLong": "Lévitique"
+    "nameLong": "Lévitique",
+    "slug": "levitique"
   },
   {
     "id": "NUM",
     "name": "Nombres",
-    "nameLong": "Nombres"
+    "nameLong": "Nombres",
+    "slug": "nombres"
   },
   {
     "id": "DEU",
     "name": "Deutéronome",
-    "nameLong": "Deutéronome"
+    "nameLong": "Deutéronome",
+    "slug": "deuteronome"
   },
   {
     "id": "JOS",
     "name": "Josué",
-    "nameLong": "Josué"
+    "nameLong": "Josué",
+    "slug": "josue"
   },
   {
     "id": "JDG",
     "name": "Juges",
-    "nameLong": "Juges"
+    "nameLong": "Juges",
+    "slug": "juges"
   },
   {
     "id": "RUT",
     "name": "Ruth",
-    "nameLong": "Ruth"
+    "nameLong": "Ruth",
+    "slug": "ruth"
   },
   {
     "id": "1SA",
     "name": "1 Samuel",
-    "nameLong": "Premier livre de Samuel"
+    "nameLong": "Premier livre de Samuel",
+    "slug": "1-samuel"
   },
   {
     "id": "2SA",
     "name": "2 Samuel",
-    "nameLong": "Deuxième livre de Samuel"
+    "nameLong": "Deuxième livre de Samuel",
+    "slug": "2-samuel"
   },
   {
     "id": "1KI",
     "name": "1 Rois",
-    "nameLong": "Premier livre des Rois"
+    "nameLong": "Premier livre des Rois",
+    "slug": "1-rois"
   },
   {
     "id": "2KI",
     "name": "2 Rois",
-    "nameLong": "Second livre des Rois"
+    "nameLong": "Second livre des Rois",
+    "slug": "2-rois"
   },
   {
     "id": "1CH",
     "name": "1 Chroniques",
-    "nameLong": "Premier livre des Chroniques"
+    "nameLong": "Premier livre des Chroniques",
+    "slug": "1-chroniques"
   },
   {
     "id": "2CH",
     "name": "2 Chroniques",
-    "nameLong": "Second livre des Chroniques"
+    "nameLong": "Second livre des Chroniques",
+    "slug": "2-chroniques"
   },
   {
     "id": "EZR",
     "name": "Esdras",
-    "nameLong": "Esdras"
+    "nameLong": "Esdras",
+    "slug": "esdras"
   },
   {
     "id": "NEH",
     "name": "Néhémie",
-    "nameLong": "Néhémie"
+    "nameLong": "Néhémie",
+    "slug": "nehemie"
   },
   {
     "id": "EST",
     "name": "Esther",
-    "nameLong": "Esther"
+    "nameLong": "Esther",
+    "slug": "esther"
   },
   {
     "id": "JOB",
     "name": "Job",
-    "nameLong": "Job"
+    "nameLong": "Job",
+    "slug": "job"
   },
   {
     "id": "PSA",
     "name": "Psaumes",
-    "nameLong": "Psaumes"
+    "nameLong": "Psaumes",
+    "slug": "psaumes"
   },
   {
     "id": "PRO",
     "name": "Proverbes",
-    "nameLong": "Proverbes"
+    "nameLong": "Proverbes",
+    "slug": "proverbes"
   },
   {
     "id": "ECC",
     "name": "Ecclésiaste",
-    "nameLong": "L'Ecclésiaste"
+    "nameLong": "L'Ecclésiaste",
+    "slug": "ecclesiaste"
   },
   {
     "id": "SNG",
     "name": "Cantique",
-    "nameLong": "Cantique des Cantiques"
+    "nameLong": "Cantique des Cantiques",
+    "slug": "cantique"
   },
   {
     "id": "ISA",
     "name": "Ésaïe",
-    "nameLong": "Ésaïe"
+    "nameLong": "Ésaïe",
+    "slug": "esaie"
   },
   {
     "id": "JER",
     "name": "Jérémie",
-    "nameLong": "Jérémie"
+    "nameLong": "Jérémie",
+    "slug": "jeremie"
   },
   {
     "id": "LAM",
     "name": "Lamentations",
-    "nameLong": "Lamentations"
+    "nameLong": "Lamentations",
+    "slug": "lamentations"
   },
   {
     "id": "EZK",
     "name": "Ézékiel",
-    "nameLong": "Ézékiel"
+    "nameLong": "Ézékiel",
+    "slug": "ezekiel"
   },
   {
     "id": "DAN",
     "name": "Daniel",
-    "nameLong": "Daniel"
+    "nameLong": "Daniel",
+    "slug": "daniel"
   },
   {
     "id": "HOS",
     "name": "Osée",
-    "nameLong": "Osée"
+    "nameLong": "Osée",
+    "slug": "osee"
   },
   {
     "id": "JOL",
     "name": "Joël",
-    "nameLong": "Joël"
+    "nameLong": "Joël",
+    "slug": "joel"
   },
   {
     "id": "AMO",
     "name": "Amos",
-    "nameLong": "Amos"
+    "nameLong": "Amos",
+    "slug": "amos"
   },
   {
     "id": "OBA",
     "name": "Abdias",
-    "nameLong": "Abdias"
+    "nameLong": "Abdias",
+    "slug": "abdias"
   },
   {
     "id": "JON",
     "name": "Jonas",
-    "nameLong": "Jonas"
+    "nameLong": "Jonas",
+    "slug": "jonas"
   },
   {
     "id": "MIC",
     "name": "Michée",
-    "nameLong": "Michée"
+    "nameLong": "Michée",
+    "slug": "michee"
   },
   {
     "id": "NAM",
     "name": "Nahum",
-    "nameLong": "Nahum"
+    "nameLong": "Nahum",
+    "slug": "nahum"
   },
   {
     "id": "HAB",
     "name": "Habacuc",
-    "nameLong": "Habacuc"
+    "nameLong": "Habacuc",
+    "slug": "habacuc"
   },
   {
     "id": "ZEP",
     "name": "Sophonie",
-    "nameLong": "Sophonie"
+    "nameLong": "Sophonie",
+    "slug": "sophonie"
   },
   {
     "id": "HAG",
     "name": "Aggée",
-    "nameLong": "Aggée"
+    "nameLong": "Aggée",
+    "slug": "aggee"
   },
   {
     "id": "ZEC",
     "name": "Zacharie",
-    "nameLong": "Zacharie"
+    "nameLong": "Zacharie",
+    "slug": "zacharie"
   },
   {
     "id": "MAL",
     "name": "Malachie",
-    "nameLong": "Malachie"
+    "nameLong": "Malachie",
+    "slug": "malachie"
   },
   {
     "id": "MAT",
     "name": "Matthieu",
-    "nameLong": "Évangile selon Matthieu"
+    "nameLong": "Évangile selon Matthieu",
+    "slug": "matthieu"
   },
   {
     "id": "MRK",
     "name": "Marc",
-    "nameLong": "Évangile selon Marc"
+    "nameLong": "Évangile selon Marc",
+    "slug": "marc"
   },
   {
     "id": "LUK",
     "name": "Luc",
-    "nameLong": "Évangile selon Luc"
+    "nameLong": "Évangile selon Luc",
+    "slug": "luc"
   },
   {
     "id": "JHN",
     "name": "Jean",
-    "nameLong": "Évangile selon Jean"
+    "nameLong": "Évangile selon Jean",
+    "slug": "jean"
   },
   {
     "id": "ACT",
     "name": "Actes",
-    "nameLong": "Actes des Apôtres"
+    "nameLong": "Actes des Apôtres",
+    "slug": "actes"
   },
   {
     "id": "ROM",
     "name": "Romains",
-    "nameLong": "Épître de Paul aux Romains"
+    "nameLong": "Épître de Paul aux Romains",
+    "slug": "romains"
   },
   {
     "id": "1CO",
     "name": "1 Corinthiens",
-    "nameLong": "Première épître de Paul aux Corinthiens"
+    "nameLong": "Première épître de Paul aux Corinthiens",
+    "slug": "1-corinthiens"
   },
   {
     "id": "2CO",
     "name": "2 Corinthiens",
-    "nameLong": "Seconde épître de Paul aux Corinthiens"
+    "nameLong": "Seconde épître de Paul aux Corinthiens",
+    "slug": "2-corinthiens"
   },
   {
     "id": "GAL",
     "name": "Galates",
-    "nameLong": "Épître de Paul aux Galates"
+    "nameLong": "Épître de Paul aux Galates",
+    "slug": "galates"
   },
   {
     "id": "EPH",
     "name": "Éphésiens",
-    "nameLong": "Épître de Paul aux Éphésiens"
+    "nameLong": "Épître de Paul aux Éphésiens",
+    "slug": "ephesiens"
   },
   {
     "id": "PHP",
     "name": "Philippiens",
-    "nameLong": "Épître de Paul aux Philippiens"
+    "nameLong": "Épître de Paul aux Philippiens",
+    "slug": "philippiens"
   },
   {
     "id": "COL",
     "name": "Colossiens",
-    "nameLong": "Épître de Paul aux Colossiens"
+    "nameLong": "Épître de Paul aux Colossiens",
+    "slug": "colossiens"
   },
   {
     "id": "1TH",
     "name": "1 Thessaloniciens",
-    "nameLong": "Première épître de Paul aux Thessaloniciens"
+    "nameLong": "Première épître de Paul aux Thessaloniciens",
+    "slug": "1-thessaloniciens"
   },
   {
     "id": "2TH",
     "name": "2 Thessaloniciens",
-    "nameLong": "Second épître de Paul aux Thessaloniciens"
+    "nameLong": "Second épître de Paul aux Thessaloniciens",
+    "slug": "2-thessaloniciens"
   },
   {
     "id": "1TI",
     "name": "1 Timothée",
-    "nameLong": "Première épître de Paul à Timothée"
+    "nameLong": "Première épître de Paul à Timothée",
+    "slug": "1-timothee"
   },
   {
     "id": "2TI",
     "name": "2 Timothée",
-    "nameLong": "Second épître de Paul à Timothée"
+    "nameLong": "Second épître de Paul à Timothée",
+    "slug": "2-timothee"
   },
   {
     "id": "TIT",
     "name": "Tite",
-    "nameLong": "Épître de Paul à Tite"
+    "nameLong": "Épître de Paul à Tite",
+    "slug": "tite"
   },
   {
     "id": "PHM",
     "name": "Philémon",
-    "nameLong": "Épître de Paul à Philémon"
+    "nameLong": "Épître de Paul à Philémon",
+    "slug": "philemon"
   },
   {
     "id": "HEB",
     "name": "Hébreux",
-    "nameLong": "Épître aux Hébreux"
+    "nameLong": "Épître aux Hébreux",
+    "slug": "hebreux"
   },
   {
     "id": "JAS",
     "name": "Jacques",
-    "nameLong": "Épître de Jacques"
+    "nameLong": "Épître de Jacques",
+    "slug": "jacques"
   },
   {
     "id": "1PE",
     "name": "1 Pierre",
-    "nameLong": "Première épître de Pierre"
+    "nameLong": "Première épître de Pierre",
+    "slug": "1-pierre"
   },
   {
     "id": "2PE",
     "name": "2 Pierre",
-    "nameLong": "Seconde épître de Pierre"
+    "nameLong": "Seconde épître de Pierre",
+    "slug": "2-pierre"
   },
   {
     "id": "1JN",
     "name": "1 Jean",
-    "nameLong": "Première épître de Jean"
+    "nameLong": "Première épître de Jean",
+    "slug": "1-jean"
   },
   {
     "id": "2JN",
     "name": "2 Jean",
-    "nameLong": "Seconde épître de Jean"
+    "nameLong": "Seconde épître de Jean",
+    "slug": "2-jean"
   },
   {
     "id": "3JN",
     "name": "3 Jean",
-    "nameLong": "Troisième épître de Jean"
+    "nameLong": "Troisième épître de Jean",
+    "slug": "3-jean"
   },
   {
     "id": "JUD",
     "name": "Jude",
-    "nameLong": "Épître de Jude"
+    "nameLong": "Épître de Jude",
+    "slug": "jude"
   },
   {
     "id": "REV",
     "name": "Apocalypse",
-    "nameLong": "Apocalypse de Jean"
+    "nameLong": "Apocalypse de Jean",
+    "slug": "apocalypse"
   }
 ]
