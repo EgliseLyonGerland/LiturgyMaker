@@ -7,6 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
+import slugify from "../utils/slugify";
 
 const useStyles = makeStyles({
   root: {
@@ -18,10 +19,9 @@ const useStyles = makeStyles({
   suggestionsContainerOpen: {
     position: "absolute",
     zIndex: 100,
-    top: "100%",
+    top: 56,
     left: 0,
-    right: 0,
-    marginTop: -4
+    right: 0
   },
   suggestion: {
     display: "block"
@@ -45,7 +45,7 @@ export default function TextFieldSuggest({
   const [suggestions, setSuggestions] = useState([]);
 
   const getSuggestions = value => {
-    const inputValue = deburr(value.trim()).toLowerCase();
+    const inputValue = slugify(value.trim());
     const inputLength = inputValue.length;
     let count = 0;
 
@@ -54,8 +54,7 @@ export default function TextFieldSuggest({
       : items.filter(suggestion => {
           const keep =
             count < 5 &&
-            suggestion[field].slice(0, inputLength).toLowerCase() ===
-              inputValue;
+            slugify(suggestion[field]).slice(0, inputLength) === inputValue;
 
           if (keep) {
             count += 1;
