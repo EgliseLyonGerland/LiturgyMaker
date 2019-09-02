@@ -93,12 +93,13 @@ export default ({ firebase }) => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [doc, setDoc] = useState({ blocks: [] });
+  const [originalDoc, setOriginalDoc] = useState(null);
   const timer = useRef(null);
+  // const originalDoc = useRef(null);
 
-  const originalDoc = useRef(null);
   const checkChanges = useRef(
-    debounce(blocks => {
-      setChanged(!isEqual(originalDoc.current.blocks, blocks));
+    debounce((doc1, doc2) => {
+      setChanged(!isEqual(doc1.blocks, doc2.blocks));
     }, 500)
   );
 
@@ -112,8 +113,8 @@ export default ({ firebase }) => {
       .doc(id)
       .set(doc)
       .then(() => {
+        setOriginalDoc(cloneDeep(doc));
         setSaved(true);
-        setSaving(false);
       });
   };
 
@@ -121,17 +122,16 @@ export default ({ firebase }) => {
     db.doc(`liturgies/${id}`)
       .get()
       .then(doc => {
-        setLoaded(true);
-
+        let originalDoc;
         if (!doc.exists) {
-          originalDoc.current = createDefaultLiturgy({
-            date: +currentDate
-          });
+          originalDoc = createDefaultLiturgy({ date: +currentDate });
         } else {
-          originalDoc.current = doc.data();
+          originalDoc = doc.data();
         }
 
-        setDoc(cloneDeep(originalDoc.current));
+        setDoc(cloneDeep(originalDoc));
+        setOriginalDoc(originalDoc);
+        setLoaded(true);
       });
   };
 
@@ -147,11 +147,12 @@ export default ({ firebase }) => {
     if (saved) {
       setTimeout(() => {
         setSaved(false);
+        setSaving(false);
       }, 2000);
     }
 
-    if (originalDoc.current) {
-      checkChanges.current(doc.blocks);
+    if (originalDoc && loaded) {
+      checkChanges.current(originalDoc, doc);
     }
   });
 
@@ -198,21 +199,29 @@ export default ({ firebase }) => {
       );
     }
 
-    return (
-      <Fab
-        aria-label="Sauvegarder"
-        variant="extended"
-        className={classnames(classes.cta, {
-          [classes.ctaSaved]: saved
-        })}
-        color="secondary"
-        onClick={updateDoc}
-      >
-        <SaveIcon className={classes.ctaIcon} />
-        Enregistrer
-      </Fab>
-    );
+    if (changed) {
+      return (
+        <Fab
+          aria-label="Sauvegarder"
+          variant="extended"
+          className={classnames(classes.cta, {
+            [classes.ctaSaved]: saved
+          })}
+          color="secondary"
+          onClick={updateDoc}
+        >
+          <SaveIcon className={classes.ctaIcon} />
+          Enregistrer
+        </Fab>
+      );
+    }
+
+    return <div />;
   };
+
+  let zoomKey = "nothing";
+  if (saved) zoomKey = "saved";
+  else if (changed) zoomKey = "save";
 
   return (
     <div className={classes.root}>
@@ -223,8 +232,9 @@ export default ({ firebase }) => {
           color="inherit"
           onClick={() => {
             let date = subDays(currentDate, 7);
-            setCurrentDate(getNextSundayDate(date));
             setLoaded(false);
+            setChanged(false);
+            setCurrentDate(getNextSundayDate(date));
           }}
         >
           <ArrowLeftIcon fontSize="inherit" />
@@ -238,8 +248,9 @@ export default ({ firebase }) => {
           color="inherit"
           onClick={() => {
             let date = addDays(currentDate, 7);
-            setCurrentDate(getNextSundayDate(date));
             setLoaded(false);
+            setChanged(false);
+            setCurrentDate(getNextSundayDate(date));
           }}
         >
           <ArrowRightIcon fontSize="inherit" />
@@ -257,15 +268,7 @@ export default ({ firebase }) => {
         </Paper>
       </div>
 
-      <Zoom
-        key={0 + saved}
-        in={changed}
-        timeout={200}
-        style={{
-          transitionDelay: `${changed ? transitionDuration.exit : 0}ms`
-        }}
-        unmountOnExit
-      >
+      <Zoom key={zoomKey} in={true}>
         {renderButton()}
       </Zoom>
     </div>
