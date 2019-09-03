@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import React, { Fragment, useState, useEffect, useRef } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
@@ -8,6 +8,8 @@ import ArrowLeftIcon from "@material-ui/icons/ArrowLeft";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import SaveIcon from "@material-ui/icons/Save";
 import CheckIcon from "@material-ui/icons/Check";
+import CodeIcon from "@material-ui/icons/Code";
+import CloseIcon from "@material-ui/icons/Close";
 import Zoom from "@material-ui/core/Zoom";
 import BeatLoader from "react-spinners/BeatLoader";
 import { format, endOfWeek, subDays, addDays } from "date-fns";
@@ -18,7 +20,9 @@ import debounce from "lodash/debounce";
 import cloneDeep from "lodash/cloneDeep";
 import classnames from "classnames";
 import Form from "../components/Form";
+import Code from "../components/Code";
 import createDefaultLiturgy from "../config/defaultLiturgy";
+import generateCode from "../utils/generateCode";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,10 +45,17 @@ const useStyles = makeStyles(theme => ({
     textAlign: "center"
   },
   content: {
-    maxWidth: 770,
+    maxWidth: 900,
     margin: [[0, "auto"]],
     display: "grid",
-    minHeight: "80vh"
+    minHeight: "80vh",
+    gridTemplateRows: "auto 1fr"
+  },
+  actions: {
+    display: "flex",
+    padding: theme.spacing(1, 2),
+    background: "#EEE",
+    justifyContent: "flex-end"
   },
   cta: {
     position: "fixed",
@@ -86,7 +97,6 @@ function formatDate(date) {
 
 export default ({ firebase }) => {
   const classes = useStyles();
-  const theme = useTheme();
   const [currentDate, setCurrentDate] = useState(getNextSundayDate(new Date()));
   const [loaded, setLoaded] = useState(false);
   const [changed, setChanged] = useState(false);
@@ -94,8 +104,8 @@ export default ({ firebase }) => {
   const [saved, setSaved] = useState(false);
   const [doc, setDoc] = useState({ blocks: [] });
   const [originalDoc, setOriginalDoc] = useState(null);
+  const [displayCode, setDisplayCode] = useState(false);
   const timer = useRef(null);
-  // const originalDoc = useRef(null);
 
   const checkChanges = useRef(
     debounce((doc1, doc2) => {
@@ -158,11 +168,6 @@ export default ({ firebase }) => {
 
   const handleBlocksChange = blocks => {
     setDoc({ ...doc, blocks });
-  };
-
-  const transitionDuration = {
-    enter: theme.transitions.duration.enteringScreen,
-    exit: theme.transitions.duration.leavingScreen
   };
 
   const renderButton = () => {
@@ -256,17 +261,31 @@ export default ({ firebase }) => {
           <ArrowRightIcon fontSize="inherit" />
         </IconButton>
       </div>
-      <div className={classes.content}>
-        <Paper elevation={5} square>
-          {loaded ? (
-            <Form blocks={doc.blocks} onChange={handleBlocksChange} />
-          ) : (
-            <div className={classes.spinner}>
-              <BeatLoader color="#DDD" />
+      <Paper className={classes.content} elevation={5} square>
+        {loaded ? (
+          <Fragment>
+            <div className={classes.actions}>
+              <IconButton
+                onClick={() => {
+                  setDisplayCode(!displayCode);
+                }}
+              >
+                {!displayCode ? <CodeIcon /> : <CloseIcon />}
+              </IconButton>
             </div>
-          )}
-        </Paper>
-      </div>
+
+            {displayCode ? (
+              <Code code={generateCode(doc)} />
+            ) : (
+              <Form blocks={doc.blocks} onChange={handleBlocksChange} />
+            )}
+          </Fragment>
+        ) : (
+          <div className={classes.spinner}>
+            <BeatLoader color="#DDD" />
+          </div>
+        )}
+      </Paper>
 
       <Zoom key={zoomKey} in={true}>
         {renderButton()}
