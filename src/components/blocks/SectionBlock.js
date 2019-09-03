@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Block from "../Block";
+import Block from "../FormBlock";
 
 const useStyles = makeStyles(
   theme => ({

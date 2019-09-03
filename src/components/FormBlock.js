@@ -9,7 +9,7 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(2)
     }
   }),
-  { name: "Block" }
+  { name: "FormBlock" }
 );
 
 export default ({ title = null, children }) => {

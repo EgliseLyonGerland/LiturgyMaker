@@ -1,5 +1,5 @@
 import React from "react";
-import Block from "../Block";
+import Block from "../FormBlock";
 import Sortable from "../Sortable";
 import BibleRefPicker from "../BibleRefPicker";
 

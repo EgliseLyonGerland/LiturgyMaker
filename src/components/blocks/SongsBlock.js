@@ -1,6 +1,6 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
-import Block from "../Block";
+import Block from "../FormBlock";
 import TextFieldSuggest from "../TextFieldSuggest";
 import Sortable from "../Sortable";
 import songs from "../../config/songs.json";
