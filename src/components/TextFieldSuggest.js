@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import deburr from "lodash/deburr";
 import Autosuggest from "react-autosuggest";
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
