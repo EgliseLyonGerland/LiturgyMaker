@@ -23,8 +23,13 @@ function generateSongsBlockCode({ data }) {
   return data
     .reduce((acc, datum) => {
       const [title] = datum.title.split("(");
+      const args = [`'${slugify(title)}'`];
 
-      return [...acc, `createSongSlide('${slugify(title)}')`];
+      if (datum.repeat) {
+        args.push(`{ repeat: true }`);
+      }
+
+      return [...acc, `createSongSlide(${args.join(", ")})`];
     }, [])
     .join("\n");
 }

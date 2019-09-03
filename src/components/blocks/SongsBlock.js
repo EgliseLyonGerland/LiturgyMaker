@@ -4,11 +4,13 @@ import Block from "../FormBlock";
 import TextFieldSuggest from "../TextFieldSuggest";
 import Sortable from "../Sortable";
 import songs from "../../config/songs.json";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
 export default ({ block, onChange }) => {
   let items = block.data;
 
-  const getDefaultItem = () => ({ title: "", infos: "" });
+  const getDefaultItem = () => ({ title: "", infos: "", repeat: false });
 
   const handleChange = (key, index, value) => {
     if (!items[index]) {
@@ -44,6 +46,16 @@ export default ({ block, onChange }) => {
         gutters={3}
         fullWidth
         multiline
+      />
+
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={item.repeat || false}
+            onChange={() => handleChange("repeat", index, !item.repeat)}
+          />
+        }
+        label="Chanté deux fois ?"
       />
     </div>
   );
