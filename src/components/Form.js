@@ -9,23 +9,26 @@ import ReadingBlock from "./blocks/ReadingBlock";
 import SermonBlock from "./blocks/SermonBlock";
 import SectionBlock from "./blocks/SectionBlock";
 
-const useStyles = makeStyles(theme => ({
-  root: {},
-  block: {
-    padding: theme.spacing(6, 8)
-  },
-  odd: {
-    background: "#F5F5F5"
-  },
-  divider: {
-    height: 1,
-    backgroundImage:
-      "linear-gradient(to right, #ccc 40%, rgba(255,255,255,0) 0%)",
-    backgroundPosition: "bottom",
-    backgroundSize: [[15, 1]],
-    backgroundRepeat: "repeat-x"
-  }
-}));
+const useStyles = makeStyles(
+  theme => ({
+    root: {},
+    block: {
+      padding: theme.spacing(6, 8)
+    },
+    odd: {
+      background: "#F5F5F5"
+    },
+    divider: {
+      height: 1,
+      backgroundImage:
+        "linear-gradient(to right, #ccc 40%, rgba(255,255,255,0) 0%)",
+      backgroundPosition: "bottom",
+      backgroundSize: [[15, 1]],
+      backgroundRepeat: "repeat-x"
+    }
+  }),
+  { name: "Form" }
+);
 
 const components = {
   AnnouncementsBlock,

@@ -5,24 +5,27 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 const copy = require("clipboard-copy");
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    maxWidth: "100%",
-    overflowX: "auto",
-    position: "relative"
-  },
-  pre: {
-    margin: `0 !important`,
-    borderRadius: `0 !important`,
-    minHeight: "100%"
-  },
-  copyButton: {
-    position: "absolute",
-    top: theme.spacing(2),
-    right: theme.spacing(2),
-    width: 250
-  }
-}));
+const useStyles = makeStyles(
+  theme => ({
+    root: {
+      maxWidth: "100%",
+      overflowX: "auto",
+      position: "relative"
+    },
+    pre: {
+      margin: `0 !important`,
+      borderRadius: `0 !important`,
+      minHeight: "100%"
+    },
+    copyButton: {
+      position: "absolute",
+      top: theme.spacing(2),
+      right: theme.spacing(2),
+      width: 250
+    }
+  }),
+  { name: "Code" }
+);
 
 export default ({ code }) => {
   const classes = useStyles();

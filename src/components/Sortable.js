@@ -10,26 +10,29 @@ import {
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
 
-const useStyles = makeStyles(theme => ({
-  item: {
-    position: "relative"
-  },
-  handle: {
-    position: "absolute",
-    top: theme.spacing(2),
-    right: "100%",
-    marginRight: theme.spacing(2)
-  },
-  trash: {
-    position: "absolute",
-    top: theme.spacing(2),
-    left: "100%",
-    marginLeft: theme.spacing(2)
-  },
-  add: {
-    marginTop: theme.spacing(2)
-  }
-}));
+const useStyles = makeStyles(
+  theme => ({
+    item: {
+      position: "relative"
+    },
+    handle: {
+      position: "absolute",
+      top: theme.spacing(2),
+      right: "100%",
+      marginRight: theme.spacing(2)
+    },
+    trash: {
+      position: "absolute",
+      top: theme.spacing(2),
+      left: "100%",
+      marginLeft: theme.spacing(2)
+    },
+    add: {
+      marginTop: theme.spacing(2)
+    }
+  }),
+  { name: "Sortable" }
+);
 
 const SortableContainer = sortableContainer(({ children }) => {
   return <div>{children}</div>;

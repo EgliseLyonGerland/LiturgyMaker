@@ -6,16 +6,19 @@ import { validate, getPassage } from "../utils/bibleRef";
 
 import books from "../config/bibleBooks.json";
 
-const useStyles = makeStyles(theme => ({
-  excerptButton: {
-    background: "transparent",
-    border: 0,
-    padding: 0,
-    color: theme.palette.primary.main,
-    cursor: "pointer",
-    outline: 0
-  }
-}));
+const useStyles = makeStyles(
+  theme => ({
+    excerptButton: {
+      background: "transparent",
+      border: 0,
+      padding: 0,
+      color: theme.palette.primary.main,
+      cursor: "pointer",
+      outline: 0
+    }
+  }),
+  { name: "BibleRefPicker" }
+);
 
 export default ({ data, onChange, withExcerpt = true }) => {
   const classes = useStyles();

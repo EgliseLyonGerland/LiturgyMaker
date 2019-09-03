@@ -7,15 +7,20 @@ import Sortable from "../Sortable";
 import SermonPlanPicker from "../SermonPlanPicker";
 import BibleRefPicker from "../BibleRefPicker";
 
-const useStyles = makeStyles(theme => ({
-  item: {},
-  subtitle: {
-    fontSize: 16,
-    color: "#777",
-    fontWeight: 900,
-    margin: theme.spacing(4, 0, 2)
+const useStyles = makeStyles(
+  theme => ({
+    item: {},
+    subtitle: {
+      fontSize: 16,
+      color: "#777",
+      fontWeight: 900,
+      margin: theme.spacing(4, 0, 2)
+    }
+  }),
+  {
+    name: "SermonBlock"
   }
-}));
+);
 
 export default ({ block, onChange }) => {
   const classes = useStyles();

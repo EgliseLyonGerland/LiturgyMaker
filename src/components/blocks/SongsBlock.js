@@ -1,17 +1,11 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Block from "../Block";
 import TextFieldSuggest from "../TextFieldSuggest";
 import Sortable from "../Sortable";
 import songs from "../../config/songs.json";
 
-const useStyles = makeStyles(theme => ({
-  item: {}
-}));
-
 export default ({ block, onChange }) => {
-  const classes = useStyles();
   let items = block.data;
 
   const getDefaultItem = () => ({ title: "", infos: "" });
@@ -26,7 +20,7 @@ export default ({ block, onChange }) => {
   };
 
   const renderItem = (item, index) => (
-    <div className={classes.item}>
+    <div>
       <TextFieldSuggest
         label="Titre"
         value={item.title}
@@ -51,12 +45,11 @@ export default ({ block, onChange }) => {
         fullWidth
         multiline
       />
-      <div />
     </div>
   );
 
   return (
-    <Block className={classes.root} title="Chants">
+    <Block title="Chants">
       <Sortable
         items={items}
         renderItem={renderItem}

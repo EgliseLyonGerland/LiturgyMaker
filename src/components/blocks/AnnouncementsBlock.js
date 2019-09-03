@@ -1,16 +1,9 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Block from "../Block";
 import Sortable from "../Sortable";
 
-const useStyles = makeStyles(theme => ({
-  root: {},
-  item: {}
-}));
-
 export default ({ block, onChange }) => {
-  const classes = useStyles();
   let items = block.data;
 
   const getDefaultItem = () => ({ title: "", detail: "" });
@@ -47,7 +40,7 @@ export default ({ block, onChange }) => {
   );
 
   return (
-    <Block className={classes.root} title="Annonces">
+    <Block title="Annonces">
       <Sortable
         items={items}
         renderItem={renderItem}

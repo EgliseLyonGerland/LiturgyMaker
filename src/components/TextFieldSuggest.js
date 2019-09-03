@@ -8,29 +8,32 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import slugify from "../utils/slugify";
 
-const useStyles = makeStyles({
-  root: {
-    flexGrow: 1
+const useStyles = makeStyles(
+  {
+    root: {
+      flexGrow: 1
+    },
+    container: {
+      position: "relative"
+    },
+    suggestionsContainerOpen: {
+      position: "absolute",
+      zIndex: 100,
+      top: 56,
+      left: 0,
+      right: 0
+    },
+    suggestion: {
+      display: "block"
+    },
+    suggestionsList: {
+      margin: 0,
+      padding: 0,
+      listStyleType: "none"
+    }
   },
-  container: {
-    position: "relative"
-  },
-  suggestionsContainerOpen: {
-    position: "absolute",
-    zIndex: 100,
-    top: 56,
-    left: 0,
-    right: 0
-  },
-  suggestion: {
-    display: "block"
-  },
-  suggestionsList: {
-    margin: 0,
-    padding: 0,
-    listStyleType: "none"
-  }
-});
+  { name: "TextFieldSuggest" }
+);
 
 export default function TextFieldSuggest({
   items = [],
