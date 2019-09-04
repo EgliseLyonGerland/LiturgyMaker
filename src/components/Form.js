@@ -16,7 +16,6 @@ const useStyles = makeStyles(
       padding: theme.spacing(6, 8)
     },
     odd: {
-      background: "#F5F5F5"
     },
     divider: {
       height: 1,

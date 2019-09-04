@@ -30,19 +30,8 @@ const useStyles = makeStyles(theme => ({
   },
   header: {
     background: "linear-gradient(344deg, #0077d1 0%, #0091ff 100%)",
-    height: 184,
-    marginBottom: -48,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white"
-  },
-  pageTitle: {
-    fontWeight: "bold",
-    fontSize: 22,
-    margin: theme.spacing(0, 2),
-    width: 350,
-    textAlign: "center"
+    height: theme.spacing(22),
+    marginBottom: -theme.spacing(8)
   },
   content: {
     maxWidth: 900,
@@ -51,11 +40,31 @@ const useStyles = makeStyles(theme => ({
     minHeight: "80vh",
     gridTemplateRows: "auto 1fr"
   },
-  actions: {
+  navBar: {
     display: "flex",
-    padding: theme.spacing(1, 2),
+    height: theme.spacing(8),
+    padding: theme.spacing(0, 2),
     background: "#EEE",
-    justifyContent: "flex-end"
+    alignItems: "center",
+
+    "&:before": {
+      content: '""',
+      width: 50
+    }
+  },
+  sundays: {
+    display: "flex",
+    alignItems: "center",
+    fontSize: 16,
+    fontWeight: 700,
+    margin: [[0, "auto"]]
+  },
+  sundaysName: {
+    width: 250,
+    textAlign: "center"
+  },
+  actions: {
+    width: 50
   },
   cta: {
     position: "fixed",
@@ -170,6 +179,10 @@ export default ({ firebase }) => {
     setDoc({ ...doc, blocks });
   };
 
+  let zoomKey = "nothing";
+  if (saved) zoomKey = "saved";
+  else if (changed) zoomKey = "save";
+
   const renderButton = () => {
     if (saved) {
       return (
@@ -224,62 +237,74 @@ export default ({ firebase }) => {
     return <div />;
   };
 
-  let zoomKey = "nothing";
-  if (saved) zoomKey = "saved";
-  else if (changed) zoomKey = "save";
+  const renderNavBar = () => {
+    return (
+      <div className={classes.navBar}>
+        <div className={classes.sundays}>
+          <IconButton
+            aria-label="delete"
+            className={classes.margin}
+            color="inherit"
+            onClick={() => {
+              let date = subDays(currentDate, 7);
+              setLoaded(false);
+              setChanged(false);
+              setCurrentDate(getNextSundayDate(date));
+            }}
+          >
+            <ArrowLeftIcon fontSize="inherit" />
+          </IconButton>
+          <Typography
+            className={classes.sundaysName}
+            variant="inherit"
+            color="textSecondary"
+          >
+            {capitalize(formatDate(currentDate))}
+          </Typography>
+          <IconButton
+            aria-label="delete"
+            className={classes.margin}
+            color="inherit"
+            onClick={() => {
+              let date = addDays(currentDate, 7);
+              setLoaded(false);
+              setChanged(false);
+              setCurrentDate(getNextSundayDate(date));
+            }}
+          >
+            <ArrowRightIcon fontSize="inherit" />
+          </IconButton>
+        </div>
+
+        <div className={classes.actions}>
+          <IconButton
+            onClick={() => {
+              setDisplayCode(!displayCode);
+            }}
+          >
+            {!displayCode ? <CodeIcon /> : <CloseIcon />}
+          </IconButton>
+        </div>
+      </div>
+    );
+  };
+
+  const renderContent = () => {
+    if (displayCode) {
+      return <Code code={generateCode(doc)} />;
+    }
+
+    return <Form blocks={doc.blocks} onChange={handleBlocksChange} />;
+  };
 
   return (
     <div className={classes.root}>
-      <div className={classes.header}>
-        <IconButton
-          aria-label="delete"
-          className={classes.margin}
-          color="inherit"
-          onClick={() => {
-            let date = subDays(currentDate, 7);
-            setLoaded(false);
-            setChanged(false);
-            setCurrentDate(getNextSundayDate(date));
-          }}
-        >
-          <ArrowLeftIcon fontSize="inherit" />
-        </IconButton>
-        <Typography color="inherit" className={classes.pageTitle} variant="h4">
-          {capitalize(formatDate(currentDate))}
-        </Typography>
-        <IconButton
-          aria-label="delete"
-          className={classes.margin}
-          color="inherit"
-          onClick={() => {
-            let date = addDays(currentDate, 7);
-            setLoaded(false);
-            setChanged(false);
-            setCurrentDate(getNextSundayDate(date));
-          }}
-        >
-          <ArrowRightIcon fontSize="inherit" />
-        </IconButton>
-      </div>
-      <Paper className={classes.content} elevation={5} square>
-        {loaded ? (
-          <Fragment>
-            <div className={classes.actions}>
-              <IconButton
-                onClick={() => {
-                  setDisplayCode(!displayCode);
-                }}
-              >
-                {!displayCode ? <CodeIcon /> : <CloseIcon />}
-              </IconButton>
-            </div>
+      <div className={classes.header}></div>
+      <Paper className={classes.content} elevation={0} square>
+        {renderNavBar()}
 
-            {displayCode ? (
-              <Code code={generateCode(doc)} />
-            ) : (
-              <Form blocks={doc.blocks} onChange={handleBlocksChange} />
-            )}
-          </Fragment>
+        {loaded ? (
+          renderContent()
         ) : (
           <div className={classes.spinner}>
             <BeatLoader color="#DDD" />
