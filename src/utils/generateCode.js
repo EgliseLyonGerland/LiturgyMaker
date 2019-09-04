@@ -16,6 +16,10 @@ function generateAnnouncementsBlockCode({ data }) {
     }, [])
   };
 
+  if (!config.items.length) {
+    return "";
+  }
+
   return `createAnnouncementsSlide(${JSON.stringify(config, null, "  ")})`;
 }
 
