@@ -78,7 +78,6 @@ export default ({ block, onChange }) => {
           data.bibleRefs = refs;
           onChange(data);
         }}
-        isItemEmpty={ref => !!ref}
         getDefaultItem={getDefaultBibleRef}
         neverEmpty
       />

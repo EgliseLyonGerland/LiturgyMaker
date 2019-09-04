@@ -53,7 +53,6 @@ export default ({
   items,
   renderItem,
   onChange,
-  isItemEmpty,
   getDefaultItem,
   neverEmpty = false,
   gutters = 0

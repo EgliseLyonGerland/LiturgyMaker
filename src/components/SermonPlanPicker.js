@@ -31,7 +31,6 @@ export default ({ items, onChange }) => {
         items={items}
         renderItem={renderItem}
         onChange={onChange}
-        isItemEmpty={item => !item}
         getDefaultItem={getDefaultItem}
         neverEmpty
       />

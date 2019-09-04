@@ -66,7 +66,6 @@ export default ({ block, onChange }) => {
         items={items}
         renderItem={renderItem}
         onChange={onChange}
-        isItemEmpty={item => !item.title && !item.infos}
         getDefaultItem={getDefaultItem}
         gutters={3}
       />

@@ -30,7 +30,6 @@ export default ({ block, onChange }) => {
           data.bibleRefs = refs;
           onChange(data);
         }}
-        isItemEmpty={item => !item.ref && !item.excerpt}
         getDefaultItem={getDefaultItem}
         gutters={3}
         neverEmpty
