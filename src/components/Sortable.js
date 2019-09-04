@@ -54,16 +54,10 @@ export default ({
   renderItem,
   onChange,
   getDefaultItem,
-  neverEmpty = false,
   gutters = 0
 }) => {
   const classes = useStyles();
   const theme = useTheme();
-
-  if (neverEmpty && !items.length) {
-    items.push(getDefaultItem());
-    onChange([...items]);
-  }
 
   const handleSortEnd = ({ oldIndex, newIndex }) => {
     onChange(arrayMove(items, oldIndex, newIndex));

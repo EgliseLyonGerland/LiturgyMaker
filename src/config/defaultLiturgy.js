@@ -6,13 +6,14 @@ export default ({ date }) => ({
     {
       id: uuid(),
       type: "announcements",
-      data: []
+      data: [{ title: "", detail: "" }]
     },
     {
       id: uuid(),
       type: "reading",
       data: {
-        title: "Ouverture"
+        title: "Ouverture",
+        bibleRefs: [{ ref: "", excerpt: "" }]
       }
     },
     {
@@ -24,7 +25,8 @@ export default ({ date }) => ({
       id: uuid(),
       type: "reading",
       data: {
-        title: "Loi de Dieu"
+        title: "Loi de Dieu",
+        bibleRefs: [{ ref: "", excerpt: "" }]
       }
     },
     {
@@ -36,7 +38,8 @@ export default ({ date }) => ({
       id: uuid(),
       type: "reading",
       data: {
-        title: "Grâce de Dieu"
+        title: "Grâce de Dieu",
+        bibleRefs: [{ ref: "", excerpt: "" }]
       }
     },
     {
@@ -48,7 +51,8 @@ export default ({ date }) => ({
       id: uuid(),
       type: "reading",
       data: {
-        title: "Lecture inter-chants"
+        title: "Lecture inter-chants",
+        bibleRefs: [{ ref: "", excerpt: "" }]
       }
     },
     {
@@ -59,7 +63,12 @@ export default ({ date }) => ({
     {
       id: uuid(),
       type: "sermon",
-      data: {}
+      data: {
+        author: "",
+        bibleRefs: [""],
+        title: "",
+        plan: [""]
+      }
     },
     {
       id: uuid(),
@@ -70,7 +79,8 @@ export default ({ date }) => ({
       id: uuid(),
       type: "section",
       data: {
-        title: "Sainte cène"
+        title: "Sainte cène",
+        bibleRefs: [{ ref: "", excerpt: "" }]
       }
     },
     {
@@ -82,7 +92,8 @@ export default ({ date }) => ({
       id: uuid(),
       type: "reading",
       data: {
-        title: "Envois"
+        title: "Envoi",
+        bibleRefs: [{ ref: "", excerpt: "" }]
       }
     }
   ]

@@ -79,7 +79,6 @@ export default ({ block, onChange }) => {
           onChange(data);
         }}
         getDefaultItem={getDefaultBibleRef}
-        neverEmpty
       />
 
       <Typography className={classes.subtitle} variant="h6">

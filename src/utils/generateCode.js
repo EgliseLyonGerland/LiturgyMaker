@@ -60,17 +60,6 @@ function generateSectionBlockCode(block) {
   return `createChapterSlide({ title: '${block.data.title}' })`;
 }
 
-// createSermonSlide({
-//   author: 'Gethin Jones',
-//   bibleRef: 'Jean 4.1-26',
-//   title: 'La quête de Dieu',
-//   plan: [
-//     'La prière reflète notre dépendance',
-//     'La prière reflète notre confiance',
-//     'La prière reflète notre confiance',
-//   ],
-// });
-
 function generateSermonBlockCode({ data }) {
   const { title, author, plan = [], bibleRefs = [] } = data;
 

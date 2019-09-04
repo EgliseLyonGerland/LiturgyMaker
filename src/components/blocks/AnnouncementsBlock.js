@@ -47,7 +47,6 @@ export default ({ block, onChange }) => {
         onChange={onChange}
         getDefaultItem={getDefaultItem}
         gutters={3}
-        neverEmpty
       />
     </Block>
   );
