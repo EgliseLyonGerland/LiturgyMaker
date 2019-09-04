@@ -31,6 +31,8 @@ export default ({ data, onChange, withExcerpt = true }) => {
 
   const handleChange = (key, value) => {
     data[key] = value;
+    data.excerpt = data.excerpt.replace(/\n/gm, "");
+    data.excerpt = data.excerpt.replace(/\s+/gm, " ");
 
     onChange(data);
   };
@@ -42,7 +44,7 @@ export default ({ data, onChange, withExcerpt = true }) => {
 
     if (excerpt) {
       excerpt = excerpt.trim();
-      excerpt = excerpt.replace(/\n\s+/gm, "\n");
+      excerpt = excerpt.replace(/\n*\s+/gm, " ");
       onChange({ ...data, excerpt });
     }
 
