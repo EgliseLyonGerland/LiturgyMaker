@@ -49,9 +49,9 @@ exports.notifyChanges = functions.firestore
 
     let subject;
     if (created) {
-      subject = `Les informations sur le culte du ${formattedDate} on été ajoutées`;
+      subject = `Les informations sur le culte du ${formattedDate} ont été ajoutées`;
     } else {
-      subject = `Des informations sur le culte du ${formattedDate} on été modifées`;
+      subject = `Des informations sur le culte du ${formattedDate} ont été modifées`;
     }
 
     let diff;
