@@ -135,7 +135,7 @@ export default ({ firebase }) => {
   const [doc, setDoc] = useState({ blocks: [] });
   const [originalDoc, setOriginalDoc] = useState(null);
   const [displayCode, setDisplayCode] = useState(false);
-  const [focusedBlock, setFocusedBlock] = useState(null);
+  const [focusedBlock, setFocusedBlock] = useState({});
   const timer = useRef(null);
   const db = firebase.firestore();
   const id = format(currentDate, "yMMdd");
@@ -148,8 +148,8 @@ export default ({ firebase }) => {
 
   const hidePreview = useRef(
     debounce(() => {
-      setFocusedBlock(null);
-    }, 1000)
+      setFocusedBlock({});
+    }, 200)
   );
 
   const updateDoc = () => {
@@ -207,12 +207,6 @@ export default ({ firebase }) => {
     }
   }, [doc.blocks]);
 
-  useEffect(() => {
-    if (loaded && !focusedBlock && doc.blocks.length) {
-      setFocusedBlock({ block: doc.blocks[1] });
-    }
-  });
-
   const handleBlocksChange = blocks => {
     setDoc({ ...doc, blocks });
   };
@@ -229,7 +223,7 @@ export default ({ firebase }) => {
   const handleChangeDate = date => {
     setLoaded(false);
     setChanged(false);
-    setFocusedBlock(null);
+    setFocusedBlock({});
     setCurrentDate(getNextSundayDate(date));
   };
 
@@ -368,12 +362,10 @@ export default ({ firebase }) => {
           )}
         </Paper>
         <div className={classes.preview}>
-          {focusedBlock && (
-            <Preview
-              block={focusedBlock.block}
-              currentFieldPath={focusedBlock.path}
-            />
-          )}
+          <Preview
+            block={focusedBlock.block}
+            currentFieldPath={focusedBlock.path}
+          />
         </div>
       </div>
       <Zoom key={zoomKey} in={true}>

@@ -22,28 +22,27 @@ export default ({ block, currentFieldPath }) => {
   const classes = useStyles();
   const canvasRef = useRef(null);
 
-  const { type } = block;
+  const clean = ctx => {
+    ctx.clearRect(0, 0, documentWidth, documentHeight);
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    const funcName = `generate${capitalize(type)}Preview`;
 
     canvas.width = documentWidth;
     canvas.height = documentHeight;
 
+    if (!block) {
+      clean(ctx);
+      return;
+    }
+
+    const { type } = block;
+    const funcName = `generate${capitalize(type)}Preview`;
+
     if (!preview[funcName]) {
-      ctx.fillStyle = "transparent";
-      ctx.fillRect(0, 0, documentWidth, documentHeight);
-      ctx.fillStyle = "white";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.font = preview.getFont("title");
-      ctx.fillText(
-        "Aperçu indisponible",
-        documentWidth / 2,
-        documentHeight / 2
-      );
+      clean(ctx);
       return;
     }
 
