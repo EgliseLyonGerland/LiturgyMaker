@@ -3,7 +3,7 @@ import Block from "../FormBlock";
 import Sortable from "../Sortable";
 import BibleRefPicker from "../BibleRefPicker";
 
-export default ({ block, onChange }) => {
+export default ({ block, onChange, onFocus, onBlur }) => {
   const { data } = block;
   const { title = "", bibleRefs = [] } = data;
 
@@ -17,6 +17,8 @@ export default ({ block, onChange }) => {
           data.bibleRefs[index] = value;
           onChange(data);
         }}
+        onFocus={path => onFocus(["bibleRefs", index, ...path])}
+        onBlur={onBlur}
       />
     </div>
   );

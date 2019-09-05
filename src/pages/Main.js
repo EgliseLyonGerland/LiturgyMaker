@@ -21,8 +21,12 @@ import cloneDeep from "lodash/cloneDeep";
 import classnames from "classnames";
 import Form from "../components/Form";
 import Code from "../components/Code";
+import Preview from "../components/Preview";
 import createDefaultLiturgy from "../config/defaultLiturgy";
 import generateCode from "../utils/generateCode";
+
+const headerHeight = 176;
+const gutters = 3;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,15 +34,31 @@ const useStyles = makeStyles(theme => ({
   },
   header: {
     background: "linear-gradient(344deg, #0077d1 0%, #0091ff 100%)",
-    height: theme.spacing(22),
-    marginBottom: -theme.spacing(8)
+    height: headerHeight
+  },
+  wrapper: {
+    display: "flex",
+    justifyContent: "center",
+    margin: theme.spacing(0, gutters)
+  },
+  preview: {
+    margin: theme.spacing(gutters * 2, gutters),
+    maxWidth: 600,
+    flexGrow: 1,
+
+    "& > *": {
+      position: "sticky",
+      top: theme.spacing(gutters * 2)
+    }
   },
   content: {
-    maxWidth: 900,
-    margin: [[0, "auto"]],
+    width: 800,
+    maxWidth: "100%",
+    margin: theme.spacing(0, gutters),
     display: "grid",
     minHeight: "80vh",
-    gridTemplateRows: "auto 1fr"
+    gridTemplateRows: "auto 1fr",
+    marginTop: -theme.spacing(8)
   },
   navBar: {
     display: "flex",
@@ -114,12 +134,19 @@ export default ({ firebase }) => {
   const [doc, setDoc] = useState({ blocks: [] });
   const [originalDoc, setOriginalDoc] = useState(null);
   const [displayCode, setDisplayCode] = useState(false);
+  const [focusedBlock, setFocusedBlock] = useState(null);
   const timer = useRef(null);
 
   const checkChanges = useRef(
     debounce((doc1, doc2) => {
       setChanged(!isEqual(doc1.blocks, doc2.blocks));
     }, 500)
+  );
+
+  const hidePreview = useRef(
+    debounce(() => {
+      setFocusedBlock(null);
+    }, 1000)
   );
 
   const db = firebase.firestore();
@@ -173,10 +200,23 @@ export default ({ firebase }) => {
     if (originalDoc && loaded) {
       checkChanges.current(originalDoc, doc);
     }
-  });
+
+    if (!focusedBlock && doc.blocks.length) {
+      setFocusedBlock({ block: doc.blocks[0] });
+    }
+  }, [doc, focusedBlock, loaded, originalDoc, saved]);
 
   const handleBlocksChange = blocks => {
     setDoc({ ...doc, blocks });
+  };
+
+  const handleBlockFocus = (block, path) => {
+    hidePreview.current.cancel();
+    setFocusedBlock({ block, path });
+  };
+
+  const handleBlockBlur = () => {
+    hidePreview.current();
   };
 
   let zoomKey = "nothing";
@@ -294,24 +334,40 @@ export default ({ firebase }) => {
       return <Code code={generateCode(doc)} />;
     }
 
-    return <Form blocks={doc.blocks} onChange={handleBlocksChange} />;
+    return (
+      <Form
+        blocks={doc.blocks}
+        onChange={handleBlocksChange}
+        onFocus={handleBlockFocus}
+        onBlur={handleBlockBlur}
+      />
+    );
   };
 
   return (
     <div className={classes.root}>
       <div className={classes.header}></div>
-      <Paper className={classes.content} elevation={0} square>
-        {renderNavBar()}
+      <div className={classes.wrapper}>
+        <Paper className={classes.content} elevation={0} square>
+          {renderNavBar()}
 
-        {loaded ? (
-          renderContent()
-        ) : (
-          <div className={classes.spinner}>
-            <BeatLoader color="#DDD" />
-          </div>
-        )}
-      </Paper>
-
+          {loaded ? (
+            renderContent()
+          ) : (
+            <div className={classes.spinner}>
+              <BeatLoader color="#DDD" />
+            </div>
+          )}
+        </Paper>
+        <div className={classes.preview}>
+          {focusedBlock && (
+            <Preview
+              block={focusedBlock.block}
+              currentFieldPath={focusedBlock.path}
+            />
+          )}
+        </div>
+      </div>
       <Zoom key={zoomKey} in={true}>
         {renderButton()}
       </Zoom>

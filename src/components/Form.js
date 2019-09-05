@@ -15,8 +15,7 @@ const useStyles = makeStyles(
     block: {
       padding: theme.spacing(6, 8)
     },
-    odd: {
-    },
+    odd: {},
     divider: {
       height: 1,
       backgroundImage:
@@ -37,7 +36,7 @@ const components = {
   SectionBlock
 };
 
-export default ({ blocks, onChange }) => {
+export default ({ blocks, onChange, onFocus, onBlur }) => {
   const classes = useStyles();
 
   const renderBlock = (block, index) => {
@@ -50,6 +49,10 @@ export default ({ blocks, onChange }) => {
           blocks[index].data = data;
           onChange([...blocks]);
         }}
+        onFocus={path => {
+          onFocus(block, path);
+        }}
+        onBlur={onBlur}
       />
     );
   };

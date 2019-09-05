@@ -22,7 +22,7 @@ const useStyles = makeStyles(
   }
 );
 
-export default ({ block, onChange }) => {
+export default ({ block, onChange, onFocus, onBlur }) => {
   const classes = useStyles();
   const { data } = block;
   const { title, author, bibleRefs = [], plan = [] } = data;
@@ -37,6 +37,8 @@ export default ({ block, onChange }) => {
           data.bibleRefs[index] = ref;
           onChange(data);
         }}
+        onFocus={path => onFocus(["bibleRefs", index, ...path])}
+        onBlur={onBlur}
         withExcerpt={false}
       />
     </div>
@@ -51,6 +53,8 @@ export default ({ block, onChange }) => {
           data.title = target.value;
           onChange(data);
         }}
+        onFocus={() => onFocus(["title"])}
+        onBlur={onBlur}
         variant="filled"
         margin="dense"
         fullWidth
@@ -62,6 +66,8 @@ export default ({ block, onChange }) => {
           data.author = target.value;
           onChange(data);
         }}
+        onFocus={() => onFocus(["author"])}
+        onBlur={onBlur}
         variant="filled"
         margin="dense"
         fullWidth
@@ -91,6 +97,8 @@ export default ({ block, onChange }) => {
           data.plan = items;
           onChange(data);
         }}
+        onFocus={path => onFocus(["plan", ...path])}
+        onBlur={onBlur}
       />
     </Block>
   );

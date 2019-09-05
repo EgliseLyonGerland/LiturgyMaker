@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Block from "../FormBlock";
 import Sortable from "../Sortable";
 
-export default ({ block, onChange }) => {
+export default ({ block, onChange, onFocus, onBlur }) => {
   let items = block.data;
 
   const getDefaultItem = () => ({ title: "", detail: "" });
@@ -25,6 +25,8 @@ export default ({ block, onChange }) => {
         onChange={event => handleChange("title", index, event.target.value)}
         variant="filled"
         margin="dense"
+        onFocus={() => onFocus([index, "title"])}
+        onBlur={onBlur}
         fullWidth
       />
       <TextField
@@ -33,6 +35,8 @@ export default ({ block, onChange }) => {
         onChange={event => handleChange("detail", index, event.target.value)}
         variant="filled"
         margin="dense"
+        onFocus={() => onFocus([index, "detail"])}
+        onBlur={onBlur}
         multiline
         fullWidth
       />

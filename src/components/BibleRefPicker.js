@@ -20,7 +20,7 @@ const useStyles = makeStyles(
   { name: "BibleRefPicker" }
 );
 
-export default ({ data, onChange, withExcerpt = true }) => {
+export default ({ data, onChange, onFocus, onBlur, withExcerpt = true }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
@@ -59,6 +59,8 @@ export default ({ data, onChange, withExcerpt = true }) => {
         onChange={value => {
           handleChange("ref", value);
         }}
+        onFocus={() => onFocus(["ref"])}
+        onBlur={onBlur}
         variant="filled"
         margin="dense"
         error={!!error}
@@ -75,6 +77,8 @@ export default ({ data, onChange, withExcerpt = true }) => {
             onChange={({ target }) => {
               handleChange("excerpt", target.value);
             }}
+            onFocus={() => onFocus(["excerpt"])}
+            onBlur={onBlur}
             variant="filled"
             margin="dense"
             fullWidth

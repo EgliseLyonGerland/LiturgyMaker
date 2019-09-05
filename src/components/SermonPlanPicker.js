@@ -2,7 +2,7 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Sortable from "./Sortable";
 
-export default ({ items, onChange }) => {
+export default ({ items, onChange, onFocus, onBlur }) => {
   const getDefaultItem = () => "";
 
   const handleChange = (index, value) => {
@@ -18,6 +18,8 @@ export default ({ items, onChange }) => {
         onChange={({ target }) => {
           handleChange(index, target.value);
         }}
+        onFocus={() => onFocus([index])}
+        onBlur={onBlur}
         variant="filled"
         margin="dense"
         fullWidth
