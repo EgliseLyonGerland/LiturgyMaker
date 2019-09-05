@@ -31,8 +31,7 @@ export default ({ data, onChange, onFocus, onBlur, withExcerpt = true }) => {
 
   const handleChange = (key, value) => {
     data[key] = value;
-    data.excerpt = data.excerpt.replace(/\n/gm, "");
-    data.excerpt = data.excerpt.replace(/\s+/gm, " ");
+    data.excerpt = data.excerpt.replace(/ +/gm, " ");
 
     onChange(data);
   };
@@ -45,6 +44,7 @@ export default ({ data, onChange, onFocus, onBlur, withExcerpt = true }) => {
     if (excerpt) {
       excerpt = excerpt.trim();
       excerpt = excerpt.replace(/\n*\s+/gm, " ");
+      excerpt = excerpt.replace(/\s+/gm, " ");
       onChange({ ...data, excerpt });
     }
 

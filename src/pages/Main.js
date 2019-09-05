@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -136,6 +137,8 @@ export default ({ firebase }) => {
   const [displayCode, setDisplayCode] = useState(false);
   const [focusedBlock, setFocusedBlock] = useState(null);
   const timer = useRef(null);
+  const db = firebase.firestore();
+  const id = format(currentDate, "yMMdd");
 
   const checkChanges = useRef(
     debounce((doc1, doc2) => {
@@ -148,9 +151,6 @@ export default ({ firebase }) => {
       setFocusedBlock(null);
     }, 1000)
   );
-
-  const db = firebase.firestore();
-  const id = format(currentDate, "yMMdd");
 
   const updateDoc = () => {
     setSaving(true);
@@ -189,22 +189,28 @@ export default ({ firebase }) => {
     if (!loaded) {
       timer.current = setTimeout(fetchDoc, 500);
     }
+  }, [currentDate]);
 
+  useEffect(() => {
     if (saved) {
       setTimeout(() => {
         setSaved(false);
         setSaving(false);
       }, 2000);
     }
+  }, [saved]);
 
+  useEffect(() => {
     if (originalDoc && loaded) {
       checkChanges.current(originalDoc, doc);
     }
+  }, [doc.blocks]);
 
-    if (!focusedBlock && doc.blocks.length) {
-      setFocusedBlock({ block: doc.blocks[0] });
+  useEffect(() => {
+    if (loaded && !focusedBlock && doc.blocks.length) {
+      setFocusedBlock({ block: doc.blocks[1] });
     }
-  }, [doc, focusedBlock, loaded, originalDoc, saved]);
+  });
 
   const handleBlocksChange = blocks => {
     setDoc({ ...doc, blocks });
@@ -217,6 +223,13 @@ export default ({ firebase }) => {
 
   const handleBlockBlur = () => {
     hidePreview.current();
+  };
+
+  const handleChangeDate = date => {
+    setLoaded(false);
+    setChanged(false);
+    setFocusedBlock(null);
+    setCurrentDate(getNextSundayDate(date));
   };
 
   let zoomKey = "nothing";
@@ -286,10 +299,7 @@ export default ({ firebase }) => {
             className={classes.margin}
             color="inherit"
             onClick={() => {
-              let date = subDays(currentDate, 7);
-              setLoaded(false);
-              setChanged(false);
-              setCurrentDate(getNextSundayDate(date));
+              handleChangeDate(subDays(currentDate, 7));
             }}
           >
             <ArrowLeftIcon fontSize="inherit" />
@@ -306,10 +316,7 @@ export default ({ firebase }) => {
             className={classes.margin}
             color="inherit"
             onClick={() => {
-              let date = addDays(currentDate, 7);
-              setLoaded(false);
-              setChanged(false);
-              setCurrentDate(getNextSundayDate(date));
+              handleChangeDate(addDays(currentDate, 7));
             }}
           >
             <ArrowRightIcon fontSize="inherit" />

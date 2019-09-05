@@ -1,7 +1,7 @@
 import chunk from "lodash/chunk";
 import { documentWidth, documentHeight, typography } from "../config/preview";
 
-const lineHeight = 1.4;
+const lineHeight = 1.35;
 
 function getWords(text) {
   const words = text.split(" ");
@@ -107,6 +107,62 @@ CanvasRenderingContext2D.prototype.fillMultilineText = function(
   return height;
 };
 
+CanvasRenderingContext2D.prototype.measureMultiligneText = function(
+  text,
+  x,
+  y,
+  width
+) {
+  const lines = getLines(this, text, width);
+
+  return lines.length * this.getCurrentLineHeight();
+};
+
+CanvasRenderingContext2D.prototype.fillSeparator = function(
+  x,
+  y,
+  horizontal = false,
+  align = "center"
+) {
+  this.save();
+
+  const size = horizontal ? 800 : 600;
+  const thickness = 4;
+  const width = horizontal ? size : thickness;
+  const height = horizontal ? thickness : size;
+
+  let finalX;
+  if (horizontal) {
+    if (align === "center") finalX = x - size / 2;
+    else if (align === "right") finalX = x - size;
+  } else {
+    finalX = x - thickness / 2;
+  }
+
+  let finalY;
+  if (horizontal) {
+    finalY = y - thickness / 2;
+  } else {
+    if (align === "center") finalY = y - size / 2;
+    else if (align === "right") finalY = y - size;
+  }
+
+  const gradient = this.createLinearGradient(
+    finalX,
+    finalY,
+    horizontal ? finalX + size : finalX,
+    horizontal ? finalY : finalY + size
+  );
+
+  gradient.addColorStop(0, "rgba(255, 255, 255, 0)");
+  gradient.addColorStop(0.5, "white");
+  gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+
+  this.fillStyle = gradient;
+  this.fillRect(finalX, finalY, width, height);
+  this.restore();
+};
+
 export function generateAnnouncementsPreview(
   ctx,
   block,
@@ -129,11 +185,9 @@ export function generateAnnouncementsPreview(
   ctx.fillText("Annonces", documentWidth / 2, 90);
 
   // Line
-  const lineWidth = 4;
-  const lineHeight = 600;
-  const lineX = documentWidth / 2 - lineWidth / 2;
-  const lineY = (contentHeight - lineHeight) / 2 + contentPositionY;
-  ctx.fillRect(lineX, lineY, lineWidth, lineHeight);
+  const lineX = documentWidth / 2;
+  const lineY = contentHeight / 2 + contentPositionY;
+  ctx.fillSeparator(lineX, lineY);
 
   const itemHeight = contentHeight / 3;
   const itemWidth = (contentWidth - margin * 2) / 2;
@@ -155,4 +209,58 @@ export function generateAnnouncementsPreview(
     ctx.textBaseline = "top";
     ctx.fillMultilineText(item.detail, x, y + itemTitleHeight, itemWidth);
   });
+}
+
+export function generateReadingPreview(
+  ctx,
+  block,
+  currentFieldPath = [0, "title"]
+) {
+  const {
+    data: { bibleRefs = [] }
+  } = block;
+
+  if (!bibleRefs.length) {
+    return;
+  }
+
+  const { ref, excerpt } = bibleRefs[0];
+
+  const margin = 80;
+  const maxContentWidth = documentWidth - 400;
+
+  ctx.font = getFont("verseTitle");
+  const titleHeight = ctx.getCurrentLineHeight();
+
+  ctx.font = getFont("verseExcerpt");
+  const excerptHeight = ctx.measureMultiligneText(
+    excerpt,
+    0,
+    0,
+    maxContentWidth
+  );
+
+  const totalHeight = titleHeight + excerptHeight + margin * 2;
+  const y = (documentHeight - totalHeight) / 2;
+
+  ctx.fillStyle = "white";
+
+  ctx.font = getFont("verseTitle");
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(ref, documentWidth / 2, y + titleHeight / 2);
+
+  const lineX = documentWidth / 2;
+  const lineY = y + titleHeight + margin;
+  ctx.fillSeparator(lineX, lineY, true);
+
+  ctx.font = getFont("verseExcerpt");
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillMultilineText(
+    excerpt,
+    documentWidth / 2,
+    y + titleHeight + margin * 2,
+    maxContentWidth
+  );
 }
