@@ -3,106 +3,83 @@ export const documentHeight = 1080;
 
 export const typography = {
   title: {
-    fontFamily: "SourceSansPro-Black",
-    fontSize: 90
+    fontFamily: "Source Sans Pro",
+    fontSize: 90,
+    fontWeight: 900
   },
   announcementTitle: {
-    fontFamily: "SourceSansPro-Black",
-    fontSize: 90
+    fontFamily: "Source Sans Pro",
+    fontSize: 90,
+    fontWeight: 900
   },
   announcementPage: {
-    fontFamily: "SourceSansPro-Semibold",
-    fontSize: 50
+    fontFamily: "Source Sans Pro",
+    fontSize: 50,
+    fontWeight: 600
   },
   announcementItemTitle: {
-    fontFamily: "SourceSansPro-Bold",
-    fontSize: 50
+    fontFamily: "Source Sans Pro",
+    fontSize: 50,
+    fontWeight: 700
   },
   announcementItemDetail: {
-    fontFamily: "SourceSansPro-Semibold",
+    fontFamily: "Source Sans Pro",
     fontSize: 40,
+    fontWeight: 600,
     opacity: 70
   },
   verseTitle: {
-    fontFamily: "SourceSansPro-Black",
-    fontSize: 90
+    fontFamily: "Source Sans Pro",
+    fontSize: 90,
+    fontWeight: 900
   },
   verseSubtitle: {
-    fontFamily: "SourceSansPro-Regular",
+    fontFamily: "Source Sans Pro",
     fontSize: 90,
+    fontWeight: 400,
     opacity: 80
   },
   verseExcerpt: {
-    fontFamily: "AdobeHebrew-BoldItalic",
-    fontSize: 90
+    fontFamily: "Crimson Text",
+    fontStyle: "italic",
+    fontSize: 100
   },
   songTitle: {
-    fontFamily: "AdobeHebrew-BoldItalic",
-    fontSize: 80
-  },
-  songAuthors: {
-    fontFamily: "SourceSansPro-Semibold",
-    fontSize: 50,
-    opacity: 70
-  },
-  songExtras: {
-    fontFamily: "SourceSansPro-Regular",
-    fontSize: 40,
-    opacity: 40
-  },
-  songVerse: {
-    fontFamily: "SourceSansPro-Semibold",
-    fontSize: 72
-  },
-  songChorus: {
-    fontFamily: "AdobeHebrew-BoldItalic",
-    fontSize: 72
-  },
-  goodbyeLine1: {
-    fontFamily: "SourceSansPro-Regular",
-    fontSize: 140,
-    opacity: 70
-  },
-  goodbyeLine2: {
-    fontFamily: "SourceSansPro-Black",
-    fontSize: 140,
-    opacity: 70
-  },
-  goodbyeLine3: {
-    fontFamily: "SourceSansPro-Bold",
-    fontSize: 140,
-    opacity: 70
-  },
-  goodbyeAddress: {
-    fontFamily: "AdobeHebrew-BoldItalic",
-    fontSize: 50,
-    opacity: 70
-  },
-  chapterTitle: {
-    fontFamily: "SourceSansPro-Black",
+    fontFamily: "Crimson Text",
+    fontStyle: "italic",
     fontSize: 90
   },
+  chapterTitle: {
+    fontFamily: "Source Sans Pro",
+    fontSize: 90,
+    fontWeight: 900
+  },
   sermonTitle: {
-    fontFamily: "AdobeHebrew-BoldItalic",
+    fontFamily: "Crimson Text",
+    fontStyle: "italic",
     fontSize: 80
   },
   sermonBibleRef: {
-    fontFamily: "SourceSansPro-Bold",
+    fontFamily: "Source Sans Pro",
     fontSize: 60,
     opacity: 70
   },
   sermonAuthor: {
-    fontFamily: "SourceSansPro-Semibold",
+    fontFamily: "Source Sans Pro",
     fontSize: 40,
+    fontWeight: 600,
     opacity: 50
   },
   sermonPlanNumber: {
-    fontFamily: "SourceSansPro-BlackIt",
+    fontFamily: "Source Sans Pro",
     fontSize: 220,
+    fontWeight: 900,
+    fontStyle: "italic",
     opacity: 20
   },
   sermonPlanTitle: {
-    fontFamily: "AdobeHebrew-BoldItalic",
+    fontFamily: "Crimson Text",
+    fontStyle: "italic",
     fontSize: 50,
     opacity: 80
   }

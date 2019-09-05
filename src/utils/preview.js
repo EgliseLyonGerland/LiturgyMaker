@@ -68,20 +68,24 @@ export function getFont(typographyName) {
   const data = typography[typographyName];
 
   let font = "";
+  if (data.fontStyle) {
+    font += ` ${data.fontStyle}`;
+  }
+  if (data.fontWeight) {
+    font += ` ${data.fontWeight}`;
+  }
   if (data.fontSize) {
-    font += `${data.fontSize}px`;
+    font += ` ${data.fontSize}px`;
   }
   if (data.fontFamily) {
     font += ` ${data.fontFamily}`;
   }
 
-  return font;
+  return font.trim();
 }
 
 CanvasRenderingContext2D.prototype.getCurrentFontSize = function() {
-  const [fontSize] = this.font.split(" ");
-
-  return parseInt(fontSize, 10);
+  return /([0-9]+)px/.exec(this.font)[1];
 };
 
 CanvasRenderingContext2D.prototype.getCurrentLineHeight = function() {
@@ -263,11 +267,11 @@ export function generateReadingPreview(
 
   ctx.font = getFont("verseExcerpt");
   ctx.textAlign = "center";
-  ctx.textBaseline = "top";
+  ctx.textBaseline = "middle";
   ctx.fillMultilineText(
     excerpt,
     documentWidth / 2,
-    y + titleHeight + margin * 2,
+    y + titleHeight * 1.5 + margin * 2,
     maxContentWidth
   );
 }
