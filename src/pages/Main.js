@@ -161,6 +161,7 @@ export default ({ firebase }) => {
       .then(() => {
         setOriginalDoc(cloneDeep(doc));
         setSaved(true);
+        setChanged(false);
       });
   };
 
@@ -236,7 +237,7 @@ export default ({ firebase }) => {
   if (saved) zoomKey = "saved";
   else if (changed) zoomKey = "save";
 
-  const renderButton = () => {
+  const renderSaveButton = () => {
     if (saved) {
       return (
         <Fab
@@ -376,7 +377,7 @@ export default ({ firebase }) => {
         </div>
       </div>
       <Zoom key={zoomKey} in={true}>
-        {renderButton()}
+        {renderSaveButton()}
       </Zoom>
     </div>
   );
