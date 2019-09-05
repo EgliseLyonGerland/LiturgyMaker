@@ -40,6 +40,8 @@ export default function TextFieldSuggest({
   field = "label",
   value,
   onChange,
+  onFocus = () => {},
+  onBlur = () => {},
   ...rest
 }) {
   const classes = useStyles();
@@ -82,7 +84,13 @@ export default function TextFieldSuggest({
     onChange(newValue);
   };
 
-  const renderInputComponent = ({ inputRef = () => {}, ref, ...other }) => {
+  const renderInputComponent = ({
+    inputRef = () => {},
+    ref,
+    onFocus: onFocus2,
+    onBlur: onBlur2,
+    ...other
+  }) => {
     return (
       <TextField
         fullWidth
@@ -94,6 +102,14 @@ export default function TextFieldSuggest({
           classes: {
             input: classes.input
           }
+        }}
+        onFocus={(event, value) => {
+          onFocus();
+          onFocus2(event, value);
+        }}
+        onBlur={event => {
+          onBlur();
+          onBlur2(event);
         }}
         {...other}
         {...rest}
