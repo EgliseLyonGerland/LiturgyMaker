@@ -177,8 +177,6 @@ export function generateAnnouncementsPreview(
   const contentPositionY = documentHeight - contentHeight - 100;
   const margin = 80;
 
-  ctx.fillStyle = "white";
-
   // Title
   ctx.font = getFont("title");
   ctx.textAlign = "center";
@@ -254,8 +252,6 @@ export function generateReadingPreview(
   const totalHeight = titleHeight + excerptHeight + margin * 2;
   const y = (documentHeight - totalHeight) / 2;
 
-  ctx.fillStyle = "white";
-
   ctx.font = getFont("verseTitle");
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -274,4 +270,19 @@ export function generateReadingPreview(
     y + titleHeight + margin * 2,
     maxContentWidth
   );
+}
+
+export function generateSongsPreview(
+  ctx,
+  block,
+  currentFieldPath = [0, "title"]
+) {
+  const songIndex = currentFieldPath[0];
+  const song = block.data[songIndex];
+  const title = song.title.split("(")[0].trim();
+
+  ctx.font = getFont("songTitle");
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(title, documentWidth / 2, documentHeight / 2);
 }

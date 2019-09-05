@@ -47,6 +47,8 @@ export default ({ block, currentFieldPath }) => {
       return;
     }
 
+    ctx.fillStyle = "white";
+
     preview[funcName](ctx, block, currentFieldPath);
   });
 
