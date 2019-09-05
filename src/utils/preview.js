@@ -277,8 +277,12 @@ export function generateSongsPreview(
   block,
   currentFieldPath = [0, "title"]
 ) {
-  const songIndex = currentFieldPath[0];
-  const song = block.data[songIndex];
+  const { data = [] } = block;
+  const songIndex = Math.min(currentFieldPath[0], data.length - 1);
+  const song = data[songIndex];
+
+  if (!song) return;
+
   const title = song.title.split("(")[0].trim();
 
   ctx.font = getFont("songTitle");
