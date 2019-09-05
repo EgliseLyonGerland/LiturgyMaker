@@ -169,7 +169,8 @@ export function generateAnnouncementsPreview(
   currentFieldPath = [0, "title"]
 ) {
   const chunks = chunk(block.data, 6);
-  const items = chunks[Math.floor(currentFieldPath[0] / 6)];
+  const chunkIndex = Math.floor(currentFieldPath[0] / 6);
+  const items = chunks[chunkIndex];
 
   const contentWidth = documentWidth - 200;
   const contentHeight = documentHeight - 430;
@@ -183,6 +184,15 @@ export function generateAnnouncementsPreview(
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
   ctx.fillText("Annonces", documentWidth / 2, 90);
+
+  if (chunks.length > 1) {
+    const page = `(${chunkIndex + 1}/${chunks.length})`;
+
+    ctx.font = getFont("announcementPage");
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillText(page, documentWidth / 2, 190);
+  }
 
   // Line
   const lineX = documentWidth / 2;

@@ -59,7 +59,9 @@ export default ({ data, onChange, onFocus, onBlur, withExcerpt = true }) => {
         onChange={value => {
           handleChange("ref", value);
         }}
-        onFocus={() => onFocus(["ref"])}
+        onFocus={() => {
+          onFocus(["ref"]);
+        }}
         onBlur={onBlur}
         variant="filled"
         margin="dense"
@@ -77,7 +79,9 @@ export default ({ data, onChange, onFocus, onBlur, withExcerpt = true }) => {
             onChange={({ target }) => {
               handleChange("excerpt", target.value);
             }}
-            onFocus={() => onFocus(["excerpt"])}
+            onFocus={() => {
+              onFocus(["excerpt"]);
+            }}
             onBlur={onBlur}
             variant="filled"
             margin="dense"

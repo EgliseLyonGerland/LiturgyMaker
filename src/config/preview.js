@@ -6,6 +6,14 @@ export const typography = {
     fontFamily: "SourceSansPro-Black",
     fontSize: 90
   },
+  announcementTitle: {
+    fontFamily: "SourceSansPro-Black",
+    fontSize: 90
+  },
+  announcementPage: {
+    fontFamily: "SourceSansPro-Semibold",
+    fontSize: 50
+  },
   announcementItemTitle: {
     fontFamily: "SourceSansPro-Bold",
     fontSize: 50
