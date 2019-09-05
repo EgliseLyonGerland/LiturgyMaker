@@ -170,7 +170,7 @@ export function generateAnnouncementsPreview(
 ) {
   const chunks = chunk(block.data, 6);
   const chunkIndex = Math.floor(currentFieldPath[0] / 6);
-  const items = chunks[chunkIndex];
+  const items = chunks[Math.min(chunkIndex, chunks.length - 1)];
 
   const contentWidth = documentWidth - 200;
   const contentHeight = documentHeight - 430;
@@ -232,8 +232,8 @@ export function generateReadingPreview(
     return;
   }
 
-  const index = currentFieldPath[1];
-  const { ref, excerpt } = bibleRefs[index];
+  const bibleRefIndex = Math.min(currentFieldPath[1], bibleRefs.length - 1);
+  const { ref, excerpt } = bibleRefs[bibleRefIndex];
 
   const margin = 80;
   const maxContentWidth = documentWidth - 400;
