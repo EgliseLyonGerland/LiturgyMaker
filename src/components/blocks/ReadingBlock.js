@@ -10,17 +10,17 @@ export default ({ block, onChange, onFocus, onBlur }) => {
   const getDefaultItem = () => ({ ref: "", excerpt: "" });
 
   const renderItem = (item, index) => (
-    <div>
-      <BibleRefPicker
-        data={item}
-        onChange={value => {
-          data.bibleRefs[index] = value;
-          onChange(data);
-        }}
-        onFocus={path => onFocus(["bibleRefs", index, ...path])}
-        onBlur={onBlur}
-      />
-    </div>
+    <BibleRefPicker
+      data={item}
+      onChange={value => {
+        data.bibleRefs[index] = value;
+        onChange(data);
+      }}
+      onFocus={path => {
+        onFocus(["bibleRefs", index, ...path]);
+      }}
+      onBlur={onBlur}
+    />
   );
 
   return (

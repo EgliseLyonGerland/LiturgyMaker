@@ -214,7 +214,7 @@ export function generateAnnouncementsPreview(
 export function generateReadingPreview(
   ctx,
   block,
-  currentFieldPath = [0, "title"]
+  currentFieldPath = ["bibleRefs", 0]
 ) {
   const {
     data: { bibleRefs = [] }
@@ -224,7 +224,8 @@ export function generateReadingPreview(
     return;
   }
 
-  const { ref, excerpt } = bibleRefs[0];
+  const index = currentFieldPath[1];
+  const { ref, excerpt } = bibleRefs[index];
 
   const margin = 80;
   const maxContentWidth = documentWidth - 400;
