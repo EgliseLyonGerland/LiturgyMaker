@@ -108,9 +108,9 @@ export default function TextFieldSuggest({
     return (
       <MenuItem selected={isHighlighted} component="div">
         <div>
-          {parts.map(part => (
+          {parts.map((part, index) => (
             <span
-              key={part.text}
+              key={index}
               style={{ fontWeight: part.highlight ? 500 : 400 }}
             >
               {part.text}
