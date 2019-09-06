@@ -130,7 +130,7 @@ CanvasRenderingContext2D.prototype.fillSeparator = function(
 ) {
   this.save();
 
-  const size = horizontal ? 800 : 600;
+  const size = horizontal ? 900 : 600;
   const thickness = 4;
   const width = horizontal ? size : thickness;
   const height = horizontal ? thickness : size;
@@ -293,4 +293,28 @@ export function generateSongsPreview(
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(title, documentWidth / 2, documentHeight / 2);
+}
+
+export function generateSectionPreview(ctx, block) {
+  const {
+    data: { title = "" }
+  } = block;
+
+  const margin = 80;
+
+  ctx.font = getFont("chapterTitle");
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  const titleHeight = ctx.getCurrentLineHeight();
+  const titleX = documentWidth / 2;
+  const titleY = (documentHeight - titleHeight - margin) / 2;
+  ctx.fillText(title, titleX, titleY);
+
+  const lineX = documentWidth / 2;
+  const lineY = titleY + titleHeight + margin;
+  ctx.fillSeparator(lineX, lineY, true);
+}
+
+export function generateSermonPreview(ctx, block, currentFieldPath = []) {
+  this.generateSectionPreview(ctx, { data: { title: "Prédication" } });
 }
