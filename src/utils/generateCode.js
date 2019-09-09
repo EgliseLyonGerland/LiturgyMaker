@@ -20,7 +20,7 @@ function generateAnnouncementsBlockCode({ data }) {
     return "";
   }
 
-  return `createAnnouncementsSlide(${JSON.stringify(config, null, "  ")})`;
+  return `createAnnouncementSlide(${JSON.stringify(config, null, "  ")})`;
 }
 
 function generateSongsBlockCode({ data }) {
@@ -92,6 +92,10 @@ function generateSermonBlockCode({ data }) {
   return `createSermonSlide(${JSON.stringify(config, 2, "  ")})`;
 }
 
+function generateGoodbyeBlockCode() {
+  return `createGoodbyeSlide()`;
+}
+
 const functions = {
   generateAnnouncementsBlockCode,
   generateSongsBlockCode,
@@ -113,6 +117,9 @@ export default function generateCode(doc) {
 
     code = code.trim();
   });
+
+  code += "\n\n";
+  code += generateGoodbyeBlockCode();
 
   return code;
 }
