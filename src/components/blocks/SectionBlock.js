@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Block from "../FormBlock";
 
 const useStyles = makeStyles(
   theme => ({
@@ -19,11 +18,9 @@ const useStyles = makeStyles(
 
 export default ({ block }) => {
   const classes = useStyles();
-  let { title } = block.data;
+  let {
+    data: { title }
+  } = block;
 
-  return (
-    <Block>
-      <div className={classes.root}>{title}</div>
-    </Block>
-  );
+  return <div className={classes.root}>{title}</div>;
 };

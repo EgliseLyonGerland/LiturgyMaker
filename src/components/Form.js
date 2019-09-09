@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import capitalize from "lodash/capitalize";
 import classnames from "classnames";
 
+import Block from "./FormBlock";
 import AnnouncementsBlock from "./blocks/AnnouncementsBlock";
 import SongsBlock from "./blocks/SongsBlock";
 import ReadingBlock from "./blocks/ReadingBlock";
@@ -43,17 +44,19 @@ export default ({ blocks, onChange, onFocus, onBlur }) => {
     const Component = components[`${capitalize(block.type)}Block`];
 
     return (
-      <Component
-        block={block}
-        onChange={data => {
-          blocks[index].data = data;
-          onChange([...blocks]);
-        }}
-        onFocus={path => {
-          onFocus(block, path);
-        }}
-        onBlur={onBlur}
-      />
+      <Block title={block.title}>
+        <Component
+          block={block}
+          onChange={data => {
+            blocks[index].data = data;
+            onChange([...blocks]);
+          }}
+          onFocus={path => {
+            onFocus(block, path);
+          }}
+          onBlur={onBlur}
+        />
+      </Block>
     );
   };
 

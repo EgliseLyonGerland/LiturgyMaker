@@ -1,6 +1,5 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
-import Block from "../FormBlock";
 import Sortable from "../Sortable";
 
 export default ({ block, onChange, onFocus, onBlur }) => {
@@ -44,14 +43,12 @@ export default ({ block, onChange, onFocus, onBlur }) => {
   );
 
   return (
-    <Block title="Annonces">
-      <Sortable
-        items={items}
-        renderItem={renderItem}
-        onChange={onChange}
-        getDefaultItem={getDefaultItem}
-        gutters={3}
-      />
-    </Block>
+    <Sortable
+      items={items}
+      renderItem={renderItem}
+      onChange={onChange}
+      getDefaultItem={getDefaultItem}
+      gutters={3}
+    />
   );
 };

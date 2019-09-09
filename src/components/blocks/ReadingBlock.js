@@ -1,11 +1,10 @@
 import React from "react";
-import Block from "../FormBlock";
 import Sortable from "../Sortable";
 import BibleRefPicker from "../BibleRefPicker";
 
 export default ({ block, onChange, onFocus, onBlur }) => {
   const { data } = block;
-  const { title = "", bibleRefs = [] } = data;
+  const { bibleRefs = [] } = data;
 
   const getDefaultItem = () => ({ ref: "", excerpt: "" });
 
@@ -24,17 +23,15 @@ export default ({ block, onChange, onFocus, onBlur }) => {
   );
 
   return (
-    <Block title={title}>
-      <Sortable
-        items={bibleRefs}
-        renderItem={renderItem}
-        onChange={refs => {
-          data.bibleRefs = refs;
-          onChange(data);
-        }}
-        getDefaultItem={getDefaultItem}
-        gutters={3}
-      />
-    </Block>
+    <Sortable
+      items={bibleRefs}
+      renderItem={renderItem}
+      onChange={refs => {
+        data.bibleRefs = refs;
+        onChange(data);
+      }}
+      getDefaultItem={getDefaultItem}
+      gutters={3}
+    />
   );
 };

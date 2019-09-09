@@ -25,6 +25,7 @@ import Code from "../components/Code";
 import Preview from "../components/Preview";
 import createDefaultLiturgy from "../config/defaultLiturgy";
 import generateCode from "../utils/generateCode";
+import migrate from "../utils/migrate";
 
 const headerHeight = 176;
 const gutters = 3;
@@ -173,7 +174,7 @@ export default ({ firebase }) => {
         if (!doc.exists) {
           originalDoc = createDefaultLiturgy({ date: +currentDate });
         } else {
-          originalDoc = doc.data();
+          originalDoc = migrate(doc.data());
         }
 
         setDoc(cloneDeep(originalDoc));

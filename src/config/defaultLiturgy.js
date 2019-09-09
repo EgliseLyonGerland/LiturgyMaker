@@ -2,67 +2,74 @@ import uuid from "uuid/v4";
 
 export default ({ date }) => ({
   date: +date,
+  version: 2,
   blocks: [
     {
       id: uuid(),
       type: "announcements",
+      title: "Annonces",
       data: [{ title: "", detail: "" }]
     },
     {
       id: uuid(),
       type: "reading",
+      title: "Ouverture",
       data: {
-        title: "Ouverture",
         bibleRefs: [{ ref: "", excerpt: "" }]
       }
     },
     {
       id: uuid(),
       type: "songs",
+      title: "Chants",
       data: []
     },
     {
       id: uuid(),
       type: "reading",
+      title: "Loi de Dieu",
       data: {
-        title: "Loi de Dieu",
         bibleRefs: [{ ref: "", excerpt: "" }]
       }
     },
     {
       id: uuid(),
       type: "songs",
+      title: "Chants",
       data: []
     },
     {
       id: uuid(),
       type: "reading",
+      title: "Grâce de Dieu",
       data: {
-        title: "Grâce de Dieu",
         bibleRefs: [{ ref: "", excerpt: "" }]
       }
     },
     {
       id: uuid(),
       type: "songs",
+      title: "Chants",
       data: []
     },
     {
       id: uuid(),
       type: "reading",
+      title: "Lecture inter-chants",
       data: {
-        title: "Lecture inter-chants",
         bibleRefs: [{ ref: "", excerpt: "" }]
       }
     },
     {
       id: uuid(),
       type: "songs",
+      title: "Chants",
       data: []
     },
     {
       id: uuid(),
       type: "sermon",
+      title: "Prédication",
       data: {
         author: "",
         bibleRefs: [""],
@@ -73,26 +80,28 @@ export default ({ date }) => ({
     {
       id: uuid(),
       type: "songs",
+      title: "Chants",
       data: []
     },
     {
       id: uuid(),
       type: "section",
+      title: null,
       data: {
-        title: "Sainte cène",
-        bibleRefs: [{ ref: "", excerpt: "" }]
+        title: "Sainte cène"
       }
     },
     {
       id: uuid(),
       type: "songs",
+      title: "Chants",
       data: []
     },
     {
       id: uuid(),
       type: "reading",
+      title: "Envoi",
       data: {
-        title: "Envoi",
         bibleRefs: [{ ref: "", excerpt: "" }]
       }
     }

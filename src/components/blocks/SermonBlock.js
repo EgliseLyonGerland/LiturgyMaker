@@ -2,7 +2,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import Block from "../FormBlock";
 import Sortable from "../Sortable";
 import SermonPlanPicker from "../SermonPlanPicker";
 import BibleRefPicker from "../BibleRefPicker";
@@ -45,7 +44,7 @@ export default ({ block, onChange, onFocus, onBlur }) => {
   );
 
   return (
-    <Block className={classes.root} title="Prédication">
+    <div className={classes.root}>
       <TextField
         label="Title"
         defaultValue={title}
@@ -100,6 +99,6 @@ export default ({ block, onChange, onFocus, onBlur }) => {
         onFocus={path => onFocus(["plan", ...path])}
         onBlur={onBlur}
       />
-    </Block>
+    </div>
   );
 };
