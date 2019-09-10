@@ -814,6 +814,11 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-9.0.1.tgz#c27b391d8457d1e893f1eddeaf5e5412d12ffbb5"
   integrity sha512-6It2EVfGskxZCQhuykrfnALg7oVeiI6KclWSmGDqB0AiInVrTGB9Jp9i4/Ad21u9Jde/voVQz6eFX/eSg/UsPA==
 
+"@culturehq/hooks@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@culturehq/hooks/-/hooks-0.1.2.tgz#e5e09027d549091d58f85eb3bc59749c4bc36103"
+  integrity sha512-pnauKNM340wvql1iPU4Y73vdQV6HHMMRSBJ/FSXoMp5wqBgqp1BQnfL4ZBOzZuJc0Bz5Ds/MVxCxwR7yGPG5aw==
+
 "@emotion/cache@^10.0.15":
   version "10.0.15"
   resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-10.0.15.tgz#b81767b48015aae2689c60373992145c67b8de02"
@@ -1892,6 +1897,11 @@ alphanum-sort@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
+
+animated-scroll-to@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/animated-scroll-to/-/animated-scroll-to-1.3.0.tgz#0df7c3d3c2256c4e41dae44001ce891fe8a85775"
+  integrity sha512-mzBW+N6Q9jtEwqh0MQ4Rph1Io4Y0vePNQ+sy6oCOUHVQMDjD80STjCu9NR3L6paP44IY3UfwEVfL9eqO3jpc0A==
 
 ansi-colors@^3.0.0:
   version "3.2.4"

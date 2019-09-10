@@ -1,7 +1,9 @@
-import React, { Fragment } from "react";
+import React, { useRef, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import capitalize from "lodash/capitalize";
-import classnames from "classnames";
+import throttle from "lodash/throttle";
+import { useWindowEvent } from "@culturehq/hooks";
+import animateScrollTo from "animated-scroll-to";
 
 import Block from "./FormBlock";
 import AnnouncementsBlock from "./blocks/AnnouncementsBlock";
@@ -12,11 +14,9 @@ import SectionBlock from "./blocks/SectionBlock";
 
 const useStyles = makeStyles(
   theme => ({
-    root: {},
-    block: {
-      padding: theme.spacing(6, 8)
+    root: {
+      position: "relative"
     },
-    odd: {},
     divider: {
       height: 1,
       backgroundImage:
@@ -24,6 +24,13 @@ const useStyles = makeStyles(
       backgroundPosition: "bottom",
       backgroundSize: [[15, 1]],
       backgroundRepeat: "repeat-x"
+    },
+    activeMarker: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: 4,
+      background: theme.palette.secondary.main
     }
   }),
   { name: "Form" }
@@ -39,6 +46,69 @@ const components = {
 
 export default ({ blocks, onChange, onFocus, onBlur }) => {
   const classes = useStyles();
+  const container = useRef(null);
+  const activeMarker = useRef(null);
+  const currentIndex = useRef(0);
+  const scrolling = useRef(false);
+
+  const handleScroll = useRef(
+    throttle(() => {
+      if (scrolling.current) {
+        return;
+      }
+
+      const { childNodes } = container.current;
+      const defaultThreshold = 176;
+
+      let index = 0;
+      let currentHeight = childNodes[0].getBoundingClientRect().height;
+      let currentPosition = 0;
+      let nextPosition = 0;
+
+      for (; index < childNodes.length; index++) {
+        const { height, top } = childNodes[index].getBoundingClientRect();
+
+        if (top > defaultThreshold) {
+          break;
+        }
+
+        currentHeight = height;
+        currentPosition = nextPosition;
+        nextPosition += currentHeight;
+      }
+
+      activeMarker.current.style.height = `${currentHeight}px`;
+      activeMarker.current.style.transform = `translateY(${currentPosition}px)`;
+      currentIndex.current = index - 1;
+
+      onFocus(blocks[currentIndex.current]);
+    }, 100)
+  );
+
+  const handleFocus = (block, path, index) => {
+    if (index === currentIndex.current) {
+      return;
+    }
+
+    const { childNodes } = container.current;
+
+    scrolling.current = true;
+
+    animateScrollTo(childNodes[index], {
+      speed: 1000,
+      offset: -48,
+      onComplete: () => {
+        scrolling.current = false;
+      }
+    });
+
+    onFocus(block, path);
+  };
+
+  useWindowEvent("scroll", handleScroll.current);
+  useEffect(() => {
+    handleScroll.current();
+  }, [blocks]);
 
   const renderBlock = (block, index) => {
     const Component = components[`${capitalize(block.type)}Block`];
@@ -52,7 +122,7 @@ export default ({ blocks, onChange, onFocus, onBlur }) => {
             onChange([...blocks]);
           }}
           onFocus={path => {
-            onFocus(block, path);
+            handleFocus(block, path, index);
           }}
           onBlur={onBlur}
         />
@@ -66,18 +136,15 @@ export default ({ blocks, onChange, onFocus, onBlur }) => {
 
   return (
     <div className={classes.root}>
-      {blocks.map((block, index) => (
-        <Fragment key={block.id}>
-          <div
-            className={classnames(classes.block, {
-              [classes.odd]: index % 2
-            })}
-          >
+      <div ref={activeMarker} className={classes.activeMarker} />
+      <div ref={container}>
+        {blocks.map((block, index) => (
+          <div key={block.id}>
             {renderBlock(block, index)}
+            {index + 1 < blocks.length && renderDivider()}
           </div>
-          {index + 1 < blocks.length && renderDivider()}
-        </Fragment>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

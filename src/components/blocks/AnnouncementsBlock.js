@@ -24,7 +24,9 @@ export default ({ block, onChange, onFocus, onBlur }) => {
         onChange={event => handleChange("title", index, event.target.value)}
         variant="filled"
         margin="dense"
-        onFocus={() => onFocus([index, "title"])}
+        onFocus={() => {
+          onFocus([index, "title"]);
+        }}
         onBlur={onBlur}
         fullWidth
       />
@@ -34,7 +36,9 @@ export default ({ block, onChange, onFocus, onBlur }) => {
         onChange={event => handleChange("detail", index, event.target.value)}
         variant="filled"
         margin="dense"
-        onFocus={() => onFocus([index, "detail"])}
+        onFocus={() => {
+          onFocus([index, "detail"]);
+        }}
         onBlur={onBlur}
         multiline
         fullWidth

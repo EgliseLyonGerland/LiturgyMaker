@@ -36,7 +36,9 @@ export default ({ block, onChange, onFocus, onBlur }) => {
           data.bibleRefs[index] = ref;
           onChange(data);
         }}
-        onFocus={path => onFocus(["bibleRefs", index, ...path])}
+        onFocus={path => {
+          onFocus(["bibleRefs", index, ...path]);
+        }}
         onBlur={onBlur}
         withExcerpt={false}
       />

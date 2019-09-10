@@ -32,7 +32,7 @@ const gutters = 3;
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginBottom: theme.spacing(20)
+    marginBottom: "50vh"
   },
   header: {
     background: "linear-gradient(344deg, #0077d1 0%, #0091ff 100%)",
