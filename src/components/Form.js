@@ -90,10 +90,11 @@ export default ({ blocks, onChange, onFocus, onBlur }) => {
       return;
     }
 
+    onFocus(block, path);
+
     const { childNodes } = container.current;
 
     scrolling.current = true;
-
     animateScrollTo(childNodes[index], {
       speed: 1000,
       offset: -48,
@@ -101,8 +102,6 @@ export default ({ blocks, onChange, onFocus, onBlur }) => {
         scrolling.current = false;
       }
     });
-
-    onFocus(block, path);
   };
 
   useWindowEvent("scroll", handleScroll.current);
