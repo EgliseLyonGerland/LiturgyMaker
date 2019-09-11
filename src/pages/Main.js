@@ -136,7 +136,10 @@ export default ({ firebase }) => {
   const [doc, setDoc] = useState({ blocks: [] });
   const [originalDoc, setOriginalDoc] = useState(null);
   const [displayCode, setDisplayCode] = useState(false);
-  const [focusedBlock, setFocusedBlock] = useState({});
+  const [activedBlock, setActivedBlock] = useState(0);
+  const [focusedBlock, setFocusedBlock] = useState([-1]);
+  const currentBlockIndex =
+    focusedBlock[0] >= 0 ? focusedBlock[0] : activedBlock;
   const timer = useRef(null);
   const db = firebase.firestore();
   const id = format(currentDate, "yMMdd");
@@ -145,12 +148,6 @@ export default ({ firebase }) => {
     debounce((doc1, doc2) => {
       setChanged(!isEqual(doc1.blocks, doc2.blocks));
     }, 500)
-  );
-
-  const hidePreview = useRef(
-    debounce(() => {
-      setFocusedBlock({});
-    }, 200)
   );
 
   const updateDoc = () => {
@@ -212,19 +209,23 @@ export default ({ firebase }) => {
     setDoc({ ...doc, blocks });
   };
 
-  const handleBlockFocus = (block, path) => {
-    hidePreview.current.cancel();
-    setFocusedBlock({ block, path });
+  const handleBlockFocus = (index, path) => {
+    setFocusedBlock([index, path]);
   };
 
   const handleBlockBlur = () => {
-    hidePreview.current();
+    setFocusedBlock([-1]);
+  };
+
+  const handleBlockActive = index => {
+    setActivedBlock(index);
   };
 
   const handleChangeDate = date => {
     setLoaded(false);
     setChanged(false);
-    setFocusedBlock({});
+    setFocusedBlock([-1]);
+    setActivedBlock(0);
     setCurrentDate(getNextSundayDate(date));
   };
 
@@ -341,8 +342,11 @@ export default ({ firebase }) => {
       <Form
         blocks={doc.blocks}
         onChange={handleBlocksChange}
+        onActive={handleBlockActive}
         onFocus={handleBlockFocus}
         onBlur={handleBlockBlur}
+        activedIndex={activedBlock}
+        focusedIndex={focusedBlock[0]}
       />
     );
   };
@@ -364,8 +368,8 @@ export default ({ firebase }) => {
         </Paper>
         <div className={classes.preview}>
           <Preview
-            block={focusedBlock.block}
-            currentFieldPath={focusedBlock.path}
+            block={doc.blocks[currentBlockIndex]}
+            currentFieldPath={focusedBlock[1]}
           />
         </div>
       </div>

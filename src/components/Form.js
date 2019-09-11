@@ -4,6 +4,7 @@ import capitalize from "lodash/capitalize";
 import throttle from "lodash/throttle";
 import { useWindowEvent } from "@culturehq/hooks";
 import animateScrollTo from "animated-scroll-to";
+import classnames from "classnames";
 
 import Block from "./FormBlock";
 import AnnouncementsBlock from "./blocks/AnnouncementsBlock";
@@ -25,12 +26,11 @@ const useStyles = makeStyles(
       backgroundSize: [[15, 1]],
       backgroundRepeat: "repeat-x"
     },
-    activeMarker: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: 4,
-      background: theme.palette.secondary.main
+    block: {
+      borderLeft: [["solid", 4, "transparent"]]
+    },
+    active: {
+      borderColor: theme.palette.secondary.main
     }
   }),
   { name: "Form" }
@@ -44,16 +44,24 @@ const components = {
   SectionBlock
 };
 
-export default ({ blocks, onChange, onFocus, onBlur }) => {
+export default ({
+  blocks,
+  activedIndex,
+  focusedIndex,
+  onChange,
+  onFocus,
+  onBlur,
+  onActive
+}) => {
   const classes = useStyles();
   const container = useRef(null);
   const activeMarker = useRef(null);
-  const currentIndex = useRef(0);
   const scrolling = useRef(false);
+  const currentIndex = focusedIndex >= 0 ? focusedIndex : activedIndex;
 
   const handleScroll = useRef(
-    throttle(() => {
-      if (scrolling.current) {
+    throttle(focused => {
+      if (focused || scrolling.current) {
         return;
       }
 
@@ -61,36 +69,21 @@ export default ({ blocks, onChange, onFocus, onBlur }) => {
       const defaultThreshold = 176;
 
       let index = 0;
-      let currentHeight = childNodes[0].getBoundingClientRect().height;
-      let currentPosition = 0;
-      let nextPosition = 0;
 
       for (; index < childNodes.length; index++) {
-        const { height, top } = childNodes[index].getBoundingClientRect();
+        const { top } = childNodes[index].getBoundingClientRect();
 
         if (top > defaultThreshold) {
           break;
         }
-
-        currentHeight = height;
-        currentPosition = nextPosition;
-        nextPosition += currentHeight;
       }
 
-      activeMarker.current.style.height = `${currentHeight}px`;
-      activeMarker.current.style.transform = `translateY(${currentPosition}px)`;
-      currentIndex.current = index - 1;
-
-      onFocus(blocks[currentIndex.current]);
+      onActive(index - 1);
     }, 100)
   );
 
   const handleFocus = (block, path, index) => {
-    if (index === currentIndex.current) {
-      return;
-    }
-
-    onFocus(block, path);
+    onFocus(index, path);
 
     const { childNodes } = container.current;
 
@@ -104,10 +97,13 @@ export default ({ blocks, onChange, onFocus, onBlur }) => {
     });
   };
 
-  useWindowEvent("scroll", handleScroll.current);
+  useWindowEvent("scroll", () => {
+    handleScroll.current(focusedIndex >= 0);
+  });
+
   useEffect(() => {
-    handleScroll.current();
-  }, [blocks]);
+    handleScroll.current(focusedIndex >= 0);
+  }, [blocks, focusedIndex, activedIndex]);
 
   const renderBlock = (block, index) => {
     const Component = components[`${capitalize(block.type)}Block`];
@@ -129,7 +125,11 @@ export default ({ blocks, onChange, onFocus, onBlur }) => {
     );
   };
 
-  const renderDivider = () => {
+  const renderDivider = index => {
+    if (index >= blocks.length - 1) {
+      return null;
+    }
+
     return <div className={classes.divider} />;
   };
 
@@ -138,9 +138,14 @@ export default ({ blocks, onChange, onFocus, onBlur }) => {
       <div ref={activeMarker} className={classes.activeMarker} />
       <div ref={container}>
         {blocks.map((block, index) => (
-          <div key={block.id}>
+          <div
+            key={block.id}
+            className={classnames(classes.block, {
+              [classes.active]: currentIndex === index
+            })}
+          >
             {renderBlock(block, index)}
-            {index + 1 < blocks.length && renderDivider()}
+            {renderDivider(index)}
           </div>
         ))}
       </div>
