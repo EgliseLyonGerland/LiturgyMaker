@@ -15,7 +15,13 @@ export default ({ date }) => ({
       type: "reading",
       title: "Ouverture",
       data: {
-        bibleRefs: [{ ref: "", excerpt: "" }]
+        bibleRefs: [
+          {
+            ref: "",
+            excerpt: "",
+            template: "rightLeftCenter"
+          }
+        ]
       }
     },
     {
@@ -29,7 +35,13 @@ export default ({ date }) => ({
       type: "reading",
       title: "Loi de Dieu",
       data: {
-        bibleRefs: [{ ref: "", excerpt: "" }]
+        bibleRefs: [
+          {
+            ref: "",
+            excerpt: "",
+            template: "topBottomLeft"
+          }
+        ]
       }
     },
     {
@@ -43,7 +55,13 @@ export default ({ date }) => ({
       type: "reading",
       title: "Grâce de Dieu",
       data: {
-        bibleRefs: [{ ref: "", excerpt: "" }]
+        bibleRefs: [
+          {
+            ref: "",
+            excerpt: "",
+            template: "bottomTopLeft"
+          }
+        ]
       }
     },
     {
@@ -57,7 +75,13 @@ export default ({ date }) => ({
       type: "reading",
       title: "Lecture inter-chants",
       data: {
-        bibleRefs: [{ ref: "", excerpt: "" }]
+        bibleRefs: [
+          {
+            ref: "",
+            excerpt: "",
+            template: "leftRightCenter"
+          }
+        ]
       }
     },
     {
@@ -102,7 +126,13 @@ export default ({ date }) => ({
       type: "reading",
       title: "Envoi",
       data: {
-        bibleRefs: [{ ref: "", excerpt: "" }]
+        bibleRefs: [
+          {
+            ref: "",
+            excerpt: "",
+            template: "topBottomRight"
+          }
+        ]
       }
     }
   ]
