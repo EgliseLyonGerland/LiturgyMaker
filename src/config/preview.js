@@ -62,6 +62,7 @@ export const typography = {
   sermonBibleRef: {
     fontFamily: "Source Sans Pro",
     fontSize: 60,
+    fontWeight: 700,
     opacity: 70
   },
   sermonAuthor: {

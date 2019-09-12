@@ -5,7 +5,7 @@ export default function generate(ctx, block) {
     data: { title = "" }
   } = block;
 
-  const margin = 80;
+  const margin = 60;
 
   ctx.setFont("chapterTitle");
   ctx.textAlign = "center";

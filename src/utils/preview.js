@@ -67,12 +67,18 @@ function getLines(ctx, text, width) {
   return lines;
 }
 
-CanvasRenderingContext2D.prototype.setFont = function(typographyName) {
+CanvasRenderingContext2D.prototype.setFont = function(
+  typographyName,
+  overrides = {}
+) {
   if (!typography[typographyName]) {
     return "";
   }
 
-  const data = typography[typographyName];
+  const data = {
+    ...typography[typographyName],
+    ...overrides
+  };
 
   let font = "";
   if (data.fontStyle) {
@@ -137,11 +143,11 @@ CanvasRenderingContext2D.prototype.fillSeparator = function(
   x,
   y,
   horizontal = false,
-  align = "center"
+  align = "center",
+  size = horizontal ? 900 : 600
 ) {
   this.save();
 
-  const size = horizontal ? 900 : 600;
   const thickness = 4;
   const width = horizontal ? size : thickness;
   const height = horizontal ? thickness : size;
