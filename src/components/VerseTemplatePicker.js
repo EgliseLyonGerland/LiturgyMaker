@@ -2,14 +2,14 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import classnames from "classnames";
 
-import topBottomLeftTemplate from "../images/templates/topBottomLeft.svg";
-import topBottomCenterTemplate from "../images/templates/topBottomCenter.svg";
-import topBottomRightTemplate from "../images/templates/topBottomRight.svg";
-import bottomTopLeftTemplate from "../images/templates/bottomTopLeft.svg";
-import bottomTopCenterTemplate from "../images/templates/bottomTopCenter.svg";
-import bottomTopRightTemplate from "../images/templates/bottomTopRight.svg";
-import leftRightCenterTemplate from "../images/templates/leftRightCenter.svg";
-import rightLeftCenterTemplate from "../images/templates/rightLeftCenter.svg";
+import { ReactComponent as TopBottomLeftPreview } from "../images/templates/topBottomLeft.svg";
+import { ReactComponent as TopBottomCenterPreview } from "../images/templates/topBottomCenter.svg";
+import { ReactComponent as TopBottomRightPreview } from "../images/templates/topBottomRight.svg";
+import { ReactComponent as BottomTopLeftPreview } from "../images/templates/bottomTopLeft.svg";
+import { ReactComponent as BottomTopCenterPreview } from "../images/templates/bottomTopCenter.svg";
+import { ReactComponent as BottomTopRightPreview } from "../images/templates/bottomTopRight.svg";
+import { ReactComponent as LeftRightCenterPreview } from "../images/templates/leftRightCenter.svg";
+import { ReactComponent as RightLeftCenterPreview } from "../images/templates/rightLeftCenter.svg";
 
 const useStyles = makeStyles(
   theme => ({
@@ -37,7 +37,7 @@ const useStyles = makeStyles(
       display: "block"
     }
   }),
-  { name: "Divider" }
+  { name: "VerseTemplatePicker" }
 );
 
 const templates = [
@@ -52,18 +52,24 @@ const templates = [
 ];
 
 const previews = {
-  topBottomLeft: topBottomLeftTemplate,
-  topBottomCenter: topBottomCenterTemplate,
-  topBottomRight: topBottomRightTemplate,
-  bottomTopLeft: bottomTopLeftTemplate,
-  bottomTopCenter: bottomTopCenterTemplate,
-  bottomTopRight: bottomTopRightTemplate,
-  leftRightCenter: leftRightCenterTemplate,
-  rightLeftCenter: rightLeftCenterTemplate
+  topBottomLeft: TopBottomLeftPreview,
+  topBottomCenter: TopBottomCenterPreview,
+  topBottomRight: TopBottomRightPreview,
+  bottomTopLeft: BottomTopLeftPreview,
+  bottomTopCenter: BottomTopCenterPreview,
+  bottomTopRight: BottomTopRightPreview,
+  leftRightCenter: LeftRightCenterPreview,
+  rightLeftCenter: RightLeftCenterPreview
 };
 
 export default ({ current = "topBottomLeft", onSelect }) => {
   const classes = useStyles();
+
+  const renderImg = name => {
+    const Component = previews[name];
+
+    return <Component className={classes.img} />;
+  };
 
   return (
     <div className={classes.root}>
@@ -77,7 +83,7 @@ export default ({ current = "topBottomLeft", onSelect }) => {
             onSelect(name);
           }}
         >
-          <img className={classes.img} src={previews[name]} alt={name} />
+          {renderImg(name)}
         </div>
       ))}
     </div>

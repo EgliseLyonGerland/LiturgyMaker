@@ -1,15 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="1280px" height="720px" viewBox="0 0 1280 720" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
-    <title>bottomTopLeft</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="bottomTopLeft">
-            <rect fill="#FFFFFF" x="0" y="0" width="1280" height="720"></rect>
-            <rect id="Rectangle" fill-opacity="0.06" fill="#000000" x="0" y="0" width="1280" height="720"></rect>
-            <rect id="Rectangle" fill-opacity="0.203725962" fill="#000000" transform="translate(414.500000, 507.000000) scale(1, -1) translate(-414.500000, -507.000000) " x="201" y="477" width="427" height="60" rx="30"></rect>
-            <rect id="Rectangle-Copy" fill-opacity="0.1" fill="#000000" transform="translate(640.500000, 323.000000) scale(1, -1) translate(-640.500000, -323.000000) " x="201" y="293" width="879" height="60" rx="30"></rect>
-            <rect id="Rectangle-Copy-2" fill-opacity="0.1" fill="#000000" transform="translate(520.500000, 213.000000) scale(1, -1) translate(-520.500000, -213.000000) " x="201" y="183" width="639" height="60" rx="30"></rect>
-        </g>
-    </g>
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" fill-rule="evenodd">
+    <path fill="#FFF" d="M0 0h1280v720H0z"/>
+    <path fill-opacity=".06" fill="#000" d="M0 0h1280v720H0z"/>
+    <rect fill-opacity=".20372596" fill="#000" transform="matrix(1 0 0 -1 0 1014)" x="201" y="477" width="427" height="60" rx="30"/>
+    <rect fill-opacity=".1" fill="#000" transform="matrix(1 0 0 -1 0 646)" x="201" y="293" width="879" height="60" rx="30"/>
+    <rect fill-opacity=".1" fill="#000" transform="matrix(1 0 0 -1 0 426)" x="201" y="183" width="639" height="60" rx="30"/>
+  </g>
 </svg>
