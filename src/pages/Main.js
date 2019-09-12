@@ -28,6 +28,7 @@ import generateCode from "../utils/generateCode";
 import migrate from "../utils/migrate";
 
 const headerHeight = 176;
+const headerHeightMobile = 104;
 const gutters = 3;
 
 const useStyles = makeStyles(theme => ({
@@ -111,6 +112,33 @@ const useStyles = makeStyles(theme => ({
     height: 200,
     alignItems: "center",
     justifyContent: "center"
+  },
+  [theme.breakpoints.down("sm")]: {
+    header: {
+      height: headerHeightMobile
+    },
+    preview: {
+      display: "none"
+    },
+    wrapper: {
+      margin: 0
+    },
+    navBar: {
+      padding: 0,
+
+      "&:before": {
+        display: "none"
+      }
+    },
+    sundays: {
+      fontSize: 16
+    },
+    sundaysName: {
+      width: "auto"
+    },
+    actions: {
+      display: "none"
+    }
   }
 }));
 
