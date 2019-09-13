@@ -1,4 +1,6 @@
 import range from "lodash/range";
+import chunk from "lodash/chunk";
+import flatten from "lodash/flatten";
 import { currentVersion } from "../config/global";
 
 function migrateToVersion2(doc) {
@@ -36,7 +38,40 @@ function migrateToVersion2(doc) {
   };
 }
 
-const functions = { migrateToVersion2 };
+function migrateToVersion3(doc) {
+  return {
+    ...doc,
+    blocks: doc.blocks.map(block => {
+      if (block.type !== "announcements") {
+        return block;
+      }
+
+      let { data = [] } = block;
+
+      data = chunk(data, 2);
+      data = data.reduce(
+        (acc, curr) => {
+          acc[0].push(curr[0]);
+
+          if (curr[1]) {
+            acc[1].push(curr[1]);
+          }
+
+          return acc;
+        },
+        [[], []]
+      );
+      data = [...data[0], ...data[1]];
+
+      return { ...block, data };
+    })
+  };
+}
+
+const functions = {
+  migrateToVersion2,
+  migrateToVersion3
+};
 
 export default function migrate(doc) {
   const { version = 1 } = doc;

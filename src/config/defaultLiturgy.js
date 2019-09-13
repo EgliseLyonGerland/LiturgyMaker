@@ -6,7 +6,7 @@ const shuffledVerseTemplates = shuffle(verseTemplates);
 
 export default ({ date }) => ({
   date: +date,
-  version: 2,
+  version: 3,
   blocks: [
     {
       id: uuid(),

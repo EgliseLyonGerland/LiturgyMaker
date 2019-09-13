@@ -47,8 +47,8 @@ export default function generate(ctx, block, currentFieldPath = [0, "title"]) {
 
   // Items
   items.forEach((item, index) => {
-    const x = index % 2 === 0 ? leftPartX : rightPartX;
-    const y = itemHeight * Math.floor(index / 2) + contentPositionY;
+    const x = index / 3 < 1 ? leftPartX : rightPartX;
+    const y = itemHeight * Math.floor(index % 3) + contentPositionY;
 
     ctx.setFont("announcementItemTitle");
     ctx.textAlign = "left";
