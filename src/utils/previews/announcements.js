@@ -46,18 +46,31 @@ export default function generate(ctx, block, currentFieldPath = [0, "title"]) {
   const rightPartX = leftPartX + itemWidth + margin * 2;
 
   // Items
+  let currentY = contentPositionY;
   items.forEach((item, index) => {
     const x = index / 3 < 1 ? leftPartX : rightPartX;
-    const y = itemHeight * Math.floor(index % 3) + contentPositionY;
+    // const y = itemHeight * Math.floor(index % 3) + contentPositionY;
+    const y = currentY;
 
     ctx.setFont("announcementItemTitle");
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    const itemTitleHeight = ctx.fillMultilineText(item.title, x, y, itemWidth);
+    const titleHeight = ctx.fillMultilineText(item.title, x, y, itemWidth);
 
     ctx.setFont("announcementItemDetail");
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillMultilineText(item.detail, x, y + itemTitleHeight, itemWidth);
+    const detailHeight = ctx.fillMultilineText(
+      item.detail,
+      x,
+      y + titleHeight,
+      itemWidth
+    );
+
+    if (index === 2) {
+      currentY = contentPositionY;
+    } else {
+      currentY += titleHeight + detailHeight + 80;
+    }
   });
 }
