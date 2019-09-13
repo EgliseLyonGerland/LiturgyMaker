@@ -207,6 +207,6 @@ export default function generate(
   ];
 
   if (verseGenerators[template]) {
-    verseGenerators[template](ctx, ref, excerpt);
+    verseGenerators[template](ctx, ref, `« ${excerpt} »`);
   }
 }
