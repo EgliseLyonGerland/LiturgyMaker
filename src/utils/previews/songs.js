@@ -7,7 +7,8 @@ export default function generate(ctx, block, currentFieldPath = [0, "title"]) {
 
   if (!song) return;
 
-  const title = song.title.split("(")[0].trim();
+  let title = song.title.split("(")[0].trim();
+  title = title || "Lorem Ipsum";
 
   ctx.setFont("songTitle");
   ctx.textAlign = "center";

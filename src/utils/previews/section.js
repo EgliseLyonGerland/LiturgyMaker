@@ -2,7 +2,7 @@ import { documentWidth, documentHeight } from "../../config/preview";
 
 export default function generate(ctx, block) {
   const {
-    data: { title = "" }
+    data: { title = "Lorem Ipsum" }
   } = block;
 
   const margin = 60;

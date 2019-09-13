@@ -202,9 +202,12 @@ export default function generate(
   }
 
   const bibleRefIndex = Math.min(currentFieldPath[1], bibleRefs.length - 1);
-  const { ref, excerpt, template = "topBottomCenter" } = bibleRefs[
-    bibleRefIndex
-  ];
+  let { ref, excerpt, template = "topBottomCenter" } = bibleRefs[bibleRefIndex];
+
+  ref = ref || "Lorem ipsum 1.2-3";
+  excerpt =
+    excerpt ||
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id dictum lectus.";
 
   if (verseGenerators[template]) {
     verseGenerators[template](ctx, ref, `« ${excerpt} »`);
