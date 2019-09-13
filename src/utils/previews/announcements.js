@@ -40,7 +40,6 @@ export default function generate(ctx, block, currentFieldPath = [0, "title"]) {
   const lineY = contentHeight / 2 + contentPositionY;
   ctx.fillSeparator(lineX, lineY);
 
-  const itemHeight = contentHeight / 3;
   const itemWidth = (contentWidth - margin * 2) / 2;
   const leftPartX = (documentWidth - contentWidth) / 2;
   const rightPartX = leftPartX + itemWidth + margin * 2;
@@ -49,7 +48,6 @@ export default function generate(ctx, block, currentFieldPath = [0, "title"]) {
   let currentY = contentPositionY;
   items.forEach((item, index) => {
     const x = index / 3 < 1 ? leftPartX : rightPartX;
-    // const y = itemHeight * Math.floor(index % 3) + contentPositionY;
     const y = currentY;
 
     ctx.setFont("announcementItemTitle");
@@ -70,7 +68,7 @@ export default function generate(ctx, block, currentFieldPath = [0, "title"]) {
     if (index === 2) {
       currentY = contentPositionY;
     } else {
-      currentY += titleHeight + detailHeight + 80;
+      currentY += titleHeight + detailHeight + 60;
     }
   });
 }

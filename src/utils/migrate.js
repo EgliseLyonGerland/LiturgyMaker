@@ -1,6 +1,5 @@
 import range from "lodash/range";
 import chunk from "lodash/chunk";
-import flatten from "lodash/flatten";
 import { currentVersion } from "../config/global";
 
 function migrateToVersion2(doc) {
