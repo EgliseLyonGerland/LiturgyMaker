@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import classnames from "classnames";
+import { verseTemplates } from "../config/preview";
 
 import { ReactComponent as TopBottomLeftPreview } from "../images/templates/topBottomLeft.svg";
 import { ReactComponent as TopBottomCenterPreview } from "../images/templates/topBottomCenter.svg";
@@ -40,17 +41,6 @@ const useStyles = makeStyles(
   { name: "VerseTemplatePicker" }
 );
 
-const templates = [
-  "topBottomLeft",
-  "topBottomCenter",
-  "topBottomRight",
-  "leftRightCenter",
-  "bottomTopLeft",
-  "bottomTopCenter",
-  "bottomTopRight",
-  "rightLeftCenter"
-];
-
 const previews = {
   topBottomLeft: TopBottomLeftPreview,
   topBottomCenter: TopBottomCenterPreview,
@@ -73,7 +63,7 @@ export default ({ current = "topBottomLeft", onSelect }) => {
 
   return (
     <div className={classes.root}>
-      {templates.map(name => (
+      {verseTemplates.map(name => (
         <div
           key={name}
           className={classnames(classes.item, {

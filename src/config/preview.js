@@ -85,3 +85,14 @@ export const typography = {
     opacity: 80
   }
 };
+
+export const verseTemplates = [
+  "topBottomLeft",
+  "topBottomCenter",
+  "topBottomRight",
+  "leftRightCenter",
+  "bottomTopLeft",
+  "bottomTopCenter",
+  "bottomTopRight",
+  "rightLeftCenter"
+];

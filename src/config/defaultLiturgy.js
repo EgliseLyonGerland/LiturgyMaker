@@ -1,4 +1,8 @@
 import uuid from "uuid/v4";
+import shuffle from "lodash/shuffle";
+import { verseTemplates } from "./preview";
+
+const shuffledVerseTemplates = shuffle(verseTemplates);
 
 export default ({ date }) => ({
   date: +date,
@@ -19,7 +23,7 @@ export default ({ date }) => ({
           {
             ref: "",
             excerpt: "",
-            template: "rightLeftCenter"
+            template: shuffledVerseTemplates[0]
           }
         ]
       }
@@ -39,7 +43,7 @@ export default ({ date }) => ({
           {
             ref: "",
             excerpt: "",
-            template: "topBottomLeft"
+            template: shuffledVerseTemplates[1]
           }
         ]
       }
@@ -59,7 +63,7 @@ export default ({ date }) => ({
           {
             ref: "",
             excerpt: "",
-            template: "bottomTopLeft"
+            template: shuffledVerseTemplates[2]
           }
         ]
       }
@@ -79,7 +83,7 @@ export default ({ date }) => ({
           {
             ref: "",
             excerpt: "",
-            template: "leftRightCenter"
+            template: shuffledVerseTemplates[3]
           }
         ]
       }
@@ -130,7 +134,7 @@ export default ({ date }) => ({
           {
             ref: "",
             excerpt: "",
-            template: "topBottomRight"
+            template: shuffledVerseTemplates[4]
           }
         ]
       }
