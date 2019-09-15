@@ -51,7 +51,8 @@ export default ({
   onChange,
   onFocus,
   onBlur,
-  onActive
+  onActive,
+  onFillFromLastWeek
 }) => {
   const classes = useStyles();
   const container = useRef(null);
@@ -109,7 +110,11 @@ export default ({
     const Component = components[`${capitalize(block.type)}Block`];
 
     return (
-      <Block title={block.title}>
+      <Block
+        title={block.title}
+        displayMenu={block.type === "announcements"}
+        onFillFromLastWeekClicked={() => onFillFromLastWeek(index)}
+      >
         <Component
           block={block}
           onChange={data => {

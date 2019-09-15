@@ -257,6 +257,28 @@ export default ({ firebase }) => {
     setCurrentDate(getNextSundayDate(date));
   };
 
+  const handleFillFromLastWeek = async index => {
+    const previousId = format(subDays(currentDate, 7), "yMMdd");
+    const block = doc.blocks[index];
+
+    const res = await db.doc(`liturgies/${previousId}`).get();
+
+    if (!res.exists) {
+      return;
+    }
+
+    const previousDoc = migrate(res.data());
+    const previousBlock = previousDoc.blocks[index];
+
+    if (block.type !== previousBlock.type) {
+      return;
+    }
+
+    doc.blocks[index].data = previousBlock.data;
+
+    handleBlocksChange(doc.blocks);
+  };
+
   let zoomKey = "nothing";
   if (saved) zoomKey = "saved";
   else if (changed) zoomKey = "save";
@@ -373,6 +395,7 @@ export default ({ firebase }) => {
         onActive={handleBlockActive}
         onFocus={handleBlockFocus}
         onBlur={handleBlockBlur}
+        onFillFromLastWeek={handleFillFromLastWeek}
         activedIndex={activedBlock}
         focusedIndex={focusedBlock[0]}
       />
