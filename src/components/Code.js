@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import okaida from "react-syntax-highlighter/dist/esm/styles/prism/okaidia";
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-const copy = require("clipboard-copy");
+import React, { useState, useEffect } from 'react';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import okaida from 'react-syntax-highlighter/dist/esm/styles/prism/okaidia';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+const copy = require('clipboard-copy');
 
 const useStyles = makeStyles(
   theme => ({
     root: {
-      maxWidth: "100%",
-      overflowX: "auto",
-      position: "relative"
+      maxWidth: '100%',
+      overflowX: 'auto',
+      position: 'relative',
     },
     pre: {
       margin: `0 !important`,
       borderRadius: `0 !important`,
-      minHeight: "100%"
+      minHeight: '100%',
     },
     copyButton: {
-      position: "absolute",
+      position: 'absolute',
       top: theme.spacing(2),
       right: theme.spacing(2),
-      width: 250
-    }
+      width: 250,
+    },
   }),
-  { name: "Code" }
+  { name: 'Code' },
 );
 
 export default ({ code }) => {
@@ -55,7 +55,7 @@ export default ({ code }) => {
         size="small"
         onClick={handleCopy}
       >
-        {copied ? "Copié !" : "Copier dans le presse-papier"}
+        {copied ? 'Copié !' : 'Copier dans le presse-papier'}
       </Button>
     </div>
   );

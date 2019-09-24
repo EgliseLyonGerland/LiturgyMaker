@@ -1,17 +1,17 @@
-import { documentWidth, documentHeight } from "../../config/preview";
-import { parse } from "../../utils/bibleRef";
+import { documentWidth, documentHeight } from '../../config/preview';
+import { parse } from '../bibleRef';
 
 function generateVerseVertical(ctx, ref, excerpt, direction, align) {
   const margin = 80;
   const maxContentWidth = documentWidth - 400;
 
-  ctx.setFont("verseTitle");
+  ctx.setFont('verseTitle');
   const titleHeight = ctx.getCurrentLineHeight();
 
-  ctx.setFont("verseExcerpt");
+  ctx.setFont('verseExcerpt');
   const { height: excerptHeight } = ctx.measureMultiligneText(
     excerpt,
-    maxContentWidth
+    maxContentWidth,
   );
 
   const totalHeight = titleHeight + excerptHeight + margin * 2;
@@ -19,19 +19,19 @@ function generateVerseVertical(ctx, ref, excerpt, direction, align) {
 
   ctx.save();
 
-  if (align === "left") {
+  if (align === 'left') {
     ctx.translate(-maxContentWidth / 2, 0);
-  } else if (align === "right") {
+  } else if (align === 'right') {
     ctx.translate(maxContentWidth / 2, 0);
   }
 
   // Display title
-  ctx.setFont("verseTitle");
+  ctx.setFont('verseTitle');
   ctx.textAlign = align;
-  ctx.textBaseline = "middle";
+  ctx.textBaseline = 'middle';
 
   let titleY = y + titleHeight / 2;
-  if (direction === "bottomTop") {
+  if (direction === 'bottomTop') {
     titleY += margin * 2 + excerptHeight;
   }
 
@@ -39,19 +39,19 @@ function generateVerseVertical(ctx, ref, excerpt, direction, align) {
 
   // Display line
   let lineY = y + titleHeight + margin;
-  if (direction === "bottomTop") {
+  if (direction === 'bottomTop') {
     lineY = y + excerptHeight + margin;
   }
 
   ctx.fillSeparator(documentWidth / 2, lineY, true, align);
 
   // Display exerpt
-  ctx.setFont("verseExcerpt");
+  ctx.setFont('verseExcerpt');
   ctx.textAlign = align;
-  ctx.textBaseline = "middle";
+  ctx.textBaseline = 'middle';
 
   let excerptY = y + titleHeight / 2;
-  if (direction === "topBottom") {
+  if (direction === 'topBottom') {
     excerptY = y + titleHeight * 1.5 + margin * 2;
   }
 
@@ -67,79 +67,79 @@ function generateVerseHorizontal(ctx, ref, excerpt, direction, align) {
 
   const parsedRef = parse(ref) || {};
   const {
-    book = "",
-    chapterStart = "",
-    verseStart = "",
-    verseEnd = ""
+    book = '',
+    chapterStart = '',
+    verseStart = '',
+    verseEnd = '',
   } = parsedRef;
   const title = `${book} ${chapterStart}`;
 
-  let subtitle = "";
+  let subtitle = '';
   if (verseEnd) {
     subtitle = `• ${verseStart}–${verseEnd}`;
   } else if (verseStart) {
     subtitle = `v. ${verseStart}`;
   }
 
-  ctx.setFont("verseTitle");
+  ctx.setFont('verseTitle');
   const { width: titleWidth } = ctx.measureText(title);
 
-  ctx.setFont("verseSubtitle");
+  ctx.setFont('verseSubtitle');
   const { width: subtitleWidth } = ctx.measureText(subtitle);
 
   const headerWidth = Math.max(titleWidth, subtitleWidth);
   const maxExcerptWidth = maxContentWidth - headerWidth - margin * 2;
 
-  ctx.setFont("verseExcerpt");
+  ctx.setFont('verseExcerpt');
   const {
     height: excerptHeight,
-    width: excerptWidth
+    width: excerptWidth,
   } = ctx.measureMultiligneText(excerpt, maxExcerptWidth);
 
   // Display title
   ctx.save();
-  ctx.setFont("verseTitle");
-  ctx.textAlign = "left";
-  ctx.textBaseline = "middle";
+  ctx.setFont('verseTitle');
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
 
   if (subtitle) {
     ctx.translate(0, -ctx.getCurrentLineHeight() / 2);
   }
 
   let titleX = padding;
-  if (direction === "rightLeft") {
+  if (direction === 'rightLeft') {
     titleX += margin * 2 + excerptWidth;
   }
 
   ctx.fillText(title, titleX, documentHeight / 2);
 
   // Display subtitle
-  ctx.setFont("verseSubtitle");
-  ctx.textAlign = "left";
-  ctx.textBaseline = "middle";
+  ctx.setFont('verseSubtitle');
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
   ctx.fillText(
     subtitle,
     titleX,
-    documentHeight / 2 + ctx.getCurrentLineHeight()
+    documentHeight / 2 + ctx.getCurrentLineHeight(),
   );
   ctx.restore();
 
   // Display seperator
   let seperatorX = padding + headerWidth + margin;
-  if (direction === "rightLeft") {
+  if (direction === 'rightLeft') {
     seperatorX = padding + excerptWidth + margin;
   }
 
   ctx.fillSeparator(seperatorX, documentHeight / 2, false, align);
 
   // Display exerpt
-  ctx.setFont("verseExcerpt");
-  ctx.textAlign = "left";
-  ctx.textBaseline = "top";
+  ctx.setFont('verseExcerpt');
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
 
-  let exerptY = (documentHeight - excerptHeight) / 2;
+  const exerptY = (documentHeight - excerptHeight) / 2;
   let excerptX = padding;
-  if (direction === "leftRight") {
+  if (direction === 'leftRight') {
     excerptX += headerWidth + margin * 2;
   }
 
@@ -147,34 +147,34 @@ function generateVerseHorizontal(ctx, ref, excerpt, direction, align) {
 }
 
 function generateVerseTopBottomLeft(ctx, ref, excerpt) {
-  generateVerseVertical(ctx, ref, excerpt, "topBottom", "left");
+  generateVerseVertical(ctx, ref, excerpt, 'topBottom', 'left');
 }
 
 function generateVerseTopBottomCenter(ctx, ref, excerpt) {
-  generateVerseVertical(ctx, ref, excerpt, "topBottom", "center");
+  generateVerseVertical(ctx, ref, excerpt, 'topBottom', 'center');
 }
 
 function generateVerseTopBottomRight(ctx, ref, excerpt) {
-  generateVerseVertical(ctx, ref, excerpt, "topBottom", "right");
+  generateVerseVertical(ctx, ref, excerpt, 'topBottom', 'right');
 }
 
 function generateVerseBottomTopLeft(ctx, ref, excerpt) {
-  generateVerseVertical(ctx, ref, excerpt, "bottomTop", "left");
+  generateVerseVertical(ctx, ref, excerpt, 'bottomTop', 'left');
 }
 
 function generateVerseBottomTopCenter(ctx, ref, excerpt) {
-  generateVerseVertical(ctx, ref, excerpt, "bottomTop", "center");
+  generateVerseVertical(ctx, ref, excerpt, 'bottomTop', 'center');
 }
 
 function generateVerseBottomTopRight(ctx, ref, excerpt) {
-  generateVerseVertical(ctx, ref, excerpt, "bottomTop", "right");
+  generateVerseVertical(ctx, ref, excerpt, 'bottomTop', 'right');
 }
 
 function generateVerseLeftRightCenter(ctx, ref, excerpt) {
-  generateVerseHorizontal(ctx, ref, excerpt, "leftRight", "center");
+  generateVerseHorizontal(ctx, ref, excerpt, 'leftRight', 'center');
 }
 function generateVerseRightLeftCenter(ctx, ref, excerpt) {
-  generateVerseHorizontal(ctx, ref, excerpt, "rightLeft", "center");
+  generateVerseHorizontal(ctx, ref, excerpt, 'rightLeft', 'center');
 }
 
 const verseGenerators = {
@@ -185,16 +185,16 @@ const verseGenerators = {
   bottomTopCenter: generateVerseBottomTopCenter,
   bottomTopRight: generateVerseBottomTopRight,
   leftRightCenter: generateVerseLeftRightCenter,
-  rightLeftCenter: generateVerseRightLeftCenter
+  rightLeftCenter: generateVerseRightLeftCenter,
 };
 
 export default function generate(
   ctx,
   block,
-  currentFieldPath = ["bibleRefs", 0]
+  currentFieldPath = ['bibleRefs', 0],
 ) {
   const {
-    data: { bibleRefs = [] }
+    data: { bibleRefs = [] },
   } = block;
 
   if (!bibleRefs.length) {
@@ -202,12 +202,12 @@ export default function generate(
   }
 
   const bibleRefIndex = Math.min(currentFieldPath[1], bibleRefs.length - 1);
-  let { ref, excerpt, template = "topBottomCenter" } = bibleRefs[bibleRefIndex];
+  let { ref, excerpt, template = 'topBottomCenter' } = bibleRefs[bibleRefIndex];
 
-  ref = ref || "Lorem ipsum 1.2-3";
+  ref = ref || 'Lorem ipsum 1.2-3';
   excerpt =
     excerpt ||
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id dictum lectus.";
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id dictum lectus.';
 
   if (verseGenerators[template]) {
     verseGenerators[template](ctx, ref, `« ${excerpt} »`);

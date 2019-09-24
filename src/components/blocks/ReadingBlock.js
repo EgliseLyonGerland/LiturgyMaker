@@ -1,14 +1,14 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Sortable from "../Sortable";
-import BibleRefPicker from "../BibleRefPicker";
-import VerseTemplatePicker from "../VerseTemplatePicker";
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import Sortable from '../Sortable';
+import BibleRefPicker from '../BibleRefPicker';
+import VerseTemplatePicker from '../VerseTemplatePicker';
 
 export default ({ block, onChange, onFocus, onBlur }) => {
   const { data } = block;
   const { bibleRefs = [] } = data;
 
-  const getDefaultItem = () => ({ ref: "", excerpt: "" });
+  const getDefaultItem = () => ({ ref: '', excerpt: '' });
 
   const renderItem = ({ template, ...rest }, index) => (
     <Grid container spacing={2}>
@@ -18,12 +18,12 @@ export default ({ block, onChange, onFocus, onBlur }) => {
           onChange={value => {
             data.bibleRefs[index] = {
               ...data.bibleRefs[index],
-              ...value
+              ...value,
             };
             onChange(data);
           }}
           onFocus={path => {
-            onFocus(["bibleRefs", index, ...path]);
+            onFocus(['bibleRefs', index, ...path]);
           }}
           onBlur={onBlur}
         />
@@ -34,7 +34,7 @@ export default ({ block, onChange, onFocus, onBlur }) => {
           onSelect={value => {
             data.bibleRefs[index] = {
               ...data.bibleRefs[index],
-              template: value
+              template: value,
             };
             onChange(data);
           }}

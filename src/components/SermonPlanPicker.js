@@ -1,9 +1,9 @@
-import React from "react";
-import TextField from "@material-ui/core/TextField";
-import Sortable from "./Sortable";
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import Sortable from './Sortable';
 
 export default ({ items, onChange, onFocus, onBlur }) => {
-  const getDefaultItem = () => "";
+  const getDefaultItem = () => '';
 
   const handleChange = (index, value) => {
     items[index] = value;

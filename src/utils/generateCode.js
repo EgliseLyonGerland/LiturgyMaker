@@ -1,9 +1,9 @@
-import capitalize from "lodash/capitalize";
-import slugify from "./slugify";
+import capitalize from 'lodash/capitalize';
+import slugify from './slugify';
 
 function generateAnnouncementsBlockCode({ data }) {
   if (!data.length) {
-    return "";
+    return '';
   }
 
   const config = {
@@ -13,29 +13,29 @@ function generateAnnouncementsBlockCode({ data }) {
       }
 
       return [...acc, { title, detail }];
-    }, [])
+    }, []),
   };
 
   if (!config.items.length) {
-    return "";
+    return '';
   }
 
-  return `createAnnouncementSlide(${JSON.stringify(config, null, "  ")})`;
+  return `createAnnouncementSlide(${JSON.stringify(config, null, '  ')})`;
 }
 
 function generateSongsBlockCode({ data }) {
   return data
     .reduce((acc, datum) => {
-      const [title] = datum.title.split("(");
+      const [title] = datum.title.split('(');
       const args = [`'${slugify(title)}'`];
 
       if (datum.repeat) {
         args.push(`{ repeat: true }`);
       }
 
-      return [...acc, `createSongSlide(${args.join(", ")})`];
+      return [...acc, `createSongSlide(${args.join(', ')})`];
     }, [])
-    .join("\n");
+    .join('\n');
 }
 
 function generateReadingBlockCode({ data }) {
@@ -50,15 +50,15 @@ function generateReadingBlockCode({ data }) {
       const config = {
         bibleRef: bibleRef.ref,
         excerpt: bibleRef.excerpt,
-        template: bibleRef.template || "topBottomLeft"
+        template: bibleRef.template || 'topBottomLeft',
       };
 
       return [
         ...acc,
-        `createVerseSlide(${JSON.stringify(config, null, "  ")})`
+        `createVerseSlide(${JSON.stringify(config, null, '  ')})`,
       ];
     }, [])
-    .join("\n\n");
+    .join('\n\n');
 }
 
 function generateSectionBlockCode(block) {
@@ -90,7 +90,7 @@ function generateSermonBlockCode({ data }) {
     config.plan = plan;
   }
 
-  return `createSermonSlide(${JSON.stringify(config, 2, "  ")})`;
+  return `createSermonSlide(${JSON.stringify(config, 2, '  ')})`;
 }
 
 function generateGoodbyeBlockCode() {
@@ -102,24 +102,24 @@ const functions = {
   generateSongsBlockCode,
   generateReadingBlockCode,
   generateSectionBlockCode,
-  generateSermonBlockCode
+  generateSermonBlockCode,
 };
 
 export default function generateCode(doc) {
-  let code = "";
+  let code = '';
 
   doc.blocks.forEach(block => {
     const funcName = `generate${capitalize(block.type)}BlockCode`;
 
     if (functions[funcName]) {
-      code += "\n\n";
+      code += '\n\n';
       code += functions[funcName](block);
     }
 
     code = code.trim();
   });
 
-  code += "\n\n";
+  code += '\n\n';
   code += generateGoodbyeBlockCode();
 
   return code;

@@ -1,14 +1,14 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Divider from "@material-ui/core/Divider";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles(
   theme => ({
     root: {
-      margin: theme.spacing(6, 0)
-    }
+      margin: theme.spacing(6, 0),
+    },
   }),
-  { name: "Divider" }
+  { name: 'Divider' },
 );
 
 export default () => {

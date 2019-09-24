@@ -1,25 +1,25 @@
-import superagent from "superagent";
-import trim from "lodash/trim";
-import deburr from "lodash/deburr";
-import find from "lodash/find";
-import slugify from "./slugify";
+import superagent from 'superagent';
+import trim from 'lodash/trim';
+import deburr from 'lodash/deburr';
+import find from 'lodash/find';
+import slugify from './slugify';
 
-import books from "../config/bibleBooks.json";
+import books from '../config/bibleBooks.json';
 
 const bookNames = books.reduce((acc, curr) => [...acc, deburr(curr.name)], [
-  "Psaume"
+  'Psaume',
 ]);
 
-const bibleId = "2ef4ad5622cfd98b-01";
-const apiKey = "428439708c0b8225b46fa975a8b6318f";
+const bibleId = '2ef4ad5622cfd98b-01';
+const apiKey = '428439708c0b8225b46fa975a8b6318f';
 
 function merge(fields, values) {
   return fields.reduce(
     (acc, key, index) => ({
       ...acc,
-      [key]: values[index]
+      [key]: values[index],
     }),
-    {}
+    {},
   );
 }
 
@@ -41,24 +41,24 @@ export function parse(ref) {
     // },
     {
       regExp: /^(.+?) *(\d+)$/,
-      fields: ["book", "chapterStart"]
+      fields: ['book', 'chapterStart'],
     },
     {
       regExp: /^(.+?) *(\d+)-(\d+)$/,
-      fields: ["book", "chapterStart", "chapterEnd"]
+      fields: ['book', 'chapterStart', 'chapterEnd'],
     },
     {
       regExp: /^(.+?) *(\d+)\.(\d+[a-z]?)$/,
-      fields: ["book", "chapterStart", "verseStart"]
+      fields: ['book', 'chapterStart', 'verseStart'],
     },
     {
       regExp: /^(.+?) *(\d+)\.(\d+[a-z]?)-(\d+[a-z]?)$/,
-      fields: ["book", "chapterStart", "verseStart", "verseEnd"]
+      fields: ['book', 'chapterStart', 'verseStart', 'verseEnd'],
     },
     {
       regExp: /^(.+?) *(\d+)\.(\d+[a-z]?)-(\d+)\.(\d+[a-z]?)$/,
-      fields: ["book", "chapterStart", "verseStart", "chapterEnd", "verseEnd"]
-    }
+      fields: ['book', 'chapterStart', 'verseStart', 'chapterEnd', 'verseEnd'],
+    },
   ];
 
   const ref$ = trim(ref);
@@ -82,14 +82,14 @@ export function validate(ref) {
   const data = parse(ref);
 
   if (!data) {
-    return "Format incorrect";
+    return 'Format incorrect';
   }
 
   if (!bookNames.includes(deburr(data.book))) {
-    return "Livre non-reconnu";
+    return 'Livre non-reconnu';
   }
 
-  return "";
+  return '';
 }
 
 export function getPassage(ref) {
@@ -97,7 +97,7 @@ export function getPassage(ref) {
 
   if (!data || !data.chapterStart) return;
 
-  const book = find(books, ["slug", slugify(data.book)]);
+  const book = find(books, ['slug', slugify(data.book)]);
 
   if (!book) return;
 
@@ -123,21 +123,21 @@ export function getPassage(ref) {
     superagent
       .get(url)
       .query({
-        "content-type": "text",
-        "include-notes": false,
-        "include-titles": false,
-        "include-chapter-numbers": false,
-        "include-verse-numbers": false,
-        "include-verse-spans": false
+        'content-type': 'text',
+        'include-notes': false,
+        'include-titles': false,
+        'include-chapter-numbers': false,
+        'include-verse-numbers': false,
+        'include-verse-spans': false,
       })
-      .set("api-key", apiKey)
-      .set("Content-Type", "application/json")
-      .set("Accept", "application/json")
+      .set('api-key', apiKey)
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
       .then(res => {
         resolve(res.body.data.content);
       })
       .catch(() => {
-        resolve("");
+        resolve('');
       });
   });
 }

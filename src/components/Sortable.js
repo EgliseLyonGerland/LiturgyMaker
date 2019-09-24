@@ -1,37 +1,37 @@
-import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import DragHandleIcon from "@material-ui/icons/DragHandle";
-import DeleteIcon from "@material-ui/icons/Delete";
+import React from 'react';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import DragHandleIcon from '@material-ui/icons/DragHandle';
+import DeleteIcon from '@material-ui/icons/Delete';
 import {
   sortableContainer,
   sortableElement,
-  sortableHandle
-} from "react-sortable-hoc";
-import arrayMove from "array-move";
+  sortableHandle,
+} from 'react-sortable-hoc';
+import arrayMove from 'array-move';
 
 const useStyles = makeStyles(
   theme => ({
     item: {
-      position: "relative"
+      position: 'relative',
     },
     handle: {
-      position: "absolute",
+      position: 'absolute',
       top: theme.spacing(2),
-      right: "100%",
-      marginRight: theme.spacing(2)
+      right: '100%',
+      marginRight: theme.spacing(2),
     },
     trash: {
-      position: "absolute",
+      position: 'absolute',
       top: theme.spacing(2),
-      left: "100%",
-      marginLeft: theme.spacing(2)
+      left: '100%',
+      marginLeft: theme.spacing(2),
     },
     add: {
-      marginTop: theme.spacing(2)
-    }
+      marginTop: theme.spacing(2),
+    },
   }),
-  { name: "Sortable" }
+  { name: 'Sortable' },
 );
 
 const SortableContainer = sortableContainer(({ children }) => {
@@ -54,7 +54,7 @@ export default ({
   renderItem,
   onChange,
   getDefaultItem,
-  gutters = 0
+  gutters = 0,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -78,7 +78,7 @@ export default ({
           index={index}
           classes={classes}
           style={{
-            marginBottom: isLast(index) ? 0 : theme.spacing(gutters)
+            marginBottom: isLast(index) ? 0 : theme.spacing(gutters),
           }}
         >
           {renderItem(item, index)}

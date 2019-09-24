@@ -1,6 +1,6 @@
-import range from "lodash/range";
-import chunk from "lodash/chunk";
-import { currentVersion } from "../config/global";
+import range from 'lodash/range';
+import chunk from 'lodash/chunk';
+import { currentVersion } from '../config/global';
 
 function migrateToVersion2(doc) {
   return {
@@ -13,27 +13,27 @@ function migrateToVersion2(doc) {
 
       let title;
       switch (block.type) {
-        case "announcements":
-          title = "Annonces";
+        case 'announcements':
+          title = 'Annonces';
           break;
-        case "reading":
+        case 'reading':
           title = block.data.title;
           break;
-        case "songs":
-          title = "Chants";
+        case 'songs':
+          title = 'Chants';
           break;
-        case "sermon":
-          title = "Prédication";
+        case 'sermon':
+          title = 'Prédication';
           break;
-        case "section":
+        case 'section':
           title = null;
           break;
         default:
-          title = "";
+          title = '';
       }
 
       return { ...block, title };
-    })
+    }),
   };
 }
 
@@ -41,7 +41,7 @@ function migrateToVersion3(doc) {
   return {
     ...doc,
     blocks: doc.blocks.map(block => {
-      if (block.type !== "announcements") {
+      if (block.type !== 'announcements') {
         return block;
       }
 
@@ -58,18 +58,18 @@ function migrateToVersion3(doc) {
 
           return acc;
         },
-        [[], []]
+        [[], []],
       );
       data = [...data[0], ...data[1]];
 
       return { ...block, data };
-    })
+    }),
   };
 }
 
 const functions = {
   migrateToVersion2,
-  migrateToVersion3
+  migrateToVersion3,
 };
 
 export default function migrate(doc) {

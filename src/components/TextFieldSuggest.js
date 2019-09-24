@@ -1,43 +1,43 @@
-import React, { useState } from "react";
-import Autosuggest from "react-autosuggest";
-import match from "autosuggest-highlight/match";
-import parse from "autosuggest-highlight/parse";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import MenuItem from "@material-ui/core/MenuItem";
-import { makeStyles } from "@material-ui/core/styles";
-import slugify from "../utils/slugify";
+import React, { useState } from 'react';
+import Autosuggest from 'react-autosuggest';
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+import slugify from '../utils/slugify';
 
 const useStyles = makeStyles(
   {
     root: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     container: {
-      position: "relative"
+      position: 'relative',
     },
     suggestionsContainerOpen: {
-      position: "absolute",
+      position: 'absolute',
       zIndex: 100,
       top: 56,
       left: 0,
-      right: 0
+      right: 0,
     },
     suggestion: {
-      display: "block"
+      display: 'block',
     },
     suggestionsList: {
       margin: 0,
       padding: 0,
-      listStyleType: "none"
-    }
+      listStyleType: 'none',
+    },
   },
-  { name: "TextFieldSuggest" }
+  { name: 'TextFieldSuggest' },
 );
 
 export default function TextFieldSuggest({
   items = [],
-  field = "label",
+  field = 'label',
   value,
   onChange,
   onFocus = () => {},
@@ -100,8 +100,8 @@ export default function TextFieldSuggest({
             inputRef(node);
           },
           classes: {
-            input: classes.input
-          }
+            input: classes.input,
+          },
         }}
         onFocus={(event, value) => {
           onFocus();
@@ -146,7 +146,7 @@ export default function TextFieldSuggest({
           container: classes.container,
           suggestionsContainerOpen: classes.suggestionsContainerOpen,
           suggestionsList: classes.suggestionsList,
-          suggestion: classes.suggestion
+          suggestion: classes.suggestion,
         }}
         renderInputComponent={renderInputComponent}
         onSuggestionsFetchRequested={handleSuggestionsFetchRequested}

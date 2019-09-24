@@ -1,11 +1,11 @@
-import React from "react";
-import TextField from "@material-ui/core/TextField";
-import Sortable from "../Sortable";
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import Sortable from '../Sortable';
 
 export default ({ block, onChange, onFocus, onBlur }) => {
   let items = block.data;
 
-  const getDefaultItem = () => ({ title: "", detail: "" });
+  const getDefaultItem = () => ({ title: '', detail: '' });
 
   const handleChange = (key, index, value) => {
     if (!items[index]) {
@@ -21,11 +21,11 @@ export default ({ block, onChange, onFocus, onBlur }) => {
       <TextField
         label="Titre"
         value={item.title}
-        onChange={event => handleChange("title", index, event.target.value)}
+        onChange={event => handleChange('title', index, event.target.value)}
         variant="filled"
         margin="dense"
         onFocus={() => {
-          onFocus([index, "title"]);
+          onFocus([index, 'title']);
         }}
         onBlur={onBlur}
         fullWidth
@@ -33,11 +33,11 @@ export default ({ block, onChange, onFocus, onBlur }) => {
       <TextField
         label="Détail"
         value={item.detail}
-        onChange={event => handleChange("detail", index, event.target.value)}
+        onChange={event => handleChange('detail', index, event.target.value)}
         variant="filled"
         margin="dense"
         onFocus={() => {
-          onFocus([index, "detail"]);
+          onFocus([index, 'detail']);
         }}
         onBlur={onBlur}
         multiline

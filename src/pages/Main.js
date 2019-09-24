@@ -1,31 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import Fab from "@material-ui/core/Fab";
-import IconButton from "@material-ui/core/IconButton";
-import ArrowLeftIcon from "@material-ui/icons/ArrowLeft";
-import ArrowRightIcon from "@material-ui/icons/ArrowRight";
-import SaveIcon from "@material-ui/icons/Save";
-import CheckIcon from "@material-ui/icons/Check";
-import CodeIcon from "@material-ui/icons/Code";
-import CloseIcon from "@material-ui/icons/Close";
-import Zoom from "@material-ui/core/Zoom";
-import BeatLoader from "react-spinners/BeatLoader";
-import { format, endOfWeek, subDays, addDays } from "date-fns";
-import locale from "date-fns/locale/fr";
-import capitalize from "lodash/capitalize";
-import isEqual from "lodash/isEqual";
-import debounce from "lodash/debounce";
-import cloneDeep from "lodash/cloneDeep";
-import classnames from "classnames";
-import Form from "../components/Form";
-import Code from "../components/Code";
-import Preview from "../components/Preview";
-import createDefaultLiturgy from "../config/defaultLiturgy";
-import generateCode from "../utils/generateCode";
-import migrate from "../utils/migrate";
+import React, { useState, useEffect, useRef } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Fab from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import SaveIcon from '@material-ui/icons/Save';
+import CheckIcon from '@material-ui/icons/Check';
+import CodeIcon from '@material-ui/icons/Code';
+import CloseIcon from '@material-ui/icons/Close';
+import Zoom from '@material-ui/core/Zoom';
+import BeatLoader from 'react-spinners/BeatLoader';
+import { format, endOfWeek, subDays, addDays } from 'date-fns';
+import locale from 'date-fns/locale/fr';
+import capitalize from 'lodash/capitalize';
+import isEqual from 'lodash/isEqual';
+import debounce from 'lodash/debounce';
+import cloneDeep from 'lodash/cloneDeep';
+import classnames from 'classnames';
+import Form from '../components/Form';
+import Code from '../components/Code';
+import Preview from '../components/Preview';
+import createDefaultLiturgy from '../config/defaultLiturgy';
+import generateCode from '../utils/generateCode';
+import migrate from '../utils/migrate';
 
 const headerHeight = 176;
 const headerHeightMobile = 104;
@@ -33,113 +33,113 @@ const gutters = 3;
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginBottom: "50vh"
+    marginBottom: '50vh',
   },
   header: {
-    background: "linear-gradient(344deg, #0077d1 0%, #0091ff 100%)",
-    height: headerHeight
+    background: 'linear-gradient(344deg, #0077d1 0%, #0091ff 100%)',
+    height: headerHeight,
   },
   wrapper: {
-    display: "flex",
-    justifyContent: "center",
-    margin: theme.spacing(0, gutters)
+    display: 'flex',
+    justifyContent: 'center',
+    margin: theme.spacing(0, gutters),
   },
   preview: {
     margin: theme.spacing(gutters * 2, gutters),
     maxWidth: 600,
     flexGrow: 1,
 
-    "& > *": {
-      position: "sticky",
-      top: theme.spacing(gutters * 2)
-    }
+    '& > *': {
+      position: 'sticky',
+      top: theme.spacing(gutters * 2),
+    },
   },
   content: {
     width: 800,
-    maxWidth: "100%",
+    maxWidth: '100%',
     margin: theme.spacing(0, gutters),
-    display: "grid",
-    minHeight: "80vh",
-    gridTemplateRows: "auto 1fr",
-    marginTop: -theme.spacing(8)
+    display: 'grid',
+    minHeight: '80vh',
+    gridTemplateRows: 'auto 1fr',
+    marginTop: -theme.spacing(8),
   },
   navBar: {
-    display: "flex",
+    display: 'flex',
     height: theme.spacing(8),
     padding: theme.spacing(0, 2),
-    background: "#EEE",
-    alignItems: "center",
+    background: '#EEE',
+    alignItems: 'center',
 
-    "&:before": {
+    '&:before': {
       content: '""',
-      width: 50
-    }
+      width: 50,
+    },
   },
   sundays: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     fontSize: 16,
     fontWeight: 700,
-    margin: [[0, "auto"]]
+    margin: [[0, 'auto']],
   },
   sundaysName: {
     width: 250,
-    textAlign: "center"
+    textAlign: 'center',
   },
   actions: {
-    width: 50
+    width: 50,
   },
   cta: {
-    position: "fixed",
+    position: 'fixed',
     bottom: theme.spacing(4),
-    left: "50%",
+    left: '50%',
     width: 200,
     marginLeft: -200 / 2,
-    transition: "background .3s"
+    transition: 'background .3s',
   },
   ctaDisabled: {
     background: `${theme.palette.secondary.main} !important`,
-    color: "white !important"
+    color: 'white !important',
   },
   ctaSaved: {
-    background: `#17d86d !important`
+    background: `#17d86d !important`,
   },
   ctaIcon: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   spinner: {
-    display: "flex",
+    display: 'flex',
     height: 200,
-    alignItems: "center",
-    justifyContent: "center"
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  [theme.breakpoints.down("sm")]: {
+  [theme.breakpoints.down('sm')]: {
     header: {
-      height: headerHeightMobile
+      height: headerHeightMobile,
     },
     preview: {
-      display: "none"
+      display: 'none',
     },
     wrapper: {
-      margin: 0
+      margin: 0,
     },
     navBar: {
       padding: 0,
 
-      "&:before": {
-        display: "none"
-      }
+      '&:before': {
+        display: 'none',
+      },
     },
     sundays: {
-      fontSize: 16
+      fontSize: 16,
     },
     sundaysName: {
-      width: "auto"
+      width: 'auto',
     },
     actions: {
-      display: "none"
-    }
-  }
+      display: 'none',
+    },
+  },
 }));
 
 function getNextSundayDate(from) {
@@ -151,7 +151,7 @@ function formatDate(date) {
     return format(date, "EEEE '1er' MMMM", { locale });
   }
 
-  return format(date, "EEEE d MMMM", { locale });
+  return format(date, 'EEEE d MMMM', { locale });
 }
 
 export default ({ firebase }) => {
@@ -170,18 +170,18 @@ export default ({ firebase }) => {
     focusedBlock[0] >= 0 ? focusedBlock[0] : activedBlock;
   const timer = useRef(null);
   const db = firebase.firestore();
-  const id = format(currentDate, "yMMdd");
+  const id = format(currentDate, 'yMMdd');
 
   const checkChanges = useRef(
     debounce((doc1, doc2) => {
       setChanged(!isEqual(doc1.blocks, doc2.blocks));
-    }, 500)
+    }, 500),
   );
 
   const updateDoc = () => {
     setSaving(true);
 
-    db.collection("liturgies")
+    db.collection('liturgies')
       .doc(id)
       .set(doc)
       .then(() => {
@@ -258,7 +258,7 @@ export default ({ firebase }) => {
   };
 
   const handleFillFromLastWeek = async index => {
-    const previousId = format(subDays(currentDate, 7), "yMMdd");
+    const previousId = format(subDays(currentDate, 7), 'yMMdd');
     const block = doc.blocks[index];
 
     const res = await db.doc(`liturgies/${previousId}`).get();
@@ -279,9 +279,9 @@ export default ({ firebase }) => {
     handleBlocksChange(doc.blocks);
   };
 
-  let zoomKey = "nothing";
-  if (saved) zoomKey = "saved";
-  else if (changed) zoomKey = "save";
+  let zoomKey = 'nothing';
+  if (saved) zoomKey = 'saved';
+  else if (changed) zoomKey = 'save';
 
   const renderSaveButton = () => {
     if (saved) {
@@ -289,7 +289,7 @@ export default ({ firebase }) => {
         <Fab
           variant="extended"
           className={classnames(classes.cta, {
-            [classes.ctaSaved]: saved
+            [classes.ctaSaved]: saved,
           })}
           color="secondary"
           disabled
@@ -306,7 +306,7 @@ export default ({ firebase }) => {
         <Fab
           variant="extended"
           className={classnames(classes.cta, {
-            [classes.ctaSaved]: saved
+            [classes.ctaSaved]: saved,
           })}
           color="secondary"
           disabled
@@ -323,7 +323,7 @@ export default ({ firebase }) => {
           aria-label="Sauvegarder"
           variant="extended"
           className={classnames(classes.cta, {
-            [classes.ctaSaved]: saved
+            [classes.ctaSaved]: saved,
           })}
           color="secondary"
           onClick={updateDoc}

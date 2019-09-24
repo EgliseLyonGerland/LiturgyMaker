@@ -1,21 +1,21 @@
-import React, { useRef, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import capitalize from "lodash/capitalize";
-import * as preview from "../utils/preview";
-import { documentWidth, documentHeight } from "../config/preview";
+import React, { useRef, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import capitalize from 'lodash/capitalize';
+import * as preview from '../utils/preview';
+import { documentWidth, documentHeight } from '../config/preview';
 
 const useStyles = makeStyles(
   theme => ({
     root: {
-      background: "#DDD"
+      background: '#DDD',
     },
     canvas: {
-      width: "100%",
-      backgroundImage: "url(https://wallpapercave.com/wp/wp2445766.jpg)",
-      backgroundSize: "cover"
-    }
+      width: '100%',
+      backgroundImage: 'url(https://wallpapercave.com/wp/wp2445766.jpg)',
+      backgroundSize: 'cover',
+    },
   }),
-  { name: "Preview" }
+  { name: 'Preview' },
 );
 
 export default ({ block, currentFieldPath }) => {
@@ -28,7 +28,7 @@ export default ({ block, currentFieldPath }) => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
 
     canvas.width = documentWidth;
     canvas.height = documentHeight;
@@ -46,7 +46,7 @@ export default ({ block, currentFieldPath }) => {
       return;
     }
 
-    ctx.fillStyle = "white";
+    ctx.fillStyle = 'white';
 
     preview[funcName](ctx, block, currentFieldPath);
   });

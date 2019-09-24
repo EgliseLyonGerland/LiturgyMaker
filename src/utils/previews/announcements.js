@@ -1,18 +1,18 @@
-import chunk from "lodash/chunk";
-import { documentWidth, documentHeight } from "../../config/preview";
+import chunk from 'lodash/chunk';
+import { documentWidth, documentHeight } from '../../config/preview';
 
-const defaultTitle = "Lorem ipsum";
+const defaultTitle = 'Lorem ipsum';
 const defaultDetail =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
 
-export default function generate(ctx, block, currentFieldPath = [0, "title"]) {
+export default function generate(ctx, block, currentFieldPath = [0, 'title']) {
   const chunks = chunk(block.data, 6);
   const chunkIndex = Math.floor(currentFieldPath[0] / 6);
 
   let items = chunks[Math.min(chunkIndex, chunks.length - 1)];
   items = items.map(({ title, detail }) => ({
     title: title || defaultTitle,
-    detail: detail || defaultDetail
+    detail: detail || defaultDetail,
   }));
 
   const contentWidth = documentWidth - 200;
@@ -21,17 +21,17 @@ export default function generate(ctx, block, currentFieldPath = [0, "title"]) {
   const margin = 80;
 
   // Title
-  ctx.setFont("title");
-  ctx.textAlign = "center";
-  ctx.textBaseline = "top";
-  ctx.fillText("Annonces", documentWidth / 2, 90);
+  ctx.setFont('title');
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillText('Annonces', documentWidth / 2, 90);
 
   if (chunks.length > 1) {
     const page = `(${chunkIndex + 1}/${chunks.length})`;
 
-    ctx.setFont("announcementPage");
-    ctx.textAlign = "center";
-    ctx.textBaseline = "top";
+    ctx.setFont('announcementPage');
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
     ctx.fillText(page, documentWidth / 2, 190);
   }
 
@@ -50,19 +50,19 @@ export default function generate(ctx, block, currentFieldPath = [0, "title"]) {
     const x = index / 3 < 1 ? leftPartX : rightPartX;
     const y = currentY;
 
-    ctx.setFont("announcementItemTitle");
-    ctx.textAlign = "left";
-    ctx.textBaseline = "top";
+    ctx.setFont('announcementItemTitle');
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
     const titleHeight = ctx.fillMultilineText(item.title, x, y, itemWidth);
 
-    ctx.setFont("announcementItemDetail");
-    ctx.textAlign = "left";
-    ctx.textBaseline = "top";
+    ctx.setFont('announcementItemDetail');
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
     const detailHeight = ctx.fillMultilineText(
       item.detail,
       x,
       y + titleHeight,
-      itemWidth
+      itemWidth,
     );
 
     if (index === 2) {

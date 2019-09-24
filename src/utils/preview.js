@@ -1,17 +1,17 @@
-import { typography } from "../config/preview";
+import { typography } from '../config/preview';
 
 export {
-  default as generateAnnouncementsPreview
-} from "./previews/announcements";
-export { default as generateReadingPreview } from "./previews/reading";
-export { default as generateSectionPreview } from "./previews/section";
-export { default as generateSermonPreview } from "./previews/sermon";
-export { default as generateSongsPreview } from "./previews/songs";
+  default as generateAnnouncementsPreview,
+} from './previews/announcements';
+export { default as generateReadingPreview } from './previews/reading';
+export { default as generateSectionPreview } from './previews/section';
+export { default as generateSermonPreview } from './previews/sermon';
+export { default as generateSongsPreview } from './previews/songs';
 
 const lineHeight = 1.3;
 
 function getWords(text) {
-  const words = text.split(" ");
+  const words = text.split(' ');
 
   if (words.length < 3) {
     return words;
@@ -29,17 +29,17 @@ function getWords(text) {
 }
 
 function getLines(ctx, text, width) {
-  const parts = text.split("\n");
+  const parts = text.split('\n');
 
   if (parts.length > 1) {
     return parts.reduce(
       (acc, curr) => [...acc, ...getLines(ctx, curr.trim(), width)],
-      []
+      [],
     );
   }
 
   const words = getWords(text);
-  const { width: spaceWidth } = ctx.measureText(" ");
+  const { width: spaceWidth } = ctx.measureText(' ');
 
   const lines = [];
 
@@ -51,7 +51,7 @@ function getLines(ctx, text, width) {
     const { width: wordWidth } = ctx.measureText(currentWord);
 
     if (currentLine.length && currentWidth + wordWidth > width) {
-      lines.push(currentLine.join(" "));
+      lines.push(currentLine.join(' '));
 
       currentWidth = 0;
       currentLine = [];
@@ -62,25 +62,25 @@ function getLines(ctx, text, width) {
     currentWord = words.shift();
   }
 
-  lines.push(currentLine.join(" "));
+  lines.push(currentLine.join(' '));
 
   return lines;
 }
 
 CanvasRenderingContext2D.prototype.setFont = function(
   typographyName,
-  overrides = {}
+  overrides = {},
 ) {
   if (!typography[typographyName]) {
-    return "";
+    return '';
   }
 
   const data = {
     ...typography[typographyName],
-    ...overrides
+    ...overrides,
   };
 
-  let font = "";
+  let font = '';
   if (data.fontStyle) {
     font += ` ${data.fontStyle}`;
   }
@@ -111,7 +111,7 @@ CanvasRenderingContext2D.prototype.fillMultilineText = function(
   text,
   x,
   y,
-  width
+  width,
 ) {
   const lines = getLines(this, text, width);
   let height = 0;
@@ -126,14 +126,14 @@ CanvasRenderingContext2D.prototype.fillMultilineText = function(
 
 CanvasRenderingContext2D.prototype.measureMultiligneText = function(
   text,
-  maxWidth
+  maxWidth,
 ) {
   const lines = getLines(this, text, maxWidth);
   const height = lines.length * this.getCurrentLineHeight();
 
   const width = lines.reduce(
     (acc, curr) => Math.max(acc, this.measureText(curr).width),
-    0
+    0,
   );
 
   return { width, height };
@@ -143,8 +143,8 @@ CanvasRenderingContext2D.prototype.fillSeparator = function(
   x,
   y,
   horizontal = false,
-  align = "center",
-  size = horizontal ? 900 : 600
+  align = 'center',
+  size = horizontal ? 900 : 600,
 ) {
   this.save();
 
@@ -154,8 +154,8 @@ CanvasRenderingContext2D.prototype.fillSeparator = function(
 
   let finalX;
   if (horizontal) {
-    if (align === "center") finalX = x - size / 2;
-    else if (align === "right") finalX = x - size;
+    if (align === 'center') finalX = x - size / 2;
+    else if (align === 'right') finalX = x - size;
     else finalX = x;
   } else {
     finalX = x - thickness / 2;
@@ -164,21 +164,19 @@ CanvasRenderingContext2D.prototype.fillSeparator = function(
   let finalY;
   if (horizontal) {
     finalY = y - thickness / 2;
-  } else {
-    if (align === "center") finalY = y - size / 2;
-    else if (align === "right") finalY = y - size;
-  }
+  } else if (align === 'center') finalY = y - size / 2;
+  else if (align === 'right') finalY = y - size;
 
   const gradient = this.createLinearGradient(
     finalX,
     finalY,
     horizontal ? finalX + size : finalX,
-    horizontal ? finalY : finalY + size
+    horizontal ? finalY : finalY + size,
   );
 
-  gradient.addColorStop(0, "rgba(255, 255, 255, 0)");
-  gradient.addColorStop(0.5, "white");
-  gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+  gradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
+  gradient.addColorStop(0.5, 'white');
+  gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
   this.fillStyle = gradient;
   this.fillRect(finalX, finalY, width, height);

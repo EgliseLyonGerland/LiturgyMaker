@@ -1,36 +1,36 @@
-import React, { Fragment, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import React, { Fragment, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-const options = ["Remplir à partir de la semaine précédente"];
+const options = ['Remplir à partir de la semaine précédente'];
 
 const useStyles = makeStyles(
   theme => ({
     root: {
-      position: "relative",
-      padding: theme.spacing(6, 8)
+      position: 'relative',
+      padding: theme.spacing(6, 8),
     },
     title: {
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
     },
     more: {
-      position: "absolute",
+      position: 'absolute',
       top: theme.spacing(2),
-      right: theme.spacing(2)
-    }
+      right: theme.spacing(2),
+    },
   }),
-  { name: "FormBlock" }
+  { name: 'FormBlock' },
 );
 
 export default ({
   title = null,
   displayMenu = false,
   onFillFromLastWeekClicked,
-  children
+  children,
 }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);

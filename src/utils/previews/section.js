@@ -1,15 +1,15 @@
-import { documentWidth, documentHeight } from "../../config/preview";
+import { documentWidth, documentHeight } from '../../config/preview';
 
 export default function generate(ctx, block) {
   const {
-    data: { title = "Lorem Ipsum" }
+    data: { title = 'Lorem Ipsum' },
   } = block;
 
   const margin = 60;
 
-  ctx.setFont("chapterTitle");
-  ctx.textAlign = "center";
-  ctx.textBaseline = "top";
+  ctx.setFont('chapterTitle');
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
   const titleHeight = ctx.getCurrentLineHeight();
   const titleX = documentWidth / 2;
   const titleY = (documentHeight - titleHeight - margin) / 2;

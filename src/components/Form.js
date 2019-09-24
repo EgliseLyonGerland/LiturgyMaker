@@ -1,39 +1,39 @@
-import React, { useRef, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import capitalize from "lodash/capitalize";
-import throttle from "lodash/throttle";
-import { useWindowEvent } from "@culturehq/hooks";
-import animateScrollTo from "animated-scroll-to";
-import classnames from "classnames";
+import React, { useRef, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import capitalize from 'lodash/capitalize';
+import throttle from 'lodash/throttle';
+import { useWindowEvent } from '@culturehq/hooks';
+import animateScrollTo from 'animated-scroll-to';
+import classnames from 'classnames';
 
-import Block from "./FormBlock";
-import AnnouncementsBlock from "./blocks/AnnouncementsBlock";
-import SongsBlock from "./blocks/SongsBlock";
-import ReadingBlock from "./blocks/ReadingBlock";
-import SermonBlock from "./blocks/SermonBlock";
-import SectionBlock from "./blocks/SectionBlock";
+import Block from './FormBlock';
+import AnnouncementsBlock from './blocks/AnnouncementsBlock';
+import SongsBlock from './blocks/SongsBlock';
+import ReadingBlock from './blocks/ReadingBlock';
+import SermonBlock from './blocks/SermonBlock';
+import SectionBlock from './blocks/SectionBlock';
 
 const useStyles = makeStyles(
   theme => ({
     root: {
-      position: "relative"
+      position: 'relative',
     },
     divider: {
       height: 1,
       backgroundImage:
-        "linear-gradient(to right, #ccc 40%, rgba(255,255,255,0) 0%)",
-      backgroundPosition: "bottom",
+        'linear-gradient(to right, #ccc 40%, rgba(255,255,255,0) 0%)',
+      backgroundPosition: 'bottom',
       backgroundSize: [[15, 1]],
-      backgroundRepeat: "repeat-x"
+      backgroundRepeat: 'repeat-x',
     },
     block: {
-      borderLeft: [["solid", 4, "transparent"]]
+      borderLeft: [['solid', 4, 'transparent']],
     },
     active: {
-      borderColor: theme.palette.secondary.main
-    }
+      borderColor: theme.palette.secondary.main,
+    },
   }),
-  { name: "Form" }
+  { name: 'Form' },
 );
 
 const components = {
@@ -41,7 +41,7 @@ const components = {
   SongsBlock,
   ReadingBlock,
   SermonBlock,
-  SectionBlock
+  SectionBlock,
 };
 
 export default ({
@@ -52,7 +52,7 @@ export default ({
   onFocus,
   onBlur,
   onActive,
-  onFillFromLastWeek
+  onFillFromLastWeek,
 }) => {
   const classes = useStyles();
   const container = useRef(null);
@@ -80,7 +80,7 @@ export default ({
       }
 
       onActive(index - 1);
-    }, 100)
+    }, 100),
   );
 
   const handleFocus = (block, path, index) => {
@@ -94,11 +94,11 @@ export default ({
       offset: -48,
       onComplete: () => {
         scrolling.current = false;
-      }
+      },
     });
   };
 
-  useWindowEvent("scroll", () => {
+  useWindowEvent('scroll', () => {
     handleScroll.current(focusedIndex >= 0);
   });
 
@@ -112,7 +112,7 @@ export default ({
     return (
       <Block
         title={block.title}
-        displayMenu={block.type === "announcements"}
+        displayMenu={block.type === 'announcements'}
         onFillFromLastWeekClicked={() => onFillFromLastWeek(index)}
       >
         <Component
@@ -146,7 +146,7 @@ export default ({
           <div
             key={block.id}
             className={classnames(classes.block, {
-              [classes.active]: currentIndex === index
+              [classes.active]: currentIndex === index,
             })}
           >
             {renderBlock(block, index)}

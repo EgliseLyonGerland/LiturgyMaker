@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import FirebaseContext from "./components/FirebaseContext";
-import AuthPage from "./pages/Auth";
-import MainPage from "./pages/Main";
+import FirebaseContext from './components/FirebaseContext';
+import AuthPage from './pages/Auth';
+import MainPage from './pages/Main';
 
 function App({ user, signInWithEmailAndPassword, signOut, ...rest }) {
-  if (typeof user === "undefined") {
+  if (typeof user === 'undefined') {
     return null;
   }
 
