@@ -2,9 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as firebase from 'firebase/app';
 import withFirebaseAuth from 'react-with-firebase-auth';
+import { Provider } from 'react-redux';
 import 'firebase/auth';
 import 'firebase/firestore';
 
+import configureStore from './redux';
 import App from './App';
 import FirebaseContext from './components/FirebaseContext';
 import firebaseConfig from './config/firebase';
@@ -14,13 +16,16 @@ import './index.css';
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const firebaseAppAuth = firebaseApp.auth();
+const store = configureStore(firebaseApp);
 
 const AppWithAuth = withFirebaseAuth({ firebaseAppAuth })(App);
 
 ReactDOM.render(
-  <FirebaseContext.Provider value={firebaseApp}>
-    <AppWithAuth />
-  </FirebaseContext.Provider>,
+  <Provider store={store}>
+    <FirebaseContext.Provider value={firebaseApp}>
+      <AppWithAuth />
+    </FirebaseContext.Provider>
+  </Provider>,
   document.getElementById('root'),
 );
 

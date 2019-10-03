@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -15,17 +15,15 @@ import Zoom from '@material-ui/core/Zoom';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { format, endOfWeek, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
+import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
-import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
-import cloneDeep from 'lodash/cloneDeep';
 import classnames from 'classnames';
 import Form from '../components/Form';
 import Code from '../components/Code';
 import Preview from '../components/Preview';
-import createDefaultLiturgy from '../config/defaultLiturgy';
 import generateCode from '../utils/generateCode';
-import migrate from '../utils/migrate';
+import * as liturgiesActions from '../redux/actions/liturgies';
 
 const headerHeight = 176;
 const headerHeightMobile = 104;
@@ -142,99 +140,60 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function getNextSundayDate(from) {
+const getNextSundayDate = from => {
   return endOfWeek(from, { weekStartsOn: 1 });
-}
+};
 
-function formatDate(date) {
+const formatDate = date => {
   if (date.getDate() === 1) {
     return format(date, "EEEE '1er' MMMM", { locale });
   }
 
   return format(date, 'EEEE d MMMM', { locale });
-}
+};
 
-export default ({ firebase }) => {
+const mapStateToProps = ({ liturgies }) => {
+  return {
+    liturgies,
+  };
+};
+
+const mapDispatchToProps = { ...liturgiesActions };
+
+const Main = ({
+  liturgies,
+  fetchLiturgy,
+  setLiturgy,
+  persistLiturgy,
+  fillBlockFromPreviousWeek,
+}) => {
   const classes = useStyles();
   const [currentDate, setCurrentDate] = useState(getNextSundayDate(new Date()));
-  const [loaded, setLoaded] = useState(false);
-  const [changed, setChanged] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [doc, setDoc] = useState({ blocks: [] });
-  const [originalDoc, setOriginalDoc] = useState(null);
   const [displayCode, setDisplayCode] = useState(false);
   const [activedBlock, setActivedBlock] = useState(0);
   const [focusedBlock, setFocusedBlock] = useState([-1]);
   const currentBlockIndex =
     focusedBlock[0] >= 0 ? focusedBlock[0] : activedBlock;
-  const timer = useRef(null);
-  const db = firebase.firestore();
   const id = format(currentDate, 'yMMdd');
 
-  const checkChanges = useRef(
-    debounce((doc1, doc2) => {
-      setChanged(!isEqual(doc1.blocks, doc2.blocks));
+  const doc = liturgies[id] || null;
+  const loading = get(doc, 'loading', true);
+  const persisted = get(doc, 'persisted', true);
+  const persisting = get(doc, 'persisting', false);
+
+  const debouncedFetchLiturgy = useRef(
+    debounce(date => {
+      fetchLiturgy(date);
     }, 500),
   );
 
-  const updateDoc = () => {
-    setSaving(true);
-
-    db.collection('liturgies')
-      .doc(id)
-      .set(doc)
-      .then(() => {
-        setOriginalDoc(cloneDeep(doc));
-        setSaved(true);
-        setChanged(false);
-      });
-  };
-
-  const fetchDoc = () => {
-    db.doc(`liturgies/${id}`)
-      .get()
-      .then(doc => {
-        let originalDoc;
-        if (!doc.exists) {
-          originalDoc = createDefaultLiturgy({ date: +currentDate });
-        } else {
-          originalDoc = migrate(doc.data());
-        }
-
-        setDoc(cloneDeep(originalDoc));
-        setOriginalDoc(originalDoc);
-        setLoaded(true);
-      });
-  };
-
   useEffect(() => {
-    if (timer.current) {
-      clearTimeout(timer.current);
-    }
-
-    if (!loaded) {
-      timer.current = setTimeout(fetchDoc, 500);
-    }
+    debouncedFetchLiturgy.current(currentDate);
   }, [currentDate]);
 
-  useEffect(() => {
-    if (saved) {
-      setTimeout(() => {
-        setSaved(false);
-        setSaving(false);
-      }, 2000);
-    }
-  }, [saved]);
-
-  useEffect(() => {
-    if (originalDoc && loaded) {
-      checkChanges.current(originalDoc, doc);
-    }
-  }, [doc.blocks]);
-
   const handleBlocksChange = blocks => {
-    setDoc({ ...doc, blocks });
+    setLiturgy(doc.id, { ...doc.data, blocks });
   };
 
   const handleBlockFocus = (index, path) => {
@@ -250,38 +209,27 @@ export default ({ firebase }) => {
   };
 
   const handleChangeDate = date => {
-    setLoaded(false);
-    setChanged(false);
     setFocusedBlock([-1]);
     setActivedBlock(0);
     setCurrentDate(getNextSundayDate(date));
   };
 
+  const handleSave = async () => {
+    await persistLiturgy(doc.id);
+
+    setSaved(true);
+    setTimeout(() => {
+      setSaved(false);
+    }, 2000);
+  };
+
   const handleFillFromLastWeek = async index => {
-    const previousId = format(subDays(currentDate, 7), 'yMMdd');
-    const block = doc.blocks[index];
-
-    const res = await db.doc(`liturgies/${previousId}`).get();
-
-    if (!res.exists) {
-      return;
-    }
-
-    const previousDoc = migrate(res.data());
-    const previousBlock = previousDoc.blocks[index];
-
-    if (block.type !== previousBlock.type) {
-      return;
-    }
-
-    doc.blocks[index].data = previousBlock.data;
-
-    handleBlocksChange(doc.blocks);
+    fillBlockFromPreviousWeek(doc.id, index);
   };
 
   let zoomKey = 'nothing';
   if (saved) zoomKey = 'saved';
-  else if (changed) zoomKey = 'save';
+  else if (!persisted) zoomKey = 'save';
 
   const renderSaveButton = () => {
     if (saved) {
@@ -301,7 +249,7 @@ export default ({ firebase }) => {
       );
     }
 
-    if (saving) {
+    if (persisting) {
       return (
         <Fab
           variant="extended"
@@ -317,7 +265,7 @@ export default ({ firebase }) => {
       );
     }
 
-    if (changed) {
+    if (!persisted) {
       return (
         <Fab
           aria-label="Sauvegarder"
@@ -326,7 +274,7 @@ export default ({ firebase }) => {
             [classes.ctaSaved]: saved,
           })}
           color="secondary"
-          onClick={updateDoc}
+          onClick={() => handleSave()}
         >
           <SaveIcon className={classes.ctaIcon} />
           Enregistrer
@@ -390,7 +338,7 @@ export default ({ firebase }) => {
 
     return (
       <Form
-        blocks={doc.blocks}
+        blocks={doc.data.blocks}
         onChange={handleBlocksChange}
         onActive={handleBlockActive}
         onFocus={handleBlockFocus}
@@ -409,17 +357,17 @@ export default ({ firebase }) => {
         <Paper className={classes.content} elevation={0} square>
           {renderNavBar()}
 
-          {loaded ? (
-            renderContent()
-          ) : (
+          {loading ? (
             <div className={classes.spinner}>
               <BeatLoader color="#DDD" />
             </div>
+          ) : (
+            renderContent()
           )}
         </Paper>
         <div className={classes.preview}>
           <Preview
-            block={doc.blocks[currentBlockIndex]}
+            block={get(doc, ['blocks', currentBlockIndex])}
             currentFieldPath={focusedBlock[1]}
           />
         </div>
@@ -430,3 +378,8 @@ export default ({ firebase }) => {
     </div>
   );
 };
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Main);
