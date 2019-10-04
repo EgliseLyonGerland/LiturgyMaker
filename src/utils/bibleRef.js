@@ -95,11 +95,11 @@ export function validate(ref) {
 export function getPassage(ref) {
   const data = parse(ref);
 
-  if (!data || !data.chapterStart) return;
+  if (!data || !data.chapterStart) return null;
 
   const book = find(books, ['slug', slugify(data.book)]);
 
-  if (!book) return;
+  if (!book) return null;
 
   const { id: bookId } = book;
   const { chapterStart, chapterEnd, verseStart, verseEnd } = data;

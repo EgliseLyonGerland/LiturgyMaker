@@ -1,11 +1,12 @@
 import React, { useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import capitalize from 'lodash/capitalize';
 import * as preview from '../utils/preview';
 import { documentWidth, documentHeight } from '../config/preview';
 
 const useStyles = makeStyles(
-  theme => ({
+  {
     root: {
       background: '#DDD',
     },
@@ -14,11 +15,11 @@ const useStyles = makeStyles(
       backgroundImage: 'url(https://wallpapercave.com/wp/wp2445766.jpg)',
       backgroundSize: 'cover',
     },
-  }),
+  },
   { name: 'Preview' },
 );
 
-export default ({ block, currentFieldPath }) => {
+const Preview = ({ block, currentFieldPath }) => {
   const classes = useStyles();
   const canvasRef = useRef(null);
 
@@ -57,3 +58,10 @@ export default ({ block, currentFieldPath }) => {
     </div>
   );
 };
+
+Preview.propTypes = {
+  block: PropTypes.object,
+  currentFieldPath: PropTypes.array,
+};
+
+export default Preview;

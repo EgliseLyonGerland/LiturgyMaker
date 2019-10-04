@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Sortable from '../Sortable';
 import BibleRefPicker from '../BibleRefPicker';
 import VerseTemplatePicker from '../VerseTemplatePicker';
 
-export default ({ block, onChange, onFocus, onBlur }) => {
+const ReadingBlock = ({ block, onChange, onFocus, onBlur }) => {
   const { data } = block;
   const { bibleRefs = [] } = data;
 
@@ -56,3 +57,13 @@ export default ({ block, onChange, onFocus, onBlur }) => {
     />
   );
 };
+
+ReadingBlock.propTypes = {
+  block: PropTypes.object,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  template: PropTypes.string,
+};
+
+export default ReadingBlock;

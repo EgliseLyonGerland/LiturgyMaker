@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -377,6 +378,14 @@ const Main = ({
       </Zoom>
     </div>
   );
+};
+
+Main.propTypes = {
+  liturgies: PropTypes.object,
+  fetchLiturgy: PropTypes.func,
+  setLiturgy: PropTypes.func,
+  persistLiturgy: PropTypes.func,
+  fillBlockFromPreviousWeek: PropTypes.func,
 };
 
 export default connect(

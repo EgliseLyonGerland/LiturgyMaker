@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import TextFieldSuggest from './TextFieldSuggest';
@@ -20,7 +21,13 @@ const useStyles = makeStyles(
   { name: 'BibleRefPicker' },
 );
 
-export default ({ data, onChange, onFocus, onBlur, withExcerpt = true }) => {
+const BibleRefPicker = ({
+  data,
+  onChange,
+  onFocus,
+  onBlur,
+  withExcerpt = true,
+}) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
@@ -30,13 +37,14 @@ export default ({ data, onChange, onFocus, onBlur, withExcerpt = true }) => {
   }
 
   const handleChange = (key, value) => {
-    data[key] = value;
+    const newData = data;
+    newData[key] = value;
 
-    if (data.excerpt) {
-      data.excerpt = data.excerpt.replace(/ +/gm, ' ');
+    if (newData.excerpt) {
+      newData.excerpt = newData.excerpt.replace(/ +/gm, ' ');
     }
 
-    onChange(data);
+    onChange(newData);
   };
 
   const handleFillPassage = async () => {
@@ -101,3 +109,13 @@ export default ({ data, onChange, onFocus, onBlur, withExcerpt = true }) => {
     </div>
   );
 };
+
+BibleRefPicker.propTypes = {
+  data: PropTypes.object,
+  withExcerpt: PropTypes.bool,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+};
+
+export default BibleRefPicker;

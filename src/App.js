@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import FirebaseContext from './components/FirebaseContext';
 import AuthPage from './pages/Auth';
 import MainPage from './pages/Main';
 
-function App({ user, signInWithEmailAndPassword, signOut, ...rest }) {
+function App({ user, signInWithEmailAndPassword }) {
   if (typeof user === 'undefined') {
     return null;
   }
@@ -19,5 +20,10 @@ function App({ user, signInWithEmailAndPassword, signOut, ...rest }) {
     </FirebaseContext.Consumer>
   );
 }
+
+App.propTypes = {
+  user: PropTypes.object,
+  signInWithEmailAndPassword: PropTypes.func,
+};
 
 export default App;

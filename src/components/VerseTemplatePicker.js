@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
 import { verseTemplates } from '../config/preview';
@@ -52,7 +53,7 @@ const previews = {
   rightLeftCenter: RightLeftCenterPreview,
 };
 
-export default ({ current = 'topBottomLeft', onSelect }) => {
+const VerseTemplatePicker = ({ current = 'topBottomLeft', onSelect }) => {
   const classes = useStyles();
 
   const renderImg = name => {
@@ -79,3 +80,10 @@ export default ({ current = 'topBottomLeft', onSelect }) => {
     </div>
   );
 };
+
+VerseTemplatePicker.propTypes = {
+  current: PropTypes.string,
+  onSelect: PropTypes.func,
+};
+
+export default VerseTemplatePicker;

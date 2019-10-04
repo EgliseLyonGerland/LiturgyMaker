@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -26,7 +27,7 @@ const useStyles = makeStyles(
   { name: 'FormBlock' },
 );
 
-export default ({
+const FormBlock = ({
   title = null,
   displayMenu = false,
   onFillFromLastWeekClicked,
@@ -88,3 +89,12 @@ export default ({
     </div>
   );
 };
+
+FormBlock.propTypes = {
+  title: PropTypes.string,
+  displayMenu: PropTypes.bool,
+  onFillFromLastWeekClicked: PropTypes.func,
+  children: PropTypes.any,
+};
+
+export default FormBlock;

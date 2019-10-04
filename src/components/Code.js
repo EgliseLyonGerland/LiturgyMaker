@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import okaida from 'react-syntax-highlighter/dist/esm/styles/prism/okaidia';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+
 const copy = require('clipboard-copy');
 
 const useStyles = makeStyles(
@@ -27,7 +29,7 @@ const useStyles = makeStyles(
   { name: 'Code' },
 );
 
-export default ({ code }) => {
+const Code = ({ code }) => {
   const classes = useStyles();
   const [copied, setCopied] = useState(false);
 
@@ -60,3 +62,9 @@ export default ({ code }) => {
     </div>
   );
 };
+
+Code.propTypes = {
+  code: PropTypes.string,
+};
+
+export default Code;

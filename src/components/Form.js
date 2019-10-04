@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import capitalize from 'lodash/capitalize';
 import throttle from 'lodash/throttle';
@@ -44,7 +45,7 @@ const components = {
   SectionBlock,
 };
 
-export default ({
+const Form = ({
   blocks,
   activedIndex,
   focusedIndex,
@@ -71,7 +72,7 @@ export default ({
 
       let index = 0;
 
-      for (; index < childNodes.length; index++) {
+      for (; index < childNodes.length; index += 1) {
         const { top } = childNodes[index].getBoundingClientRect();
 
         if (top > defaultThreshold) {
@@ -118,8 +119,9 @@ export default ({
         <Component
           block={block}
           onChange={data => {
-            blocks[index].data = data;
-            onChange([...blocks]);
+            const newBlocks = blocks;
+            newBlocks[index].data = data;
+            onChange([...newBlocks]);
           }}
           onFocus={path => {
             handleFocus(block, path, index);
@@ -157,3 +159,16 @@ export default ({
     </div>
   );
 };
+
+Form.propTypes = {
+  blocks: PropTypes.array,
+  activedIndex: PropTypes.number,
+  focusedIndex: PropTypes.number,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  onActive: PropTypes.func,
+  onFillFromLastWeek: PropTypes.func,
+};
+
+export default Form;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
@@ -49,7 +50,7 @@ const SortableItem = sortableElement(({ children, style, classes }) => (
   </div>
 ));
 
-export default ({
+const Sortable = ({
   items,
   renderItem,
   onChange,
@@ -106,3 +107,13 @@ export default ({
     </SortableContainer>
   );
 };
+
+Sortable.propTypes = {
+  items: PropTypes.array,
+  gutters: PropTypes.number,
+  renderItem: PropTypes.func,
+  getDefaultItem: PropTypes.func,
+  onChange: PropTypes.func,
+};
+
+export default Sortable;

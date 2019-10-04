@@ -1,13 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Sortable from './Sortable';
 
-export default ({ items, onChange, onFocus, onBlur }) => {
+const SermonPlanPicker = ({ items, onChange, onFocus, onBlur }) => {
   const getDefaultItem = () => '';
 
   const handleChange = (index, value) => {
-    items[index] = value;
-    onChange(items);
+    const newItems = items;
+    newItems[index] = value;
+    onChange(newItems);
   };
 
   const renderItem = (text, index) => (
@@ -38,3 +40,12 @@ export default ({ items, onChange, onFocus, onBlur }) => {
     </div>
   );
 };
+
+SermonPlanPicker.propTypes = {
+  items: PropTypes.array,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+};
+
+export default SermonPlanPicker;

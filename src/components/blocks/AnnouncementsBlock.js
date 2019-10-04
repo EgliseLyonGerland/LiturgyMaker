@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Sortable from '../Sortable';
 
-export default ({ block, onChange, onFocus, onBlur }) => {
-  let items = block.data;
+const AnnouncementsBlock = ({ block, onChange, onFocus, onBlur }) => {
+  const items = block.data;
 
   const getDefaultItem = () => ({ title: '', detail: '' });
 
@@ -56,3 +57,13 @@ export default ({ block, onChange, onFocus, onBlur }) => {
     />
   );
 };
+
+AnnouncementsBlock.propTypes = {
+  block: PropTypes.object,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  template: PropTypes.string,
+};
+
+export default AnnouncementsBlock;

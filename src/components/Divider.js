@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
+import MuiDivider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles(
   theme => ({
@@ -11,8 +11,10 @@ const useStyles = makeStyles(
   { name: 'Divider' },
 );
 
-export default () => {
+const Divider = () => {
   const classes = useStyles();
 
-  return <Divider className={classes.root} />;
+  return <MuiDivider className={classes.root} />;
 };
+
+export default Divider;

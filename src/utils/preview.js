@@ -67,12 +67,12 @@ function getLines(ctx, text, width) {
   return lines;
 }
 
-CanvasRenderingContext2D.prototype.setFont = function(
+CanvasRenderingContext2D.prototype.setFont = function setFont(
   typographyName,
   overrides = {},
 ) {
   if (!typography[typographyName]) {
-    return '';
+    return;
   }
 
   const data = {
@@ -97,17 +97,17 @@ CanvasRenderingContext2D.prototype.setFont = function(
   this.font = font.trim();
 };
 
-CanvasRenderingContext2D.prototype.getCurrentFontSize = function() {
+CanvasRenderingContext2D.prototype.getCurrentFontSize = function getCurrentFontSize() {
   return /([0-9]+)px/.exec(this.font)[1];
 };
 
-CanvasRenderingContext2D.prototype.getCurrentLineHeight = function() {
+CanvasRenderingContext2D.prototype.getCurrentLineHeight = function getCurrentLineHeight() {
   const fontSize = this.getCurrentFontSize();
 
   return fontSize * lineHeight;
 };
 
-CanvasRenderingContext2D.prototype.fillMultilineText = function(
+CanvasRenderingContext2D.prototype.fillMultilineText = function fillMultilineText(
   text,
   x,
   y,
@@ -116,7 +116,7 @@ CanvasRenderingContext2D.prototype.fillMultilineText = function(
   const lines = getLines(this, text, width);
   let height = 0;
 
-  lines.forEach((line, index) => {
+  lines.forEach(line => {
     this.fillText(line, x, y + height);
     height += this.getCurrentLineHeight();
   });
@@ -124,7 +124,7 @@ CanvasRenderingContext2D.prototype.fillMultilineText = function(
   return height;
 };
 
-CanvasRenderingContext2D.prototype.measureMultiligneText = function(
+CanvasRenderingContext2D.prototype.measureMultiligneText = function measureMultiligneText(
   text,
   maxWidth,
 ) {
@@ -139,7 +139,7 @@ CanvasRenderingContext2D.prototype.measureMultiligneText = function(
   return { width, height };
 };
 
-CanvasRenderingContext2D.prototype.fillSeparator = function(
+CanvasRenderingContext2D.prototype.fillSeparator = function fillSeparator(
   x,
   y,
   horizontal = false,

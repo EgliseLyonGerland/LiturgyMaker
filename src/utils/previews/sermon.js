@@ -4,7 +4,7 @@ import generateSection from './section';
 
 const documentHalfWidth = documentWidth / 2;
 
-export default function generate(ctx, block, currentFieldPath = []) {
+export default function generate(ctx, block) {
   const {
     data: { title, author, bibleRefs },
   } = block;
@@ -13,7 +13,8 @@ export default function generate(ctx, block, currentFieldPath = []) {
   const ref = parse(bibleRef);
 
   if (!ref) {
-    return generateSection(ctx, { data: { title: 'Prédication' } });
+    generateSection(ctx, { data: { title: 'Prédication' } });
+    return;
   }
 
   ctx.setFont('chapterTitle', { fontSize: 60 });

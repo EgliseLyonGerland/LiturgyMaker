@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default ({ onSubmit = () => {} }) => {
+const Auth = ({ onSubmit = () => {} }) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -73,3 +74,9 @@ export default ({ onSubmit = () => {} }) => {
     </div>
   );
 };
+
+Auth.propTypes = {
+  onSubmit: PropTypes.func,
+};
+
+export default Auth;

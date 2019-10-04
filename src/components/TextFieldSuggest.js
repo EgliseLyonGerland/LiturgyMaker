@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Autosuggest from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
@@ -35,7 +36,7 @@ const useStyles = makeStyles(
   { name: 'TextFieldSuggest' },
 );
 
-export default function TextFieldSuggest({
+const TextFieldSuggest = ({
   items = [],
   field = 'label',
   value,
@@ -43,13 +44,13 @@ export default function TextFieldSuggest({
   onFocus = () => {},
   onBlur = () => {},
   ...rest
-}) {
+}) => {
   const classes = useStyles();
 
   const [suggestions, setSuggestions] = useState([]);
 
-  const getSuggestions = value => {
-    const inputValue = slugify(value.trim());
+  const getSuggestions = str => {
+    const inputValue = slugify(str.trim());
     const inputLength = inputValue.length;
     let count = 0;
 
@@ -72,8 +73,8 @@ export default function TextFieldSuggest({
     return suggestion[field];
   };
 
-  const handleSuggestionsFetchRequested = ({ value }) => {
-    setSuggestions(getSuggestions(value));
+  const handleSuggestionsFetchRequested = options => {
+    setSuggestions(getSuggestions(options.value));
   };
 
   const handleSuggestionsClearRequested = () => {
@@ -103,9 +104,9 @@ export default function TextFieldSuggest({
             input: classes.input,
           },
         }}
-        onFocus={(event, value) => {
+        onFocus={(event, newValue) => {
           onFocus();
-          onFocus2(event, value);
+          onFocus2(event, newValue);
         }}
         onBlur={event => {
           onBlur();
@@ -161,4 +162,17 @@ export default function TextFieldSuggest({
       />
     </div>
   );
-}
+};
+
+TextFieldSuggest.propTypes = {
+  items: PropTypes.array,
+  field: PropTypes.string,
+  value: PropTypes.any,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  inputRef: PropTypes.any,
+  ref: PropTypes.any,
+};
+
+export default TextFieldSuggest;

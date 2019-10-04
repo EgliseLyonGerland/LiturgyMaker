@@ -202,7 +202,8 @@ export default function generate(
   }
 
   const bibleRefIndex = Math.min(currentFieldPath[1], bibleRefs.length - 1);
-  let { ref, excerpt, template = 'topBottomCenter' } = bibleRefs[bibleRefIndex];
+  const { template = 'topBottomCenter' } = bibleRefs[bibleRefIndex];
+  let { ref, excerpt } = bibleRefs[bibleRefIndex];
 
   ref = ref || 'Lorem ipsum 1.2-3';
   excerpt =

@@ -1,13 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import TextFieldSuggest from '../TextFieldSuggest';
 import Sortable from '../Sortable';
 import songs from '../../config/songs.json';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 
-export default ({ block, onChange, onFocus, onBlur }) => {
-  let items = block.data;
+const SongsBlock = ({ block, onChange, onFocus, onBlur }) => {
+  const items = block.data;
 
   const getDefaultItem = () => ({ title: '', infos: '', repeat: false });
 
@@ -73,3 +74,12 @@ export default ({ block, onChange, onFocus, onBlur }) => {
     />
   );
 };
+
+SongsBlock.propTypes = {
+  block: PropTypes.object,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+};
+
+export default SongsBlock;
