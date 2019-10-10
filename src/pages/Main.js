@@ -368,7 +368,7 @@ const Main = ({
         </Paper>
         <div className={classes.preview}>
           <Preview
-            block={get(doc, ['blocks', currentBlockIndex])}
+            block={get(doc, ['data', 'blocks', currentBlockIndex])}
             currentFieldPath={focusedBlock[1]}
           />
         </div>
