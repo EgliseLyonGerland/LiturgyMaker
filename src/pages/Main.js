@@ -334,7 +334,7 @@ const Main = ({
 
   const renderContent = () => {
     if (displayCode) {
-      return <Code code={generateCode(doc)} />;
+      return <Code code={generateCode(doc.data)} />;
     }
 
     return (
