@@ -69,7 +69,7 @@ function generateSermonBlockCode({ data }) {
   const { title, author, plan = [], bibleRefs = [] } = data;
 
   if (!author || !bibleRefs.length) {
-    return `createSermonSlide()`;
+    return '';
   }
 
   const config = {};
@@ -78,7 +78,7 @@ function generateSermonBlockCode({ data }) {
     config.title = title;
   }
 
-  if (title) {
+  if (author) {
     config.author = author;
   }
 
@@ -86,7 +86,7 @@ function generateSermonBlockCode({ data }) {
     [config.bibleRef] = bibleRefs;
   }
 
-  if (plan.length) {
+  if (plan.length && plan.join('')) {
     config.plan = plan;
   }
 
