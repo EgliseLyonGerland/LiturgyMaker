@@ -135,9 +135,10 @@ function generateVerseHorizontal(ctx, ref, excerpt, direction, align) {
   // Display exerpt
   ctx.setFont('verseExcerpt');
   ctx.textAlign = 'left';
-  ctx.textBaseline = 'top';
+  ctx.textBaseline = 'bottom';
 
-  const exerptY = (documentHeight - excerptHeight) / 2;
+  const exerptY =
+    (documentHeight - excerptHeight) / 2 + ctx.getCurrentLineHeight();
   let excerptX = padding;
   if (direction === 'leftRight') {
     excerptX += headerWidth + margin * 2;
@@ -211,6 +212,22 @@ export default function generate(
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id dictum lectus.';
 
   if (verseGenerators[template]) {
-    verseGenerators[template](ctx, ref, `“ ${excerpt} ”`);
+    verseGenerators[template](ctx, ref, `“ ${excerpt.trim()} ”`);
   }
+
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([10, 10]);
+
+  ctx.beginPath();
+  ctx.moveTo(0, 150);
+  ctx.lineTo(documentWidth, 150);
+  ctx.stroke();
+  ctx.closePath();
+
+  ctx.beginPath();
+  ctx.moveTo(0, documentHeight - 150);
+  ctx.lineTo(documentWidth, documentHeight - 150);
+  ctx.stroke();
+  ctx.closePath();
 }
