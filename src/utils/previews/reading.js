@@ -91,10 +91,10 @@ function generateVerseHorizontal(ctx, ref, excerpt, direction, align) {
   const maxExcerptWidth = maxContentWidth - headerWidth - margin * 2;
 
   ctx.setFont('verseExcerpt');
-  const {
-    height: excerptHeight,
-    width: excerptWidth,
-  } = ctx.measureMultiligneText(excerpt, maxExcerptWidth);
+  const { height: excerptHeight } = ctx.measureMultiligneText(
+    excerpt,
+    maxExcerptWidth,
+  );
 
   // Display title
   ctx.save();
@@ -108,7 +108,7 @@ function generateVerseHorizontal(ctx, ref, excerpt, direction, align) {
 
   let titleX = padding;
   if (direction === 'rightLeft') {
-    titleX += margin * 2 + excerptWidth;
+    titleX += margin * 2 + maxExcerptWidth;
   }
 
   ctx.fillText(title, titleX, documentHeight / 2);
@@ -127,7 +127,7 @@ function generateVerseHorizontal(ctx, ref, excerpt, direction, align) {
   // Display seperator
   let seperatorX = padding + headerWidth + margin;
   if (direction === 'rightLeft') {
-    seperatorX = padding + excerptWidth + margin;
+    seperatorX = padding + maxExcerptWidth + margin;
   }
 
   ctx.fillSeparator(seperatorX, documentHeight / 2, false, align);
@@ -211,6 +211,6 @@ export default function generate(
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id dictum lectus.';
 
   if (verseGenerators[template]) {
-    verseGenerators[template](ctx, ref, `« ${excerpt} »`);
+    verseGenerators[template](ctx, ref, `“ ${excerpt} ”`);
   }
 }

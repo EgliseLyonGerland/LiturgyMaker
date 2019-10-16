@@ -11,19 +11,21 @@ export { default as generateSongsPreview } from './previews/songs';
 const lineHeight = 1.3;
 
 function getWords(text) {
-  const words = text.split(' ');
+  let words = text.split(' ');
 
   if (words.length < 3) {
     return words;
   }
 
-  const lastWord = words.pop();
+  words = words.reduce((acc, curr) => {
+    if (acc.length && curr.length === 1) {
+      acc[acc.length - 1] += ` ${curr}`;
+    } else {
+      acc.push(curr);
+    }
 
-  if (lastWord.length <= 3) {
-    words[words.length - 1] += ` ${lastWord}`;
-  } else {
-    words.push(lastWord);
-  }
+    return acc;
+  }, []);
 
   return words;
 }
@@ -50,7 +52,7 @@ function getLines(ctx, text, width) {
   while (currentWord !== undefined) {
     const { width: wordWidth } = ctx.measureText(currentWord);
 
-    if (currentLine.length && currentWidth + wordWidth > width) {
+    if (currentLine.length && currentWidth + wordWidth >= width - 8) {
       lines.push(currentLine.join(' '));
 
       currentWidth = 0;
