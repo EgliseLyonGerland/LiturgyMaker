@@ -48,13 +48,17 @@ export function persistLiturgy(id) {
   return async (dispatch, getState, { firebase }) => {
     const { liturgies } = getState();
     const db = firebase.firestore();
+    const { uid } = firebase.auth().currentUser;
 
     dispatch({ type: LITURGIES_PERSISTING, id });
 
     await db
       .collection('liturgies')
       .doc(id)
-      .set(liturgies[id].data);
+      .set({
+        uid,
+        ...liturgies[id].data,
+      });
 
     return dispatch({ type: LITURGIES_PERSISTED, id });
   };
