@@ -20,17 +20,17 @@ function formatDate(date) {
 
 exports.notifyChanges = functions.firestore
   .document('liturgies/{liturgyId}')
-  .onWrite(async change => {
+  .onWrite(async (change, context) => {
     const created = !change.before.exists;
     const data = change.after.data();
     const date = toDate(data.date);
     const formattedDate = formatDate(date);
+    const { uid } = data;
+
+    const user = await admin.auth().getUser(uid);
 
     const transporter = nodemailer.createTransport(
       smtpTransport({
-        // host: "smtp.gmail.com",
-        // port: 465,
-        // secure: true,
         service: 'gmail',
         auth: {
           user: 'egliselyongerland@gmail.com',
@@ -42,16 +42,17 @@ exports.notifyChanges = functions.firestore
     const from = 'Eglise Lyon Gerland <egliselyongerland@gmail.com>';
 
     const to = [
+      'nicolas@bazille.fr',
       'alexsarran@gmail.com',
       'blumdenis@aol.com',
-      'nicolas@bazille.fr',
+      'mailysvenet@gmail.com',
     ].join(', ');
 
-    let subject;
+    let subject = `Les informations sur le culte du ${formattedDate} ont été `;
     if (created) {
-      subject = `Les informations sur le culte du ${formattedDate} ont été ajoutées`;
+      subject += 'ajoutées';
     } else {
-      subject = `Des informations sur le culte du ${formattedDate} ont été modifées`;
+      subject += 'modifées';
     }
 
     let diff;
@@ -63,7 +64,7 @@ exports.notifyChanges = functions.firestore
     const html = [
       `Bonjour,`,
       ``,
-      `${subject}.`,
+      `${subject} par ${user.email}.`,
       ``,
       `Rendez vous sur culte.egliselyongerland.org pour visualiser les informations.`,
       ``,
