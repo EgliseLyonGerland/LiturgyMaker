@@ -1,6 +1,18 @@
 import capitalize from 'lodash/capitalize';
 import slugify from './slugify';
 
+let currentSongBackground = 'blue';
+
+function changeBackground() {
+  if (currentSongBackground === 'blue') {
+    currentSongBackground = 'red';
+  } else if (currentSongBackground === 'red') {
+    currentSongBackground = 'green';
+  } else {
+    currentSongBackground = 'blue';
+  }
+}
+
 function generateAnnouncementsBlockCode({ data }) {
   if (!data.length) {
     return '';
@@ -29,9 +41,17 @@ function generateSongsBlockCode({ data }) {
       const [title] = datum.title.split('(');
       const args = [`'${slugify(title)}'`];
 
+      const options = {
+        background: currentSongBackground,
+      };
+
       if (datum.repeat) {
-        args.push(`{ repeat: true }`);
+        options.repeat = true;
       }
+
+      args.push(JSON.stringify(options, 2, null));
+
+      changeBackground();
 
       return [...acc, `createSongSlide(${args.join(', ')})`];
     }, [])
@@ -106,6 +126,8 @@ const functions = {
 };
 
 export default function generateCode(doc) {
+  currentSongBackground = 'blue';
+
   let code = '';
 
   doc.blocks.forEach(block => {
