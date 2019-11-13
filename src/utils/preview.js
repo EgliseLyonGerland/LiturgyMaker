@@ -1,8 +1,6 @@
 import { typography } from '../config/preview';
 
-export {
-  default as generateAnnouncementsPreview,
-} from './previews/announcements';
+export { default as generateAnnouncementsPreview } from './previews/announcements';
 export { default as generateReadingPreview } from './previews/reading';
 export { default as generateSectionPreview } from './previews/section';
 export { default as generateSermonPreview } from './previews/sermon';
