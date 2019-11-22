@@ -56,8 +56,8 @@ export function persistLiturgy(id) {
       .collection('liturgies')
       .doc(id)
       .set({
-        uid,
         ...liturgies[id].data,
+        uid,
       });
 
     return dispatch({ type: LITURGIES_PERSISTED, id });
