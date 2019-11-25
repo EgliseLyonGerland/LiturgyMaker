@@ -26,8 +26,14 @@ exports.notifyChanges = functions.firestore
     const date = toDate(data.date);
     const formattedDate = formatDate(date);
     const { uid } = data;
+    const db = admin.firestore();
 
-    const user = await admin.auth().getUser(uid);
+    const user = (
+      await db
+        .collection('users')
+        .doc(uid)
+        .get()
+    ).data();
 
     const transporter = nodemailer.createTransport(
       smtpTransport({
@@ -64,7 +70,7 @@ exports.notifyChanges = functions.firestore
     const html = [
       `Bonjour,`,
       ``,
-      `${subject} par ${user.email}.`,
+      `${subject} par ${user.displayName}.`,
       ``,
       `Rendez vous sur culte.egliselyongerland.org pour visualiser les informations.`,
       ``,
