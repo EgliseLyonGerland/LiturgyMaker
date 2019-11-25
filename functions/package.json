@@ -11,7 +11,7 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "8"
+    "node": "10"
   },
   "dependencies": {
     "date-fns": "2.6.0",
@@ -22,9 +22,9 @@
     "nodemailer-smtp-transport": "2.7.4"
   },
   "devDependencies": {
-    "eslint": "6.6.0",
+    "eslint": "6.7.1",
     "eslint-plugin-promise": "4.2.1",
-    "firebase-functions-test": "0.1.6"
+    "firebase-functions-test": "0.1.7"
   },
   "private": true
 }
