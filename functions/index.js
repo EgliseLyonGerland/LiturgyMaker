@@ -54,11 +54,9 @@ exports.notifyChanges = functions.firestore
       'mailysvenet@gmail.com',
     ].join(', ');
 
-    let subject = `Les informations sur le culte du ${formattedDate} ont été `;
-    if (created) {
-      subject += 'ajoutées';
-    } else {
-      subject += 'modifées';
+    let subject = `Présidence du ${formattedDate}`;
+    if (!created) {
+      subject = `Re: ${subject}`;
     }
 
     let diff;
@@ -67,10 +65,15 @@ exports.notifyChanges = functions.firestore
       diff = JSON.stringify(diff, null, '  ');
     }
 
+    let verb = 'modifier';
+    if (created) {
+      subject += 'créer';
+    }
+
     const html = [
       `Bonjour,`,
       ``,
-      `${subject} par ${user.displayName}.`,
+      `${user.displayName} vient de ${verb} les informations sur le culte du ${formattedDate}.`,
       ``,
       `Rendez vous sur culte.egliselyongerland.org pour visualiser les informations.`,
       ``,
