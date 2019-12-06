@@ -67,7 +67,7 @@ exports.notifyChanges = functions.firestore
 
     let verb = 'modifier';
     if (created) {
-      subject += 'créer';
+      verb = 'créer';
     }
 
     const html = [
