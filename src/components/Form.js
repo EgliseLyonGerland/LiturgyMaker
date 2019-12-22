@@ -99,6 +99,11 @@ const Form = ({
     });
   };
 
+  const handleBlur = () => {
+    onBlur();
+    scrolling.current = false;
+  };
+
   useWindowEvent('scroll', () => {
     handleScroll.current(focusedIndex >= 0);
   });
@@ -126,7 +131,7 @@ const Form = ({
           onFocus={path => {
             handleFocus(block, path, index);
           }}
-          onBlur={onBlur}
+          onBlur={handleBlur}
         />
       </Block>
     );
