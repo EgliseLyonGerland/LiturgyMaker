@@ -1,3 +1,4 @@
+import find from 'lodash/find';
 import { documentWidth, documentHeight } from '../../config/preview';
 
 export default function generate(
@@ -10,14 +11,18 @@ export default function generate(
   const songIndex = Math.min(currentFieldPath[0], data.length - 1);
   const songData = data[songIndex];
 
-  if (!songData || songData.id === null || !songs[songData.id]) {
+  if (!songData || songData.id === null) {
     return;
   }
 
-  const { title } = songs[songData.id];
+  const song = find(songs, ['id', songData.id]);
+
+  if (!song) {
+    return;
+  }
 
   ctx.setFont('songTitle');
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(title, documentWidth / 2, documentHeight / 2);
+  ctx.fillText(song.title, documentWidth / 2, documentHeight / 2);
 }
