@@ -1,5 +1,6 @@
 import capitalize from 'lodash/capitalize';
-import slugify from './slugify';
+import find from 'lodash/find';
+import omit from 'lodash/omit';
 
 let currentSongBackground = 'blue';
 
@@ -35,27 +36,28 @@ function generateAnnouncementsBlockCode({ data }) {
   return `createAnnouncementSlide(${JSON.stringify(config, null, '  ')})`;
 }
 
-function generateSongsBlockCode({ data }) {
+function generateSongsBlockCode({ data }, { songs }) {
   return data
     .reduce((acc, datum) => {
-      const [title] = datum.title.split('(');
-      const args = [`'${slugify(title)}'`];
+      let song = find(songs, ['id', datum.id]);
 
-      const options = {
-        background: currentSongBackground,
-      };
-
-      if (datum.repeat) {
-        options.repeat = true;
+      if (!song) {
+        return [...acc, `throw new Error('Unable to find song "${datum.id}"')`];
       }
 
-      args.push(JSON.stringify(options, 2, null));
+      song = {
+        title: song.title,
+        ...omit(song, ['id', 'number', 'lyrics']),
+        repeat: datum.repeat,
+        background: currentSongBackground,
+        lyrics: song.lyrics,
+      };
 
       changeBackground();
 
-      return [...acc, `createSongSlide(${args.join(', ')})`];
+      return [...acc, `createSongSlide(${JSON.stringify(song, null, 2)})`];
     }, [])
-    .join('\n');
+    .join('\n\n');
 }
 
 function generateReadingBlockCode({ data }) {
@@ -125,7 +127,7 @@ const functions = {
   generateSermonBlockCode,
 };
 
-export default function generateCode(doc) {
+export default function generateCode(doc, songs) {
   currentSongBackground = 'blue';
 
   let code = '';
@@ -135,7 +137,7 @@ export default function generateCode(doc) {
 
     if (functions[funcName]) {
       code += '\n\n';
-      code += functions[funcName](block);
+      code += functions[funcName](block, { songs });
     }
 
     code = code.trim();
