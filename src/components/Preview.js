@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import capitalize from 'lodash/capitalize';
 import forEach from 'lodash/forEach';
@@ -21,7 +22,13 @@ const useStyles = makeStyles(
   { name: 'Preview' },
 );
 
-const Preview = ({ block, currentFieldPath }) => {
+const mapStateToProps = ({ songs }) => {
+  return {
+    songs,
+  };
+};
+
+const Preview = ({ block, songs, currentFieldPath }) => {
   const classes = useStyles();
   const canvasRef = useRef(null);
 
@@ -51,7 +58,13 @@ const Preview = ({ block, currentFieldPath }) => {
 
     ctx.fillStyle = 'white';
 
-    preview[funcName](ctx, block, currentFieldPath);
+    const args = [ctx, block, currentFieldPath];
+
+    if (type === 'songs') {
+      args.push(songs.data);
+    }
+
+    preview[funcName].apply(this, args);
   };
 
   useEffect(() => {
@@ -76,7 +89,8 @@ const Preview = ({ block, currentFieldPath }) => {
 
 Preview.propTypes = {
   block: PropTypes.object,
+  songs: PropTypes.object,
   currentFieldPath: PropTypes.array,
 };
 
-export default Preview;
+export default connect(mapStateToProps)(Preview);

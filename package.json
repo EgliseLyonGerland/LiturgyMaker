@@ -6,6 +6,7 @@
     "@culturehq/hooks": "0.2.1",
     "@material-ui/core": "4.7.0",
     "@material-ui/icons": "4.5.1",
+    "@material-ui/lab": "4.0.0-alpha.39",
     "@material-ui/styles": "4.6.0",
     "animated-scroll-to": "2.0.5",
     "array-move": "2.2.0",

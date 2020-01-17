@@ -25,6 +25,7 @@ import Code from '../components/Code';
 import Preview from '../components/Preview';
 import generateCode from '../utils/generateCode';
 import * as liturgiesActions from '../redux/actions/liturgies';
+import * as songsActions from '../redux/actions/songs';
 
 const headerHeight = 176;
 const headerHeightMobile = 104;
@@ -153,13 +154,14 @@ const formatDate = date => {
   return format(date, 'EEEE d MMMM', { locale });
 };
 
-const mapStateToProps = ({ liturgies }) => {
+const mapStateToProps = ({ liturgies, songs }) => {
   return {
     liturgies,
+    songs,
   };
 };
 
-const mapDispatchToProps = { ...liturgiesActions };
+const mapDispatchToProps = { ...liturgiesActions, ...songsActions };
 
 const Main = ({
   liturgies,
@@ -167,6 +169,8 @@ const Main = ({
   setLiturgy,
   persistLiturgy,
   fillBlockFromPreviousWeek,
+  songs,
+  fetchSongs,
 }) => {
   const classes = useStyles();
   const [currentDate, setCurrentDate] = useState(getNextSundayDate(new Date()));
@@ -178,10 +182,10 @@ const Main = ({
     focusedBlock[0] >= 0 ? focusedBlock[0] : activedBlock;
   const id = format(currentDate, 'yMMdd');
 
-  const doc = liturgies[id] || null;
-  const loading = get(doc, 'loading', true);
-  const persisted = get(doc, 'persisted', true);
-  const persisting = get(doc, 'persisting', false);
+  const liturgy = liturgies[id] || null;
+  const loading = get(liturgy, 'loading', true) || get(songs, 'loading', true);
+  const persisted = get(liturgy, 'persisted', true);
+  const persisting = get(liturgy, 'persisting', false);
 
   const debouncedFetchLiturgy = useRef(
     debounce(date => {
@@ -190,11 +194,15 @@ const Main = ({
   );
 
   useEffect(() => {
+    if (!songs.loaded) {
+      fetchSongs();
+    }
+
     debouncedFetchLiturgy.current(currentDate);
   }, [currentDate]);
 
   const handleBlocksChange = blocks => {
-    setLiturgy(doc.id, { ...doc.data, blocks });
+    setLiturgy(liturgy.id, { ...liturgy.data, blocks });
   };
 
   const handleBlockFocus = (index, path) => {
@@ -216,7 +224,7 @@ const Main = ({
   };
 
   const handleSave = async () => {
-    await persistLiturgy(doc.id);
+    await persistLiturgy(liturgy.id);
 
     setSaved(true);
     setTimeout(() => {
@@ -225,7 +233,7 @@ const Main = ({
   };
 
   const handleFillFromLastWeek = async index => {
-    fillBlockFromPreviousWeek(doc.id, index);
+    fillBlockFromPreviousWeek(liturgy.id, index);
   };
 
   let zoomKey = 'nothing';
@@ -334,12 +342,12 @@ const Main = ({
 
   const renderContent = () => {
     if (displayCode) {
-      return <Code code={generateCode(doc.data)} />;
+      return <Code code={generateCode(liturgy.data)} />;
     }
 
     return (
       <Form
-        blocks={doc.data.blocks}
+        blocks={liturgy.data.blocks}
         onChange={handleBlocksChange}
         onActive={handleBlockActive}
         onFocus={handleBlockFocus}
@@ -350,6 +358,10 @@ const Main = ({
       />
     );
   };
+
+  // console.log(
+  //   get(liturgy, ['data', 'blocks', currentBlockIndex, 'data', 0, 'id']),
+  // );
 
   return (
     <div className={classes.root}>
@@ -368,7 +380,7 @@ const Main = ({
         </Paper>
         <div className={classes.preview}>
           <Preview
-            block={get(doc, ['data', 'blocks', currentBlockIndex])}
+            block={get(liturgy, ['data', 'blocks', currentBlockIndex])}
             currentFieldPath={focusedBlock[1]}
           />
         </div>
@@ -386,6 +398,8 @@ Main.propTypes = {
   setLiturgy: PropTypes.func,
   persistLiturgy: PropTypes.func,
   fillBlockFromPreviousWeek: PropTypes.func,
+  songs: PropTypes.object,
+  fetchSongs: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -1,16 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import TextFieldSuggest from '../TextFieldSuggest';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import find from 'lodash/find';
+import get from 'lodash/get';
 import Sortable from '../Sortable';
-import songs from '../../config/songs.json';
 
-const SongsBlock = ({ block, onChange, onFocus, onBlur }) => {
+const mapStateToProps = ({ songs }) => {
+  return {
+    songs,
+  };
+};
+
+const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
   const items = block.data;
 
-  const getDefaultItem = () => ({ title: '', infos: '', repeat: false });
+  const getDefaultItem = () => ({
+    id: null,
+    infos: '',
+    repeat: false,
+  });
 
   const handleChange = (key, index, value) => {
     if (!items[index]) {
@@ -23,19 +35,27 @@ const SongsBlock = ({ block, onChange, onFocus, onBlur }) => {
 
   const renderItem = (item, index) => (
     <div>
-      <TextFieldSuggest
-        label="Titre"
-        value={item.title}
-        onChange={value => {
-          handleChange('title', index, value);
+      <Autocomplete
+        defaultValue={find(songs.data, ['id', item.id])}
+        options={songs.data}
+        getOptionLabel={option =>
+          `${option.title}${option.number ? ` (${option.number})` : ''}`
+        }
+        renderInput={params => (
+          <TextField
+            {...params}
+            label="Titre"
+            variant="filled"
+            margin="dense"
+            fullWidth
+          />
+        )}
+        onChange={(event, option) => {
+          handleChange('id', index, get(option, 'id', null));
         }}
         onFocus={() => onFocus([index, 'title'])}
         onBlur={onBlur}
-        variant="filled"
-        margin="dense"
-        items={songs}
-        field="title"
-        fullWidth
+        autoComplete
       />
       <TextField
         label="Informations"
@@ -51,7 +71,29 @@ const SongsBlock = ({ block, onChange, onFocus, onBlur }) => {
         fullWidth
         multiline
       />
-
+      {/* <TextField
+        label="Paroles"
+        value={item.infos}
+        onChange={event => {
+          handleChange('infos', index, event.target.value);
+        }}
+        onFocus={() => onFocus([index, 'infos'])}
+        onBlur={onBlur}
+        variant="filled"
+        margin="dense"
+        gutters={3}
+        fullWidth
+        multiline
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={item.repeat || false}
+            onChange={() => handleChange('repeat', index, !item.repeat)}
+          />
+        }
+        label="Personnaliser les paroles"
+      /> */}
       <FormControlLabel
         control={
           <Checkbox
@@ -77,9 +119,10 @@ const SongsBlock = ({ block, onChange, onFocus, onBlur }) => {
 
 SongsBlock.propTypes = {
   block: PropTypes.object,
+  songs: PropTypes.object,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
 };
 
-export default SongsBlock;
+export default connect(mapStateToProps)(SongsBlock);

@@ -1,14 +1,20 @@
 import { documentWidth, documentHeight } from '../../config/preview';
 
-export default function generate(ctx, block, currentFieldPath = [0, 'title']) {
+export default function generate(
+  ctx,
+  block,
+  currentFieldPath = [0, 'title'],
+  songs,
+) {
   const { data = [] } = block;
   const songIndex = Math.min(currentFieldPath[0], data.length - 1);
-  const song = data[songIndex];
+  const songData = data[songIndex];
 
-  if (!song) return;
+  if (!songData || songData.id === null || !songs[songData.id]) {
+    return;
+  }
 
-  let title = song.title.split('(')[0].trim();
-  title = title || 'Lorem Ipsum';
+  const { title } = songs[songData.id];
 
   ctx.setFont('songTitle');
   ctx.textAlign = 'center';

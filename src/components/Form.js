@@ -125,8 +125,8 @@ const Form = ({
           block={block}
           onChange={data => {
             const newBlocks = blocks;
-            newBlocks[index].data = data;
-            onChange([...newBlocks]);
+            newBlocks[index] = { ...newBlocks[index], data };
+            onChange(newBlocks);
           }}
           onFocus={path => {
             handleFocus(block, path, index);
