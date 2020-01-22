@@ -12,6 +12,7 @@ export default function reducer(state = defaultState, action) {
       return {
         ...state,
         loading: action.loading,
+        loaded: action.loaded,
         data: action.data,
       };
     }

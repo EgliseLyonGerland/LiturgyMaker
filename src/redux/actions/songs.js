@@ -5,7 +5,8 @@ export function fetchSongs() {
     await dispatch({
       type: SONGS_FETCH,
       loading: true,
-      data: null,
+      loaded: false,
+      data: [],
     });
 
     const db = firebase.firestore();
@@ -15,6 +16,7 @@ export function fetchSongs() {
     return dispatch({
       type: SONGS_FETCH,
       loading: false,
+      loaded: true,
       data,
     });
   };
