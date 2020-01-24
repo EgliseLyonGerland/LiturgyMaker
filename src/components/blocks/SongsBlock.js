@@ -71,29 +71,6 @@ const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
         fullWidth
         multiline
       />
-      {/* <TextField
-        label="Paroles"
-        value={item.infos}
-        onChange={event => {
-          handleChange('infos', index, event.target.value);
-        }}
-        onFocus={() => onFocus([index, 'infos'])}
-        onBlur={onBlur}
-        variant="filled"
-        margin="dense"
-        gutters={3}
-        fullWidth
-        multiline
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={item.repeat || false}
-            onChange={() => handleChange('repeat', index, !item.repeat)}
-          />
-        }
-        label="Personnaliser les paroles"
-      /> */}
       <FormControlLabel
         control={
           <Checkbox

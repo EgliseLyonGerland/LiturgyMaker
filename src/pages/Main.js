@@ -26,6 +26,7 @@ import Preview from '../components/Preview';
 import generateCode from '../utils/generateCode';
 import * as liturgiesActions from '../redux/actions/liturgies';
 import * as songsActions from '../redux/actions/songs';
+import * as recitationsActions from '../redux/actions/recitations';
 
 const headerHeight = 176;
 const headerHeightMobile = 104;
@@ -154,14 +155,19 @@ const formatDate = date => {
   return format(date, 'EEEE d MMMM', { locale });
 };
 
-const mapStateToProps = ({ liturgies, songs }) => {
+const mapStateToProps = ({ liturgies, songs, recitations }) => {
   return {
     liturgies,
     songs,
+    recitations,
   };
 };
 
-const mapDispatchToProps = { ...liturgiesActions, ...songsActions };
+const mapDispatchToProps = {
+  ...liturgiesActions,
+  ...songsActions,
+  ...recitationsActions,
+};
 
 const Main = ({
   liturgies,
@@ -170,7 +176,9 @@ const Main = ({
   persistLiturgy,
   fillBlockFromPreviousWeek,
   songs,
+  recitations,
   fetchSongs,
+  fetchRecitations,
 }) => {
   const classes = useStyles();
   const [currentDate, setCurrentDate] = useState(getNextSundayDate(new Date()));
@@ -183,7 +191,10 @@ const Main = ({
   const id = format(currentDate, 'yMMdd');
 
   const liturgy = liturgies[id] || null;
-  const loading = get(liturgy, 'loading', true) || get(songs, 'loading', true);
+  const loading =
+    get(liturgy, 'loading', true) ||
+    get(songs, 'loading', true) ||
+    get(recitations, 'loading', true);
   const persisted = get(liturgy, 'persisted', true);
   const persisting = get(liturgy, 'persisting', false);
 
@@ -196,6 +207,10 @@ const Main = ({
   useEffect(() => {
     if (!songs.loaded) {
       fetchSongs();
+    }
+
+    if (!recitations.loaded) {
+      fetchRecitations();
     }
 
     debouncedFetchLiturgy.current(currentDate);
@@ -399,7 +414,9 @@ Main.propTypes = {
   persistLiturgy: PropTypes.func,
   fillBlockFromPreviousWeek: PropTypes.func,
   songs: PropTypes.object,
+  recitations: PropTypes.object,
   fetchSongs: PropTypes.func,
+  fetchRecitations: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

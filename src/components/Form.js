@@ -13,6 +13,7 @@ import SongsBlock from './blocks/SongsBlock';
 import ReadingBlock from './blocks/ReadingBlock';
 import SermonBlock from './blocks/SermonBlock';
 import SectionBlock from './blocks/SectionBlock';
+import RecitationBlock from './blocks/RecitationBlock';
 
 const useStyles = makeStyles(
   theme => ({
@@ -43,6 +44,7 @@ const components = {
   ReadingBlock,
   SermonBlock,
   SectionBlock,
+  RecitationBlock,
 };
 
 const Form = ({

@@ -22,13 +22,14 @@ const useStyles = makeStyles(
   { name: 'Preview' },
 );
 
-const mapStateToProps = ({ songs }) => {
+const mapStateToProps = ({ songs, recitations }) => {
   return {
     songs,
+    recitations,
   };
 };
 
-const Preview = ({ block, songs, currentFieldPath }) => {
+const Preview = ({ block, songs, recitations, currentFieldPath }) => {
   const classes = useStyles();
   const canvasRef = useRef(null);
 
@@ -64,6 +65,10 @@ const Preview = ({ block, songs, currentFieldPath }) => {
       args.push(songs.data);
     }
 
+    if (type === 'recitation') {
+      args.push(recitations.data);
+    }
+
     preview[funcName].apply(this, args);
   };
 
@@ -90,6 +95,7 @@ const Preview = ({ block, songs, currentFieldPath }) => {
 Preview.propTypes = {
   block: PropTypes.object,
   songs: PropTypes.object,
+  recitations: PropTypes.object,
   currentFieldPath: PropTypes.array,
 };
 
