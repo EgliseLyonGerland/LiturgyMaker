@@ -24,7 +24,7 @@ module.exports.parse = function parse(content) {
     .split('\n')
     .reduce((acc, curr) => {
       if (acc.length === 0 || isBlankLine(curr)) {
-        return [...acc, { type: currentType, text: curr }];
+        return [...acc, { type: currentType, text: '' }];
       }
 
       if (isTypeLine(curr)) {

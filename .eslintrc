@@ -2,7 +2,8 @@
   "extends": ["airbnb-base", "prettier", "plugin:react/recommended"],
   "plugins": ["prettier", "react"],
   "env": {
-    "browser": true
+    "browser": true,
+    "jest": true
   },
   "parserOptions": {
     "ecmaFeatures": {
