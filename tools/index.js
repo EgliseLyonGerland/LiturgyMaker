@@ -7,6 +7,7 @@ const firebaseConfig = require('../config/firebase');
 
 const loginCommand = require('./commands/login');
 const logoutCommand = require('./commands/logout');
+const songCommand = require('./commands/song');
 const recitationCommand = require('./commands/recitation');
 
 require('firebase/auth');
@@ -24,6 +25,7 @@ if (config.has('user')) {
 yargs
   .command(loginCommand)
   .command(logoutCommand)
+  .command(songCommand)
   .command(recitationCommand)
   .demandCommand()
   .recommendCommands()

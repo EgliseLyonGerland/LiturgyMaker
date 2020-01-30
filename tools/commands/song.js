@@ -4,8 +4,8 @@ const noop = require('lodash/noop');
 const { prompt } = require('inquirer');
 const { parse, stringify } = require('../../src/utils/lyrics');
 
-module.exports.command = `recitation <command>`;
-module.exports.desc = 'Manage recitations';
+module.exports.command = `song <command>`;
+module.exports.desc = 'Manage songs';
 
 const questions = [
   {
@@ -15,16 +15,34 @@ const questions = [
     default: (title = null) => title,
   },
   {
-    name: 'content',
+    name: 'authors',
+    type: 'string',
+    message: 'Authors (separated by comma)',
+    default: (authors = null) => authors,
+  },
+  {
+    name: 'copyright',
+    type: 'string',
+    message: 'Copyright',
+    default: (copyright = null) => copyright,
+  },
+  {
+    name: 'collection',
+    type: 'string',
+    message: 'Collections (separated by comma)',
+    default: (collection = null) => collection,
+  },
+  {
+    name: 'transaltion',
+    type: 'string',
+    message: 'Translation',
+    default: (transaltion = null) => transaltion,
+  },
+  {
+    name: 'lyrics',
     type: 'editor',
-    message: 'Content',
-    default: (content = []) =>
-      stringify(
-        content.map(({ text, italic = false }) => ({
-          type: italic ? 'chorus' : 'verse',
-          text,
-        })),
-      ),
+    message: 'Lyrics',
+    default: (lyrics = []) => stringify(lyrics),
   },
 ];
 
@@ -47,11 +65,12 @@ async function form(defaults = {}) {
 
 async function addCommand() {
   const data = await form();
+
   const db = firebase.firestore();
 
-  await db.collection('recitations').add(data);
+  await db.collection('songs').add(data);
 
-  console.log('Recitation added');
+  console.log('Song added');
   process.exit();
 }
 
@@ -59,27 +78,27 @@ async function updateCommand({ id }) {
   const db = firebase.firestore();
 
   const doc = await db
-    .collection('recitations')
+    .collection('songs')
     .doc(`${id}`)
     .get();
 
   if (!doc.exists) {
-    throw new Error(`Recitation ${id} not found`);
+    throw new Error(`Song ${id} not found`);
   }
 
   const data = await form(doc.data());
 
   await db
-    .collection('recitations')
+    .collection('songs')
     .doc(`${id}`)
     .set(data);
 
-  console.log('Recitation updated');
+  console.log('Song updated');
   process.exit();
 }
 
 module.exports.builder = function builder(yargs) {
   yargs
-    .command('add', 'Add a recitation', noop, addCommand)
-    .command('update <id>', 'Update a recitation', noop, updateCommand);
+    .command('add', 'Add a song', noop, addCommand)
+    .command('update <id>', 'Update a song', noop, updateCommand);
 };
