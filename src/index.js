@@ -9,12 +9,14 @@ import 'firebase/firestore';
 import configureStore from './redux';
 import App from './App';
 import FirebaseContext from './components/FirebaseContext';
-import firebaseConfig from './config/firebase';
+import createFirebaseConfig from './config/firebase';
 import * as serviceWorker from './serviceWorker';
 
 import './index.css';
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.initializeApp(
+  createFirebaseConfig(process.env.NODE_ENV),
+);
 const firebaseAppAuth = firebaseApp.auth();
 const store = configureStore(firebaseApp);
 
