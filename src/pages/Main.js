@@ -357,7 +357,14 @@ const Main = ({
 
   const renderContent = () => {
     if (displayCode) {
-      return <Code code={generateCode(liturgy.data, songs.data)} />;
+      return (
+        <Code
+          code={generateCode(liturgy.data, {
+            songs: songs.data,
+            recitations: recitations.data,
+          })}
+        />
+      );
     }
 
     return (

@@ -60,6 +60,26 @@ function generateSongsBlockCode({ data }, { songs }) {
     .join('\n\n');
 }
 
+function generateRecitationBlockCode({ data }, { recitations }) {
+  const recitation = find(recitations, ['id', data.id]);
+
+  if (!recitation) {
+    return `throw new Error('Unable to find recitation "${data.id}"')`;
+  }
+  const arg = {
+    title: recitation.title,
+    background: currentSongBackground,
+    lyrics: recitation.content.map(({ text, italic = false }) => ({
+      type: italic ? 'chorus' : 'verse',
+      text,
+    })),
+  };
+
+  changeBackground();
+
+  return `createSongSlide(${JSON.stringify(arg, null, 2)})`;
+}
+
 function generateReadingBlockCode({ data }) {
   const { bibleRefs = [] } = data;
 
@@ -125,9 +145,10 @@ const functions = {
   generateReadingBlockCode,
   generateSectionBlockCode,
   generateSermonBlockCode,
+  generateRecitationBlockCode,
 };
 
-export default function generateCode(doc, songs) {
+export default function generateCode(doc, { songs, recitations }) {
   currentSongBackground = 'blue';
 
   let code = '';
@@ -137,7 +158,7 @@ export default function generateCode(doc, songs) {
 
     if (functions[funcName]) {
       code += '\n\n';
-      code += functions[funcName](block, { songs });
+      code += functions[funcName](block, { songs, recitations });
     }
 
     code = code.trim();
