@@ -30,6 +30,7 @@
     "redux": "4.0.5",
     "redux-thunk": "2.3.0",
     "superagent": "5.2.1",
+    "superagent-jsonp": "0.2.1",
     "uuid": "3.4.0"
   },
   "devDependencies": {

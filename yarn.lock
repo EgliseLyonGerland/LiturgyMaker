@@ -13458,7 +13458,14 @@ stylehacks@^4.0.0:
     postcss "^7.0.0"
     postcss-selector-parser "^3.0.0"
 
-superagent@5.2.1:
+superagent-jsonp@0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/superagent-jsonp/-/superagent-jsonp-0.2.1.tgz#f72296b99f5c5faede96d3dff51ceac662fcb622"
+  integrity sha512-1ZDvsbLfmM2FIV4kZbJFpwEAzocz5YT3GPVqti0IWjFh8bAWeqWv2+aOHoeKpjl4fsekrSkONx+R8noRkVfn3Q==
+  dependencies:
+    superagent ">=1.4"
+
+superagent@5.2.1, superagent@>=1.4:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/superagent/-/superagent-5.2.1.tgz#9f5f86b705be0865a8c1b9bcde533ab7773ff63a"
   integrity sha512-46b4Lkwnlz7Ebdv2FBbfuqb3kVkG1jV/SK3EW6NnwL9a3T4h5hHtegNEQfbXvTFbDoUZXId4W3dMgap2f6ic1g==

@@ -50,12 +50,9 @@ const BibleRefPicker = ({
   const handleFillPassage = async () => {
     setLoading(true);
 
-    let excerpt = await getPassage(data.ref);
+    const excerpt = await getPassage(data.ref);
 
     if (excerpt) {
-      excerpt = excerpt.trim();
-      excerpt = excerpt.replace(/\n*\s+/gm, ' ');
-      excerpt = excerpt.replace(/\s+/gm, ' ');
       onChange({ ...data, excerpt });
     }
 
