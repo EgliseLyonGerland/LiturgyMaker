@@ -1,4 +1,5 @@
 const firebase = require('firebase');
+const mapValues = require('lodash/mapValues');
 const omitBy = require('lodash/omitBy');
 const noop = require('lodash/noop');
 const { prompt } = require('inquirer');
@@ -54,13 +55,12 @@ async function form(defaults = {}) {
     })),
   );
 
-  answers.content = parse(answers.content);
-  answers.content = answers.content.map(({ text, type }) => ({
-    text,
-    italic: type === 'chorus',
-  }));
+  answers.lyrics = parse(answers.lyrics);
 
-  return omitBy(answers, answer => !answer);
+  return omitBy(
+    mapValues(answers, answer => (answer.trim ? answer.trim() : answer)),
+    answer => !answer,
+  );
 }
 
 async function addCommand() {
