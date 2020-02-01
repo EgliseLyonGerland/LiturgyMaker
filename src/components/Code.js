@@ -18,6 +18,7 @@ const useStyles = makeStyles(
       margin: `0 !important`,
       borderRadius: `0 !important`,
       minHeight: '100%',
+      paddingTop: '64px !important',
     },
     copyButton: {
       position: 'absolute',

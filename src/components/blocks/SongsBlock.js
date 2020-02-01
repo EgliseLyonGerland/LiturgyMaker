@@ -33,55 +33,65 @@ const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
     onChange(items);
   };
 
-  const renderItem = (item, index) => (
-    <div>
-      <Autocomplete
-        defaultValue={find(songs.data, ['id', item.id])}
-        options={songs.data}
-        getOptionLabel={option =>
-          `${option.title}${option.number ? ` (${option.number})` : ''}`
-        }
-        renderInput={params => (
-          <TextField
-            {...params}
-            label="Titre"
-            variant="filled"
-            margin="dense"
-            fullWidth
-          />
-        )}
-        onChange={(event, option) => {
-          handleChange('id', index, get(option, 'id', null));
-        }}
-        onFocus={() => onFocus([index, 'title'])}
-        onBlur={onBlur}
-        autoComplete
-      />
-      <TextField
-        label="Informations"
-        value={item.infos}
-        onChange={event => {
-          handleChange('infos', index, event.target.value);
-        }}
-        onFocus={() => onFocus([index, 'infos'])}
-        onBlur={onBlur}
-        variant="filled"
-        margin="dense"
-        gutters={3}
-        fullWidth
-        multiline
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={item.repeat || false}
-            onChange={() => handleChange('repeat', index, !item.repeat)}
-          />
-        }
-        label="Chanté deux fois ?"
-      />
-    </div>
-  );
+  const renderItem = (item, index) => {
+    const song = find(songs.data, ['id', item.id]);
+
+    return (
+      <div>
+        <Autocomplete
+          defaultValue={song}
+          options={songs.data}
+          getOptionLabel={option =>
+            `${option.title}${option.number ? ` (${option.number})` : ''}`
+          }
+          renderInput={params => (
+            <TextField
+              {...params}
+              label="Titre"
+              variant="filled"
+              margin="dense"
+              helperText={
+                song &&
+                song.lyrics.length === 0 &&
+                `Paroles manquantes pour ce chant (${song.id})`
+              }
+              fullWidth
+            />
+          )}
+          onChange={(event, option) => {
+            handleChange('id', index, get(option, 'id', null));
+          }}
+          onFocus={() => onFocus([index, 'title'])}
+          onBlur={onBlur}
+          autoComplete
+        />
+        {}
+        <TextField
+          label="Informations"
+          value={item.infos}
+          onChange={event => {
+            handleChange('infos', index, event.target.value);
+          }}
+          onFocus={() => onFocus([index, 'infos'])}
+          onBlur={onBlur}
+          variant="filled"
+          margin="dense"
+          gutters={3}
+          fullWidth
+          multiline
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={item.repeat || false}
+              onChange={() => handleChange('repeat', index, !item.repeat)}
+            />
+          }
+          label="Chanté deux fois ?"
+        />
+      </div>
+    );
+  };
 
   return (
     <Sortable

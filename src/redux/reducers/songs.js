@@ -6,6 +6,15 @@ const defaultState = {
   data: [],
 };
 
+const defaultSong = {
+  title: '',
+  authors: '',
+  copyright: '',
+  collection: '',
+  transaltion: '',
+  lyrics: [],
+};
+
 export default function reducer(state = defaultState, action) {
   switch (action.type) {
     case SONGS_FETCH: {
@@ -13,7 +22,10 @@ export default function reducer(state = defaultState, action) {
         ...state,
         loading: action.loading,
         loaded: action.loaded,
-        data: action.data,
+        data: action.data.map(datum => ({
+          ...defaultSong,
+          ...datum,
+        })),
       };
     }
     default: {

@@ -36,13 +36,19 @@ function generateAnnouncementsBlockCode({ data }) {
   return `createAnnouncementSlide(${JSON.stringify(config, null, '  ')})`;
 }
 
-function generateSongsBlockCode({ data }, { songs }) {
+function generateSongsBlockCode({ data }, { songs, addError }) {
   return data
     .reduce((acc, datum) => {
       let song = find(songs, ['id', datum.id]);
 
       if (!song) {
-        return [...acc, `throw new Error('Unable to find song "${datum.id}"')`];
+        addError(`Unable to find song "${datum.id}"`);
+        return acc;
+      }
+
+      if (song.lyrics.length === 0) {
+        addError(`Song "${song.title}" (${song.id}) has no lyric`);
+        return acc;
       }
 
       song = {
@@ -60,12 +66,13 @@ function generateSongsBlockCode({ data }, { songs }) {
     .join('\n\n');
 }
 
-function generateRecitationBlockCode({ data }, { recitations }) {
+function generateRecitationBlockCode({ data }, { recitations, addError }) {
   const recitation = find(recitations, ['id', data.id]);
 
   if (!recitation) {
-    return `throw new Error('Unable to find recitation "${data.id}"')`;
+    return addError(`Unable to find recitation "${data.id}"`);
   }
+
   const arg = {
     title: recitation.title,
     background: currentSongBackground,
@@ -148,17 +155,28 @@ const functions = {
   generateRecitationBlockCode,
 };
 
+function generateErrors(errors) {
+  return errors
+    .map(error => `throw new Error("${error.replace(/"/gm, '\\"')}")`)
+    .join('\n');
+}
+
 export default function generateCode(doc, { songs, recitations }) {
   currentSongBackground = 'blue';
 
   let code = '';
+  const errors = [];
+
+  const addError = msg => {
+    errors.push(msg);
+  };
 
   doc.blocks.forEach(block => {
     const funcName = `generate${capitalize(block.type)}BlockCode`;
 
     if (functions[funcName]) {
       code += '\n\n';
-      code += functions[funcName](block, { songs, recitations });
+      code += functions[funcName](block, { songs, recitations, addError });
     }
 
     code = code.trim();
@@ -166,6 +184,7 @@ export default function generateCode(doc, { songs, recitations }) {
 
   code += '\n\n';
   code += generateGoodbyeBlockCode();
+  code = `${generateErrors(errors)}\n\n${code}`.trim();
 
   return code;
 }
