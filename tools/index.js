@@ -7,6 +7,7 @@ const loginCommand = require('./commands/login');
 const logoutCommand = require('./commands/logout');
 const songCommand = require('./commands/song');
 const recitationCommand = require('./commands/recitation');
+const blockCommand = require('./commands/block');
 
 const config = new Configstore('liturgy-maker');
 
@@ -32,6 +33,7 @@ yargs
   .command(logoutCommand)
   .command(songCommand)
   .command(recitationCommand)
+  .command(blockCommand)
   .option('prod', {
     describe: 'Use production data',
     boolean: true,
