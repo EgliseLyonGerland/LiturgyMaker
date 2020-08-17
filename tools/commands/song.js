@@ -48,12 +48,15 @@ const questions = [
 ];
 
 async function form(defaults = {}) {
-  const answers = await prompt(
-    questions.map(question => ({
-      ...question,
-      default: question.default(defaults[question.name]),
-    })),
-  );
+  const answers = {
+    ...defaults,
+    ...(await prompt(
+      questions.map(question => ({
+        ...question,
+        default: question.default(defaults[question.name]),
+      })),
+    )),
+  };
 
   answers.lyrics = parse(answers.lyrics);
 
