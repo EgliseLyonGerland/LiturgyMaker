@@ -61,7 +61,13 @@ function generateSongsBlockCode({ data }, { songs, addError }) {
 
       changeBackground();
 
-      return [...acc, `createSongSlide(${JSON.stringify(song, null, 2)})`];
+      return [
+        ...acc,
+        [
+          `// ${datum.id}`,
+          `createSongSlide(${JSON.stringify(song, null, 2)})`,
+        ].join('\n'),
+      ];
     }, [])
     .join('\n\n');
 }
