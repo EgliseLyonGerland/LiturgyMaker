@@ -52,6 +52,7 @@ const SortableItem = sortableElement(({ children, style, classes }) => (
 
 const Sortable = ({
   items,
+  maxItems = Infinity,
   renderItem,
   onChange,
   getDefaultItem,
@@ -97,6 +98,7 @@ const Sortable = ({
         color="primary"
         size="small"
         className={classes.add}
+        disabled={maxItems === items.length}
         onClick={() => {
           items.push(getDefaultItem());
           onChange([...items]);
@@ -110,6 +112,7 @@ const Sortable = ({
 
 Sortable.propTypes = {
   items: PropTypes.array,
+  maxItems: PropTypes.number,
   gutters: PropTypes.number,
   renderItem: PropTypes.func,
   getDefaultItem: PropTypes.func,

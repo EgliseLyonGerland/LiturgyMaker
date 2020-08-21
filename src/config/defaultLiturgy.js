@@ -113,6 +113,16 @@ export default ({ date }) => ({
     },
     {
       id: uuid(),
+      type: 'openDoors',
+      title: 'Portes Ouvertes',
+      data: {
+        title: '',
+        detail: '',
+        prayerTopics: [],
+      },
+    },
+    {
+      id: uuid(),
       type: 'section',
       title: null,
       data: {

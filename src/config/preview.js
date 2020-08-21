@@ -3,6 +3,7 @@ export const documentHeight = 1080;
 
 export const fontFamilies = {
   sansSerif: 'Source Sans Pro',
+  barlow: 'Barlow Condensed',
   serif: 'Adobe Hebrew',
 };
 
@@ -88,6 +89,24 @@ export const typography = {
     fontStyle: 'italic',
     fontSize: 50,
     opacity: 80,
+  },
+  openDoorsTitle: {
+    fontFamily: fontFamilies.barlow,
+    fontWeight: 700,
+    fontSize: 65,
+  },
+  openDoorsDetail: {
+    fontFamily: fontFamilies.serif,
+    fontSize: 46,
+  },
+  openDoorsPrayerTopicsHeadline: {
+    fontFamily: fontFamilies.barlow,
+    fontWeight: 700,
+    fontSize: 55,
+  },
+  openDoorsPrayerTopic: {
+    fontFamily: fontFamilies.sansSerif,
+    fontSize: 35,
   },
 };
 

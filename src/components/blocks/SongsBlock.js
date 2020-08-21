@@ -65,7 +65,6 @@ const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
           onBlur={onBlur}
           autoComplete
         />
-        {}
         <TextField
           label="Informations"
           value={item.infos}

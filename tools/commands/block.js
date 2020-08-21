@@ -93,6 +93,20 @@ const blocksConfig = {
       };
     },
   },
+  openDoors: {
+    toString() {
+      return `Portes Ouvertes`;
+    },
+    createDefault() {
+      return {
+        data: {
+          title: '',
+          detail: '',
+          prayerTopic: [],
+        },
+      };
+    },
+  },
 };
 
 function stringifyBlock(block) {

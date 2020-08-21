@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import capitalize from 'lodash/capitalize';
+import upperFirst from 'lodash/upperFirst';
 import throttle from 'lodash/throttle';
 import { useWindowEvent } from '@culturehq/hooks';
 import animateScrollTo from 'animated-scroll-to';
@@ -14,6 +14,7 @@ import ReadingBlock from './blocks/ReadingBlock';
 import SermonBlock from './blocks/SermonBlock';
 import SectionBlock from './blocks/SectionBlock';
 import RecitationBlock from './blocks/RecitationBlock';
+import OpenDoorsBlock from './blocks/OpenDoorsBlock';
 
 const useStyles = makeStyles(
   theme => ({
@@ -45,6 +46,7 @@ const components = {
   SermonBlock,
   SectionBlock,
   RecitationBlock,
+  OpenDoorsBlock,
 };
 
 const Form = ({
@@ -115,12 +117,14 @@ const Form = ({
   }, [blocks, focusedIndex, activedIndex]);
 
   const renderBlock = (block, index) => {
-    const Component = components[`${capitalize(block.type)}Block`];
+    const Component = components[`${upperFirst(block.type)}Block`];
 
     return (
       <Block
         title={block.title}
-        displayMenu={block.type === 'announcements'}
+        displayMenu={
+          block.type === 'announcements' || block.type === 'openDoors'
+        }
         onFillFromLastWeekClicked={() => onFillFromLastWeek(index)}
       >
         <Component

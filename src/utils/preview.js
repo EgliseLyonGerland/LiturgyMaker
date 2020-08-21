@@ -6,6 +6,7 @@ export { default as generateSectionPreview } from './previews/section';
 export { default as generateSermonPreview } from './previews/sermon';
 export { default as generateSongsPreview } from './previews/songs';
 export { default as generateRecitationPreview } from './previews/recitation';
+export { default as generateOpenDoorsPreview } from './previews/openDoors';
 
 const lineHeight = 1.3;
 

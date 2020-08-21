@@ -1,4 +1,4 @@
-import capitalize from 'lodash/capitalize';
+import upperFirst from 'lodash/upperFirst';
 import find from 'lodash/find';
 import omit from 'lodash/omit';
 
@@ -148,6 +148,22 @@ function generateSermonBlockCode({ data }) {
   return `createSermonSlide(${JSON.stringify(config, 2, '  ')})`;
 }
 
+function generateOpenDoorsBlockCode({ data }) {
+  const { title, detail, prayerTopics = [] } = data;
+
+  if (!title || !detail) {
+    return '';
+  }
+
+  const config = {
+    title,
+    detail,
+    prayerTopics,
+  };
+
+  return `createSermonSlide(${JSON.stringify(config, 2, '  ')})`;
+}
+
 function generateGoodbyeBlockCode() {
   return `createGoodbyeSlide()`;
 }
@@ -159,6 +175,7 @@ const functions = {
   generateSectionBlockCode,
   generateSermonBlockCode,
   generateRecitationBlockCode,
+  generateOpenDoorsBlockCode,
 };
 
 function generateErrors(errors) {
@@ -178,7 +195,7 @@ export default function generateCode(doc, { songs, recitations }) {
   };
 
   doc.blocks.forEach(block => {
-    const funcName = `generate${capitalize(block.type)}BlockCode`;
+    const funcName = `generate${upperFirst(block.type)}BlockCode`;
 
     if (functions[funcName]) {
       code += '\n\n';

@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import capitalize from 'lodash/capitalize';
+import upperFirst from 'lodash/upperFirst';
 import forEach from 'lodash/forEach';
 import FontFaceObserver from 'fontfaceobserver';
 import * as preview from '../utils/preview';
@@ -14,9 +14,14 @@ const useStyles = makeStyles(
       background: '#DDD',
     },
     canvas: {
+      display: 'none',
+    },
+    image: {
+      display: 'block',
       width: '100%',
       backgroundImage: 'url(https://wallpapercave.com/wp/wp2445766.jpg)',
       backgroundSize: 'cover',
+      boxShadow: '0 0 20px rgba(0, 0, 0, .1)',
     },
   },
   { name: 'Preview' },
@@ -32,12 +37,13 @@ const mapStateToProps = ({ songs, recitations }) => {
 const Preview = ({ block, songs, recitations, currentFieldPath }) => {
   const classes = useStyles();
   const canvasRef = useRef(null);
+  const imageRef = useRef(null);
 
   const clean = ctx => {
     ctx.clearRect(0, 0, documentWidth, documentHeight);
   };
 
-  const draw = () => {
+  const draw = async () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
 
@@ -50,7 +56,7 @@ const Preview = ({ block, songs, recitations, currentFieldPath }) => {
     }
 
     const { type } = block;
-    const funcName = `generate${capitalize(type)}Preview`;
+    const funcName = `generate${upperFirst(type)}Preview`;
 
     if (!preview[funcName]) {
       clean(ctx);
@@ -69,7 +75,9 @@ const Preview = ({ block, songs, recitations, currentFieldPath }) => {
       args.push(recitations.data);
     }
 
-    preview[funcName].apply(this, args);
+    await preview[funcName].apply(this, args);
+
+    imageRef.current.src = canvas.toDataURL('image/png');
   };
 
   useEffect(() => {
@@ -88,6 +96,7 @@ const Preview = ({ block, songs, recitations, currentFieldPath }) => {
   return (
     <div className={classes.root}>
       <canvas ref={canvasRef} className={classes.canvas} />
+      <img ref={imageRef} className={classes.image} />
     </div>
   );
 };

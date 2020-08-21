@@ -49,7 +49,7 @@ const SermonBlock = ({ block, onChange, onFocus, onBlur }) => {
   return (
     <div className={classes.root}>
       <TextField
-        label="Title"
+        label="Titre"
         defaultValue={title}
         onChange={({ target }) => {
           data.title = target.value;
