@@ -1,12 +1,14 @@
 {
   "hosting": {
     "public": "build",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "appAssociation": "AUTO",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "predeploy": ["yarn build"],
     "rewrites": [
+      {
+        "source": "/link/**",
+        "dynamicLinks": true
+      },
       {
         "source": "**",
         "destination": "/index.html"
@@ -14,9 +16,7 @@
     ]
   },
   "functions": {
-    "predeploy": [
-      "npm --prefix \"$RESOURCE_DIR\" run lint"
-    ],
+    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run lint"],
     "source": "functions"
   }
 }
