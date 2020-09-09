@@ -99,6 +99,7 @@ const blocksConfig = {
     },
     createDefault() {
       return {
+        title: 'Portes Ouvertes',
         data: {
           title: '',
           detail: '',
