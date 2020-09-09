@@ -161,7 +161,7 @@ function generateOpenDoorsBlockCode({ data }) {
     prayerTopics,
   };
 
-  return `createSermonSlide(${JSON.stringify(config, 2, '  ')})`;
+  return `createOpenDoorsSlide(${JSON.stringify(config, 2, '  ')})`;
 }
 
 function generateGoodbyeBlockCode() {
