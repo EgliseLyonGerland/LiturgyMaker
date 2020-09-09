@@ -14,7 +14,7 @@ import { ReactComponent as LeftRightCenterPreview } from '../images/templates/le
 import { ReactComponent as RightLeftCenterPreview } from '../images/templates/rightLeftCenter.svg';
 
 const useStyles = makeStyles(
-  theme => ({
+  (theme) => ({
     root: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr 1fr 1fr',
@@ -56,7 +56,7 @@ const previews = {
 const VerseTemplatePicker = ({ current = 'topBottomLeft', onSelect }) => {
   const classes = useStyles();
 
-  const renderImg = name => {
+  const renderImg = (name) => {
     const Component = previews[name];
 
     return <Component className={classes.img} />;
@@ -64,7 +64,7 @@ const VerseTemplatePicker = ({ current = 'topBottomLeft', onSelect }) => {
 
   return (
     <div className={classes.root}>
-      {verseTemplates.map(name => (
+      {verseTemplates.map((name) => (
         <div
           key={name}
           className={classnames(classes.item, {

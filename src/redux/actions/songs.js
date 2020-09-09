@@ -11,7 +11,7 @@ export function fetchSongs() {
 
     const db = firebase.firestore();
     const { docs } = await db.collection(`songs`).get();
-    const data = docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
     return dispatch({
       type: SONGS_FETCH,

@@ -30,7 +30,7 @@ const questions = [
 
 async function form(defaults = {}) {
   const answers = await prompt(
-    questions.map(question => ({
+    questions.map((question) => ({
       ...question,
       default: question.default(defaults[question.name]),
     })),
@@ -42,7 +42,7 @@ async function form(defaults = {}) {
     italic: type === 'chorus',
   }));
 
-  return omitBy(answers, answer => !answer);
+  return omitBy(answers, (answer) => !answer);
 }
 
 async function addCommand() {
@@ -58,10 +58,7 @@ async function addCommand() {
 async function updateCommand({ id }) {
   const db = firebase.firestore();
 
-  const doc = await db
-    .collection('recitations')
-    .doc(`${id}`)
-    .get();
+  const doc = await db.collection('recitations').doc(`${id}`).get();
 
   if (!doc.exists) {
     throw new Error(`Recitation ${id} not found`);
@@ -69,10 +66,7 @@ async function updateCommand({ id }) {
 
   const data = await form(doc.data());
 
-  await db
-    .collection('recitations')
-    .doc(`${id}`)
-    .set(data);
+  await db.collection('recitations').doc(`${id}`).set(data);
 
   console.log('Recitation updated');
   process.exit();

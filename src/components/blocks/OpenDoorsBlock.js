@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Sortable from '../Sortable';
 
 const useStyles = makeStyles(
-  theme => ({
+  (theme) => ({
     item: {},
     subtitle: {
       fontSize: 16,
@@ -81,7 +81,7 @@ const OpenDoorsBlock = ({ block, onChange, onFocus, onBlur }) => {
             />
           </div>
         )}
-        onChange={items => {
+        onChange={(items) => {
           data.prayerTopics = items;
           onChange(data);
         }}

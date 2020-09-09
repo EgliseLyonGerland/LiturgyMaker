@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '100vw',
     height: '100vh',
@@ -42,7 +42,7 @@ const Auth = ({ onSubmit = () => {} }) => {
             variant="filled"
             autoComplete="off"
             value={email}
-            onChange={event => {
+            onChange={(event) => {
               setEmail(event.target.value);
             }}
             autoFocus
@@ -55,7 +55,7 @@ const Auth = ({ onSubmit = () => {} }) => {
             variant="filled"
             autoComplete="off"
             value={password}
-            onChange={event => {
+            onChange={(event) => {
               setPassword(event.target.value);
             }}
             fullWidth

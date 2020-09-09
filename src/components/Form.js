@@ -17,7 +17,7 @@ import RecitationBlock from './blocks/RecitationBlock';
 import OpenDoorsBlock from './blocks/OpenDoorsBlock';
 
 const useStyles = makeStyles(
-  theme => ({
+  (theme) => ({
     root: {
       position: 'relative',
     },
@@ -66,7 +66,7 @@ const Form = ({
   const currentIndex = focusedIndex >= 0 ? focusedIndex : activedIndex;
 
   const handleScroll = useRef(
-    throttle(focused => {
+    throttle((focused) => {
       if (focused || scrolling.current) {
         return;
       }
@@ -129,12 +129,12 @@ const Form = ({
       >
         <Component
           block={block}
-          onChange={data => {
+          onChange={(data) => {
             const newBlocks = blocks;
             newBlocks[index] = { ...newBlocks[index], data };
             onChange(newBlocks);
           }}
-          onFocus={path => {
+          onFocus={(path) => {
             handleFocus(block, path, index);
           }}
           onBlur={handleBlur}
@@ -143,7 +143,7 @@ const Form = ({
     );
   };
 
-  const renderDivider = index => {
+  const renderDivider = (index) => {
     if (index >= blocks.length - 1) {
       return null;
     }

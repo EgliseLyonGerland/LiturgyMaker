@@ -51,7 +51,7 @@ async function form(defaults = {}) {
   const answers = {
     ...defaults,
     ...(await prompt(
-      questions.map(question => ({
+      questions.map((question) => ({
         ...question,
         default: question.default(defaults[question.name]),
       })),
@@ -61,8 +61,8 @@ async function form(defaults = {}) {
   answers.lyrics = parse(answers.lyrics);
 
   return omitBy(
-    mapValues(answers, answer => (answer.trim ? answer.trim() : answer)),
-    answer => !answer,
+    mapValues(answers, (answer) => (answer.trim ? answer.trim() : answer)),
+    (answer) => !answer,
   );
 }
 
@@ -80,10 +80,7 @@ async function addCommand() {
 async function updateCommand({ id }) {
   const db = firebase.firestore();
 
-  const doc = await db
-    .collection('songs')
-    .doc(`${id}`)
-    .get();
+  const doc = await db.collection('songs').doc(`${id}`).get();
 
   if (!doc.exists) {
     throw new Error(`Song ${id} not found`);
@@ -91,10 +88,7 @@ async function updateCommand({ id }) {
 
   const data = await form(doc.data());
 
-  await db
-    .collection('songs')
-    .doc(`${id}`)
-    .set(data);
+  await db.collection('songs').doc(`${id}`).set(data);
 
   console.log('Song updated');
   process.exit();

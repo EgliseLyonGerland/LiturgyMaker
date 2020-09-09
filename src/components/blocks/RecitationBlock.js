@@ -33,10 +33,10 @@ const RecitationBlock = ({ block, recitations, onChange, onFocus, onBlur }) => {
       <Autocomplete
         defaultValue={find(recitations.data, ['id', data.id])}
         options={recitations.data}
-        getOptionLabel={option =>
+        getOptionLabel={(option) =>
           `${option.title}${option.number ? ` (${option.number})` : ''}`
         }
-        renderInput={params => (
+        renderInput={(params) => (
           <TextField
             {...params}
             label="Titre"
@@ -55,7 +55,7 @@ const RecitationBlock = ({ block, recitations, onChange, onFocus, onBlur }) => {
       <TextField
         label="Informations"
         value={data.infos}
-        onChange={event => {
+        onChange={(event) => {
           handleChange('infos', event.target.value);
         }}
         onFocus={() => onFocus(['infos'])}

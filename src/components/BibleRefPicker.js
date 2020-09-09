@@ -8,7 +8,7 @@ import { validate, getPassage } from '../utils/bibleRef';
 import books from '../config/bibleBooks.json';
 
 const useStyles = makeStyles(
-  theme => ({
+  (theme) => ({
     excerptButton: {
       background: 'transparent',
       border: 0,
@@ -64,7 +64,7 @@ const BibleRefPicker = ({
       <TextFieldSuggest
         label="Référence biblique"
         value={data.ref}
-        onChange={value => {
+        onChange={(value) => {
           handleChange('ref', value);
         }}
         onFocus={() => {

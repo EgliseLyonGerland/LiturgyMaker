@@ -118,7 +118,7 @@ CanvasRenderingContext2D.prototype.fillMultilineText = function fillMultilineTex
   const lines = getLines(this, text, width);
   let height = 0;
 
-  lines.forEach(line => {
+  lines.forEach((line) => {
     this.fillText(line, x, y + height);
     height += this.getCurrentLineHeight();
   });

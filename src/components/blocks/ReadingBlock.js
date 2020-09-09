@@ -16,14 +16,14 @@ const ReadingBlock = ({ block, onChange, onFocus, onBlur }) => {
       <Grid item xs={12}>
         <BibleRefPicker
           data={rest}
-          onChange={value => {
+          onChange={(value) => {
             data.bibleRefs[index] = {
               ...data.bibleRefs[index],
               ...value,
             };
             onChange(data);
           }}
-          onFocus={path => {
+          onFocus={(path) => {
             onFocus(['bibleRefs', index, ...path]);
           }}
           onBlur={onBlur}
@@ -32,7 +32,7 @@ const ReadingBlock = ({ block, onChange, onFocus, onBlur }) => {
       <Grid item xs={12}>
         <VerseTemplatePicker
           current={template}
-          onSelect={value => {
+          onSelect={(value) => {
             data.bibleRefs[index] = {
               ...data.bibleRefs[index],
               template: value,
@@ -48,7 +48,7 @@ const ReadingBlock = ({ block, onChange, onFocus, onBlur }) => {
     <Sortable
       items={bibleRefs}
       renderItem={renderItem}
-      onChange={refs => {
+      onChange={(refs) => {
         data.bibleRefs = refs;
         onChange(data);
       }}

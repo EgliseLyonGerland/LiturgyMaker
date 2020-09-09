@@ -71,5 +71,5 @@ module.exports.parse = function parse(content) {
 };
 
 module.exports.stringify = function stringify(lyrics) {
-  return lyrics.map(part => `[${part.type}]\n${part.text}`).join('\n\n');
+  return lyrics.map((part) => `[${part.type}]\n${part.text}`).join('\n\n');
 };

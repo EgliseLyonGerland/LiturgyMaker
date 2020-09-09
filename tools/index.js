@@ -16,7 +16,7 @@ require('firebase/firestore');
 
 // eslint-disable-next-line no-unused-expressions
 yargs
-  .middleware(argv => {
+  .middleware((argv) => {
     // eslint-disable-next-line no-param-reassign
     argv.env = argv.prod ? 'production' : 'development';
   })

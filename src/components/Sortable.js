@@ -12,7 +12,7 @@ import {
 import arrayMove from 'array-move';
 
 const useStyles = makeStyles(
-  theme => ({
+  (theme) => ({
     item: {
       position: 'relative',
     },
@@ -65,12 +65,12 @@ const Sortable = ({
     onChange(arrayMove(items, oldIndex, newIndex));
   };
 
-  const handleDelete = index => {
+  const handleDelete = (index) => {
     items.splice(index, 1);
     onChange([...items]);
   };
 
-  const isLast = index => index === items.length - 1;
+  const isLast = (index) => index === items.length - 1;
 
   return (
     <SortableContainer onSortEnd={handleSortEnd} useDragHandle>

@@ -32,7 +32,7 @@ const headerHeight = 176;
 const headerHeightMobile = 104;
 const gutters = 3;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: '50vh',
   },
@@ -143,11 +143,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const getNextSundayDate = from => {
+const getNextSundayDate = (from) => {
   return endOfWeek(from, { weekStartsOn: 1 });
 };
 
-const formatDate = date => {
+const formatDate = (date) => {
   if (date.getDate() === 1) {
     return format(date, "EEEE '1er' MMMM", { locale });
   }
@@ -199,7 +199,7 @@ const Main = ({
   const persisting = get(liturgy, 'persisting', false);
 
   const debouncedFetchLiturgy = useRef(
-    debounce(date => {
+    debounce((date) => {
       fetchLiturgy(date);
     }, 500),
   );
@@ -214,9 +214,15 @@ const Main = ({
     }
 
     debouncedFetchLiturgy.current(currentDate);
-  }, [currentDate]);
+  }, [
+    currentDate,
+    fetchRecitations,
+    fetchSongs,
+    recitations.loaded,
+    songs.loaded,
+  ]);
 
-  const handleBlocksChange = blocks => {
+  const handleBlocksChange = (blocks) => {
     setLiturgy(liturgy.id, { ...liturgy.data, blocks });
   };
 
@@ -228,11 +234,11 @@ const Main = ({
     setFocusedBlock([-1]);
   };
 
-  const handleBlockActive = index => {
+  const handleBlockActive = (index) => {
     setActivedBlock(index);
   };
 
-  const handleChangeDate = date => {
+  const handleChangeDate = (date) => {
     setFocusedBlock([-1]);
     setActivedBlock(0);
     setCurrentDate(getNextSundayDate(date));
@@ -247,7 +253,7 @@ const Main = ({
     }, 2000);
   };
 
-  const handleFillFromLastWeek = async index => {
+  const handleFillFromLastWeek = async (index) => {
     fillBlockFromPreviousWeek(liturgy.id, index);
   };
 

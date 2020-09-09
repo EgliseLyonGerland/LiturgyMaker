@@ -16,7 +16,7 @@ function App({ user, signInWithEmailAndPassword }) {
 
   return (
     <FirebaseContext.Consumer>
-      {firebase => <MainPage firebase={firebase} />}
+      {(firebase) => <MainPage firebase={firebase} />}
     </FirebaseContext.Consumer>
   );
 }

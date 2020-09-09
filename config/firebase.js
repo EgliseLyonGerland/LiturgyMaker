@@ -1,4 +1,4 @@
-module.exports = env =>
+module.exports = (env) =>
   env === 'production'
     ? {
         apiKey: 'AIzaSyDaAc0fidGbSIDqO_3PamEB2InvHrbjEzM',

@@ -22,7 +22,7 @@ const AnnouncementsBlock = ({ block, onChange, onFocus, onBlur }) => {
       <TextField
         label="Titre"
         value={item.title}
-        onChange={event => handleChange('title', index, event.target.value)}
+        onChange={(event) => handleChange('title', index, event.target.value)}
         variant="filled"
         margin="dense"
         onFocus={() => {
@@ -34,7 +34,7 @@ const AnnouncementsBlock = ({ block, onChange, onFocus, onBlur }) => {
       <TextField
         label="Détail"
         value={item.detail}
-        onChange={event => handleChange('detail', index, event.target.value)}
+        onChange={(event) => handleChange('detail', index, event.target.value)}
         variant="filled"
         margin="dense"
         onFocus={() => {

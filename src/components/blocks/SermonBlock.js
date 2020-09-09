@@ -8,7 +8,7 @@ import SermonPlanPicker from '../SermonPlanPicker';
 import BibleRefPicker from '../BibleRefPicker';
 
 const useStyles = makeStyles(
-  theme => ({
+  (theme) => ({
     item: {},
     subtitle: {
       fontSize: 16,
@@ -33,11 +33,11 @@ const SermonBlock = ({ block, onChange, onFocus, onBlur }) => {
     <div className={classes.item}>
       <BibleRefPicker
         data={{ ref }}
-        onChange={value => {
+        onChange={(value) => {
           data.bibleRefs[index] = value.ref;
           onChange(data);
         }}
-        onFocus={path => {
+        onFocus={(path) => {
           onFocus(['bibleRefs', index, ...path]);
         }}
         onBlur={onBlur}
@@ -82,7 +82,7 @@ const SermonBlock = ({ block, onChange, onFocus, onBlur }) => {
       <Sortable
         items={bibleRefs}
         renderItem={renderBibleRef}
-        onChange={refs => {
+        onChange={(refs) => {
           data.bibleRefs = refs;
           onChange(data);
         }}
@@ -95,11 +95,11 @@ const SermonBlock = ({ block, onChange, onFocus, onBlur }) => {
 
       <SermonPlanPicker
         items={plan}
-        onChange={items => {
+        onChange={(items) => {
           data.plan = items;
           onChange(data);
         }}
-        onFocus={path => onFocus(['plan', ...path])}
+        onFocus={(path) => onFocus(['plan', ...path])}
         onBlur={onBlur}
       />
     </div>

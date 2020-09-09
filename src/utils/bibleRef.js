@@ -27,7 +27,7 @@ function stringifyContent({ book = [] } = {}) {
         .map(({ verse }) => verse.trim())
         .join(' ')
         .split('¶')
-        .map(text => text.trim())
+        .map((text) => text.trim())
         .join(' ')
     ).trim();
   }, '');

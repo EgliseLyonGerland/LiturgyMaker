@@ -9,7 +9,7 @@ const composeEnhancers =
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
-export default firebase => {
+export default (firebase) => {
   const enhancer = composeEnhancers(
     applyMiddleware(thunk.withExtraArgument({ firebase })),
   );

@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 const copy = require('clipboard-copy');
 
 const useStyles = makeStyles(
-  theme => ({
+  (theme) => ({
     root: {
       maxWidth: '100%',
       overflowX: 'auto',

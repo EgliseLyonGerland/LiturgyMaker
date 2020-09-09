@@ -49,14 +49,14 @@ const TextFieldSuggest = ({
 
   const [suggestions, setSuggestions] = useState([]);
 
-  const getSuggestions = str => {
+  const getSuggestions = (str) => {
     const inputValue = slugify(str.trim());
     const inputLength = inputValue.length;
     let count = 0;
 
     return inputLength === 0
       ? []
-      : items.filter(suggestion => {
+      : items.filter((suggestion) => {
           const keep =
             count < 5 &&
             slugify(suggestion[field]).slice(0, inputLength) === inputValue;
@@ -69,11 +69,11 @@ const TextFieldSuggest = ({
         });
   };
 
-  const getSuggestionValue = suggestion => {
+  const getSuggestionValue = (suggestion) => {
     return suggestion[field];
   };
 
-  const handleSuggestionsFetchRequested = options => {
+  const handleSuggestionsFetchRequested = (options) => {
     setSuggestions(getSuggestions(options.value));
   };
 
@@ -96,7 +96,7 @@ const TextFieldSuggest = ({
       <TextField
         fullWidth
         InputProps={{
-          inputRef: node => {
+          inputRef: (node) => {
             ref(node);
             inputRef(node);
           },
@@ -108,7 +108,7 @@ const TextFieldSuggest = ({
           onFocus();
           onFocus2(event, newValue);
         }}
-        onBlur={event => {
+        onBlur={(event) => {
           onBlur();
           onBlur2(event);
         }}
@@ -154,7 +154,7 @@ const TextFieldSuggest = ({
         onSuggestionsClearRequested={handleSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
-        renderSuggestionsContainer={options => (
+        renderSuggestionsContainer={(options) => (
           <Paper {...options.containerProps} square>
             {options.children}
           </Paper>

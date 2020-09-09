@@ -29,16 +29,16 @@ const Request = {
     callback(mockError, mockResponse);
   }),
 
-  __setMockDelay: boolValue => {
+  __setMockDelay: (boolValue) => {
     mockDelay = boolValue;
   },
-  __setMockResponse: mockRes => {
+  __setMockResponse: (mockRes) => {
     mockResponse = mockRes;
   },
-  __setMockError: mockErr => {
+  __setMockError: (mockErr) => {
     mockError = mockErr;
   },
-  __setMockResponseBody: body => {
+  __setMockResponseBody: (body) => {
     mockResponse.body = body;
   },
 };

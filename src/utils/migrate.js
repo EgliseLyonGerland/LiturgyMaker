@@ -6,7 +6,7 @@ function migrateToVersion2(doc) {
   return {
     ...doc,
     version: 2,
-    blocks: doc.blocks.map(block => {
+    blocks: doc.blocks.map((block) => {
       if (block.title) {
         return block;
       }
@@ -40,7 +40,7 @@ function migrateToVersion2(doc) {
 function migrateToVersion3(doc) {
   return {
     ...doc,
-    blocks: doc.blocks.map(block => {
+    blocks: doc.blocks.map((block) => {
       if (block.type !== 'announcements') {
         return block;
       }

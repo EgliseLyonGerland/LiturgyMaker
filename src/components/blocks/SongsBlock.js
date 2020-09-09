@@ -41,10 +41,10 @@ const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
         <Autocomplete
           defaultValue={song}
           options={songs.data}
-          getOptionLabel={option =>
+          getOptionLabel={(option) =>
             `${option.title}${option.number ? ` (${option.number})` : ''}`
           }
-          renderInput={params => (
+          renderInput={(params) => (
             <TextField
               {...params}
               label="Titre"
@@ -68,7 +68,7 @@ const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
         <TextField
           label="Informations"
           value={item.infos}
-          onChange={event => {
+          onChange={(event) => {
             handleChange('infos', index, event.target.value);
           }}
           onFocus={() => onFocus([index, 'infos'])}

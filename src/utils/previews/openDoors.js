@@ -71,7 +71,7 @@ function drawSlide2(ctx, data, image) {
     (documentWidth - prayerTopicMargins * 2 - prayerTopicGutters * 2) / 3;
   let prayerTopicMaxHeight = 0;
 
-  const topics = data.prayerTopics.map(topic => {
+  const topics = data.prayerTopics.map((topic) => {
     ctx.save();
     ctx.setFont('openDoorsPrayerTopic');
     const { width, height } = ctx.measureMultiligneText(
@@ -170,7 +170,7 @@ export default async function generate(ctx, block) {
     detail:
       block.data.detail ||
       'Excepteur duis elit culpa nisi nulla ut. Dolor sint deserunt tempor dolor exercitation. Consectetur qui dolor laboris cupidatat amet anim laboris eiusmod aliqua nostrud do ipsum consectetur proident. Esse nulla eu nisi occaecat laborum tempor.',
-    prayerTopics: block.data.prayerTopics.filter(item => !!item),
+    prayerTopics: block.data.prayerTopics.filter((item) => !!item),
   };
 
   ctx.fillStyle = '#F4F4F4';
@@ -180,7 +180,7 @@ export default async function generate(ctx, block) {
   const image = new Image();
   image.src = openDoorsImage;
 
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     image.onload = () => {
       if (data.prayerTopics && data.prayerTopics.length) {
         drawSlide2(ctx, data, image);

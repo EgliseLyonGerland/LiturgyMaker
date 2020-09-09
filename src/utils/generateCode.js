@@ -180,7 +180,7 @@ const functions = {
 
 function generateErrors(errors) {
   return errors
-    .map(error => `throw new Error("${error.replace(/"/gm, '\\"')}")`)
+    .map((error) => `throw new Error("${error.replace(/"/gm, '\\"')}")`)
     .join('\n');
 }
 
@@ -190,11 +190,11 @@ export default function generateCode(doc, { songs, recitations }) {
   let code = '';
   const errors = [];
 
-  const addError = msg => {
+  const addError = (msg) => {
     errors.push(msg);
   };
 
-  doc.blocks.forEach(block => {
+  doc.blocks.forEach((block) => {
     const funcName = `generate${upperFirst(block.type)}BlockCode`;
 
     if (functions[funcName]) {

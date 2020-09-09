@@ -1,7 +1,7 @@
 const firebase = require('firebase');
 const noop = require('lodash/noop');
 const { prompt, Separator } = require('inquirer');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 
 module.exports.command = `block <command>`;
 module.exports.desc = 'Manage blocks';
@@ -116,10 +116,7 @@ function stringifyBlock(block) {
 async function addCommand({ liturgyId }) {
   const db = firebase.firestore();
 
-  const doc = await db
-    .collection('liturgies')
-    .doc(`${liturgyId}`)
-    .get();
+  const doc = await db.collection('liturgies').doc(`${liturgyId}`).get();
 
   if (!doc.exists) {
     throw new Error(`Liturgy ${liturgyId} not found`);
@@ -170,10 +167,7 @@ async function addCommand({ liturgyId }) {
   const blocks = [...data.blocks];
   blocks.splice(index, 0, block);
 
-  await db
-    .collection('liturgies')
-    .doc(`${liturgyId}`)
-    .update({ blocks });
+  await db.collection('liturgies').doc(`${liturgyId}`).update({ blocks });
 
   console.log('Block added');
   process.exit();

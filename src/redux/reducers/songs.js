@@ -22,7 +22,7 @@ export default function reducer(state = defaultState, action) {
         ...state,
         loading: action.loading,
         loaded: action.loaded,
-        data: action.data.map(datum => ({
+        data: action.data.map((datum) => ({
           ...defaultSong,
           ...datum,
         })),

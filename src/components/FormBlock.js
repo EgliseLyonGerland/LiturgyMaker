@@ -10,7 +10,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 const options = ['Remplir à partir de la semaine précédente'];
 
 const useStyles = makeStyles(
-  theme => ({
+  (theme) => ({
     root: {
       position: 'relative',
       padding: theme.spacing(6, 8),
@@ -76,7 +76,7 @@ const FormBlock = ({
             open={!!anchorEl}
             onClose={handleClose}
           >
-            {options.map(option => (
+            {options.map((option) => (
               <MenuItem key={option} onClick={handleClick}>
                 {option}
               </MenuItem>

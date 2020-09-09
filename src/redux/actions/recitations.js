@@ -11,7 +11,7 @@ export function fetchRecitations() {
 
     const db = firebase.firestore();
     const { docs } = await db.collection(`recitations`).get();
-    const data = docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
     return dispatch({
       type: RECITATIONS_FETCH,

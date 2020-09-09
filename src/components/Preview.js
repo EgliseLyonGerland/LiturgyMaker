@@ -39,7 +39,7 @@ const Preview = ({ block, songs, recitations, currentFieldPath }) => {
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
 
-  const clean = ctx => {
+  const clean = (ctx) => {
     ctx.clearRect(0, 0, documentWidth, documentHeight);
   };
 
@@ -81,13 +81,13 @@ const Preview = ({ block, songs, recitations, currentFieldPath }) => {
   };
 
   useEffect(() => {
-    forEach(fontFamilies, fontFamily => {
+    forEach(fontFamilies, (fontFamily) => {
       const font = new FontFaceObserver(fontFamily);
       font.load().then(() => {
         draw();
       });
     });
-  }, []);
+  });
 
   useEffect(() => {
     draw();
@@ -96,7 +96,7 @@ const Preview = ({ block, songs, recitations, currentFieldPath }) => {
   return (
     <div className={classes.root}>
       <canvas ref={canvasRef} className={classes.canvas} />
-      <img ref={imageRef} className={classes.image} />
+      <img ref={imageRef} className={classes.image} alt="Preview" />
     </div>
   );
 };
