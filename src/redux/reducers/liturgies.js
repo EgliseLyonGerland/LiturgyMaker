@@ -3,6 +3,7 @@ import {
   LITURGIES_PERSISTING,
   LITURGIES_PERSISTED,
   LITURGIES_SET,
+  LITURGIES_ADD_BLOCK,
 } from '../actions/liturgies';
 
 const defaultState = {};
@@ -49,6 +50,17 @@ export default function reducer(state = defaultState, action) {
           ...state[action.id],
           persisted: false,
           persisting: true,
+        },
+      };
+    }
+    case LITURGIES_ADD_BLOCK: {
+      const liturgy = state[action.id];
+      liturgy.data.blocks.splice(action.position, 0, action.data);
+
+      return {
+        ...state,
+        [action.id]: {
+          ...liturgy,
         },
       };
     }

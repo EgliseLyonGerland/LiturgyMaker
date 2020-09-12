@@ -7,13 +7,15 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+import { blockTypes } from '../config/global';
+
 const options = ['Remplir à partir de la semaine précédente'];
 
 const useStyles = makeStyles(
   (theme) => ({
     root: {
       position: 'relative',
-      padding: theme.spacing(6, 8),
+      padding: theme.spacing(8),
     },
     title: {
       marginBottom: theme.spacing(2),
@@ -27,12 +29,7 @@ const useStyles = makeStyles(
   { name: 'FormBlock' },
 );
 
-const FormBlock = ({
-  title = null,
-  displayMenu = false,
-  onFillFromLastWeekClicked,
-  children,
-}) => {
+const FormBlock = ({ block, onFillFromLastWeekClicked, children }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -51,39 +48,39 @@ const FormBlock = ({
 
   return (
     <div className={classes.root}>
-      {title && (
-        <Typography className={classes.title} variant="h6">
-          {title}
+      <Typography className={classes.title} variant="h6">
+        {blockTypes[block.type]}
+        {' \u00A0'}
+        <Typography component="span" variant="subtitle1">
+          {block.title}
         </Typography>
-      )}
+      </Typography>
 
-      {displayMenu && (
-        <Fragment>
-          <IconButton
-            className={classes.more}
-            aria-label="more"
-            aria-controls="long-menu"
-            aria-haspopup="true"
-            onClick={handleToggle}
-          >
-            <MoreVertIcon />
-          </IconButton>
+      <Fragment>
+        <IconButton
+          className={classes.more}
+          aria-label="more"
+          aria-controls="long-menu"
+          aria-haspopup="true"
+          onClick={handleToggle}
+        >
+          <MoreVertIcon />
+        </IconButton>
 
-          <Menu
-            id="long-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={!!anchorEl}
-            onClose={handleClose}
-          >
-            {options.map((option) => (
-              <MenuItem key={option} onClick={handleClick}>
-                {option}
-              </MenuItem>
-            ))}
-          </Menu>
-        </Fragment>
-      )}
+        <Menu
+          id="long-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={!!anchorEl}
+          onClose={handleClose}
+        >
+          {options.map((option) => (
+            <MenuItem key={option} onClick={handleClick}>
+              {option}
+            </MenuItem>
+          ))}
+        </Menu>
+      </Fragment>
 
       {children}
     </div>
@@ -91,8 +88,10 @@ const FormBlock = ({
 };
 
 FormBlock.propTypes = {
-  title: PropTypes.string,
-  displayMenu: PropTypes.bool,
+  block: PropTypes.shape({
+    type: PropTypes.string,
+    title: PropTypes.string,
+  }).isRequired,
   onFillFromLastWeekClicked: PropTypes.func,
   children: PropTypes.any,
 };

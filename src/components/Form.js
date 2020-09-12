@@ -1,13 +1,15 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import upperFirst from 'lodash/upperFirst';
 import throttle from 'lodash/throttle';
+import toArray from 'lodash/toArray';
 import { useWindowEvent } from '@culturehq/hooks';
 import animateScrollTo from 'animated-scroll-to';
 import classnames from 'classnames';
 
 import Block from './FormBlock';
+import Divider from './Divider';
 import AnnouncementsBlock from './blocks/AnnouncementsBlock';
 import SongsBlock from './blocks/SongsBlock';
 import ReadingBlock from './blocks/ReadingBlock';
@@ -15,19 +17,13 @@ import SermonBlock from './blocks/SermonBlock';
 import SectionBlock from './blocks/SectionBlock';
 import RecitationBlock from './blocks/RecitationBlock';
 import OpenDoorsBlock from './blocks/OpenDoorsBlock';
+import { createDefaultBlock } from '../utils/defaults';
 
 const useStyles = makeStyles(
   (theme) => ({
     root: {
       position: 'relative',
-    },
-    divider: {
-      height: 1,
-      backgroundImage:
-        'linear-gradient(to right, #ccc 40%, rgba(255,255,255,0) 0%)',
-      backgroundPosition: 'bottom',
-      backgroundSize: [[15, 1]],
-      backgroundRepeat: 'repeat-x',
+      padding: theme.spacing(8, 0),
     },
     block: {
       borderLeft: [['solid', 4, 'transparent']],
@@ -57,6 +53,7 @@ const Form = ({
   onFocus,
   onBlur,
   onActive,
+  onAddBlock,
   onFillFromLastWeek,
 }) => {
   const classes = useStyles();
@@ -74,32 +71,35 @@ const Form = ({
       const { childNodes } = container.current;
       const defaultThreshold = 176;
 
-      let index = 0;
+      const activeIndex = toArray(childNodes)
+        .filter((childNode) => childNode.className.includes(classes.block))
+        .reduce((acc, childNode, index) => {
+          const { top } = childNode.getBoundingClientRect();
 
-      for (; index < childNodes.length; index += 1) {
-        const { top } = childNodes[index].getBoundingClientRect();
+          if (top > defaultThreshold) {
+            return acc;
+          }
 
-        if (top > defaultThreshold) {
-          break;
-        }
-      }
+          return index;
+        }, 0);
 
-      onActive(index - 1);
-    }, 100),
+      onActive(activeIndex);
+    }, 300),
   );
 
   const handleFocus = (block, path, index) => {
-    onFocus(index, path);
-
     const { childNodes } = container.current;
+    const blockChildNodes = toArray(childNodes).filter((childNode) =>
+      childNode.className.includes(classes.block),
+    );
 
     scrolling.current = true;
-    animateScrollTo(childNodes[index], {
+    animateScrollTo(blockChildNodes[index], {
       speed: 1000,
       offset: -48,
-      onComplete: () => {
-        scrolling.current = false;
-      },
+    }).then(() => {
+      onFocus(index, path);
+      scrolling.current = false;
     });
   };
 
@@ -114,17 +114,14 @@ const Form = ({
 
   useEffect(() => {
     handleScroll.current(focusedIndex >= 0);
-  }, [blocks, focusedIndex, activedIndex]);
+  }, [blocks, focusedIndex, activedIndex, container]);
 
   const renderBlock = (block, index) => {
     const Component = components[`${upperFirst(block.type)}Block`];
 
     return (
       <Block
-        title={block.title}
-        displayMenu={
-          block.type === 'announcements' || block.type === 'openDoors'
-        }
+        block={block}
         onFillFromLastWeekClicked={() => onFillFromLastWeek(index)}
       >
         <Component
@@ -144,27 +141,33 @@ const Form = ({
   };
 
   const renderDivider = (index) => {
-    if (index >= blocks.length - 1) {
-      return null;
-    }
-
-    return <div className={classes.divider} />;
+    return (
+      <Divider
+        onBlockSelected={(type) => {
+          onAddBlock(index, createDefaultBlock(type));
+        }}
+      />
+    );
   };
 
   return (
     <div className={classes.root}>
       <div ref={activeMarker} className={classes.activeMarker} />
       <div ref={container}>
+        {renderDivider(0)}
+
         {blocks.map((block, index) => (
-          <div
-            key={block.id}
-            className={classnames(classes.block, {
-              [classes.active]: currentIndex === index,
-            })}
-          >
-            {renderBlock(block, index)}
-            {renderDivider(index)}
-          </div>
+          <Fragment key={block.id}>
+            <div
+              className={classnames(classes.block, {
+                [classes.active]: currentIndex === index,
+              })}
+            >
+              {renderBlock(block, index)}
+            </div>
+
+            {renderDivider(index + 1)}
+          </Fragment>
         ))}
       </div>
     </div>
@@ -179,6 +182,7 @@ Form.propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   onActive: PropTypes.func,
+  onAddBlock: PropTypes.func,
   onFillFromLastWeek: PropTypes.func,
 };
 

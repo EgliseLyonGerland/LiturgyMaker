@@ -1,12 +1,13 @@
 import { format, subDays } from 'date-fns';
 import cloneDeep from 'lodash/cloneDeep';
-import createDefaultLiturgy from '../../config/defaultLiturgy';
+import { createDefaultLiturgy } from '../../utils/defaults';
 import migrate from '../../utils/migrate';
 
 export const LITURGIES_FETCH = 'liturgies/FETCH';
 export const LITURGIES_PERSISTING = 'liturgies/PERSISTING';
 export const LITURGIES_PERSISTED = 'liturgies/PERSISTED';
 export const LITURGIES_SET = 'liturgies/SET';
+export const LITURGIES_ADD_BLOCK = 'liturgies/LITURGIES_ADD_BLOCK';
 
 export function fetchLiturgy(date) {
   const id = format(date, 'yMMdd');
@@ -69,6 +70,15 @@ export function setLiturgy(id, data) {
     type: LITURGIES_SET,
     id,
     data,
+  };
+}
+
+export function addBlock(id, position, data) {
+  return {
+    type: LITURGIES_ADD_BLOCK,
+    id,
+    data,
+    position,
   };
 }
 

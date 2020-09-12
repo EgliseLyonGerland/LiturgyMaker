@@ -1,5 +1,6 @@
 import range from 'lodash/range';
 import chunk from 'lodash/chunk';
+import omit from 'lodash/omit';
 import { currentVersion } from '../config/global';
 
 function migrateToVersion2(doc) {
@@ -67,9 +68,23 @@ function migrateToVersion3(doc) {
   };
 }
 
+function migrateToVersion4(doc) {
+  return {
+    ...doc,
+    blocks: doc.blocks.map((block) => {
+      if (block.type === 'reading') {
+        return block;
+      }
+
+      return omit(block, 'title');
+    }),
+  };
+}
+
 const functions = {
   migrateToVersion2,
   migrateToVersion3,
+  migrateToVersion4,
 };
 
 export default function migrate(doc) {
