@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -17,13 +18,30 @@ const useStyles = makeStyles(
   },
 );
 
-const SectionBlock = ({ block }) => {
+const SectionBlock = ({ block, onChange, onFocus, onBlur }) => {
   const classes = useStyles();
+  const { data } = block;
   const {
     data: { title },
   } = block;
 
-  return <div className={classes.root}>{title}</div>;
+  return (
+    <div className={classes.root}>
+      <TextField
+        label="Titre"
+        defaultValue={title}
+        onChange={({ target }) => {
+          data.title = target.value;
+          onChange(data);
+        }}
+        onFocus={() => onFocus(['title'])}
+        onBlur={onBlur}
+        variant="filled"
+        margin="dense"
+        fullWidth
+      />
+    </div>
+  );
 };
 
 SectionBlock.propTypes = {
