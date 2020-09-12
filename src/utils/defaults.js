@@ -61,6 +61,12 @@ export const createDefaultSongsBlock = () => ({
   data: [],
 });
 
+export const createDefaultRecitationBlock = () => ({
+  id: uuid(),
+  type: 'recitation',
+  data: {},
+});
+
 const functions = {
   createDefaultAnnouncementsBlock,
   createDefaultReadingBlock,
@@ -68,6 +74,7 @@ const functions = {
   createDefaultOpenDoorsBlock,
   createDefaultSectionBlock,
   createDefaultSongsBlock,
+  createDefaultRecitationBlock,
 };
 
 export const createDefaultBlock = (type, ...args) => {
