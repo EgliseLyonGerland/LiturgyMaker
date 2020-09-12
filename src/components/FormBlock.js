@@ -9,8 +9,6 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { blockTypes } from '../config/global';
 
-const options = ['Remplir à partir de la semaine précédente'];
-
 const useStyles = makeStyles(
   (theme) => ({
     root: {
@@ -29,7 +27,12 @@ const useStyles = makeStyles(
   { name: 'FormBlock' },
 );
 
-const FormBlock = ({ block, onFillFromLastWeekClicked, children }) => {
+const FormBlock = ({
+  block,
+  onRemoveBlockClicked,
+  onFillFromLastWeekClicked,
+  children,
+}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -41,9 +44,9 @@ const FormBlock = ({ block, onFillFromLastWeekClicked, children }) => {
     setAnchorEl(null);
   }
 
-  function handleClick() {
+  function handleClick(fn) {
     handleClose();
-    onFillFromLastWeekClicked();
+    fn();
   }
 
   return (
@@ -74,11 +77,12 @@ const FormBlock = ({ block, onFillFromLastWeekClicked, children }) => {
           open={!!anchorEl}
           onClose={handleClose}
         >
-          {options.map((option) => (
-            <MenuItem key={option} onClick={handleClick}>
-              {option}
-            </MenuItem>
-          ))}
+          <MenuItem onClick={() => handleClick(onRemoveBlockClicked)}>
+            Supprimer
+          </MenuItem>
+          <MenuItem onClick={() => handleClick(onFillFromLastWeekClicked)}>
+            Remplir à partir de la semaine précédente
+          </MenuItem>
         </Menu>
       </Fragment>
 
@@ -92,6 +96,7 @@ FormBlock.propTypes = {
     type: PropTypes.string,
     title: PropTypes.string,
   }).isRequired,
+  onRemoveBlockClicked: PropTypes.func,
   onFillFromLastWeekClicked: PropTypes.func,
   children: PropTypes.any,
 };

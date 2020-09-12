@@ -4,6 +4,7 @@ import {
   LITURGIES_PERSISTED,
   LITURGIES_SET,
   LITURGIES_ADD_BLOCK,
+  LITURGIES_REMOVE_BLOCK,
 } from '../actions/liturgies';
 
 const defaultState = {};
@@ -56,6 +57,17 @@ export default function reducer(state = defaultState, action) {
     case LITURGIES_ADD_BLOCK: {
       const liturgy = state[action.id];
       liturgy.data.blocks.splice(action.position, 0, action.data);
+
+      return {
+        ...state,
+        [action.id]: {
+          ...liturgy,
+        },
+      };
+    }
+    case LITURGIES_REMOVE_BLOCK: {
+      const liturgy = state[action.id];
+      liturgy.data.blocks.splice(action.position, 1);
 
       return {
         ...state,

@@ -8,6 +8,7 @@ export const LITURGIES_PERSISTING = 'liturgies/PERSISTING';
 export const LITURGIES_PERSISTED = 'liturgies/PERSISTED';
 export const LITURGIES_SET = 'liturgies/SET';
 export const LITURGIES_ADD_BLOCK = 'liturgies/LITURGIES_ADD_BLOCK';
+export const LITURGIES_REMOVE_BLOCK = 'liturgies/LITURGIES_REMOVE_BLOCK';
 
 export function fetchLiturgy(date) {
   const id = format(date, 'yMMdd');
@@ -78,6 +79,14 @@ export function addBlock(id, position, data) {
     type: LITURGIES_ADD_BLOCK,
     id,
     data,
+    position,
+  };
+}
+
+export function removeBlock(id, position) {
+  return {
+    type: LITURGIES_REMOVE_BLOCK,
+    id,
     position,
   };
 }

@@ -54,6 +54,7 @@ const Form = ({
   onBlur,
   onActive,
   onAddBlock,
+  onRemoveBlock,
   onFillFromLastWeek,
 }) => {
   const classes = useStyles();
@@ -122,6 +123,7 @@ const Form = ({
     return (
       <Block
         block={block}
+        onRemoveBlockClicked={() => onRemoveBlock(index)}
         onFillFromLastWeekClicked={() => onFillFromLastWeek(block)}
       >
         <Component
@@ -183,6 +185,7 @@ Form.propTypes = {
   onBlur: PropTypes.func,
   onActive: PropTypes.func,
   onAddBlock: PropTypes.func,
+  onRemoveBlock: PropTypes.func,
   onFillFromLastWeek: PropTypes.func,
 };
 

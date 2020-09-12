@@ -175,6 +175,7 @@ const Main = ({
   setLiturgy,
   persistLiturgy,
   addBlock,
+  removeBlock,
   fillBlockFromPreviousWeek,
   songs,
   recitations,
@@ -256,6 +257,10 @@ const Main = ({
 
   const handleAddBlock = (index, data) => {
     addBlock(liturgy.id, index, data);
+  };
+
+  const handleRemoveBlock = (index) => {
+    removeBlock(liturgy.id, index);
   };
 
   const handleFillFromLastWeek = (block) => {
@@ -386,6 +391,7 @@ const Main = ({
         onFocus={handleBlockFocus}
         onBlur={handleBlockBlur}
         onAddBlock={handleAddBlock}
+        onRemoveBlock={handleRemoveBlock}
         onFillFromLastWeek={handleFillFromLastWeek}
         activedIndex={activedBlock}
         focusedIndex={focusedBlock[0]}
@@ -432,6 +438,7 @@ Main.propTypes = {
   setLiturgy: PropTypes.func,
   persistLiturgy: PropTypes.func,
   addBlock: PropTypes.func,
+  removeBlock: PropTypes.func,
   fillBlockFromPreviousWeek: PropTypes.func,
   songs: PropTypes.object,
   recitations: PropTypes.object,
