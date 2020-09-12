@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Sortable from '../Sortable';
 import BibleRefPicker from '../BibleRefPicker';
-import VerseTemplatePicker from '../VerseTemplatePicker';
+// import VerseTemplatePicker from '../VerseTemplatePicker';
 
 const ReadingBlock = ({ block, onChange, onFocus, onBlur }) => {
   const { data } = block;
@@ -29,7 +29,7 @@ const ReadingBlock = ({ block, onChange, onFocus, onBlur }) => {
           onBlur={onBlur}
         />
       </Grid>
-      <Grid item xs={12}>
+      {/* <Grid item xs={12}>
         <VerseTemplatePicker
           current={template}
           onSelect={(value) => {
@@ -40,7 +40,7 @@ const ReadingBlock = ({ block, onChange, onFocus, onBlur }) => {
             onChange(data);
           }}
         />
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 
