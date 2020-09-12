@@ -258,8 +258,8 @@ const Main = ({
     addBlock(liturgy.id, index, data);
   };
 
-  const handleFillFromLastWeek = (index) => {
-    fillBlockFromPreviousWeek(liturgy.id, index);
+  const handleFillFromLastWeek = (block) => {
+    fillBlockFromPreviousWeek(liturgy.id, block);
   };
 
   let zoomKey = 'nothing';

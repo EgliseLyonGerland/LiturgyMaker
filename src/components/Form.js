@@ -122,7 +122,7 @@ const Form = ({
     return (
       <Block
         block={block}
-        onFillFromLastWeekClicked={() => onFillFromLastWeek(index)}
+        onFillFromLastWeekClicked={() => onFillFromLastWeek(block)}
       >
         <Component
           block={block}

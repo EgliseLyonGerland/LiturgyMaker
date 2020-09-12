@@ -82,26 +82,44 @@ export function addBlock(id, position, data) {
   };
 }
 
-export function fillBlockFromPreviousWeek(id, blockIndex) {
+export function fillBlockFromPreviousWeek(id, currentBlock) {
   return async (dispatch, getState) => {
     let { liturgies } = getState();
     const currentLiturgy = liturgies[id].data;
     const currentDate = currentLiturgy.date;
-    const currentBlock = currentLiturgy.blocks[blockIndex];
     const previousDate = subDays(currentDate, 7);
 
     await dispatch(fetchLiturgy(previousDate));
 
     liturgies = getState().liturgies;
     const previousId = format(previousDate, 'yMMdd');
-    const previousLiturgy = liturgies[previousId].data;
-    const previousBlock = previousLiturgy.blocks[blockIndex];
+    const previousLiturgy = liturgies[previousId];
 
-    if (!previousBlock || currentBlock.type !== previousBlock.type) {
+    if (!previousLiturgy) {
       return null;
     }
 
-    currentLiturgy.blocks[blockIndex].data = cloneDeep(previousBlock.data);
+    const currentBlockIndex = currentLiturgy.blocks.findIndex(
+      (block) => block.id === currentBlock.id,
+    );
+    const currentBlockNumber = currentLiturgy.blocks
+      .filter((block) => block.type === currentBlock.type)
+      .findIndex((block) => block.id === currentBlock.id);
+
+    const sameTypeBlocks = previousLiturgy.data.blocks.filter(
+      (block) => block.type === currentBlock.type,
+    );
+
+    if (sameTypeBlocks.length === 0) {
+      return null;
+    }
+
+    const previousBlock =
+      sameTypeBlocks[currentBlockNumber] || sameTypeBlocks.pop();
+
+    currentLiturgy.blocks[currentBlockIndex].data = cloneDeep(
+      previousBlock.data,
+    );
 
     return dispatch(setLiturgy(id, currentLiturgy));
   };
