@@ -169,7 +169,7 @@ const mapDispatchToProps = {
   ...recitationsActions,
 };
 
-const Main = ({
+const FormPage = ({
   liturgies,
   fetchLiturgy,
   setLiturgy,
@@ -432,7 +432,7 @@ const Main = ({
   );
 };
 
-Main.propTypes = {
+FormPage.propTypes = {
   liturgies: PropTypes.object,
   fetchLiturgy: PropTypes.func,
   setLiturgy: PropTypes.func,
@@ -446,4 +446,4 @@ Main.propTypes = {
   fetchRecitations: PropTypes.func,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(FormPage);

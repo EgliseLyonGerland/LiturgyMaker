@@ -1,0 +1,179 @@
+{
+  "id": "20200920",
+  "persisted": true,
+  "persisting": false,
+  "loading": false,
+  "data": {
+    "date": 1600639199999,
+    "blocks": [
+      {
+        "type": "announcements",
+        "data": [
+          {
+            "detail": "Culte à 10h au Théâtre de Lulu\n> inscription préalable\n> venir avec un masque",
+            "title": "Dimanche 27 septembre"
+          },
+          {
+            "detail": "Dimanche 27 septembre à 12h30",
+            "title": "Groupe d'ados"
+          },
+          {
+            "detail": "- Lyon Centre : mardi à 20h (voir Joshua ou Denis)\n- Lyon Ouest : mercredi à 20h (voir Kalhou)",
+            "title": "Groupes de maison"
+          },
+          {
+            "title": "Journée spéciale de rentrée",
+            "detail": "Samedi 3 octobre à la Maison Chavril\n> inscriptions nécessaires"
+          }
+        ],
+        "id": "4073ce46-8ae6-4cc9-83c9-240f90c4ea36"
+      },
+      {
+        "title": "Ouverture",
+        "id": "ac0e6928-668c-4d08-91eb-8d3dea152a2c",
+        "type": "reading",
+        "data": {
+          "bibleRefs": [
+            {
+              "excerpt": "La vie est plus que la nourriture et le corps plus que le vêtement. [...] Recherchez plutôt le royaume de Dieu, et toutes ces choses vous seront données par-dessus.",
+              "template": "topBottomRight",
+              "ref": "Luc 12.23-34"
+            }
+          ]
+        }
+      },
+      {
+        "id": "7c3b4de1-10a0-4428-8277-2913fd8beae2",
+        "type": "songs",
+        "data": [{ "id": "EW6z7PYHJ2roILudXXRl", "infos": "", "repeat": false }]
+      },
+      {
+        "type": "reading",
+        "title": "Loi de Dieu",
+        "data": {
+          "bibleRefs": [
+            {
+              "template": "topBottomRight",
+              "excerpt": "Ne vous vengez point vous-mêmes, bien-aimés, mais laissez agir la colère ; car il est écrit : À moi la vengeance, à moi la rétribution, dit le Seigneur.",
+              "ref": "Romains 12.19"
+            }
+          ]
+        },
+        "id": "fd5fea93-fd46-4998-9677-21d87c412b16"
+      },
+      {
+        "data": [
+          { "infos": "", "id": "01euvvAGlW9DkTqw2SRj", "repeat": false }
+        ],
+        "type": "songs",
+        "id": "7389d354-2760-4be5-b7a1-4377919a7d1f"
+      },
+      {
+        "type": "reading",
+        "id": "f4f9734e-e1bb-4c95-8f4d-3264a3f5294f",
+        "title": "Grâce de Dieu",
+        "data": {
+          "bibleRefs": [
+            {
+              "ref": "Romains 5.8-9",
+              "excerpt": "Christ est mort pour nous. À plus forte raison donc, maintenant que nous sommes justifiés par son sang, serons-nous sauvés par lui de la colère.",
+              "template": "topBottomRight"
+            }
+          ]
+        }
+      },
+      {
+        "type": "songs",
+        "data": [
+          { "repeat": false, "id": "gzbHI1zOnXFV7p2l4sZM", "infos": "" },
+          { "id": "qAfQ93gSMc8dXlMAJonK", "repeat": false, "infos": "" }
+        ],
+        "id": "b4e95a38-3772-4275-8ee3-89f08bb57b71"
+      },
+      {
+        "title": "Inter-chants",
+        "type": "reading",
+        "id": "992f37ac-d612-43c6-a99a-27d5cea0bcd9",
+        "data": {
+          "bibleRefs": [
+            {
+              "excerpt": "Jusques à quand, Éternel, m'oublieras-tu sans cesse ? Jusques à quand me cacheras-tu ta face ?",
+              "template": "topBottomRight",
+              "ref": "Psaumes 13"
+            }
+          ]
+        }
+      },
+      {
+        "id": "1ae58aac-c57d-4302-bee1-e1a71ebe8b74",
+        "type": "songs",
+        "data": [
+          { "infos": "", "repeat": false, "id": "RWQljAK8z5pPT1D1zNtp" },
+          { "infos": "", "id": "otdLxx16ARQjwvtiIaHr", "repeat": true },
+          { "repeat": false, "id": "x0zbmAb2o6bC8ANG3d92", "infos": "" }
+        ]
+      },
+      {
+        "type": "sermon",
+        "data": {
+          "author": "Alexandre Sarran",
+          "plan": [
+            "Facile de trouver une explication (ch. 4)",
+            "Facile de proposer une solution (ch. 5)",
+            "Facile de manquer de compassion (ch. 6)",
+            "Facile d'empirer la situation (ch. 7)"
+          ],
+          "bibleRefs": ["Job 4-7"],
+          "title": "Une sagesse qui tue"
+        },
+        "id": "12ff2be7-e9de-4147-a9eb-755d0edbc062"
+      },
+      {
+        "type": "songs",
+        "data": [
+          { "infos": "", "repeat": false, "id": "jHp49DdgXAXjBSZ5dJAK" }
+        ],
+        "id": "b027ac4e-c7be-4052-bfb2-85732e39107e"
+      },
+      {
+        "id": "73a46e00-6e94-4161-a8f2-099fd8fc6cdc",
+        "type": "openDoors",
+        "data": {
+          "title": "Égypte : enlèvements de chrétiens",
+          "prayerTopics": [
+            "Remercions Dieu pour la présence des églises et des chrétiens en Égypte.",
+            "Prions pour que Bakhit et Osama soient libérés.",
+            "Prions pour les aggresseurs et les autorités, qu'elles protègent les chrétiens."
+          ],
+          "detail": "Début août, un marchand chrétien de 68 ans a été enlevé sous les yeux de plusieurs membres de sa famille. La police ne fait rien et Bakhit et son fils Osama, kidnappé en 2016, restent introuvables."
+        }
+      },
+      {
+        "type": "section",
+        "data": { "title": "Prière" },
+        "id": "02ca88f1-90e6-47a5-966f-3f6215c4ac34"
+      },
+      {
+        "id": "45adecca-9fc7-45f9-93d8-57da0bab9b82",
+        "type": "songs",
+        "data": [{ "id": "RKG9UN5cZpj0VCCBqUfm", "infos": "", "repeat": false }]
+      },
+      {
+        "type": "reading",
+        "id": "be7a312c-a96e-4d0a-99fc-764973a80322",
+        "data": {
+          "bibleRefs": [
+            {
+              "excerpt": "Que l'Éternel fasse luire sa face sur toi, et qu'il t'accorde sa grâce ! Que l'Éternel tourne sa face vers toi, et qu'il te donne la paix !",
+              "template": "topBottomRight",
+              "ref": "Nombres 6.24-26"
+            }
+          ]
+        },
+        "title": "Envoi"
+      }
+    ],
+    "uid": "kbr8FeooHxWPfRlC5Rr6PeVOPQJ3",
+    "version": 3
+  }
+}

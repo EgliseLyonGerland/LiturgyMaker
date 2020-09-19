@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import FirebaseContext from './components/FirebaseContext';
 import AuthPage from './pages/Auth';
-import MainPage from './pages/Main';
+import FormPage from './pages/Form';
+import SlidesPage from './pages/Slides';
 
 function App({ user, signInWithEmailAndPassword }) {
   if (typeof user === 'undefined') {
@@ -16,7 +18,18 @@ function App({ user, signInWithEmailAndPassword }) {
 
   return (
     <FirebaseContext.Consumer>
-      {(firebase) => <MainPage firebase={firebase} />}
+      {(firebase) => (
+        <Router>
+          <Switch>
+            <Route path="/" exact>
+              <FormPage firebase={firebase} />
+            </Route>
+            <Route path="/slides" exact>
+              <SlidesPage />
+            </Route>
+          </Switch>
+        </Router>
+      )}
     </FirebaseContext.Consumer>
   );
 }
