@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid';
 import shuffle from 'lodash/shuffle';
 import upperFirst from 'lodash/upperFirst';
 import { verseTemplates } from '../config/preview';
+import { currentVersion } from '../config/global';
 
 const shuffledVerseTemplates = shuffle(verseTemplates);
 
@@ -85,7 +86,7 @@ export const createDefaultBlock = (type, ...args) => {
 
 export const createDefaultLiturgy = ({ date }) => ({
   date: +date,
-  version: 3,
+  version: currentVersion,
   blocks: [
     createDefaultAnnouncementsBlock('announcements'),
     createDefaultReadingBlock({ title: 'Ouverture' }),
