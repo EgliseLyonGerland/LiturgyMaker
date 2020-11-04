@@ -27,7 +27,7 @@ export const createDefaultReadingBlock = ({ title = '' } = {}) => ({
   },
 });
 
-export const createDefaultSermonsBlock = () => ({
+export const createDefaultSermonBlock = () => ({
   id: uuid(),
   type: 'sermon',
   data: {
@@ -71,7 +71,7 @@ export const createDefaultRecitationBlock = () => ({
 const functions = {
   createDefaultAnnouncementsBlock,
   createDefaultReadingBlock,
-  createDefaultSermonsBlock,
+  createDefaultSermonBlock,
   createDefaultOpenDoorsBlock,
   createDefaultSectionBlock,
   createDefaultSongsBlock,
@@ -93,7 +93,7 @@ export const createDefaultLiturgy = ({ date }) => ({
     createDefaultReadingBlock({ title: 'Loi de Dieu' }),
     createDefaultReadingBlock({ title: 'Grâce de Dieu' }),
     createDefaultReadingBlock({ title: 'Inter-chants' }),
-    createDefaultSermonsBlock(),
+    createDefaultSermonBlock(),
     createDefaultOpenDoorsBlock(),
     createDefaultSectionBlock({ title: 'Prière' }),
     createDefaultReadingBlock({ title: 'Envoi' }),
