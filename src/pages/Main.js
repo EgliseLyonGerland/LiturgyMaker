@@ -24,7 +24,6 @@ import Form from '../components/Form';
 import Code from '../components/Code';
 import Preview from '../components/Preview';
 import generateCode from '../utils/generateCode';
-import { validate } from '../utils/liturgy';
 import * as liturgiesActions from '../redux/actions/liturgies';
 import * as songsActions from '../redux/actions/songs';
 import * as recitationsActions from '../redux/actions/recitations';
