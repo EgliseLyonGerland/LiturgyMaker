@@ -18,7 +18,7 @@ require('firebase/firestore');
 yargs
   .middleware((argv) => {
     // eslint-disable-next-line no-param-reassign
-    argv.env = argv.prod ? 'production' : 'development';
+    argv.env = argv.dev ? 'development' : 'production';
   })
   .middleware(({ env }) => {
     firebase.initializeApp(createFirebaseConfig(env));
@@ -34,8 +34,8 @@ yargs
   .command(songCommand)
   .command(recitationCommand)
   .command(blockCommand)
-  .option('prod', {
-    describe: 'Use production data',
+  .option('dev', {
+    describe: 'Use development data',
     boolean: true,
     default: false,
   })
