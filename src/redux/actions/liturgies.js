@@ -2,6 +2,7 @@ import { format, subDays } from 'date-fns';
 import cloneDeep from 'lodash/cloneDeep';
 import { createDefaultLiturgy } from '../../utils/defaults';
 import migrate from '../../utils/migrate';
+import { validate } from '../../utils/liturgy';
 
 export const LITURGIES_FETCH = 'liturgies/FETCH';
 export const LITURGIES_PERSISTING = 'liturgies/PERSISTING';
@@ -49,6 +50,11 @@ export function fetchLiturgy(date) {
 export function persistLiturgy(id) {
   return async (dispatch, getState, { firebase }) => {
     const { liturgies } = getState();
+
+    if (!validate(liturgies[id])) {
+      return null;
+    }
+
     const db = firebase.firestore();
     const { uid } = firebase.auth().currentUser;
 

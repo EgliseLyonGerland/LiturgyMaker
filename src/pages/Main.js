@@ -24,6 +24,7 @@ import Form from '../components/Form';
 import Code from '../components/Code';
 import Preview from '../components/Preview';
 import generateCode from '../utils/generateCode';
+import { validate } from '../utils/liturgy';
 import * as liturgiesActions from '../redux/actions/liturgies';
 import * as songsActions from '../redux/actions/songs';
 import * as recitationsActions from '../redux/actions/recitations';
@@ -247,12 +248,12 @@ const Main = ({
   };
 
   const handleSave = async () => {
-    await persistLiturgy(liturgy.id);
-
-    setSaved(true);
-    setTimeout(() => {
-      setSaved(false);
-    }, 2000);
+    if (await persistLiturgy(liturgy.id)) {
+      setSaved(true);
+      setTimeout(() => {
+        setSaved(false);
+      }, 2000);
+    }
   };
 
   const handleAddBlock = (index, data) => {
@@ -314,6 +315,7 @@ const Main = ({
             [classes.ctaSaved]: saved,
           })}
           color="secondary"
+          // disabled={!validate(liturgy.data)}
           onClick={() => handleSave()}
         >
           <SaveIcon className={classes.ctaIcon} />

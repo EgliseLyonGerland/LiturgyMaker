@@ -92,14 +92,22 @@ export function validate(ref) {
   const data = parse(ref);
 
   if (!data) {
-    return 'Format incorrect';
+    throw new Error('Format incorrect');
   }
 
   if (!bookNames.includes(deburr(data.book))) {
-    return 'Livre non-reconnu';
+    throw new Error('Livre non-reconnu');
+  }
+}
+
+export function isValid(ref) {
+  try {
+    validate(ref);
+  } catch (e) {
+    return false;
   }
 
-  return '';
+  return true;
 }
 
 export async function getPassage(ref) {

@@ -33,7 +33,11 @@ const BibleRefPicker = ({
 
   let error = '';
   if (data.ref) {
-    error = validate(data.ref);
+    try {
+      validate(data.ref);
+    } catch (e) {
+      error = e.message;
+    }
   }
 
   const handleChange = (key, value) => {
