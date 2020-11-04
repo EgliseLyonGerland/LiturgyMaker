@@ -1,12 +1,12 @@
 @font-face {
   font-family: 'Adobe Hebrew';
   font-style: italic;
-  src: url('/fonts/AdobeHebrewBoldItalic.otf') format('opentype');
+  src: url('./fonts/AdobeHebrewBoldItalic.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'Adobe Hebrew';
-  src: url('/fonts/AdobeHebrewRegular.otf') format('opentype');
+  src: url('./fonts/AdobeHebrewRegular.otf') format('opentype');
 }
 
 body {
