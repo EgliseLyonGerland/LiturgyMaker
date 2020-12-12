@@ -41,9 +41,20 @@ const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
         <Autocomplete
           defaultValue={song}
           options={songs.data}
-          getOptionLabel={(option) =>
-            `${option.title}${option.number ? ` (${option.number})` : ''}`
-          }
+          getOptionLabel={(option) => {
+            if (option.number) {
+              return `${option.title} (${option.number})`;
+            }
+
+            const total = songs.data.filter(
+              ({ title }) => title === option.title,
+            );
+            if (total.length > 1) {
+              return `${option.title} (${option.authors})`;
+            }
+
+            return option.title;
+          }}
           renderInput={(params) => (
             <TextField
               {...params}
