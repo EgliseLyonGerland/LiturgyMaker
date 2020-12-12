@@ -22,7 +22,7 @@ import debounce from 'lodash/debounce';
 import classnames from 'classnames';
 import Form from '../components/Form';
 import Code from '../components/Code';
-import Preview from '../components/Preview';
+// import Preview from '../components/Preview';
 import generateCode from '../utils/generateCode';
 import * as liturgiesActions from '../redux/actions/liturgies';
 import * as songsActions from '../redux/actions/songs';
@@ -188,8 +188,8 @@ const Main = ({
   const [displayCode, setDisplayCode] = useState(false);
   const [activedBlock, setActivedBlock] = useState(0);
   const [focusedBlock, setFocusedBlock] = useState([-1]);
-  const currentBlockIndex =
-    focusedBlock[0] >= 0 ? focusedBlock[0] : activedBlock;
+  // const currentBlockIndex =
+  //   focusedBlock[0] >= 0 ? focusedBlock[0] : activedBlock;
   const id = format(currentDate, 'yMMdd');
 
   const liturgy = liturgies[id] || null;
@@ -418,12 +418,12 @@ const Main = ({
             renderContent()
           )}
         </Paper>
-        <div className={classes.preview}>
+        {/* <div className={classes.preview}>
           <Preview
             block={get(liturgy, ['data', 'blocks', currentBlockIndex])}
             currentFieldPath={focusedBlock[1]}
           />
-        </div>
+        </div> */}
       </div>
       <Zoom key={zoomKey} in={true}>
         {renderSaveButton()}
