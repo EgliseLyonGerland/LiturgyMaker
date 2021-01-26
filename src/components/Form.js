@@ -1,11 +1,7 @@
-import React, { useRef, useEffect, Fragment } from 'react';
+import React, { useRef, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import upperFirst from 'lodash/upperFirst';
-import throttle from 'lodash/throttle';
-import toArray from 'lodash/toArray';
-import { useWindowEvent } from '@culturehq/hooks';
-import animateScrollTo from 'animated-scroll-to';
 import classnames from 'classnames';
 
 import Block from './FormBlock';
@@ -25,12 +21,6 @@ const useStyles = makeStyles(
       position: 'relative',
       padding: theme.spacing(8, 0),
     },
-    block: {
-      borderLeft: [['solid', 4, 'transparent']],
-    },
-    active: {
-      borderColor: theme.palette.secondary.main,
-    },
   }),
   { name: 'Form' },
 );
@@ -47,75 +37,23 @@ const components = {
 
 const Form = ({
   blocks,
-  activedIndex,
-  focusedIndex,
   onChange,
   onFocus,
   onBlur,
-  onActive,
   onAddBlock,
   onRemoveBlock,
   onFillFromLastWeek,
 }) => {
   const classes = useStyles();
   const container = useRef(null);
-  const activeMarker = useRef(null);
-  const scrolling = useRef(false);
-  const currentIndex = focusedIndex >= 0 ? focusedIndex : activedIndex;
-
-  const handleScroll = useRef(
-    throttle((focused) => {
-      if (focused || scrolling.current) {
-        return;
-      }
-
-      const { childNodes } = container.current;
-      const defaultThreshold = 176;
-
-      const activeIndex = toArray(childNodes)
-        .filter((childNode) => childNode.className.includes(classes.block))
-        .reduce((acc, childNode, index) => {
-          const { top } = childNode.getBoundingClientRect();
-
-          if (top > defaultThreshold) {
-            return acc;
-          }
-
-          return index;
-        }, 0);
-
-      onActive(activeIndex);
-    }, 300),
-  );
 
   const handleFocus = (block, path, index) => {
-    const { childNodes } = container.current;
-    const blockChildNodes = toArray(childNodes).filter((childNode) =>
-      childNode.className.includes(classes.block),
-    );
-
-    scrolling.current = true;
-    animateScrollTo(blockChildNodes[index], {
-      speed: 1000,
-      offset: -48,
-    }).then(() => {
-      onFocus(index, path);
-      scrolling.current = false;
-    });
+    onFocus(index, path);
   };
 
   const handleBlur = () => {
     onBlur();
-    scrolling.current = false;
   };
-
-  useWindowEvent('scroll', () => {
-    handleScroll.current(focusedIndex >= 0);
-  });
-
-  useEffect(() => {
-    handleScroll.current(focusedIndex >= 0);
-  }, [blocks, focusedIndex, activedIndex, container]);
 
   const renderBlock = (block, index) => {
     const Component = components[`${upperFirst(block.type)}Block`];
@@ -152,17 +90,12 @@ const Form = ({
 
   return (
     <div className={classes.root}>
-      <div ref={activeMarker} className={classes.activeMarker} />
       <div ref={container}>
         {renderDivider(0)}
 
         {blocks.map((block, index) => (
           <Fragment key={block.id}>
-            <div
-              className={classnames(classes.block, {
-                [classes.active]: currentIndex === index,
-              })}
-            >
+            <div className={classnames(classes.block)}>
               {renderBlock(block, index)}
             </div>
 
@@ -176,12 +109,9 @@ const Form = ({
 
 Form.propTypes = {
   blocks: PropTypes.array,
-  activedIndex: PropTypes.number,
-  focusedIndex: PropTypes.number,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
-  onActive: PropTypes.func,
   onAddBlock: PropTypes.func,
   onRemoveBlock: PropTypes.func,
   onFillFromLastWeek: PropTypes.func,

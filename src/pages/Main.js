@@ -169,10 +169,7 @@ const Main = ({
   const [currentDate, setCurrentDate] = useState(getNextSundayDate(new Date()));
   const [saved, setSaved] = useState(false);
   const [displayCode, setDisplayCode] = useState(false);
-  const [activedBlock, setActivedBlock] = useState(0);
   const [focusedBlock, setFocusedBlock] = useState([-1]);
-  // const currentBlockIndex =
-  //   focusedBlock[0] >= 0 ? focusedBlock[0] : activedBlock;
   const id = format(currentDate, 'yMMdd');
 
   const liturgy = liturgies[id] || null;
@@ -219,13 +216,8 @@ const Main = ({
     setFocusedBlock([-1]);
   };
 
-  const handleBlockActive = (index) => {
-    setActivedBlock(index);
-  };
-
   const handleChangeDate = (date) => {
     setFocusedBlock([-1]);
-    setActivedBlock(0);
     setCurrentDate(getNextSundayDate(date));
   };
 
@@ -368,13 +360,11 @@ const Main = ({
       <Form
         blocks={liturgy.data.blocks}
         onChange={handleBlocksChange}
-        onActive={handleBlockActive}
         onFocus={handleBlockFocus}
         onBlur={handleBlockBlur}
         onAddBlock={handleAddBlock}
         onRemoveBlock={handleRemoveBlock}
         onFillFromLastWeek={handleFillFromLastWeek}
-        activedIndex={activedBlock}
         focusedIndex={focusedBlock[0]}
       />
     );
