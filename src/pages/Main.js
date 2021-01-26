@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import IconButton from '@material-ui/core/IconButton';
@@ -380,15 +379,13 @@ const Main = ({
       <div className={classes.wrapper}>
         {renderNavBar()}
 
-        <Paper className={classes.content} elevation={0} square>
-          {loading ? (
-            <div className={classes.spinner}>
-              <BeatLoader color="#DDD" />
-            </div>
-          ) : (
-            renderContent()
-          )}
-        </Paper>
+        {loading ? (
+          <div className={classes.spinner}>
+            <BeatLoader color="#DDD" />
+          </div>
+        ) : (
+          renderContent()
+        )}
         {/* <div className={classes.preview}>
           <Preview
             block={get(liturgy, ['data', 'blocks', currentBlockIndex])}

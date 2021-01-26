@@ -15,6 +15,7 @@ const useStyles = makeStyles(
       height: 1,
       display: 'flex',
       alignItems: 'center',
+      margin: theme.spacing(4, 0),
     },
     inner: {
       display: 'flex',
@@ -30,7 +31,7 @@ const useStyles = makeStyles(
         position: 'absolute',
         height: 1,
         backgroundImage:
-          'linear-gradient(to right, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0) 0%)',
+          'linear-gradient(to right, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0) 0%)',
         backgroundPosition: 'bottom',
         backgroundSize: [[8, 1]],
         backgroundRepeat: 'repeat-x',

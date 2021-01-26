@@ -31,13 +31,16 @@ const theme = createMuiTheme({
       main: '#73FFCC',
     },
     background: {
+      light: '#1A2D3C',
       main: '#15232E',
-      dark: '#111c25',
-      default: '#15232E',
-      paper: '#1A2D3C',
+      dark: '#121e27',
+
+      default: '#15232E', // same as main
+      paper: '#1A2D3C', // same as light
     },
     text: {
       primary: 'rgba(255, 255, 255, 0.8)',
+      secondary: 'rgba(255, 255, 255, 0.6)',
     },
   },
 });

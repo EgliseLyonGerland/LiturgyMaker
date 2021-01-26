@@ -1,31 +1,13 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+import { Box } from '@material-ui/core';
 import { blockTypes } from '../config/global';
-
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      position: 'relative',
-      padding: theme.spacing(8),
-    },
-    title: {
-      marginBottom: theme.spacing(2),
-    },
-    more: {
-      position: 'absolute',
-      top: theme.spacing(2),
-      right: theme.spacing(2),
-    },
-  }),
-  { name: 'FormBlock' },
-);
 
 const FormBlock = ({
   block,
@@ -33,7 +15,6 @@ const FormBlock = ({
   onFillFromLastWeekClicked,
   children,
 }) => {
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
   function handleToggle(event) {
@@ -50,25 +31,34 @@ const FormBlock = ({
   }
 
   return (
-    <div className={classes.root}>
-      <Typography className={classes.title} variant="h6">
-        {blockTypes[block.type]}
-        {' \u00A0'}
-        <Typography component="span" variant="subtitle1">
-          {block.title}
+    <Box bgcolor="background.paper" borderRadius={16}>
+      <Box
+        height={72}
+        pl={5}
+        pr={3}
+        display="flex"
+        alignItems="center"
+        bgcolor="background.dark"
+        borderRadius="16px 16px 0 0"
+      >
+        <Typography variant="h6">
+          {blockTypes[block.type]}
+          {' \u00A0'}
+          <Typography component="span" variant="subtitle1">
+            {block.title}
+          </Typography>
         </Typography>
-      </Typography>
 
-      <Fragment>
-        <IconButton
-          className={classes.more}
-          aria-label="more"
-          aria-controls="long-menu"
-          aria-haspopup="true"
-          onClick={handleToggle}
-        >
-          <MoreVertIcon />
-        </IconButton>
+        <Box ml="auto">
+          <IconButton
+            aria-label="more"
+            aria-controls="long-menu"
+            aria-haspopup="true"
+            onClick={handleToggle}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        </Box>
 
         <Menu
           id="long-menu"
@@ -84,10 +74,11 @@ const FormBlock = ({
             Remplir à partir de la semaine précédente
           </MenuItem>
         </Menu>
-      </Fragment>
-
-      {children}
-    </div>
+      </Box>
+      <Box p={5} px={8}>
+        {children}
+      </Box>
+    </Box>
   );
 };
 

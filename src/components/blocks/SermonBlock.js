@@ -12,7 +12,6 @@ const useStyles = makeStyles(
     item: {},
     subtitle: {
       fontSize: 16,
-      color: '#777',
       fontWeight: 900,
       margin: theme.spacing(4, 0, 2),
     },
@@ -75,7 +74,11 @@ const SermonBlock = ({ block, onChange, onFocus, onBlur }) => {
         fullWidth
       />
 
-      <Typography className={classes.subtitle} variant="h6">
+      <Typography
+        className={classes.subtitle}
+        color="textSecondary"
+        variant="h6"
+      >
         Passage(s) biblique(s)
       </Typography>
 

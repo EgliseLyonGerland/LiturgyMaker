@@ -1,8 +1,6 @@
-import React, { useRef, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import upperFirst from 'lodash/upperFirst';
-import classnames from 'classnames';
 
 import Block from './FormBlock';
 import Divider from './Divider';
@@ -14,16 +12,6 @@ import SectionBlock from './blocks/SectionBlock';
 import RecitationBlock from './blocks/RecitationBlock';
 import OpenDoorsBlock from './blocks/OpenDoorsBlock';
 import { createDefaultBlock } from '../utils/defaults';
-
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      position: 'relative',
-      padding: theme.spacing(8, 0),
-    },
-  }),
-  { name: 'Form' },
-);
 
 const components = {
   AnnouncementsBlock,
@@ -44,9 +32,6 @@ const Form = ({
   onRemoveBlock,
   onFillFromLastWeek,
 }) => {
-  const classes = useStyles();
-  const container = useRef(null);
-
   const handleFocus = (block, path, index) => {
     onFocus(index, path);
   };
@@ -89,20 +74,15 @@ const Form = ({
   );
 
   return (
-    <div className={classes.root}>
-      <div ref={container}>
-        {renderDivider(0)}
+    <div>
+      {renderDivider(0)}
 
-        {blocks.map((block, index) => (
-          <Fragment key={block.id}>
-            <div className={classnames(classes.block)}>
-              {renderBlock(block, index)}
-            </div>
-
-            {renderDivider(index + 1)}
-          </Fragment>
-        ))}
-      </div>
+      {blocks.map((block, index) => (
+        <Fragment key={block.id}>
+          {renderBlock(block, index)}
+          {renderDivider(index + 1)}
+        </Fragment>
+      ))}
     </div>
   );
 };

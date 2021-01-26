@@ -10,7 +10,6 @@ const useStyles = makeStyles(
     item: {},
     subtitle: {
       fontSize: 16,
-      color: '#777',
       fontWeight: 900,
       margin: theme.spacing(4, 0, 2),
     },
@@ -55,7 +54,11 @@ const OpenDoorsBlock = ({ block, onChange, onFocus, onBlur }) => {
         fullWidth
         multiline
       />
-      <Typography className={classes.subtitle} variant="h6">
+      <Typography
+        className={classes.subtitle}
+        color="textSecondary"
+        variant="h6"
+      >
         Sujets de prière
       </Typography>
 
