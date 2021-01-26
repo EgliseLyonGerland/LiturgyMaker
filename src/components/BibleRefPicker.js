@@ -13,7 +13,7 @@ const useStyles = makeStyles(
       background: 'transparent',
       border: 0,
       padding: 0,
-      color: theme.palette.primary.main,
+      color: theme.palette.text.secondary,
       cursor: 'pointer',
       outline: 0,
     },

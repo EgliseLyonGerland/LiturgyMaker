@@ -22,28 +22,25 @@ import debounce from 'lodash/debounce';
 import classnames from 'classnames';
 import Form from '../components/Form';
 import Code from '../components/Code';
+import Header from '../components/Header';
 // import Preview from '../components/Preview';
 import generateCode from '../utils/generateCode';
 import * as liturgiesActions from '../redux/actions/liturgies';
 import * as songsActions from '../redux/actions/songs';
 import * as recitationsActions from '../redux/actions/recitations';
 
-const headerHeight = 176;
-const headerHeightMobile = 104;
 const gutters = 3;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: '50vh',
-  },
-  header: {
-    background: 'linear-gradient(344deg, #0077d1 0%, #0091ff 100%)',
-    height: headerHeight,
+    paddingTop: 100,
   },
   wrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    margin: theme.spacing(0, gutters),
+    width: 800 + gutters * 2,
+    maxWidth: '100%',
+    padding: theme.spacing(0, gutters),
+    margin: '0 auto',
   },
   preview: {
     margin: theme.spacing(gutters * 2, gutters),
@@ -56,19 +53,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   content: {
-    width: 800,
-    maxWidth: '100%',
-    margin: theme.spacing(0, gutters),
     display: 'grid',
     minHeight: '80vh',
     gridTemplateRows: 'auto 1fr',
-    marginTop: -theme.spacing(8),
+    // marginTop: -theme.spacing(8),
   },
   navBar: {
     display: 'flex',
     height: theme.spacing(8),
     padding: theme.spacing(0, 2),
-    background: '#EEE',
     alignItems: 'center',
 
     '&:before': {
@@ -115,14 +108,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   [theme.breakpoints.down('md')]: {
-    header: {
-      height: headerHeightMobile,
-    },
     preview: {
       display: 'none',
-    },
-    wrapper: {
-      margin: 0,
     },
     navBar: {
       padding: 0,
@@ -399,11 +386,11 @@ const Main = ({
 
   return (
     <div className={classes.root}>
-      <div className={classes.header}></div>
+      <Header />
       <div className={classes.wrapper}>
-        <Paper className={classes.content} elevation={0} square>
-          {renderNavBar()}
+        {renderNavBar()}
 
+        <Paper className={classes.content} elevation={0} square>
           {loading ? (
             <div className={classes.spinner}>
               <BeatLoader color="#DDD" />

@@ -30,7 +30,7 @@ const useStyles = makeStyles(
         position: 'absolute',
         height: 1,
         backgroundImage:
-          'linear-gradient(to right, #ccc 40%, rgba(255,255,255,0) 0%)',
+          'linear-gradient(to right, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0) 0%)',
         backgroundPosition: 'bottom',
         backgroundSize: [[8, 1]],
         backgroundRepeat: 'repeat-x',
@@ -57,7 +57,7 @@ const useStyles = makeStyles(
       width: 32,
       height: 32,
       borderRadius: 16,
-      background: '#eee',
+      background: 'rgba(255,255,255,0.1)',
     },
   }),
   { name: 'Divider' },
