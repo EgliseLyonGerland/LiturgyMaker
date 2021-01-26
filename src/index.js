@@ -5,6 +5,7 @@ import withFirebaseAuth from 'react-with-firebase-auth';
 import { Provider } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { BrowserRouter } from 'react-router-dom';
 import 'firebase/auth';
 import 'firebase/firestore';
 
@@ -39,20 +40,22 @@ const theme = createMuiTheme({
       paper: '#1A2D3C', // same as light
     },
     text: {
-      primary: 'rgba(255, 255, 255, 0.8)',
-      secondary: 'rgba(255, 255, 255, 0.6)',
+      primary: 'rgba(255, 255, 255, 0.6)',
+      secondary: 'rgba(255, 255, 255, 0.4)',
     },
   },
 });
 
 ReactDOM.render(
   <Provider store={store}>
-    <FirebaseContext.Provider value={firebaseApp}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <AppWithAuth />
-      </ThemeProvider>
-    </FirebaseContext.Provider>
+    <BrowserRouter>
+      <FirebaseContext.Provider value={firebaseApp}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <AppWithAuth />
+        </ThemeProvider>
+      </FirebaseContext.Provider>
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root'),
 );

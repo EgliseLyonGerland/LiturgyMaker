@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { Box, Link } from '@material-ui/core';
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -20,18 +21,39 @@ const useStyles = makeStyles(
   { name: 'Header' },
 );
 
-const Header = () => {
+const Header = ({ links, onClick }) => {
   const classes = useStyles();
+
+  const handleClick = (event, link) => {
+    event.preventDefault();
+    onClick(link);
+  };
 
   return (
     <div className={classes.root}>
-      <Box fontWeight="bold" fontSize="1.1em">
-        Gestion des présidences
+      <Box fontWeight="bold" fontSize="1.1em" mr={4}>
+        LiturgyMaker
       </Box>
+
+      {links.map((link, index) => (
+        <Box key={index} mx={1}>
+          <Link href="#" onClick={(event) => handleClick(event, link)}>
+            {link.title}
+          </Link>
+        </Box>
+      ))}
     </div>
   );
 };
 
-Header.propTypes = {};
+Header.propTypes = {
+  links: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+    }),
+  ),
+  onClick: PropTypes.func,
+};
 
 export default Header;
