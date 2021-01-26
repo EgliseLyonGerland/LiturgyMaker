@@ -1,11 +1,9 @@
-const Configstore = require('configstore');
-
-const config = new Configstore('liturgy-maker');
+const config = require('../utils/config');
 
 module.exports.command = `logout`;
 module.exports.desc = 'Logout';
 
-module.exports.handler = async function handler({ env }) {
-  config.delete(`${env}.user`);
+module.exports.handler = async function handler() {
+  config.delete('user');
   console.log('Logout successfull');
 };
