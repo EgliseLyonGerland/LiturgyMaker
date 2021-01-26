@@ -9,11 +9,9 @@ import find from 'lodash/find';
 import get from 'lodash/get';
 import Sortable from '../Sortable';
 
-const mapStateToProps = ({ songs }) => {
-  return {
-    songs,
-  };
-};
+const mapStateToProps = ({ songs }) => ({
+  songs,
+});
 
 const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
   const items = block.data;

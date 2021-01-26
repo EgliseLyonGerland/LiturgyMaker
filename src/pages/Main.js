@@ -143,9 +143,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getNextSundayDate = (from) => {
-  return endOfWeek(from, { weekStartsOn: 1 });
-};
+const getNextSundayDate = (from) => endOfWeek(from, { weekStartsOn: 1 });
 
 const formatDate = (date) => {
   if (date.getDate() === 1) {
@@ -155,13 +153,11 @@ const formatDate = (date) => {
   return format(date, 'EEEE d MMMM', { locale });
 };
 
-const mapStateToProps = ({ liturgies, songs, recitations }) => {
-  return {
-    liturgies,
-    songs,
-    recitations,
-  };
-};
+const mapStateToProps = ({ liturgies, songs, recitations }) => ({
+  liturgies,
+  songs,
+  recitations,
+});
 
 const mapDispatchToProps = {
   ...liturgiesActions,
@@ -325,51 +321,49 @@ const Main = ({
     return <div />;
   };
 
-  const renderNavBar = () => {
-    return (
-      <div className={classes.navBar}>
-        <div className={classes.sundays}>
-          <IconButton
-            aria-label="delete"
-            className={classes.margin}
-            color="inherit"
-            onClick={() => {
-              handleChangeDate(subDays(currentDate, 7));
-            }}
-          >
-            <ArrowLeftIcon fontSize="inherit" />
-          </IconButton>
-          <Typography
-            className={classes.sundaysName}
-            variant="inherit"
-            color="textSecondary"
-          >
-            {capitalize(formatDate(currentDate))}
-          </Typography>
-          <IconButton
-            aria-label="delete"
-            className={classes.margin}
-            color="inherit"
-            onClick={() => {
-              handleChangeDate(addDays(currentDate, 7));
-            }}
-          >
-            <ArrowRightIcon fontSize="inherit" />
-          </IconButton>
-        </div>
-
-        <div className={classes.actions}>
-          <IconButton
-            onClick={() => {
-              setDisplayCode(!displayCode);
-            }}
-          >
-            {!displayCode ? <CodeIcon /> : <CloseIcon />}
-          </IconButton>
-        </div>
+  const renderNavBar = () => (
+    <div className={classes.navBar}>
+      <div className={classes.sundays}>
+        <IconButton
+          aria-label="delete"
+          className={classes.margin}
+          color="inherit"
+          onClick={() => {
+            handleChangeDate(subDays(currentDate, 7));
+          }}
+        >
+          <ArrowLeftIcon fontSize="inherit" />
+        </IconButton>
+        <Typography
+          className={classes.sundaysName}
+          variant="inherit"
+          color="textSecondary"
+        >
+          {capitalize(formatDate(currentDate))}
+        </Typography>
+        <IconButton
+          aria-label="delete"
+          className={classes.margin}
+          color="inherit"
+          onClick={() => {
+            handleChangeDate(addDays(currentDate, 7));
+          }}
+        >
+          <ArrowRightIcon fontSize="inherit" />
+        </IconButton>
       </div>
-    );
-  };
+
+      <div className={classes.actions}>
+        <IconButton
+          onClick={() => {
+            setDisplayCode(!displayCode);
+          }}
+        >
+          {!displayCode ? <CodeIcon /> : <CloseIcon />}
+        </IconButton>
+      </div>
+    </div>
+  );
 
   const renderContent = () => {
     if (displayCode) {

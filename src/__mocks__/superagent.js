@@ -1,9 +1,7 @@
 let mockDelay;
 let mockError;
 let mockResponse = {
-  status: () => {
-    return 200;
-  },
+  status: () => 200,
   ok: true,
   get: jest.fn(),
   toError: jest.fn(),

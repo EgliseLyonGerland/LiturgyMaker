@@ -20,17 +20,19 @@ function merge(fields, values) {
 }
 
 function stringifyContent({ book = [] } = {}) {
-  return book.reduce((acc, curr) => {
-    return (
-      acc +
-      Object.values(curr.chapter)
-        .map(({ verse }) => verse.trim())
-        .join(' ')
-        .split('¶')
-        .map((text) => text.trim())
-        .join(' ')
-    ).trim();
-  }, '');
+  return book.reduce(
+    (acc, curr) =>
+      (
+        acc +
+        Object.values(curr.chapter)
+          .map(({ verse }) => verse.trim())
+          .join(' ')
+          .split('¶')
+          .map((text) => text.trim())
+          .join(' ')
+      ).trim(),
+    '',
+  );
 }
 
 export function parse(ref) {

@@ -6,11 +6,9 @@ import TextField from '@material-ui/core/TextField';
 import find from 'lodash/find';
 import get from 'lodash/get';
 
-const mapStateToProps = ({ recitations }) => {
-  return {
-    recitations,
-  };
-};
+const mapStateToProps = ({ recitations }) => ({
+  recitations,
+});
 
 const RecitationBlock = ({ block, recitations, onChange, onFocus, onBlur }) => {
   const { data } = block;

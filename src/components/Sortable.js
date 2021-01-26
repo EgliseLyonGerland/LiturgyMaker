@@ -35,9 +35,9 @@ const useStyles = makeStyles(
   { name: 'Sortable' },
 );
 
-const SortableContainer = sortableContainer(({ children }) => {
-  return <div>{children}</div>;
-});
+const SortableContainer = sortableContainer(({ children }) => (
+  <div>{children}</div>
+));
 
 const DragHandle = sortableHandle(({ classes }) => (
   <DragHandleIcon color="disabled" className={classes.handle} />

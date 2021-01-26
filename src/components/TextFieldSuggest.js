@@ -69,9 +69,7 @@ const TextFieldSuggest = ({
         });
   };
 
-  const getSuggestionValue = (suggestion) => {
-    return suggestion[field];
-  };
+  const getSuggestionValue = (suggestion) => suggestion[field];
 
   const handleSuggestionsFetchRequested = (options) => {
     setSuggestions(getSuggestions(options.value));
@@ -91,32 +89,30 @@ const TextFieldSuggest = ({
     onFocus: onFocus2,
     onBlur: onBlur2,
     ...other
-  }) => {
-    return (
-      <TextField
-        fullWidth
-        InputProps={{
-          inputRef: (node) => {
-            ref(node);
-            inputRef(node);
-          },
-          classes: {
-            input: classes.input,
-          },
-        }}
-        onFocus={(event, newValue) => {
-          onFocus();
-          onFocus2(event, newValue);
-        }}
-        onBlur={(event) => {
-          onBlur();
-          onBlur2(event);
-        }}
-        {...other}
-        {...rest}
-      />
-    );
-  };
+  }) => (
+    <TextField
+      fullWidth
+      InputProps={{
+        inputRef: (node) => {
+          ref(node);
+          inputRef(node);
+        },
+        classes: {
+          input: classes.input,
+        },
+      }}
+      onFocus={(event, newValue) => {
+        onFocus();
+        onFocus2(event, newValue);
+      }}
+      onBlur={(event) => {
+        onBlur();
+        onBlur2(event);
+      }}
+      {...other}
+      {...rest}
+    />
+  );
 
   const renderSuggestion = (suggestion, { query, isHighlighted }) => {
     const matches = match(suggestion[field], query);

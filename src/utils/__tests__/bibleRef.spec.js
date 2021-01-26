@@ -17,7 +17,7 @@ test('getPassage() with "1 Pierre 1"', async () => {
 
   expect(superagent.query).toHaveBeenCalledWith({
     passage: '1 Pe 1',
-    version: 'darby',
+    version: 'ls1910',
   });
 });
 
@@ -26,7 +26,7 @@ test('getPassage() with "1 Pierre 1-2"', async () => {
 
   expect(superagent.query).toHaveBeenCalledWith({
     passage: '1 Pe 1:1-999;2:1-999',
-    version: 'darby',
+    version: 'ls1910',
   });
 });
 
@@ -35,7 +35,7 @@ test('getPassage() with "1 Pierre 1-4"', async () => {
 
   expect(superagent.query).toHaveBeenCalledWith({
     passage: '1 Pe 1:1-999;2:1-999;3:1-999;4:1-999',
-    version: 'darby',
+    version: 'ls1910',
   });
 });
 
@@ -44,7 +44,7 @@ test('getPassage() with "1 Pierre 1.1"', async () => {
 
   expect(superagent.query).toHaveBeenCalledWith({
     passage: '1 Pe 1:1',
-    version: 'darby',
+    version: 'ls1910',
   });
 });
 
@@ -53,7 +53,7 @@ test('getPassage() with "1 Pierre 1.1-4"', async () => {
 
   expect(superagent.query).toHaveBeenCalledWith({
     passage: '1 Pe 1:1-4',
-    version: 'darby',
+    version: 'ls1910',
   });
 });
 
@@ -62,7 +62,7 @@ test('getPassage() with "1 Pierre 1.1-2.2"', async () => {
 
   expect(superagent.query).toHaveBeenCalledWith({
     passage: '1 Pe 1:1-999;2:1-2',
-    version: 'darby',
+    version: 'ls1910',
   });
 });
 
@@ -71,7 +71,7 @@ test('getPassage() with "1 Pierre 1.1-4.4"', async () => {
 
   expect(superagent.query).toHaveBeenCalledWith({
     passage: '1 Pe 1:1-999;2:1-999;3:1-999;4:1-4',
-    version: 'darby',
+    version: 'ls1910',
   });
 });
 

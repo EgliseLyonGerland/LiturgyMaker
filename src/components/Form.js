@@ -142,15 +142,13 @@ const Form = ({
     );
   };
 
-  const renderDivider = (index) => {
-    return (
-      <Divider
-        onBlockSelected={(type) => {
-          onAddBlock(index, createDefaultBlock(type));
-        }}
-      />
-    );
-  };
+  const renderDivider = (index) => (
+    <Divider
+      onBlockSelected={(type) => {
+        onAddBlock(index, createDefaultBlock(type));
+      }}
+    />
+  );
 
   return (
     <div className={classes.root}>

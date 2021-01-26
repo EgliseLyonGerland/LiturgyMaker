@@ -27,12 +27,10 @@ const useStyles = makeStyles(
   { name: 'Preview' },
 );
 
-const mapStateToProps = ({ songs, recitations }) => {
-  return {
-    songs,
-    recitations,
-  };
-};
+const mapStateToProps = ({ songs, recitations }) => ({
+  songs,
+  recitations,
+});
 
 const Preview = ({ block, songs, recitations, currentFieldPath }) => {
   const classes = useStyles();
