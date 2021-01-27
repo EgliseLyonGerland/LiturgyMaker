@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Box } from '@material-ui/core';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import Header from '../components/Header';
-import LiturgiesPage from './Liturgies';
-import SongsPage from './Songs';
+
+const LiturgiesPage = lazy(() => import('./Liturgies'));
+const SongsPage = lazy(() => import('./Songs'));
 
 const Main = () => {
   const history = useHistory();
@@ -19,14 +20,16 @@ const Main = () => {
       />
 
       <Box pt={12}>
-        <Switch>
-          <Route path="/" exact>
-            <LiturgiesPage />
-          </Route>
-          <Route path="/songs" exact>
-            <SongsPage />
-          </Route>
-        </Switch>
+        <Suspense fallback={<div />}>
+          <Switch>
+            <Route path="/" exact>
+              <LiturgiesPage />
+            </Route>
+            <Route path="/songs" exact>
+              <SongsPage />
+            </Route>
+          </Switch>
+        </Suspense>
       </Box>
     </div>
   );
