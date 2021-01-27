@@ -4,12 +4,20 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Checkbox,
   Container,
+  FormControlLabel,
+  FormGroup,
+  InputBase,
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { ExpandMore } from '@material-ui/icons';
+import { CheckBox, CheckBoxOutlineBlank, ExpandMore } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
+import MiniSearch from 'minisearch';
+import sortBy from 'lodash/sortBy';
+import find from 'lodash/find';
+import deburr from 'lodash/deburr';
 import { fetchSongs } from '../redux/actions/songs';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,17 +58,70 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function escape(str) {
+  return deburr(str).toLocaleLowerCase();
+}
+
+function createSearch(songsState) {
+  const search = new MiniSearch({
+    fields: ['title', 'authors', 'lyrics'],
+    processTerm: escape,
+    searchOptions: {
+      processTerm: escape,
+    },
+  });
+
+  search.addAll(
+    songsState.data.map(({ id, title, authors, lyrics }) => ({
+      id,
+      title,
+      authors,
+      lyrics: lyrics.map((part) => part.text).join(' '),
+    })),
+  );
+
+  return search;
+}
+
 const Songs = () => {
-  const songs = useSelector((state) => state.songs);
+  const songsState = useSelector((state) => state.songs);
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
+  const [query, setQuery] = useState('');
+  const [searchInLyrics, setSearchInLyrics] = useState(true);
+  const [search, setSearch] = useState(
+    createSearch(songsState, searchInLyrics),
+  );
   const classes = useStyles();
 
+  const handleSearchChange = (event) => {
+    setQuery(event.target.value);
+  };
+
   useEffect(() => {
-    if (!songs.loaded) {
+    if (!songsState.loaded) {
       dispatch(fetchSongs());
     }
   }, []);
+
+  useEffect(() => {
+    if (songsState.loaded) {
+      setSearch(createSearch(songsState, searchInLyrics));
+    }
+  }, [songsState]);
+
+  let { data: songs } = songsState;
+
+  if (query) {
+    songs = search
+      .search(query, {
+        prefix: true,
+        fields: ['title', 'authors'].concat(searchInLyrics ? ['lyrics'] : []),
+      })
+      .map(({ id }) => find(songs, ['id', id]));
+  }
+
+  songs = sortBy(songs, 'title');
 
   const renderSongDetails = (song) => {
     const details = [];
@@ -86,72 +147,112 @@ const Songs = () => {
     );
   };
 
+  const renderToolbar = () => (
+    <Box mb={3} display="flex">
+      <Box
+        bgcolor="background.dark"
+        border="sold 1px rgba(255,255,255,0.1)"
+        borderRadius={4}
+        width={200}
+        mr={2}
+        px={2}
+        py={0.5}
+      >
+        <InputBase
+          placeholder="Recherche"
+          fullWidth
+          onChange={handleSearchChange}
+        />
+      </Box>
+      <FormGroup row>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={searchInLyrics}
+              icon={<CheckBoxOutlineBlank fontSize="small" />}
+              checkedIcon={<CheckBox fontSize="small" />}
+              onChange={() => setSearchInLyrics(!searchInLyrics)}
+            />
+          }
+          label="Rechercher dans les paroles"
+        />
+      </FormGroup>
+    </Box>
+  );
+
   return (
     <Container maxWidth="md">
-      {songs.data.map((song) => (
-        <Accordion
-          key={song.id}
-          expanded={expanded === song.id}
-          classes={{
-            root: classes.accordionRoot,
-            expanded: classes.accordionExpanded,
-          }}
-          onChange={(event, isExpanded) => {
-            setExpanded(isExpanded ? song.id : false);
-          }}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMore />}
-            classes={{
-              root: classes.accordionSummaryRoot,
-              content: classes.accordionSummaryContent,
-              expanded: classes.accordionSummaryExpanded,
-            }}
-          >
-            <div>
-              <b>{song.title}</b>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="span"
-              >
-                {song.number ? ` (${song.number})` : ''}
-              </Typography>
-              <Typography color="textSecondary" variant="body2">
-                {song.authors || <i>Aucun auteur</i>}
-              </Typography>
-            </div>
-          </AccordionSummary>
-          <AccordionDetails
-            classes={{
-              root: classes.accordionDetailsRoot,
-            }}
-          >
-            {renderSongDetails(song)}
+      {renderToolbar()}
 
-            <Box mt={2} style={{ columnCount: 2, columnGap: 32 }}>
-              {song.lyrics.length ? (
-                song.lyrics.map(({ text, type }, index) => (
-                  <Box
-                    key={index}
-                    whiteSpace="pre"
-                    fontStyle={type === 'chorus' ? 'italic' : 'normal'}
-                    mb={2}
-                    style={{
-                      breakInside: 'avoid',
-                      pageBreakInside: 'avoid',
-                    }}
-                  >
-                    <Typography>{text}</Typography>
-                  </Box>
-                ))
-              ) : (
-                <i>Aucune parole</i>
-              )}
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+      <div>
+        {songs.map((song) => (
+          <Accordion
+            key={song.id}
+            elevation={0}
+            expanded={expanded === song.id}
+            classes={{
+              root: classes.accordionRoot,
+              expanded: classes.accordionExpanded,
+            }}
+            onChange={(event, isExpanded) => {
+              setExpanded(isExpanded ? song.id : false);
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              classes={{
+                root: classes.accordionSummaryRoot,
+                content: classes.accordionSummaryContent,
+                expanded: classes.accordionSummaryExpanded,
+              }}
+            >
+              <div>
+                <Typography component="span">
+                  <b>{song.title}</b>
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  component="span"
+                >
+                  {song.number ? ` (${song.number})` : ''}
+                </Typography>
+                <Typography color="textSecondary" variant="body2">
+                  {song.authors || <i>Aucun auteur</i>}
+                </Typography>
+              </div>
+            </AccordionSummary>
+            <AccordionDetails
+              classes={{
+                root: classes.accordionDetailsRoot,
+              }}
+            >
+              {renderSongDetails(song)}
+
+              <Box mt={2} style={{ columnCount: 2, columnGap: 32 }}>
+                {song.lyrics.length ? (
+                  song.lyrics.map(({ text, type }, index) => (
+                    <Box
+                      key={index}
+                      whiteSpace="pre"
+                      fontStyle={type === 'chorus' ? 'italic' : 'normal'}
+                      mb={2}
+                      style={{
+                        breakInside: 'avoid',
+                        pageBreakInside: 'avoid',
+                      }}
+                    >
+                      <Typography>{text}</Typography>
+                    </Box>
+                  ))
+                ) : (
+                  <i>Aucune parole</i>
+                )}
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+        ))}
+      </div>
     </Container>
   );
 };
