@@ -18,6 +18,7 @@ import MiniSearch from 'minisearch';
 import sortBy from 'lodash/sortBy';
 import find from 'lodash/find';
 import deburr from 'lodash/deburr';
+import debounce from 'lodash/debounce';
 import { fetchSongs } from '../redux/actions/songs';
 
 const useStyles = makeStyles((theme) => ({
@@ -94,9 +95,9 @@ const Songs = () => {
   );
   const classes = useStyles();
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = debounce((event) => {
     setQuery(event.target.value);
-  };
+  }, 200);
 
   useEffect(() => {
     if (!songsState.loaded) {
