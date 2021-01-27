@@ -19,7 +19,7 @@ const Main = () => {
         onClick={(link) => history.push(link.path)}
       />
 
-      <Box pt={12}>
+      <Box pt={12} pb={5}>
         <Suspense fallback={<div />}>
           <Switch>
             <Route path="/" exact>
