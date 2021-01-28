@@ -1,20 +1,11 @@
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { find, isString } from 'lodash';
 import { useParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
-import {
-  Box,
-  Checkbox,
-  Container,
-  FormControlLabel,
-  FormGroup,
-  InputBase,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import { Box, Container, TextField, Typography } from '@material-ui/core';
 import { Form, Field } from 'react-final-form';
-import Sortable from '../components/Sortable';
+import LyricsField from '../components/LyricsField';
 import { fetchSongs } from '../redux/slices/songs';
 
 const Block = ({ header, children, ...props }) => {
@@ -40,80 +31,6 @@ const Block = ({ header, children, ...props }) => {
         {children}
       </Box>
     </Box>
-  );
-};
-
-const LyricsField = ({ value: defaultValue, onChange, onFocus, onBlur }) => {
-  const handleChange = (index, text, type) => {
-    const splittedText = text.split('\n');
-
-    if (splittedText.length > 6) {
-      return;
-    }
-
-    const lastLine = splittedText.pop();
-    const formattedText = splittedText
-      .filter((line) => line.trim() !== '')
-      .concat([lastLine])
-      .join('\n');
-
-    const newValue = [...defaultValue];
-    newValue[index] = { text: formattedText, type };
-
-    onChange(newValue);
-  };
-
-  if (defaultValue.length === 0) {
-    defaultValue.push({ text: '', type: 'verse' });
-  }
-
-  return (
-    <Sortable
-      items={defaultValue}
-      onChange={onChange}
-      getDefaultItem={() => ({ text: '', type: 'verse' })}
-      gutters={5}
-      renderItem={({ text, type }, index) => (
-        <>
-          <Box
-            bgcolor="rgba(255,255,255,0.09)"
-            borderRadius={4}
-            px={3}
-            py={2}
-            mb={1}
-          >
-            <InputBase
-              value={text}
-              fullWidth
-              multiline
-              rows={6}
-              placeholder={'Lorem ipsum dolor sit amet...'}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              onChange={({ target: { value } }) => {
-                handleChange(index, value, type);
-              }}
-              style={{
-                lineHeight: 1.5,
-                fontSize: 18,
-              }}
-            />
-          </Box>
-
-          <FormGroup row>
-            <FormControlLabel
-              control={<Checkbox checked={type === 'chorus'} />}
-              label="Refrain"
-              onFocus={onFocus}
-              onBlur={onBlur}
-              onChange={({ target: { checked } }) => {
-                handleChange(index, text, checked ? 'chorus' : 'verse');
-              }}
-            />
-          </FormGroup>
-        </>
-      )}
-    />
   );
 };
 
@@ -235,7 +152,7 @@ const SongEdit = () => {
             <Block header="Paroles" mt={5}>
               <Field name="lyrics">
                 {({ input }) => (
-                  <LyricsField {...input} value={[...input.value]} />
+                  <LyricsField {...input} lyrics={[...input.value]} />
                 )}
               </Field>
             </Block>
