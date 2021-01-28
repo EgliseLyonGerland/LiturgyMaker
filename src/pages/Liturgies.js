@@ -25,7 +25,7 @@ import Code from '../components/Code';
 // import Preview from '../components/Preview';
 import generateCode from '../utils/generateCode';
 import * as liturgiesActions from '../redux/actions/liturgies';
-import * as songsActions from '../redux/actions/songs';
+import * as songsActions from '../redux/slices/songs';
 import * as recitationsActions from '../redux/actions/recitations';
 
 const gutters = 3;
@@ -167,7 +167,7 @@ const Liturgies = ({
   const liturgy = liturgies[id] || null;
   const loading =
     get(liturgy, 'loading', true) ||
-    get(songs, 'loading', true) ||
+    get(songs, 'status', 'loading') === 'loading' ||
     get(recitations, 'loading', true);
   const persisted = get(liturgy, 'persisted', true);
   const persisting = get(liturgy, 'persisting', false);
@@ -179,7 +179,7 @@ const Liturgies = ({
   );
 
   useEffect(() => {
-    if (!songs.loaded) {
+    if (songs.status === 'idle') {
       fetchSongs();
     }
 
@@ -193,7 +193,7 @@ const Liturgies = ({
     fetchRecitations,
     fetchSongs,
     recitations.loaded,
-    songs.loaded,
+    songs.status,
   ]);
 
   const handleBlocksChange = (blocks) => {
@@ -341,7 +341,7 @@ const Liturgies = ({
       return (
         <Code
           code={generateCode(liturgy.data, {
-            songs: songs.data,
+            songs: songs.entities,
             recitations: recitations.data,
           })}
         />

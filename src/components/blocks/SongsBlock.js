@@ -32,19 +32,19 @@ const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
   };
 
   const renderItem = (item, index) => {
-    const song = find(songs.data, ['id', item.id]);
+    const song = find(songs.entities, ['id', item.id]);
 
     return (
       <div>
         <Autocomplete
           defaultValue={song}
-          options={songs.data}
+          options={songs.entities}
           getOptionLabel={(option) => {
             if (option.number) {
               return `${option.title} (${option.number})`;
             }
 
-            const total = songs.data.filter(
+            const total = songs.entities.filter(
               ({ title }) => title === option.title,
             );
             if (total.length > 1) {

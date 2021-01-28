@@ -20,7 +20,7 @@ import sortBy from 'lodash/sortBy';
 import find from 'lodash/find';
 import deburr from 'lodash/deburr';
 import debounce from 'lodash/debounce';
-import { fetchSongs } from '../redux/actions/songs';
+import { fetchSongs } from '../redux/slices/songs';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -75,7 +75,7 @@ function createSearch(songsState) {
   });
 
   search.addAll(
-    songsState.data.map(({ id, title, authors, lyrics }) => ({
+    songsState.entities.map(({ id, title, authors, lyrics }) => ({
       id,
       title,
       authors,
@@ -102,18 +102,18 @@ const Songs = () => {
   }, 200);
 
   useEffect(() => {
-    if (!songsState.loaded) {
+    if (songsState.status === 'idle') {
       dispatch(fetchSongs());
     }
-  }, [dispatch, songsState.loaded]);
+  }, [dispatch, songsState.status]);
 
   useEffect(() => {
-    if (songsState.loaded) {
+    if (songsState.status === 'success') {
       setSearch(createSearch(songsState, searchInLyrics));
     }
   }, [searchInLyrics, songsState]);
 
-  let { data: songs } = songsState;
+  let { entities: songs } = songsState;
 
   if (query) {
     songs = search

@@ -1,6 +1,5 @@
 import { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSongs } from '../redux/actions/songs';
 import { find, isString } from 'lodash';
 import { useParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
@@ -16,6 +15,7 @@ import {
 } from '@material-ui/core';
 import { Form, Field } from 'react-final-form';
 import Sortable from '../components/Sortable';
+import { fetchSongs } from '../redux/slices/songs';
 
 const Block = ({ header, children, ...props }) => {
   return (
@@ -123,12 +123,12 @@ const SongEdit = () => {
   const params = useParams();
 
   useEffect(() => {
-    if (!songsState.loaded) {
+    if (songsState.status === 'idle') {
       dispatch(fetchSongs());
     }
-  }, [dispatch, songsState.loaded]);
+  }, [dispatch, songsState.status]);
 
-  const song = find(songsState.data, ['id', params.songId]);
+  const song = find(songsState.entities, ['id', params.songId]);
 
   if (!song) {
     return (
@@ -234,7 +234,9 @@ const SongEdit = () => {
 
             <Block header="Paroles" mt={5}>
               <Field name="lyrics">
-                {({ input }) => <LyricsField {...input} />}
+                {({ input }) => (
+                  <LyricsField {...input} value={[...input.value]} />
+                )}
               </Field>
             </Block>
           </Container>

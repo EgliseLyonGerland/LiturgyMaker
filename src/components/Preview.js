@@ -66,7 +66,7 @@ const Preview = ({ block, songs, recitations, currentFieldPath }) => {
     const args = [ctx, block, currentFieldPath];
 
     if (type === 'songs') {
-      args.push(songs.data);
+      args.push(songs.entities);
     }
 
     if (type === 'recitation') {
