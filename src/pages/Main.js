@@ -5,6 +5,7 @@ import Header from '../components/Header';
 
 const LiturgiesPage = lazy(() => import('./Liturgies'));
 const SongsPage = lazy(() => import('./Songs'));
+const SongEditPage = lazy(() => import('./SongEdit'));
 
 const Main = () => {
   const history = useHistory();
@@ -27,6 +28,9 @@ const Main = () => {
             </Route>
             <Route path="/songs" exact>
               <SongsPage />
+            </Route>
+            <Route path="/songs/:songId/edit" exact>
+              <SongEditPage />
             </Route>
           </Switch>
         </Suspense>

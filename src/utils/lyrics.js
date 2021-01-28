@@ -12,7 +12,33 @@ function resolveType(text) {
   return text.substr(1, text.length - 2);
 }
 
-module.exports.parse = function parse(content) {
+export function format(lyrics) {
+  const result = [];
+
+  lyrics.forEach(({ text, type }) => {
+    let currentIndex = 0;
+
+    text.split('\n').forEach((line, index) => {
+      const trimedLine = line.trim();
+
+      if (trimedLine === '') {
+        return;
+      }
+      if (currentIndex % 6 === 0) {
+        result.push({ text: '', type });
+        result[result.length - 1].text += trimedLine;
+      } else {
+        result[result.length - 1].text += `\n${trimedLine}`;
+      }
+
+      currentIndex += 1;
+    });
+  });
+
+  return result;
+}
+
+export function parse(content) {
   let currentType = 'verse';
 
   if (!content.trim()) {
@@ -68,8 +94,8 @@ module.exports.parse = function parse(content) {
 
       return acc;
     }, []);
-};
+}
 
-module.exports.stringify = function stringify(lyrics) {
+export function stringify(lyrics) {
   return lyrics.map((part) => `[${part.type}]\n${part.text}`).join('\n\n');
-};
+}

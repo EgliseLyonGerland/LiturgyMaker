@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
+  Button,
   Checkbox,
   Container,
   FormControlLabel,
@@ -12,7 +13,7 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { CheckBox, CheckBoxOutlineBlank, ExpandMore } from '@material-ui/icons';
+import { CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import MiniSearch from 'minisearch';
 import sortBy from 'lodash/sortBy';
@@ -20,6 +21,7 @@ import find from 'lodash/find';
 import deburr from 'lodash/deburr';
 import debounce from 'lodash/debounce';
 import { fetchSongs } from '../redux/actions/songs';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   accordionRoot: {
@@ -103,13 +105,13 @@ const Songs = () => {
     if (!songsState.loaded) {
       dispatch(fetchSongs());
     }
-  }, []);
+  }, [dispatch, songsState.loaded]);
 
   useEffect(() => {
     if (songsState.loaded) {
       setSearch(createSearch(songsState, searchInLyrics));
     }
-  }, [songsState]);
+  }, [searchInLyrics, songsState]);
 
   let { data: songs } = songsState;
 
@@ -200,14 +202,13 @@ const Songs = () => {
             }}
           >
             <AccordionSummary
-              expandIcon={<ExpandMore />}
               classes={{
                 root: classes.accordionSummaryRoot,
                 content: classes.accordionSummaryContent,
                 expanded: classes.accordionSummaryExpanded,
               }}
             >
-              <div>
+              <Box>
                 <Typography component="span">
                   <b>{song.title}</b>
                 </Typography>
@@ -221,7 +222,16 @@ const Songs = () => {
                 <Typography color="textSecondary" variant="body2">
                   {song.authors || <i>Aucun auteur</i>}
                 </Typography>
-              </div>
+              </Box>
+              <Box ml="auto" alignSelf="center">
+                <Button
+                  component={Link}
+                  to={`/songs/${song.id}/edit`}
+                  size="small"
+                >
+                  Édtier
+                </Button>
+              </Box>
             </AccordionSummary>
             <AccordionDetails
               classes={{

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Zoom from '@material-ui/core/Zoom';
+import Container from '@material-ui/core/Container';
 import Fab from '@material-ui/core/Fab';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
@@ -11,7 +13,6 @@ import SaveIcon from '@material-ui/icons/Save';
 import CheckIcon from '@material-ui/icons/Check';
 import CodeIcon from '@material-ui/icons/Code';
 import CloseIcon from '@material-ui/icons/Close';
-import Zoom from '@material-ui/core/Zoom';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { format, endOfWeek, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
@@ -32,12 +33,6 @@ const gutters = 3;
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: '50vh',
-  },
-  wrapper: {
-    width: 800 + gutters * 2,
-    maxWidth: '100%',
-    padding: theme.spacing(0, gutters),
-    margin: '0 auto',
   },
   preview: {
     margin: theme.spacing(gutters * 2, gutters),
@@ -367,13 +362,9 @@ const Liturgies = ({
     );
   };
 
-  // console.log(
-  //   get(liturgy, ['data', 'blocks', currentBlockIndex, 'data', 0, 'id']),
-  // );
-
   return (
     <div className={classes.root}>
-      <div className={classes.wrapper}>
+      <Container maxWidth="md">
         {renderNavBar()}
 
         {loading ? (
@@ -389,7 +380,7 @@ const Liturgies = ({
             currentFieldPath={focusedBlock[1]}
           />
         </div> */}
-      </div>
+      </Container>
       <Zoom key={zoomKey} in={true}>
         {renderSaveButton()}
       </Zoom>
