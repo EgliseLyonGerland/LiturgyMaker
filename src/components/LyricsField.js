@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import Sortable from './Sortable';
 
-function LyricsField({ lyrics, onChange, onFocus, onBlur }) {
+function LyricsField({ lyrics, disabled = false, onChange, onFocus, onBlur }) {
   const handleChange = (index, text, type) => {
     const splittedText = text.split('\n');
 
@@ -37,6 +37,7 @@ function LyricsField({ lyrics, onChange, onFocus, onBlur }) {
       onChange={onChange}
       getDefaultItem={() => ({ text: '', type: 'verse' })}
       gutters={5}
+      disabled={disabled}
       renderItem={({ text, type }, index) => (
         <>
           <Box
@@ -52,6 +53,7 @@ function LyricsField({ lyrics, onChange, onFocus, onBlur }) {
               multiline
               rows={6}
               placeholder={'Lorem ipsum dolor sit amet...'}
+              disabled={disabled}
               onFocus={onFocus}
               onBlur={onBlur}
               onChange={({ target }) => {
@@ -68,6 +70,7 @@ function LyricsField({ lyrics, onChange, onFocus, onBlur }) {
             <FormControlLabel
               control={<Checkbox checked={type === 'chorus'} />}
               label="Refrain"
+              disabled={disabled}
               onFocus={onFocus}
               onBlur={onBlur}
               onChange={({ target: { checked } }) => {

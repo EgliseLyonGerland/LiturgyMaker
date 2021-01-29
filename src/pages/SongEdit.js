@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { isString } from 'lodash';
 import { useParams } from 'react-router-dom';
@@ -6,6 +6,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { Box, Container, TextField, Typography } from '@material-ui/core';
 import { Form, Field } from 'react-final-form';
 import LyricsField from '../components/LyricsField';
+import SaveButton from '../components/SaveButton';
 import { fetchSongs, persistSong, selectSongById } from '../redux/slices/songs';
 
 const Block = ({ header, children, ...props }) => {
@@ -39,6 +40,20 @@ const SongEdit = () => {
   const songsStatus = useSelector((state) => state.songs.status);
   const song = useSelector((state) => selectSongById(state, params.songId));
   const dispatch = useDispatch();
+  const [disabled, setDisabled] = useState(false);
+  const [persisting, setPersisting] = useState(false);
+  const [persisted, setPersisted] = useState(false);
+
+  const submit = async (data) => {
+    setDisabled(true);
+    setPersisting(true);
+
+    await dispatch(persistSong(data));
+
+    setPersisted(true);
+    setPersisting(false);
+    setDisabled(false);
+  };
 
   useEffect(() => {
     if (songsStatus === 'idle') {
@@ -56,22 +71,23 @@ const SongEdit = () => {
 
   return (
     <Form
-      onSubmit={console.log}
+      onSubmit={submit}
       initialValues={song}
+      subscription={{ dirty: true }}
       validate={(values) => {
         const errors = {};
 
         if (!values.title) {
           errors.title = 'Requis';
         }
-        if (!Number.isInteger(parseInt(values.number, 10))) {
+        if (values.number && !Number.isInteger(parseInt(values.number, 10))) {
           errors.number = 'Doit être un nombre';
         }
 
         return errors;
       }}
-      render={({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
+      render={({ handleSubmit, dirty }) => (
+        <>
           <Container maxWidth="md">
             <Block header="Informations générales">
               <Field name="title">
@@ -80,10 +96,11 @@ const SongEdit = () => {
                     label="Titre"
                     variant="filled"
                     margin="dense"
-                    fullWidth
+                    disabled={disabled}
                     error={meta.error && meta.touched}
                     helperText={meta.touched && meta.error}
                     {...input}
+                    fullWidth
                   />
                 )}
               </Field>
@@ -94,6 +111,7 @@ const SongEdit = () => {
                     variant="filled"
                     margin="dense"
                     helperText="Séparés par une virgule (ex. Paul Baloche, Matt Redman)"
+                    disabled={disabled}
                     fullWidth
                     {...input}
                   />
@@ -106,6 +124,7 @@ const SongEdit = () => {
                     variant="filled"
                     margin="dense"
                     error={meta.error && meta.touched}
+                    disabled={disabled}
                     helperText={meta.touched && meta.error}
                     fullWidth
                     {...input}
@@ -119,6 +138,7 @@ const SongEdit = () => {
                     variant="filled"
                     margin="dense"
                     fullWidth
+                    disabled={disabled}
                     {...input}
                   />
                 )}
@@ -130,6 +150,7 @@ const SongEdit = () => {
                     variant="filled"
                     margin="dense"
                     fullWidth
+                    disabled={disabled}
                     {...input}
                   />
                 )}
@@ -142,6 +163,7 @@ const SongEdit = () => {
                     margin="dense"
                     helperText="Séparés par une virgule (ex. ARC 123, JEM 456)"
                     fullWidth
+                    disabled={disabled}
                     {...input}
                   />
                 )}
@@ -151,12 +173,29 @@ const SongEdit = () => {
             <Block header="Paroles" mt={5}>
               <Field name="lyrics">
                 {({ input }) => (
-                  <LyricsField {...input} lyrics={[...input.value]} />
+                  <LyricsField
+                    {...input}
+                    lyrics={[...input.value]}
+                    disabled={disabled}
+                  />
                 )}
               </Field>
             </Block>
           </Container>
-        </form>
+          <SaveButton
+            status={
+              persisting
+                ? 'running'
+                : persisted
+                ? 'done'
+                : dirty
+                ? 'ready'
+                : null
+            }
+            onClick={handleSubmit}
+            onHide={() => setPersisted(false)}
+          />
+        </>
       )}
     />
   );

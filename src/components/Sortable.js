@@ -57,6 +57,7 @@ const Sortable = ({
   onChange,
   getDefaultItem,
   gutters = 0,
+  disabled = false,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -79,6 +80,7 @@ const Sortable = ({
           key={index}
           index={index}
           classes={classes}
+          disabled={disabled}
           style={{
             marginBottom: isLast(index) ? 0 : theme.spacing(gutters),
           }}
@@ -88,7 +90,11 @@ const Sortable = ({
           <DeleteIcon
             className={classes.trash}
             color="disabled"
-            onClick={() => handleDelete(index)}
+            onClick={() => {
+              if (!disabled) {
+                handleDelete(index);
+              }
+            }}
           />
         </SortableItem>
       ))}
@@ -98,7 +104,7 @@ const Sortable = ({
         color="primary"
         size="small"
         className={classes.add}
-        disabled={maxItems === items.length}
+        disabled={disabled || maxItems === items.length}
         onClick={() => {
           items.push(getDefaultItem());
           onChange([...items]);
