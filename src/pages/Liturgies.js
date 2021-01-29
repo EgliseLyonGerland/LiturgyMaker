@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Zoom from '@material-ui/core/Zoom';
@@ -25,7 +25,7 @@ import Code from '../components/Code';
 // import Preview from '../components/Preview';
 import generateCode from '../utils/generateCode';
 import * as liturgiesActions from '../redux/actions/liturgies';
-import * as songsActions from '../redux/slices/songs';
+import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
 import * as recitationsActions from '../redux/actions/recitations';
 
 const gutters = 3;
@@ -132,15 +132,13 @@ const formatDate = (date) => {
   return format(date, 'EEEE d MMMM', { locale });
 };
 
-const mapStateToProps = ({ liturgies, songs, recitations }) => ({
+const mapStateToProps = ({ liturgies, recitations }) => ({
   liturgies,
-  songs,
   recitations,
 });
 
 const mapDispatchToProps = {
   ...liturgiesActions,
-  ...songsActions,
   ...recitationsActions,
 };
 
@@ -152,9 +150,7 @@ const Liturgies = ({
   addBlock,
   removeBlock,
   fillBlockFromPreviousWeek,
-  songs,
   recitations,
-  fetchSongs,
   fetchRecitations,
 }) => {
   const classes = useStyles();
@@ -162,12 +158,16 @@ const Liturgies = ({
   const [saved, setSaved] = useState(false);
   const [displayCode, setDisplayCode] = useState(false);
   const [focusedBlock, setFocusedBlock] = useState([-1]);
+  const songsStatus = useSelector((state) => state.songs.status);
+  const songs = useSelector(selectAllSongs);
+  const dispatch = useDispatch();
+
   const id = format(currentDate, 'yMMdd');
 
   const liturgy = liturgies[id] || null;
   const loading =
+    songsStatus === 'loading' ||
     get(liturgy, 'loading', true) ||
-    get(songs, 'status', 'loading') === 'loading' ||
     get(recitations, 'loading', true);
   const persisted = get(liturgy, 'persisted', true);
   const persisting = get(liturgy, 'persisting', false);
@@ -179,8 +179,8 @@ const Liturgies = ({
   );
 
   useEffect(() => {
-    if (songs.status === 'idle') {
-      fetchSongs();
+    if (songsStatus === 'idle') {
+      dispatch(fetchSongs());
     }
 
     if (!recitations.loaded) {
@@ -190,10 +190,10 @@ const Liturgies = ({
     debouncedFetchLiturgy.current(currentDate);
   }, [
     currentDate,
+    dispatch,
     fetchRecitations,
-    fetchSongs,
     recitations.loaded,
-    songs.status,
+    songsStatus,
   ]);
 
   const handleBlocksChange = (blocks) => {
@@ -341,7 +341,7 @@ const Liturgies = ({
       return (
         <Code
           code={generateCode(liturgy.data, {
-            songs: songs.entities,
+            songs,
             recitations: recitations.data,
           })}
         />

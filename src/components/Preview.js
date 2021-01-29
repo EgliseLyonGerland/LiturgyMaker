@@ -1,12 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import upperFirst from 'lodash/upperFirst';
 import forEach from 'lodash/forEach';
 import FontFaceObserver from 'fontfaceobserver';
 import * as preview from '../utils/preview';
 import { fontFamilies, documentWidth, documentHeight } from '../config/preview';
+import { selectAllSongs } from '../redux/slices/songs';
 
 const useStyles = makeStyles(
   {
@@ -27,15 +28,15 @@ const useStyles = makeStyles(
   { name: 'Preview' },
 );
 
-const mapStateToProps = ({ songs, recitations }) => ({
-  songs,
+const mapStateToProps = ({ recitations }) => ({
   recitations,
 });
 
-const Preview = ({ block, songs, recitations, currentFieldPath }) => {
+const Preview = ({ block, recitations, currentFieldPath }) => {
   const classes = useStyles();
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
+  const songs = useSelector(selectAllSongs);
 
   const clean = (ctx) => {
     ctx.clearRect(0, 0, documentWidth, documentHeight);
@@ -66,7 +67,7 @@ const Preview = ({ block, songs, recitations, currentFieldPath }) => {
     const args = [ctx, block, currentFieldPath];
 
     if (type === 'songs') {
-      args.push(songs.entities);
+      args.push(songs);
     }
 
     if (type === 'recitation') {
@@ -101,7 +102,6 @@ const Preview = ({ block, songs, recitations, currentFieldPath }) => {
 
 Preview.propTypes = {
   block: PropTypes.object,
-  songs: PropTypes.object,
   recitations: PropTypes.object,
   currentFieldPath: PropTypes.array,
 };

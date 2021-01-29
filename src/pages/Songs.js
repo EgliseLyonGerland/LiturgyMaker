@@ -20,7 +20,7 @@ import sortBy from 'lodash/sortBy';
 import find from 'lodash/find';
 import deburr from 'lodash/deburr';
 import debounce from 'lodash/debounce';
-import { fetchSongs } from '../redux/slices/songs';
+import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +65,7 @@ function escape(str) {
   return deburr(str).toLocaleLowerCase();
 }
 
-function createSearch(songsState) {
+function createSearch(songs) {
   const search = new MiniSearch({
     fields: ['title', 'authors', 'lyrics'],
     processTerm: escape,
@@ -75,7 +75,7 @@ function createSearch(songsState) {
   });
 
   search.addAll(
-    songsState.entities.map(({ id, title, authors, lyrics }) => ({
+    songs.map(({ id, title, authors, lyrics }) => ({
       id,
       title,
       authors,
@@ -87,14 +87,13 @@ function createSearch(songsState) {
 }
 
 const Songs = () => {
-  const songsState = useSelector((state) => state.songs);
+  const songsStatus = useSelector((state) => state.songs.status);
+  const songs = useSelector(selectAllSongs);
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
   const [query, setQuery] = useState('');
   const [searchInLyrics, setSearchInLyrics] = useState(true);
-  const [search, setSearch] = useState(
-    createSearch(songsState, searchInLyrics),
-  );
+  const [search, setSearch] = useState(createSearch(songs, searchInLyrics));
   const classes = useStyles();
 
   const handleSearchChange = debounce((event) => {
@@ -102,21 +101,21 @@ const Songs = () => {
   }, 200);
 
   useEffect(() => {
-    if (songsState.status === 'idle') {
+    if (songsStatus === 'idle') {
       dispatch(fetchSongs());
     }
-  }, [dispatch, songsState.status]);
+  }, [dispatch, songsStatus]);
 
   useEffect(() => {
-    if (songsState.status === 'success') {
-      setSearch(createSearch(songsState, searchInLyrics));
+    if (songsStatus === 'success') {
+      setSearch(createSearch(songs, searchInLyrics));
     }
-  }, [searchInLyrics, songsState]);
+  }, [searchInLyrics, songs, songsStatus]);
 
-  let { entities: songs } = songsState;
+  let filteredSongs = songs;
 
   if (query) {
-    songs = search
+    filteredSongs = search
       .search(query, {
         prefix: true,
         fields: ['title', 'authors'].concat(searchInLyrics ? ['lyrics'] : []),
@@ -124,7 +123,7 @@ const Songs = () => {
       .map(({ id }) => find(songs, ['id', id]));
   }
 
-  songs = sortBy(songs, 'title');
+  filteredSongs = sortBy(songs, 'title');
 
   const renderSongDetails = (song) => {
     const details = [];
@@ -188,7 +187,7 @@ const Songs = () => {
       {renderToolbar()}
 
       <div>
-        {songs.map((song) => (
+        {filteredSongs.map((song) => (
           <Accordion
             key={song.id}
             elevation={0}

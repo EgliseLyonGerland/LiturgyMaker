@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -8,12 +8,10 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import find from 'lodash/find';
 import get from 'lodash/get';
 import Sortable from '../Sortable';
+import { selectAllSongs } from '../../redux/slices/songs';
 
-const mapStateToProps = ({ songs }) => ({
-  songs,
-});
-
-const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
+const SongsBlock = ({ block, onChange, onFocus, onBlur }) => {
+  const songs = useSelector(selectAllSongs);
   const items = block.data;
 
   const getDefaultItem = () => ({
@@ -32,21 +30,19 @@ const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
   };
 
   const renderItem = (item, index) => {
-    const song = find(songs.entities, ['id', item.id]);
+    const song = find(songs, ['id', item.id]);
 
     return (
       <div>
         <Autocomplete
           defaultValue={song}
-          options={songs.entities}
+          options={songs}
           getOptionLabel={(option) => {
             if (option.number) {
               return `${option.title} (${option.number})`;
             }
 
-            const total = songs.entities.filter(
-              ({ title }) => title === option.title,
-            );
+            const total = songs.filter(({ title }) => title === option.title);
             if (total.length > 1) {
               return `${option.title} (${option.authors})`;
             }
@@ -114,10 +110,9 @@ const SongsBlock = ({ block, songs, onChange, onFocus, onBlur }) => {
 
 SongsBlock.propTypes = {
   block: PropTypes.object,
-  songs: PropTypes.object,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
 };
 
-export default connect(mapStateToProps)(SongsBlock);
+export default SongsBlock;

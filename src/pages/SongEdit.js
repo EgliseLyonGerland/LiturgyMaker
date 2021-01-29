@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { find, isString } from 'lodash';
+import { isString } from 'lodash';
 import { useParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { Box, Container, TextField, Typography } from '@material-ui/core';
 import { Form, Field } from 'react-final-form';
 import LyricsField from '../components/LyricsField';
-import { fetchSongs } from '../redux/slices/songs';
+import { fetchSongs, persistSong, selectSongById } from '../redux/slices/songs';
 
 const Block = ({ header, children, ...props }) => {
   return (
@@ -35,17 +35,16 @@ const Block = ({ header, children, ...props }) => {
 };
 
 const SongEdit = () => {
-  const songsState = useSelector((state) => state.songs);
-  const dispatch = useDispatch();
   const params = useParams();
+  const songsStatus = useSelector((state) => state.songs.status);
+  const song = useSelector((state) => selectSongById(state, params.songId));
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (songsState.status === 'idle') {
+    if (songsStatus === 'idle') {
       dispatch(fetchSongs());
     }
-  }, [dispatch, songsState.status]);
-
-  const song = find(songsState.entities, ['id', params.songId]);
+  }, [dispatch, songsStatus]);
 
   if (!song) {
     return (
