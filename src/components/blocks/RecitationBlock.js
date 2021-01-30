@@ -1,16 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import find from 'lodash/find';
 import get from 'lodash/get';
+import { selectAllRecitations } from '../../redux/slices/recitations';
 
-const mapStateToProps = ({ recitations }) => ({
-  recitations,
-});
-
-const RecitationBlock = ({ block, recitations, onChange, onFocus, onBlur }) => {
+const RecitationBlock = ({ block, onChange, onFocus, onBlur }) => {
+  const recitations = useSelector(selectAllRecitations);
   const { data } = block;
 
   const getDefaultItem = () => ({
@@ -29,8 +27,8 @@ const RecitationBlock = ({ block, recitations, onChange, onFocus, onBlur }) => {
   return (
     <div>
       <Autocomplete
-        defaultValue={find(recitations.data, ['id', data.id])}
-        options={recitations.data}
+        defaultValue={find(recitations, ['id', data.id])}
+        options={recitations}
         getOptionLabel={(option) =>
           `${option.title}${option.number ? ` (${option.number})` : ''}`
         }
@@ -70,10 +68,9 @@ const RecitationBlock = ({ block, recitations, onChange, onFocus, onBlur }) => {
 
 RecitationBlock.propTypes = {
   block: PropTypes.object,
-  recitations: PropTypes.object,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
 };
 
-export default connect(mapStateToProps)(RecitationBlock);
+export default RecitationBlock;

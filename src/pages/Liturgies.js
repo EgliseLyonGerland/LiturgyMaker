@@ -26,7 +26,10 @@ import Code from '../components/Code';
 import generateCode from '../utils/generateCode';
 import * as liturgiesActions from '../redux/actions/liturgies';
 import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
-import * as recitationsActions from '../redux/actions/recitations';
+import {
+  fetchRecitations,
+  selectAllRecitations,
+} from '../redux/slices/recitations';
 
 const gutters = 3;
 
@@ -132,14 +135,12 @@ const formatDate = (date) => {
   return format(date, 'EEEE d MMMM', { locale });
 };
 
-const mapStateToProps = ({ liturgies, recitations }) => ({
+const mapStateToProps = ({ liturgies }) => ({
   liturgies,
-  recitations,
 });
 
 const mapDispatchToProps = {
   ...liturgiesActions,
-  ...recitationsActions,
 };
 
 const Liturgies = ({
@@ -150,25 +151,25 @@ const Liturgies = ({
   addBlock,
   removeBlock,
   fillBlockFromPreviousWeek,
-  recitations,
-  fetchRecitations,
 }) => {
   const classes = useStyles();
   const [currentDate, setCurrentDate] = useState(getNextSundayDate(new Date()));
   const [saved, setSaved] = useState(false);
   const [displayCode, setDisplayCode] = useState(false);
   const [focusedBlock, setFocusedBlock] = useState([-1]);
+  const dispatch = useDispatch();
   const songsStatus = useSelector((state) => state.songs.status);
   const songs = useSelector(selectAllSongs);
-  const dispatch = useDispatch();
+  const recitationsStatus = useSelector((state) => state.recitations.status);
+  const recitations = useSelector(selectAllRecitations);
 
   const id = format(currentDate, 'yMMdd');
 
   const liturgy = liturgies[id] || null;
   const loading =
     songsStatus === 'loading' ||
-    get(liturgy, 'loading', true) ||
-    get(recitations, 'loading', true);
+    recitationsStatus === 'loading' ||
+    get(liturgy, 'loading', true);
   const persisted = get(liturgy, 'persisted', true);
   const persisting = get(liturgy, 'persisting', false);
 
@@ -182,19 +183,12 @@ const Liturgies = ({
     if (songsStatus === 'idle') {
       dispatch(fetchSongs());
     }
-
-    if (!recitations.loaded) {
-      fetchRecitations();
+    if (recitationsStatus === 'idle') {
+      dispatch(fetchRecitations());
     }
 
     debouncedFetchLiturgy.current(currentDate);
-  }, [
-    currentDate,
-    dispatch,
-    fetchRecitations,
-    recitations.loaded,
-    songsStatus,
-  ]);
+  }, [currentDate, dispatch, recitationsStatus, songsStatus]);
 
   const handleBlocksChange = (blocks) => {
     setLiturgy(liturgy.id, { ...liturgy.data, blocks });
@@ -338,14 +332,7 @@ const Liturgies = ({
 
   const renderContent = () => {
     if (displayCode) {
-      return (
-        <Code
-          code={generateCode(liturgy.data, {
-            songs,
-            recitations: recitations.data,
-          })}
-        />
-      );
+      return <Code code={generateCode(liturgy.data, { songs, recitations })} />;
     }
 
     return (
@@ -396,10 +383,6 @@ Liturgies.propTypes = {
   addBlock: PropTypes.func,
   removeBlock: PropTypes.func,
   fillBlockFromPreviousWeek: PropTypes.func,
-  songs: PropTypes.object,
-  recitations: PropTypes.object,
-  fetchSongs: PropTypes.func,
-  fetchRecitations: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Liturgies);

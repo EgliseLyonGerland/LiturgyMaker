@@ -25,12 +25,10 @@ export const fetchSongs = createAsyncThunk(
     const db = firebase.firestore();
     const { docs } = await db.collection('songs').get();
 
-    const normalized = normalize(
+    return normalize(
       docs.map((doc) => ({ id: doc.id, ...defaultSong, ...doc.data() })),
       songsEntity,
-    );
-
-    return normalized.entities;
+    ).entities;
   },
 );
 
