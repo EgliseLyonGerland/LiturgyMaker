@@ -1,7 +1,7 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from '@reduxjs/toolkit';
 import liturgies from './liturgies';
-import songs from '../slices/songs';
-import recitations from '../slices/recitations';
+import songs from './songs';
+import recitations from './recitations';
 
 const rootReducer = combineReducers({
   liturgies,

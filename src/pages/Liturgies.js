@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Zoom from '@material-ui/core/Zoom';
@@ -16,15 +15,23 @@ import CloseIcon from '@material-ui/icons/Close';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { format, endOfWeek, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
-import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
+import cloneDeep from 'lodash/cloneDeep';
 import classnames from 'classnames';
 import Form from '../components/Form';
 import Code from '../components/Code';
 // import Preview from '../components/Preview';
 import generateCode from '../utils/generateCode';
-import * as liturgiesActions from '../redux/actions/liturgies';
+import {
+  fetchLiturgy,
+  persistLiturgy,
+  selectLiturgyById,
+  setLiturgy,
+  addLiturgyBlock,
+  removeLiturgyBlock,
+  fillBlockFromPreviousWeek,
+} from '../redux/slices/liturgies';
 import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
 import {
   fetchRecitations,
@@ -135,47 +142,31 @@ const formatDate = (date) => {
   return format(date, 'EEEE d MMMM', { locale });
 };
 
-const mapStateToProps = ({ liturgies }) => ({
-  liturgies,
-});
-
-const mapDispatchToProps = {
-  ...liturgiesActions,
-};
-
-const Liturgies = ({
-  liturgies,
-  fetchLiturgy,
-  setLiturgy,
-  persistLiturgy,
-  addBlock,
-  removeBlock,
-  fillBlockFromPreviousWeek,
-}) => {
+const Liturgies = () => {
   const classes = useStyles();
   const [currentDate, setCurrentDate] = useState(getNextSundayDate(new Date()));
   const [saved, setSaved] = useState(false);
   const [displayCode, setDisplayCode] = useState(false);
   const [focusedBlock, setFocusedBlock] = useState([-1]);
+  const [persisting, setPersisting] = useState(false);
+  const [persisted, setPersisted] = useState(true);
   const dispatch = useDispatch();
+  const liturgyState = useSelector((state) =>
+    selectLiturgyById(state, format(currentDate, 'yMMdd')),
+  );
   const songsStatus = useSelector((state) => state.songs.status);
   const songs = useSelector(selectAllSongs);
   const recitationsStatus = useSelector((state) => state.recitations.status);
   const recitations = useSelector(selectAllRecitations);
 
-  const id = format(currentDate, 'yMMdd');
+  const liturgy = cloneDeep(liturgyState);
 
-  const liturgy = liturgies[id] || null;
   const loading =
-    songsStatus === 'loading' ||
-    recitationsStatus === 'loading' ||
-    get(liturgy, 'loading', true);
-  const persisted = get(liturgy, 'persisted', true);
-  const persisting = get(liturgy, 'persisting', false);
+    songsStatus === 'loading' || recitationsStatus === 'loading' || !liturgy;
 
   const debouncedFetchLiturgy = useRef(
     debounce((date) => {
-      fetchLiturgy(date);
+      dispatch(fetchLiturgy(date));
     }, 500),
   );
 
@@ -186,12 +177,14 @@ const Liturgies = ({
     if (recitationsStatus === 'idle') {
       dispatch(fetchRecitations());
     }
-
-    debouncedFetchLiturgy.current(currentDate);
-  }, [currentDate, dispatch, recitationsStatus, songsStatus]);
+    if (!liturgy) {
+      debouncedFetchLiturgy.current(currentDate);
+    }
+  }, [currentDate, dispatch, liturgy, recitationsStatus, songsStatus]);
 
   const handleBlocksChange = (blocks) => {
-    setLiturgy(liturgy.id, { ...liturgy.data, blocks });
+    setPersisted(false);
+    dispatch(setLiturgy({ ...liturgy, blocks }));
   };
 
   const handleBlockFocus = (index, path) => {
@@ -208,8 +201,12 @@ const Liturgies = ({
   };
 
   const handleSave = async () => {
-    await persistLiturgy(liturgy.id);
+    setPersisting(true);
 
+    await dispatch(persistLiturgy(liturgy));
+
+    setPersisting(false);
+    setPersisted(true);
     setSaved(true);
     setTimeout(() => {
       setSaved(false);
@@ -217,15 +214,18 @@ const Liturgies = ({
   };
 
   const handleAddBlock = (index, data) => {
-    addBlock(liturgy.id, index, data);
+    setPersisted(false);
+    dispatch(addLiturgyBlock({ id: liturgy.id, index, data }));
   };
 
   const handleRemoveBlock = (index) => {
-    removeBlock(liturgy.id, index);
+    setPersisted(false);
+    dispatch(removeLiturgyBlock({ id: liturgy.id, index }));
   };
 
   const handleFillFromLastWeek = (block) => {
-    fillBlockFromPreviousWeek(liturgy.id, block);
+    setPersisted(false);
+    dispatch(fillBlockFromPreviousWeek({ id: liturgy.id, block }));
   };
 
   let zoomKey = 'nothing';
@@ -332,12 +332,12 @@ const Liturgies = ({
 
   const renderContent = () => {
     if (displayCode) {
-      return <Code code={generateCode(liturgy.data, { songs, recitations })} />;
+      return <Code code={generateCode(liturgy, { songs, recitations })} />;
     }
 
     return (
       <Form
-        blocks={liturgy.data.blocks}
+        blocks={liturgy.blocks}
         onChange={handleBlocksChange}
         onFocus={handleBlockFocus}
         onBlur={handleBlockBlur}
@@ -375,14 +375,4 @@ const Liturgies = ({
   );
 };
 
-Liturgies.propTypes = {
-  liturgies: PropTypes.object,
-  fetchLiturgy: PropTypes.func,
-  setLiturgy: PropTypes.func,
-  persistLiturgy: PropTypes.func,
-  addBlock: PropTypes.func,
-  removeBlock: PropTypes.func,
-  fillBlockFromPreviousWeek: PropTypes.func,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Liturgies);
+export default Liturgies;

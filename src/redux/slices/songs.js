@@ -34,7 +34,7 @@ export const fetchSongs = createAsyncThunk(
 
 export const persistSong = createAsyncThunk(
   'songs/persistSong',
-  async (song, { extra: { firebase } }, b, c) => {
+  async (song, { extra: { firebase } }) => {
     const { id, ...data } = song;
     const db = firebase.firestore();
 
