@@ -12,7 +12,7 @@ function resolveType(text) {
   return text.substr(1, text.length - 2);
 }
 
-export function format(lyrics) {
+module.exports.format = function format(lyrics) {
   const result = [];
 
   lyrics.forEach(({ text, type }) => {
@@ -36,9 +36,9 @@ export function format(lyrics) {
   });
 
   return result;
-}
+};
 
-export function parse(content) {
+module.exports.parse = function parse(content) {
   let currentType = 'verse';
 
   if (!content.trim()) {
@@ -94,8 +94,8 @@ export function parse(content) {
 
       return acc;
     }, []);
-}
+};
 
-export function stringify(lyrics) {
+module.exports.stringify = function stringify(lyrics) {
   return lyrics.map((part) => `[${part.type}]\n${part.text}`).join('\n\n');
-}
+};
