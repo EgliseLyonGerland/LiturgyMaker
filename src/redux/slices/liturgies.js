@@ -16,8 +16,7 @@ const liturgiesAdapter = createEntityAdapter();
 
 export const fetchLiturgy = createAsyncThunk(
   'liturgies/fetchLiturgy',
-  async (date, { extra: { firebase } }) => {
-    const id = format(date, 'yMMdd');
+  async (id, { extra: { firebase } }) => {
     const db = firebase.firestore();
     const doc = await db.doc(`liturgies/${id}`).get();
 
@@ -25,7 +24,7 @@ export const fetchLiturgy = createAsyncThunk(
     if (doc.exists) {
       data = migrate(doc.data());
     } else {
-      data = createDefaultLiturgy({ date });
+      data = createDefaultLiturgy(id);
     }
 
     return normalize({ id, ...data }, liturgyEntity);

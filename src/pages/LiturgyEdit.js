@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -9,7 +10,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import CodeIcon from '@material-ui/icons/Code';
 import CloseIcon from '@material-ui/icons/Close';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { format, endOfWeek, subDays, addDays } from 'date-fns';
+import { format, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
@@ -33,6 +34,7 @@ import {
   fetchRecitations,
   selectAllRecitations,
 } from '../redux/slices/recitations';
+import { converToDate, getNextLiturgyId } from '../utils/liturgy';
 
 // const gutters = 3;
 
@@ -104,8 +106,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getNextSundayDate = (from) => endOfWeek(from, { weekStartsOn: 1 });
-
 const formatDate = (date) => {
   if (date.getDate() === 1) {
     return format(date, "EEEE '1er' MMMM", { locale });
@@ -116,14 +116,15 @@ const formatDate = (date) => {
 
 const Liturgies = () => {
   const classes = useStyles();
-  const [currentDate, setCurrentDate] = useState(getNextSundayDate(new Date()));
+  const history = useHistory();
+  const { liturgyId } = useParams();
   const [displayCode, setDisplayCode] = useState(false);
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(true);
   const [dirty, setDirty] = useState(false);
   const dispatch = useDispatch();
   const liturgyState = useSelector((state) =>
-    selectLiturgyById(state, format(currentDate, 'yMMdd')),
+    selectLiturgyById(state, liturgyId),
   );
   const songsStatus = useSelector((state) => state.songs.status);
   const songs = useSelector(selectAllSongs);
@@ -131,6 +132,7 @@ const Liturgies = () => {
   const recitations = useSelector(selectAllRecitations);
 
   const liturgy = cloneDeep(liturgyState);
+  const currentDate = converToDate(liturgyId);
 
   const loading =
     songsStatus === 'loading' || recitationsStatus === 'loading' || !liturgy;
@@ -143,7 +145,7 @@ const Liturgies = () => {
 
   useEffect(() => {
     setDirty(false);
-  }, [currentDate]);
+  }, [liturgyId]);
 
   useEffect(() => {
     if (songsStatus === 'idle') {
@@ -153,9 +155,9 @@ const Liturgies = () => {
       dispatch(fetchRecitations());
     }
     if (!liturgy) {
-      debouncedFetchLiturgy.current(currentDate);
+      debouncedFetchLiturgy.current(liturgyId);
     }
-  }, [currentDate, dispatch, liturgy, recitationsStatus, songsStatus]);
+  }, [liturgyId, dispatch, liturgy, recitationsStatus, songsStatus]);
 
   const handleBlocksChange = (blocks) => {
     setDirty(true);
@@ -163,7 +165,7 @@ const Liturgies = () => {
   };
 
   const handleChangeDate = (date) => {
-    setCurrentDate(getNextSundayDate(date));
+    history.push(`/liturgies/${getNextLiturgyId(date)}/edit`);
   };
 
   const handleSave = async () => {

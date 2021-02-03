@@ -3,6 +3,7 @@ import shuffle from 'lodash/shuffle';
 import upperFirst from 'lodash/upperFirst';
 import { verseTemplates } from '../config/preview';
 import { currentVersion } from '../config/global';
+import { converToDate } from './liturgy';
 
 const shuffledVerseTemplates = shuffle(verseTemplates);
 
@@ -84,8 +85,8 @@ export const createDefaultBlock = (type, ...args) => {
   return functions[funcName](...args);
 };
 
-export const createDefaultLiturgy = ({ date }) => ({
-  date: +date,
+export const createDefaultLiturgy = (id) => ({
+  date: +converToDate(id),
   version: currentVersion,
   blocks: [
     createDefaultAnnouncementsBlock('announcements'),

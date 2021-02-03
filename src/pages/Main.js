@@ -1,7 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import { Box } from '@material-ui/core';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory, Redirect } from 'react-router-dom';
 import Header from '../components/Header';
+import { getNextLiturgyId } from '../utils/liturgy';
 
 const LiturgyEditPage = lazy(() => import('./LiturgyEdit'));
 const SongsPage = lazy(() => import('./Songs'));
@@ -24,6 +25,9 @@ const Main = () => {
         <Suspense fallback={<div />}>
           <Switch>
             <Route path="/" exact>
+              <Redirect to={`/liturgies/${getNextLiturgyId()}/edit`} />
+            </Route>
+            <Route path="/liturgies/:liturgyId/edit" exact>
               <LiturgyEditPage />
             </Route>
             <Route path="/songs" exact>
