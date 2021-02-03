@@ -44,7 +44,7 @@ const SongEdit = () => {
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(false);
 
-  const submit = async (data) => {
+  const handleSubmit = async (data) => {
     setDisabled(true);
     setPersisting(true);
 
@@ -71,7 +71,7 @@ const SongEdit = () => {
 
   return (
     <Form
-      onSubmit={submit}
+      onSubmit={handleSubmit}
       initialValues={song}
       subscription={{ dirty: true }}
       validate={(values) => {
@@ -86,7 +86,7 @@ const SongEdit = () => {
 
         return errors;
       }}
-      render={({ handleSubmit, dirty }) => (
+      render={({ onSubmit, dirty }) => (
         <>
           <Container maxWidth="md">
             <Block header="Informations générales">
@@ -192,7 +192,7 @@ const SongEdit = () => {
                 ? 'ready'
                 : null
             }
-            onClick={handleSubmit}
+            onClick={onSubmit}
             onHide={() => setPersisted(false)}
           />
         </>
