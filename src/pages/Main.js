@@ -3,7 +3,7 @@ import { Box } from '@material-ui/core';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 
-const LiturgiesPage = lazy(() => import('./Liturgies'));
+const LiturgyEditPage = lazy(() => import('./LiturgyEdit'));
 const SongsPage = lazy(() => import('./Songs'));
 const SongEditPage = lazy(() => import('./SongEdit'));
 
@@ -24,7 +24,7 @@ const Main = () => {
         <Suspense fallback={<div />}>
           <Switch>
             <Route path="/" exact>
-              <LiturgiesPage />
+              <LiturgyEditPage />
             </Route>
             <Route path="/songs" exact>
               <SongsPage />
