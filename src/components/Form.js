@@ -25,12 +25,12 @@ const components = {
 
 const Form = ({
   blocks,
-  onChange,
-  onFocus,
-  onBlur,
-  onAddBlock,
-  onRemoveBlock,
-  onFillFromLastWeek,
+  onChange = () => {},
+  onFocus = () => {},
+  onBlur = () => {},
+  onAddBlock = () => {},
+  onRemoveBlock = () => {},
+  onFillFromLastWeek = () => {},
 }) => {
   const handleFocus = (block, path, index) => {
     onFocus(index, path);

@@ -118,7 +118,6 @@ const Liturgies = () => {
   const classes = useStyles();
   const [currentDate, setCurrentDate] = useState(getNextSundayDate(new Date()));
   const [displayCode, setDisplayCode] = useState(false);
-  const [focusedBlock, setFocusedBlock] = useState([-1]);
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(true);
   const [dirty, setDirty] = useState(false);
@@ -163,16 +162,7 @@ const Liturgies = () => {
     dispatch(setLiturgy({ ...liturgy, blocks }));
   };
 
-  const handleBlockFocus = (index, path) => {
-    setFocusedBlock([index, path]);
-  };
-
-  const handleBlockBlur = () => {
-    setFocusedBlock([-1]);
-  };
-
   const handleChangeDate = (date) => {
-    setFocusedBlock([-1]);
     setCurrentDate(getNextSundayDate(date));
   };
 
@@ -252,12 +242,9 @@ const Liturgies = () => {
       <Form
         blocks={liturgy.blocks}
         onChange={handleBlocksChange}
-        onFocus={handleBlockFocus}
-        onBlur={handleBlockBlur}
         onAddBlock={handleAddBlock}
         onRemoveBlock={handleRemoveBlock}
         onFillFromLastWeek={handleFillFromLastWeek}
-        focusedIndex={focusedBlock[0]}
       />
     );
   };
