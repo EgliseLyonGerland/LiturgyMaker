@@ -98,7 +98,6 @@ const liturgiesSlice = createSlice({
       state.entities[id].blocks.splice(index, 0, data);
     },
     removeLiturgyBlock(state, action) {
-      console.log(action);
       const { id, index } = action.payload;
       state.entities[id].blocks.splice(index, 1);
     },
