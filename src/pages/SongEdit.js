@@ -86,7 +86,7 @@ const SongEdit = () => {
 
         return errors;
       }}
-      render={({ onSubmit, dirty }) => (
+      render={({ handleSubmit: onSubmit, dirty }) => (
         <>
           <Container maxWidth="md">
             <Block header="Informations générales">
