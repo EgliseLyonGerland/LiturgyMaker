@@ -3,11 +3,19 @@ import { Box, Fab, useTheme, Zoom } from '@material-ui/core';
 import { Check, Save } from '@material-ui/icons';
 import BeatLoader from 'react-spinners/BeatLoader';
 
-function SaveButton({ status = null, onClick, onHide }) {
+function SaveButton({ persisting, persisted, dirty, onClick, onHide }) {
   const theme = useTheme();
 
   const [currentStatus, setCurrentStatus] = useState(null);
   const [displayed, setDisplayed] = useState(false);
+
+  const status = persisting
+    ? 'running'
+    : persisted
+    ? 'done'
+    : dirty
+    ? 'ready'
+    : null;
 
   useEffect(() => {
     if (currentStatus === 'done' && displayed) {

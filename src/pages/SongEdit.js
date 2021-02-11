@@ -183,15 +183,9 @@ const SongEdit = () => {
             </Block>
           </Container>
           <SaveButton
-            status={
-              persisting
-                ? 'running'
-                : persisted
-                ? 'done'
-                : dirty
-                ? 'ready'
-                : null
-            }
+            persisting={persisting}
+            persisted={persisted}
+            dirty={dirty}
             onClick={onSubmit}
             onHide={() => setPersisted(false)}
           />
