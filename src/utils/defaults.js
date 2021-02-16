@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import shuffle from 'lodash/shuffle';
 import upperFirst from 'lodash/upperFirst';
 import { verseTemplates } from '../config/preview';
@@ -8,15 +7,14 @@ import { converToDate } from './liturgy';
 const shuffledVerseTemplates = shuffle(verseTemplates);
 
 export const createDefaultAnnouncementsBlock = () => ({
-  id: uuid(),
   type: 'announcements',
+  title: '',
   data: [{ title: '', detail: '' }],
 });
 
 export const createDefaultReadingBlock = ({ title = '' } = {}) => ({
-  id: uuid(),
   type: 'reading',
-  ...(title ? { title } : null),
+  title,
   data: {
     bibleRefs: [
       {
@@ -29,44 +27,47 @@ export const createDefaultReadingBlock = ({ title = '' } = {}) => ({
 });
 
 export const createDefaultSermonBlock = () => ({
-  id: uuid(),
   type: 'sermon',
+  title: '',
   data: {
-    author: '',
-    bibleRefs: [''],
     title: '',
-    plan: [''],
+    author: '',
+    bibleRefs: [{ ref: '' }],
+    plan: [{ text: '' }],
   },
 });
 
 export const createDefaultOpenDoorsBlock = () => ({
-  id: uuid(),
   type: 'openDoors',
+  title: '',
   data: {
     title: '',
     detail: '',
-    prayerTopics: [],
+    prayerTopics: [{ text: '' }],
   },
 });
 
 export const createDefaultSectionBlock = ({ title = '' } = {}) => ({
-  id: uuid(),
   type: 'section',
+  title: '',
   data: {
     title,
   },
 });
 
 export const createDefaultSongsBlock = () => ({
-  id: uuid(),
   type: 'songs',
+  title: '',
   data: [],
 });
 
 export const createDefaultRecitationBlock = () => ({
-  id: uuid(),
   type: 'recitation',
-  data: {},
+  title: '',
+  data: {
+    id: '',
+    infos: '',
+  },
 });
 
 const functions = {

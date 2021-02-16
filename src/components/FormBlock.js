@@ -7,10 +7,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { Box } from '@material-ui/core';
-import { blockTypes } from '../config/global';
 
 const FormBlock = ({
-  block,
+  title,
+  subtitle = '',
   onRemoveBlockClicked,
   onFillFromLastWeekClicked,
   children,
@@ -42,10 +42,10 @@ const FormBlock = ({
         borderRadius="16px 16px 0 0"
       >
         <Typography variant="h6">
-          {blockTypes[block.type]}
+          {title}
           {' \u00A0'}
           <Typography component="span" variant="subtitle1">
-            {block.title}
+            {subtitle}
           </Typography>
         </Typography>
 
@@ -83,10 +83,8 @@ const FormBlock = ({
 };
 
 FormBlock.propTypes = {
-  block: PropTypes.shape({
-    type: PropTypes.string,
-    title: PropTypes.string,
-  }).isRequired,
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string,
   onRemoveBlockClicked: PropTypes.func,
   onFillFromLastWeekClicked: PropTypes.func,
   children: PropTypes.any,

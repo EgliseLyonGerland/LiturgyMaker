@@ -81,10 +81,35 @@ function migrateToVersion4(doc) {
   };
 }
 
+function migrateToVersion5(doc) {
+  return {
+    ...doc,
+    blocks: doc.blocks.map((block) => {
+      const result = omit(block, 'id');
+
+      if (!result.title) {
+        result.title = '';
+      }
+      if (block.type === 'sermon') {
+        block.data.plan = block.data.plan.map((text) => ({ text }));
+        block.data.bibleRefs = block.data.bibleRefs.map((ref) => ({ ref }));
+      }
+      if (block.type === 'openDoors') {
+        block.data.prayerTopics = block.data.prayerTopics.map((text) => ({
+          text,
+        }));
+      }
+
+      return result;
+    }),
+  };
+}
+
 const functions = {
   migrateToVersion2,
   migrateToVersion3,
   migrateToVersion4,
+  migrateToVersion5,
 };
 
 export default function migrate(doc) {
@@ -94,7 +119,10 @@ export default function migrate(doc) {
     const funcName = `migrateToVersion${curr + 1}`;
 
     if (functions[funcName]) {
-      return functions[funcName](acc);
+      const result = functions[funcName](acc);
+      result.version = curr + 1;
+
+      return result;
     }
 
     return acc;

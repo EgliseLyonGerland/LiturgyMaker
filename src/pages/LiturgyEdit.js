@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -10,31 +10,29 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import CodeIcon from '@material-ui/icons/Code';
 import CloseIcon from '@material-ui/icons/Close';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { useForm } from 'react-hook-form';
 import { format, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import cloneDeep from 'lodash/cloneDeep';
-import Form from '../components/Form';
+
 import Code from '../components/Code';
 import SaveButton from '../components/SaveButton';
+import BlocksField from '../components/fields/BlocksField';
 // import Preview from '../components/Preview';
 import generateCode from '../utils/generateCode';
 import {
   fetchLiturgy,
   persistLiturgy,
   selectLiturgyById,
-  setLiturgy,
-  addLiturgyBlock,
-  removeLiturgyBlock,
-  fillBlockFromPreviousWeek,
 } from '../redux/slices/liturgies';
 import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
 import {
   fetchRecitations,
   selectAllRecitations,
 } from '../redux/slices/recitations';
-import { converToDate, getNextLiturgyId } from '../utils/liturgy';
+import { converToDate, convertToId, getNextLiturgyId } from '../utils/liturgy';
 
 // const gutters = 3;
 
@@ -117,11 +115,11 @@ const formatDate = (date) => {
 const Liturgies = () => {
   const classes = useStyles();
   const history = useHistory();
+  const store = useStore();
   const { liturgyId } = useParams();
   const [displayCode, setDisplayCode] = useState(false);
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(true);
-  const [dirty, setDirty] = useState(false);
   const dispatch = useDispatch();
   const liturgyState = useSelector((state) =>
     selectLiturgyById(state, liturgyId),
@@ -131,11 +129,22 @@ const Liturgies = () => {
   const recitationsStatus = useSelector((state) => state.recitations.status);
   const recitations = useSelector(selectAllRecitations);
 
-  const liturgy = cloneDeep(liturgyState);
+  const {
+    register,
+    control,
+    handleSubmit: onSubmit,
+    reset: resetForm,
+    getValues: getFormValues,
+    setValue: setFormValue,
+    // formState: { isDirty },
+  } = useForm();
+
   const currentDate = converToDate(liturgyId);
 
   const loading =
-    songsStatus === 'loading' || recitationsStatus === 'loading' || !liturgy;
+    songsStatus === 'loading' ||
+    recitationsStatus === 'loading' ||
+    !liturgyState;
 
   const debouncedFetchLiturgy = useRef(
     debounce((date) => {
@@ -144,8 +153,10 @@ const Liturgies = () => {
   );
 
   useEffect(() => {
-    setDirty(false);
-  }, [liturgyId]);
+    if (liturgyState) {
+      resetForm(cloneDeep(liturgyState));
+    }
+  }, [liturgyState, resetForm]);
 
   useEffect(() => {
     if (songsStatus === 'idle') {
@@ -154,41 +165,58 @@ const Liturgies = () => {
     if (recitationsStatus === 'idle') {
       dispatch(fetchRecitations());
     }
-    if (!liturgy) {
+    if (!liturgyState) {
       debouncedFetchLiturgy.current(liturgyId);
     }
-  }, [liturgyId, dispatch, liturgy, recitationsStatus, songsStatus]);
-
-  const handleBlocksChange = (blocks) => {
-    setDirty(true);
-    dispatch(setLiturgy({ ...liturgy, blocks }));
-  };
+  }, [liturgyId, dispatch, liturgyState, recitationsStatus, songsStatus]);
 
   const handleChangeDate = (date) => {
     history.push(`/liturgies/${getNextLiturgyId(date)}/edit`);
   };
 
-  const handleSave = async () => {
+  const handleSubmit = async (data) => {
     setPersisting(true);
-    await dispatch(persistLiturgy(liturgy));
-    setPersisting(false);
+    await dispatch(
+      persistLiturgy({
+        ...liturgyState,
+        blocks: data.blocks,
+      }),
+    );
     setPersisted(true);
-    setDirty(false);
+    setPersisting(false);
   };
 
-  const handleAddBlock = (index, data) => {
-    setDirty(true);
-    dispatch(addLiturgyBlock({ id: liturgy.id, index, data }));
-  };
+  const handleFillFromLastWeek = async (index) => {
+    const previousDate = subDays(currentDate, 7);
+    const previousId = convertToId(previousDate);
 
-  const handleRemoveBlock = (index) => {
-    setDirty(true);
-    dispatch(removeLiturgyBlock({ id: liturgy.id, index }));
-  };
+    await dispatch(fetchLiturgy(previousId));
 
-  const handleFillFromLastWeek = (block) => {
-    setDirty(true);
-    dispatch(fillBlockFromPreviousWeek({ id: liturgy.id, block }));
+    const previousLiturgy = selectLiturgyById(store.getState(), previousId);
+
+    if (!previousLiturgy) {
+      return null;
+    }
+
+    const { blocks } = getFormValues();
+    const currentBlock = blocks[index];
+
+    const currentBlockNumber = blocks
+      .filter((block) => block.type === currentBlock.type)
+      .findIndex((block) => block.id === currentBlock.id);
+
+    const sameTypeBlocks = previousLiturgy.blocks.filter(
+      (block) => block.type === currentBlock.type,
+    );
+
+    if (sameTypeBlocks.length === 0) {
+      return null;
+    }
+
+    const previousBlock =
+      sameTypeBlocks[currentBlockNumber] || sameTypeBlocks.pop();
+
+    setFormValue(`blocks[${index}].data`, previousBlock.data);
   };
 
   const renderNavBar = () => (
@@ -237,17 +265,26 @@ const Liturgies = () => {
 
   const renderContent = () => {
     if (displayCode) {
-      return <Code code={generateCode(liturgy, { songs, recitations })} />;
+      return <Code code={generateCode(liturgyState, { songs, recitations })} />;
     }
 
     return (
-      <Form
-        blocks={liturgy.blocks}
-        onChange={handleBlocksChange}
-        onAddBlock={handleAddBlock}
-        onRemoveBlock={handleRemoveBlock}
-        onFillFromLastWeek={handleFillFromLastWeek}
-      />
+      <div>
+        <BlocksField
+          name="blocks"
+          register={register}
+          control={control}
+          onFillFromLastWeekClicked={handleFillFromLastWeek}
+        />
+
+        <SaveButton
+          persisting={persisting}
+          persisted={persisted}
+          dirty={true}
+          onClick={onSubmit(handleSubmit)}
+          onHide={() => setPersisted(false)}
+        />
+      </div>
     );
   };
 
@@ -270,14 +307,6 @@ const Liturgies = () => {
           />
         </div> */}
       </Container>
-
-      <SaveButton
-        status={
-          persisting ? 'running' : persisted ? 'done' : dirty ? 'ready' : null
-        }
-        onClick={handleSave}
-        onHide={() => setPersisted(false)}
-      />
     </div>
   );
 };

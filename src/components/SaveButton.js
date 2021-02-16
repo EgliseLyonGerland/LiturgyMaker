@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Fab, useTheme, Zoom } from '@material-ui/core';
 import { Check, Save } from '@material-ui/icons';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { createPortal } from 'react-dom';
 
 function SaveButton({ persisting, persisted, dirty, onClick, onHide }) {
   const theme = useTheme();
@@ -95,7 +96,7 @@ function SaveButton({ persisting, persisted, dirty, onClick, onHide }) {
     );
   };
 
-  return (
+  return createPortal(
     <Box
       position="fixed"
       bottom={32}
@@ -103,11 +104,13 @@ function SaveButton({ persisting, persisted, dirty, onClick, onHide }) {
       justifyContent="center"
       width="100%"
       transition="background .3s"
+      zIndex={100}
     >
       <Zoom key={currentStatus} in={displayed}>
         {renderButton()}
       </Zoom>
-    </Box>
+    </Box>,
+    document.body,
   );
 }
 
