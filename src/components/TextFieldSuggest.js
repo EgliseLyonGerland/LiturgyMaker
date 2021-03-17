@@ -42,6 +42,7 @@ const TextFieldSuggest = ({
   value,
   name,
   disabled = false,
+  inputRef = () => {},
   onChange,
   onFocus = () => {},
   onBlur = () => {},
@@ -86,7 +87,6 @@ const TextFieldSuggest = ({
   };
 
   const renderInputComponent = ({
-    inputRef = () => {},
     ref,
     onFocus: onFocus2,
     onBlur: onBlur2,

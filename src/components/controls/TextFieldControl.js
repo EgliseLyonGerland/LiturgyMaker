@@ -16,6 +16,10 @@ function TextFieldControl({
     fieldState: { invalid, error },
   } = useController({ name, control, defaultValue });
 
+  const { ref, value, ...params } = field;
+  params.value = value || '';
+  params.inputRef = ref;
+
   return (
     <TextField
       label={label}
@@ -27,7 +31,7 @@ function TextFieldControl({
       helperText={error?.message || helperText}
       autoComplete="off"
       fullWidth
-      {...{ ...field, value: field.value || '' }}
+      {...params}
     />
   );
 }
