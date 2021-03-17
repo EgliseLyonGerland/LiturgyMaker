@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import CodeIcon from '@material-ui/icons/Code';
-import CloseIcon from '@material-ui/icons/Close';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -100,6 +99,8 @@ const useStyles = makeStyles((theme) => ({
     sundaysName: {
       width: 'auto',
     },
+  },
+  [theme.breakpoints.down('xs')]: {
     actions: {
       display: 'none',
     },
@@ -277,22 +278,14 @@ function LiturgyEdit() {
       <div className={classes.actions}>
         <IconButton
           onClick={() => {
-            setDisplayCode(!displayCode);
+            setDisplayCode(true);
           }}
         >
-          {!displayCode ? <CodeIcon /> : <CloseIcon />}
+          <CodeIcon />
         </IconButton>
       </div>
     </div>
   );
-
-  const renderContent = () => {
-    if (displayCode) {
-      return <Code code={generateCode(liturgyState, { songs, recitations })} />;
-    }
-
-    return <Form key={liturgyState.id} liturgy={liturgyState} />;
-  };
 
   return (
     <div className={classes.root}>
@@ -304,7 +297,18 @@ function LiturgyEdit() {
             <BeatLoader color="#DDD" />
           </div>
         ) : (
-          renderContent()
+          <>
+            {displayCode && (
+              <Code
+                code={generateCode(liturgyState, { songs, recitations })}
+                onHide={() => {
+                  setDisplayCode(false);
+                }}
+              />
+            )}
+
+            <Form key={liturgyState.id} liturgy={liturgyState} />
+          </>
         )}
         {/* <div className={classes.preview}>
           <Preview

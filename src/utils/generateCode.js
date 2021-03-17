@@ -138,11 +138,11 @@ function generateSermonBlockCode({ data }) {
   }
 
   if (bibleRefs.length) {
-    [config.bibleRef] = bibleRefs;
+    config.bibleRef = bibleRefs[0].ref;
   }
 
-  if (plan.length && plan.join('')) {
-    config.plan = plan;
+  if (plan.length) {
+    config.plan = plan.map((item) => item.text);
   }
 
   return `createSermonSlide(${JSON.stringify(config, 2, '  ')})`;
@@ -158,7 +158,7 @@ function generateOpenDoorsBlockCode({ data }) {
   const config = {
     title,
     detail,
-    prayerTopics,
+    prayerTopics: prayerTopics.map((topic) => topic.text),
   };
 
   return `createOpenDoorsSlide(${JSON.stringify(config, 2, '  ')})`;
