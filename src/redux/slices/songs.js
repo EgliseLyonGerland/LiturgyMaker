@@ -15,25 +15,6 @@ const defaultSong = {
   lyrics: [],
 };
 
-function stringOrNull(value) {
-  return `${value || ''}`.trim() || null;
-}
-function numberOrNull(value) {
-  return parseInt(value, 10) || null;
-}
-
-function prepare(data) {
-  return {
-    title: data.title,
-    authors: stringOrNull(data.authors),
-    copyright: stringOrNull(data.copyright),
-    collection: stringOrNull(data.collection),
-    translation: stringOrNull(data.translation),
-    number: numberOrNull(data.number),
-    lyrics: data.lyrics || [],
-  };
-}
-
 export const songEntity = new schema.Entity('songs');
 export const songsEntity = new schema.Array(songEntity);
 
@@ -58,8 +39,7 @@ export const persistSong = createAsyncThunk(
     const { id, ...data } = song;
     const db = firebase.firestore();
 
-    console.log(prepare(data));
-    await db.collection('songs').doc(id).set(prepare(data));
+    await db.collection('songs').doc(id).set(data);
 
     return song;
   },

@@ -5,6 +5,7 @@ import { ButtonBase } from '@material-ui/core';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AddIcon from '@material-ui/icons/Add';
+import classnames from 'classnames';
 
 import { blockTypes } from '../config/global';
 
@@ -50,10 +51,11 @@ const useStyles = makeStyles(
         transform: 'translateX(24px)',
       },
 
-      '&:hover': {
+      '&:hover:not($disabled)': {
         opacity: 1,
       },
     },
+    disabled: {},
     addButton: {
       width: 32,
       height: 32,
@@ -64,7 +66,7 @@ const useStyles = makeStyles(
   { name: 'Divider' },
 );
 
-const Divider = ({ onBlockSelected }) => {
+const Divider = ({ onBlockSelected, disabled = false }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -79,11 +81,14 @@ const Divider = ({ onBlockSelected }) => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.inner}>
+      <div
+        className={classnames(classes.inner, { [classes.disabled]: disabled })}
+      >
         <ButtonBase
           className={classes.addButton}
           size="small"
           title="Ajouter un bloc"
+          disabled={disabled}
           onClick={(event) => {
             setAnchorEl(event.currentTarget);
           }}

@@ -10,7 +10,8 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import CodeIcon from '@material-ui/icons/Code';
 import CloseIcon from '@material-ui/icons/Close';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { format, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
 import capitalize from 'lodash/capitalize';
@@ -33,6 +34,7 @@ import {
   selectAllRecitations,
 } from '../redux/slices/recitations';
 import { converToDate, convertToId, getNextLiturgyId } from '../utils/liturgy';
+import { liturgySchema } from '../config/schemas';
 
 // const gutters = 3;
 
@@ -112,82 +114,36 @@ const formatDate = (date) => {
   return format(date, 'EEEE d MMMM', { locale });
 };
 
-const Liturgies = () => {
-  const classes = useStyles();
-  const history = useHistory();
+function Form({ liturgy }) {
   const store = useStore();
-  const { liturgyId } = useParams();
-  const [displayCode, setDisplayCode] = useState(false);
+  const dispatch = useDispatch();
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(true);
-  const dispatch = useDispatch();
-  const liturgyState = useSelector((state) =>
-    selectLiturgyById(state, liturgyId),
-  );
-  const songsStatus = useSelector((state) => state.songs.status);
-  const songs = useSelector(selectAllSongs);
-  const recitationsStatus = useSelector((state) => state.recitations.status);
-  const recitations = useSelector(selectAllRecitations);
+  const date = converToDate(liturgy.id);
+
+  const form = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(liturgySchema),
+    defaultValues: cloneDeep(liturgy),
+  });
 
   const {
-    register,
-    control,
     handleSubmit: onSubmit,
-    reset: resetForm,
     getValues: getFormValues,
     setValue: setFormValue,
-    // formState: { isDirty },
-  } = useForm();
-
-  const currentDate = converToDate(liturgyId);
-
-  const loading =
-    songsStatus === 'loading' ||
-    recitationsStatus === 'loading' ||
-    !liturgyState;
-
-  const debouncedFetchLiturgy = useRef(
-    debounce((date) => {
-      dispatch(fetchLiturgy(date));
-    }, 500),
-  );
-
-  useEffect(() => {
-    if (liturgyState) {
-      resetForm(cloneDeep(liturgyState));
-    }
-  }, [liturgyState, resetForm]);
-
-  useEffect(() => {
-    if (songsStatus === 'idle') {
-      dispatch(fetchSongs());
-    }
-    if (recitationsStatus === 'idle') {
-      dispatch(fetchRecitations());
-    }
-    if (!liturgyState) {
-      debouncedFetchLiturgy.current(liturgyId);
-    }
-  }, [liturgyId, dispatch, liturgyState, recitationsStatus, songsStatus]);
-
-  const handleChangeDate = (date) => {
-    history.push(`/liturgies/${getNextLiturgyId(date)}/edit`);
-  };
+    reset: resetForm,
+    formState: { isDirty },
+  } = form;
 
   const handleSubmit = async (data) => {
     setPersisting(true);
-    await dispatch(
-      persistLiturgy({
-        ...liturgyState,
-        blocks: data.blocks,
-      }),
-    );
+    await dispatch(persistLiturgy(data));
     setPersisted(true);
     setPersisting(false);
   };
 
   const handleFillFromLastWeek = async (index) => {
-    const previousDate = subDays(currentDate, 7);
+    const previousDate = subDays(date, 7);
     const previousId = convertToId(previousDate);
 
     await dispatch(fetchLiturgy(previousId));
@@ -216,7 +172,74 @@ const Liturgies = () => {
     const previousBlock =
       sameTypeBlocks[currentBlockNumber] || sameTypeBlocks.pop();
 
-    setFormValue(`blocks[${index}].data`, previousBlock.data);
+    setFormValue(`blocks.${index}.data`, previousBlock.data);
+  };
+
+  useEffect(() => {
+    if (liturgy) {
+      resetForm(cloneDeep(liturgy));
+    }
+  }, [liturgy, resetForm]);
+
+  return (
+    <FormProvider {...form}>
+      <BlocksField
+        name="blocks"
+        disabled={persisting}
+        onFillFromLastWeekClicked={handleFillFromLastWeek}
+      />
+      <SaveButton
+        persisting={persisting}
+        persisted={persisted}
+        dirty={isDirty}
+        onClick={onSubmit(handleSubmit)}
+        onHide={() => setPersisted(false)}
+      />
+    </FormProvider>
+  );
+}
+
+function LiturgyEdit() {
+  const classes = useStyles();
+  const history = useHistory();
+  const { liturgyId } = useParams();
+  const [displayCode, setDisplayCode] = useState(false);
+  const dispatch = useDispatch();
+  const liturgyState = useSelector((state) =>
+    selectLiturgyById(state, liturgyId),
+  );
+  const songsStatus = useSelector((state) => state.songs.status);
+  const songs = useSelector(selectAllSongs);
+  const recitationsStatus = useSelector((state) => state.recitations.status);
+  const recitations = useSelector(selectAllRecitations);
+
+  const currentDate = converToDate(liturgyId);
+
+  const loading =
+    songsStatus === 'loading' ||
+    recitationsStatus === 'loading' ||
+    !liturgyState;
+
+  const debouncedFetchLiturgy = useRef(
+    debounce((date) => {
+      dispatch(fetchLiturgy(date));
+    }, 1000),
+  );
+
+  useEffect(() => {
+    if (songsStatus === 'idle') {
+      dispatch(fetchSongs());
+    }
+    if (recitationsStatus === 'idle') {
+      dispatch(fetchRecitations());
+    }
+    if (!liturgyState) {
+      debouncedFetchLiturgy.current(liturgyId);
+    }
+  }, [liturgyId, dispatch, liturgyState, recitationsStatus, songsStatus]);
+
+  const handleChangeDate = (date) => {
+    history.push(`/liturgies/${getNextLiturgyId(date)}/edit`);
   };
 
   const renderNavBar = () => (
@@ -268,24 +291,7 @@ const Liturgies = () => {
       return <Code code={generateCode(liturgyState, { songs, recitations })} />;
     }
 
-    return (
-      <div>
-        <BlocksField
-          name="blocks"
-          register={register}
-          control={control}
-          onFillFromLastWeekClicked={handleFillFromLastWeek}
-        />
-
-        <SaveButton
-          persisting={persisting}
-          persisted={persisted}
-          dirty={true}
-          onClick={onSubmit(handleSubmit)}
-          onHide={() => setPersisted(false)}
-        />
-      </div>
-    );
+    return <Form key={liturgyState.id} liturgy={liturgyState} />;
   };
 
   return (
@@ -309,6 +315,6 @@ const Liturgies = () => {
       </Container>
     </div>
   );
-};
+}
 
-export default Liturgies;
+export default LiturgyEdit;

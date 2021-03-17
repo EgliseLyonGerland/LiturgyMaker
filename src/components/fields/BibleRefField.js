@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import { Controller, useController } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 import TextFieldSuggest from '../TextFieldSuggest';
+import TextFieldControl from '../controls/TextFieldControl';
 import { validate, getPassage } from '../../utils/bibleRef';
 import books from '../../config/bibleBooks.json';
 
@@ -21,10 +21,16 @@ const useStyles = makeStyles(
   { name: 'BibleRefField' },
 );
 
-const BibleRefField = ({ name, control, defaultValue, withExcerpt = true }) => {
+const BibleRefField = ({
+  name,
+  defaultValue,
+  withExcerpt = true,
+  disabled = false,
+}) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
+  const { control, setValue } = useFormContext();
   const refController = useController({
     name: `${name}.ref`,
     control,
@@ -33,20 +39,21 @@ const BibleRefField = ({ name, control, defaultValue, withExcerpt = true }) => {
 
   const currentRef = refController.field.value;
 
-  let error = '';
+  let error;
   if (currentRef) {
     error = validate(currentRef);
   }
+  if (!error) {
+    error = refController.fieldState.error?.message;
+  }
 
-  const handleFillPassage = async (onChange) => {
+  const handleFillPassage = async () => {
     setLoading(true);
-
-    const excerpt = await getPassage(currentRef);
+    const excerpt = await getPassage(refController.field.value);
 
     if (excerpt) {
-      onChange(excerpt);
+      setValue(name, { ref: refController.field.value, excerpt });
     }
-
     setLoading(false);
   };
 
@@ -62,37 +69,31 @@ const BibleRefField = ({ name, control, defaultValue, withExcerpt = true }) => {
         fullWidth
         items={books}
         field="name"
+        disabled={disabled}
         inputRef={refController.field.ref}
         onChange={refController.field.onChange}
         onBlur={refController.field.onBlur}
       />
       {withExcerpt && (
-        <Controller
-          name={`${name}.excerpt`}
-          control={control}
-          defaultValue={defaultValue.excerpt || ''}
-          render={({ value, ref: inputRef, onChange, onBlur }) => (
-            <>
-              <TextField
-                label="Extrait"
-                variant="filled"
-                margin="dense"
-                fullWidth
-                multiline
-                {...{ value, inputRef, onChange, onBlur }}
-              />
-              <button
-                type="button"
-                className={classes.excerptButton}
-                onClick={() => handleFillPassage(onChange)}
-              >
-                {loading
-                  ? 'Chargement...'
-                  : "Remplir automatiquement l'extrait à partir de la référence"}
-              </button>
-            </>
-          )}
-        />
+        <>
+          <TextFieldControl
+            name={`${name}.excerpt`}
+            label="Extrait"
+            defaultValue={defaultValue.excerpt}
+            disabled={disabled}
+            multiline
+          />
+          <button
+            type="button"
+            className={classes.excerptButton}
+            disabled={disabled}
+            onClick={() => handleFillPassage()}
+          >
+            {loading
+              ? 'Chargement...'
+              : "Remplir automatiquement l'extrait à partir de la référence"}
+          </button>
+        </>
       )}
     </div>
   );

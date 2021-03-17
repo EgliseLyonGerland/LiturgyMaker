@@ -5,11 +5,13 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import find from 'lodash/find';
 import get from 'lodash/get';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { selectAllRecitations } from '../../redux/slices/recitations';
+import TextFieldControl from '../controls/TextFieldControl';
 
-const RecitationField = ({ name, control, defaultValue }) => {
+const RecitationField = ({ name, defaultValue, disabled = false }) => {
   const recitations = useSelector(selectAllRecitations);
+  const { control } = useFormContext();
 
   return (
     <div>
@@ -17,7 +19,10 @@ const RecitationField = ({ name, control, defaultValue }) => {
         name={`${name}.id`}
         control={control}
         defaultValue={defaultValue.id || ''}
-        render={({ value, ref: inputRef, onChange, onBlur }) => (
+        render={({
+          field: { value, ref: inputRef, onChange, onBlur },
+          fieldState: { error },
+        }) => (
           <Autocomplete
             value={find(recitations, ['id', value]) || null}
             options={recitations}
@@ -28,6 +33,7 @@ const RecitationField = ({ name, control, defaultValue }) => {
               onChange(get(option, 'id', null));
             }}
             onBlur={onBlur}
+            disabled={disabled}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -35,27 +41,20 @@ const RecitationField = ({ name, control, defaultValue }) => {
                 variant="filled"
                 margin="dense"
                 inputRef={inputRef}
+                error={!!error}
+                helperText={error?.message}
               />
             )}
             autoComplete
           />
         )}
       />
-      <Controller
+      <TextFieldControl
         name={`${name}.infos`}
-        control={control}
+        label="Informations"
         defaultValue={defaultValue.infos || ''}
-        render={({ value, ref: inputRef, onChange, onBlur }) => (
-          <TextField
-            label="Informations"
-            variant="filled"
-            margin="dense"
-            gutters={3}
-            fullWidth
-            multiline
-            {...{ value, inputRef, onChange, onBlur }}
-          />
-        )}
+        disabled={disabled}
+        multiline
       />
     </div>
   );

@@ -1,23 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import { Controller } from 'react-hook-form';
+import TextFieldControl from '../controls/TextFieldControl';
 
-const SectionField = ({ name, register, control, defaultValue }) => {
+const SectionField = ({ name, defaultValue, disabled = false }) => {
   return (
-    <Controller
+    <TextFieldControl
       name={`${name}.title`}
-      control={control}
-      defaultValue={defaultValue.title || ''}
-      render={({ value, ref: inputRef, onChange, onBlur }) => (
-        <TextField
-          label="Titre"
-          variant="filled"
-          margin="dense"
-          fullWidth
-          {...{ value, inputRef, onChange, onBlur }}
-        />
-      )}
+      label="Titre"
+      defaultValue={defaultValue.title}
+      disabled={disabled}
     />
   );
 };

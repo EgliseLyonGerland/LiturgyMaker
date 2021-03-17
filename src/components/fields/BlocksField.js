@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import upperFirst from 'lodash/upperFirst';
 
 import { blockTypes } from '../../config/global';
@@ -26,12 +26,8 @@ const components = {
   OpenDoorsField: memo(OpenDoorsField),
 };
 
-const BlocksField = ({
-  name,
-  register,
-  control,
-  onFillFromLastWeekClicked,
-}) => {
+const BlocksField = ({ name, disabled = false, onFillFromLastWeekClicked }) => {
+  const { control, register } = useFormContext();
   const { fields, insert, remove } = useFieldArray({
     name,
     control,
@@ -45,27 +41,17 @@ const BlocksField = ({
       <Block
         title={blockTypes[block.type]}
         subtitle={block.title}
+        disabled={disabled}
         onRemoveBlockClicked={() => remove(index)}
         onFillFromLastWeekClicked={() => onFillFromLastWeekClicked(index)}
       >
-        <input
-          type="hidden"
-          name={`${name}[${index}].type`}
-          value={block.type}
-          ref={register()}
-        />
-        <input
-          type="hidden"
-          name={`${name}[${index}].title`}
-          value={block.title}
-          ref={register()}
-        />
+        <input type="hidden" {...register(`${name}.${index}.type`)} />
+        <input type="hidden" {...register(`${name}.${index}.title`)} />
 
         <Component
-          name={`${name}[${index}].data`}
-          register={register}
-          control={control}
+          name={`${name}.${index}.data`}
           defaultValue={block.data}
+          disabled={disabled}
         />
       </Block>
     );
@@ -74,6 +60,7 @@ const BlocksField = ({
   return (
     <div>
       <Divider
+        disabled={disabled}
         onBlockSelected={(type) => {
           insert(0, createDefaultBlock(type));
         }}
@@ -83,6 +70,7 @@ const BlocksField = ({
           {renderBlock(block, index)}
 
           <Divider
+            disabled={disabled}
             onBlockSelected={(type) => {
               insert(index + 1, createDefaultBlock(type));
             }}

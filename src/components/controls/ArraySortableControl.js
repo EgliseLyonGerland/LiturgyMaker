@@ -9,7 +9,7 @@ import {
   sortableElement,
   sortableHandle,
 } from 'react-sortable-hoc';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -32,7 +32,7 @@ const useStyles = makeStyles(
       marginTop: theme.spacing(2),
     },
   }),
-  { name: 'Sortable' },
+  { name: 'ArraySortableControl' },
 );
 
 const SortableContainer = sortableContainer(({ children }) => (
@@ -50,9 +50,8 @@ const SortableItem = sortableElement(({ children, style, classes }) => (
   </div>
 ));
 
-const FieldArraySortable = ({
+const ArraySortableControl = ({
   name,
-  control,
   maxItems,
   disabled,
   gutters = 0,
@@ -61,6 +60,7 @@ const FieldArraySortable = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const { control } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({
     name,
     control,
@@ -117,11 +117,11 @@ const FieldArraySortable = ({
   );
 };
 
-FieldArraySortable.propTypes = {
+ArraySortableControl.propTypes = {
   items: PropTypes.array,
   maxItems: PropTypes.number,
   gutters: PropTypes.number,
   renderItem: PropTypes.func,
 };
 
-export default FieldArraySortable;
+export default ArraySortableControl;

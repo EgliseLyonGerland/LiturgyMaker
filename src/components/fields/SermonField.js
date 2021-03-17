@@ -1,56 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
 import { Box } from '@material-ui/core';
-import { Controller } from 'react-hook-form';
-import FieldArraySortable from '../FieldArraySortable';
+import ArraySortableControl from '../controls/ArraySortableControl';
 import BibleRefField from './BibleRefField';
+import TextFieldControl from '../controls/TextFieldControl';
 
-const SermonField = ({ name, control, defaultValue }) => (
+const SermonField = ({ name, defaultValue, disabled = false }) => (
   <div>
-    <Controller
+    <TextFieldControl
       name={`${name}.title`}
-      control={control}
-      defaultValue={defaultValue.title || ''}
-      render={({ value, ref: inputRef, onChange, onBlur }) => (
-        <TextField
-          label="Titre"
-          variant="filled"
-          margin="dense"
-          fullWidth
-          {...{ value, inputRef, onChange, onBlur }}
-        />
-      )}
+      label="Titre"
+      defaultValue={defaultValue.title}
+      disabled={disabled}
     />
-    <Controller
+    <TextFieldControl
       name={`${name}.author`}
-      control={control}
-      defaultValue={defaultValue.author || ''}
-      render={({ value, ref: inputRef, onChange, onBlur }) => (
-        <TextField
-          label="Auteur"
-          variant="filled"
-          margin="dense"
-          fullWidth
-          {...{ value, inputRef, onChange, onBlur }}
-        />
-      )}
+      label="Auteur"
+      defaultValue={defaultValue.author}
+      disabled={disabled}
     />
 
     <Box fontSize={16} fontWeight={900} mt={4} mb={2}>
       Passage(s) biblique(s)
     </Box>
 
-    <FieldArraySortable
+    <ArraySortableControl
       name={`${name}.bibleRefs`}
-      control={control}
       defaultItem={{ ref: '' }}
+      disabled={disabled}
       renderItem={(item, index) => (
         <BibleRefField
-          name={`${name}.bibleRefs[${index}]`}
-          control={control}
+          name={`${name}.bibleRefs.${index}`}
           defaultValue={item}
           withExcerpt={false}
+          disabled={disabled}
         />
       )}
     />
@@ -59,24 +42,16 @@ const SermonField = ({ name, control, defaultValue }) => (
       Plan
     </Box>
 
-    <FieldArraySortable
+    <ArraySortableControl
       name={`${name}.plan`}
-      control={control}
       defaultItem={{ text: '' }}
+      disabled={disabled}
       renderItem={(item, index) => (
-        <Controller
-          name={`${name}.plan[${index}].text`}
-          control={control}
+        <TextFieldControl
+          name={`${name}.plan.${index}.text`}
           defaultValue={item.text || ''}
-          render={({ value, ref: inputRef, onChange, onBlur }) => (
-            <TextField
-              label={`Point #${index + 1}`}
-              variant="filled"
-              margin="dense"
-              fullWidth
-              {...{ value, inputRef, onChange, onBlur }}
-            />
-          )}
+          label={`Point #${index + 1}`}
+          disabled={disabled}
         />
       )}
     />

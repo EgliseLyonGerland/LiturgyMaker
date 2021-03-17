@@ -11,6 +11,7 @@ import { Box } from '@material-ui/core';
 const FormBlock = ({
   title,
   subtitle = '',
+  disabled = false,
   onRemoveBlockClicked,
   onFillFromLastWeekClicked,
   children,
@@ -54,6 +55,7 @@ const FormBlock = ({
             aria-label="more"
             aria-controls="long-menu"
             aria-haspopup="true"
+            disabled={disabled}
             onClick={handleToggle}
           >
             <MoreVertIcon />

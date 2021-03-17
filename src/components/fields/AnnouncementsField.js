@@ -1,46 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import { Controller } from 'react-hook-form';
-import FieldArraySortable from '../FieldArraySortable';
+import ArraySortableControl from '../controls/ArraySortableControl';
+import TextFieldControl from '../controls/TextFieldControl';
 
-const AnnouncementsField = ({ name, control }) => {
+const AnnouncementsField = ({ name, disabled = false }) => {
   return (
-    <FieldArraySortable
+    <ArraySortableControl
       name={name}
-      control={control}
       gutters={3}
       defaultItem={{ title: '', detail: '' }}
+      disabled={disabled}
       renderItem={(item, index) => (
         <div>
-          <Controller
-            name={`${name}[${index}].title`}
-            control={control}
-            defaultValue={item.title || ''}
-            render={({ value, ref: inputRef, onChange, onBlur }) => (
-              <TextField
-                label="Titre"
-                variant="filled"
-                margin="dense"
-                fullWidth
-                {...{ value, inputRef, onChange, onBlur }}
-              />
-            )}
+          <TextFieldControl
+            name={`${name}.${index}.title`}
+            label="Titre"
+            defaultValue={item.title}
+            disabled={disabled}
           />
-          <Controller
-            name={`${name}[${index}].detail`}
-            control={control}
-            defaultValue={item.detail || ''}
-            render={({ value, ref: inputRef, onChange, onBlur }) => (
-              <TextField
-                label="Détails"
-                variant="filled"
-                margin="dense"
-                fullWidth
-                multiline
-                {...{ value, inputRef, onChange, onBlur }}
-              />
-            )}
+          <TextFieldControl
+            name={`${name}.${index}.detail`}
+            label="Détails"
+            defaultValue={item.detail}
+            disabled={disabled}
+            multiline
           />
         </div>
       )}

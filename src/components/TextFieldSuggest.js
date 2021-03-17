@@ -40,6 +40,8 @@ const TextFieldSuggest = ({
   items = [],
   field = 'label',
   value,
+  name,
+  disabled = false,
   onChange,
   onFocus = () => {},
   onBlur = () => {},
@@ -92,6 +94,7 @@ const TextFieldSuggest = ({
   }) => (
     <TextField
       fullWidth
+      disabled={disabled}
       InputProps={{
         inputRef: (node) => {
           ref(node);
@@ -106,7 +109,7 @@ const TextFieldSuggest = ({
         onFocus2(event, newValue);
       }}
       onBlur={(event) => {
-        onBlur();
+        onBlur(event);
         onBlur2(event);
       }}
       {...other}
@@ -138,7 +141,7 @@ const TextFieldSuggest = ({
     <div className={classes.root}>
       <Autosuggest
         suggestions={suggestions}
-        inputProps={{ value, onChange: handleChange }}
+        inputProps={{ value, name, onChange: handleChange }}
         theme={{
           container: classes.container,
           suggestionsContainerOpen: classes.suggestionsContainerOpen,
