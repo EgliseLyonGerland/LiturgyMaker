@@ -123,7 +123,7 @@ const Songs = () => {
       .map(({ id }) => find(songs, ['id', id]));
   }
 
-  filteredSongs = sortBy(songs, 'title');
+  filteredSongs = sortBy(filteredSongs, 'title');
 
   const renderSongDetails = (song) => {
     const details = [];
