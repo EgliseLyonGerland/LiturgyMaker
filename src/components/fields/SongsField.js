@@ -88,7 +88,8 @@ const SongsField = ({ name, disabled = false }) => {
                 <Checkbox
                   disabled={disabled}
                   onChange={(e) => onChange(e.target.checked)}
-                  {...{ value, inputRef, onBlur }}
+                  checked={value}
+                  {...{ inputRef, onBlur }}
                 />
               )}
             />
