@@ -4,15 +4,15 @@ export const bibleRefSchema = yup.string();
 
 export const announcementsBlockSchema = yup.array().of(
   yup.object().shape({
-    title: yup.string().required('Requis'),
-    detail: yup.string().required('Requis'),
+    title: yup.string(),
+    detail: yup.string(),
   }),
 );
 
 export const readingBlockSchema = yup.object().shape({
   bibleRefs: yup.array().of(
     yup.object().shape({
-      ref: bibleRefSchema.required('Requis'),
+      ref: bibleRefSchema,
       excerpt: yup.string(),
     }),
   ),
@@ -20,49 +20,49 @@ export const readingBlockSchema = yup.object().shape({
 
 export const songsBlockSchema = yup.array().of(
   yup.object().shape({
-    id: yup.string().nullable().required('Requis'),
+    id: yup.string().nullable(),
     infos: yup.string(),
     repeat: yup.boolean(),
   }),
 );
 
 export const recitationBlockSchema = yup.object().shape({
-  id: yup.string().nullable().required('Requis'),
+  id: yup.string().nullable(),
   infos: yup.string(),
 });
 
 export const sermonBlockSchema = yup.object().shape({
-  title: yup.string().required('Requis'),
-  author: yup.string().required('Requis'),
+  title: yup.string(),
+  author: yup.string(),
   bibleRefs: yup.array().of(
     yup.object().shape({
-      ref: bibleRefSchema.required('Requis'),
+      ref: bibleRefSchema,
     }),
   ),
   plan: yup.array().of(
     yup.object().shape({
-      text: yup.string().required('Requis'),
+      text: yup.string(),
     }),
   ),
 });
 
 export const openDoorsBlockSchema = yup.object().shape({
-  title: yup.string().required('Requis'),
-  detail: yup.string().required('Requis'),
+  title: yup.string(),
+  detail: yup.string(),
   prayerTopics: yup.array().of(
     yup.object().shape({
-      text: bibleRefSchema.required('Requis'),
+      text: bibleRefSchema,
     }),
   ),
   plan: yup.array().of(
     yup.object().shape({
-      text: yup.string().required('Requis'),
+      text: yup.string(),
     }),
   ),
 });
 
 export const sectionBlockSchema = yup.object().shape({
-  title: yup.string().required('Requis'),
+  title: yup.string(),
 });
 
 const blockSchemas = {
@@ -79,7 +79,7 @@ export const liturgySchema = yup.object().shape({
   blocks: yup.array().of(
     yup.lazy((value) =>
       yup.object().shape({
-        type: yup.string().required('Requis'),
+        type: yup.string(),
         title: yup.string(),
         data: blockSchemas[value.type],
       }),
@@ -88,7 +88,7 @@ export const liturgySchema = yup.object().shape({
 });
 
 export const songSchema = yup.object().shape({
-  title: yup.string().required('Requis'),
+  title: yup.string(),
   authors: yup.string().nullable(),
   number: yup.number().min(1),
   copyright: yup.string().nullable(),
@@ -96,7 +96,7 @@ export const songSchema = yup.object().shape({
   collection: yup.string().nullable(),
   lyrics: yup.array().of(
     yup.object().shape({
-      text: yup.string().required('Requis'),
+      text: yup.string(),
       type: yup.string().oneOf(['verse', 'chorus']),
     }),
   ),
