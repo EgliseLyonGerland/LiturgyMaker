@@ -152,7 +152,7 @@ const Songs = () => {
   const renderToolbar = () => (
     <Box mb={3} display="flex">
       <Box
-        bgcolor="background.dark"
+        bgcolor="tertiary.dark"
         border="sold 1px rgba(255,255,255,0.1)"
         borderRadius={4}
         width={200}

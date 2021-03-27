@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   header: {
-    background: theme.palette.background.dark,
+    background: theme.palette.tertiary.dark,
     color: theme.palette.text.primary,
     ...theme.typography.h6,
   },

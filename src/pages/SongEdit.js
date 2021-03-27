@@ -15,14 +15,14 @@ import { songSchema } from '../config/schemas';
 
 const Block = ({ header, children, ...props }) => {
   return (
-    <Box bgcolor="background.light" borderRadius={16} {...props}>
+    <Box bgcolor="tertiary.light" borderRadius={16} {...props}>
       {header && (
         <Box
           height={72}
           px={5}
           display="flex"
           alignItems="center"
-          bgcolor="background.dark"
+          bgcolor="tertiary.dark"
           borderRadius="16px 16px 0 0"
         >
           {isString(header) ? (

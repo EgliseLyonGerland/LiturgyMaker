@@ -39,7 +39,7 @@ const FormBlock = ({
         pr={3}
         display="flex"
         alignItems="center"
-        bgcolor="background.dark"
+        bgcolor="tertiary.dark"
         borderRadius="16px 16px 0 0"
       >
         <Typography variant="h6">

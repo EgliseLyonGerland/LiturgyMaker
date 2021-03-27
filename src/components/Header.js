@@ -6,7 +6,7 @@ import { Box, Link } from '@material-ui/core';
 const useStyles = makeStyles(
   (theme) => ({
     root: {
-      background: theme.palette.background.dark,
+      background: theme.palette.tertiary.dark,
       position: 'fixed',
       width: '100%',
       height: 60,
