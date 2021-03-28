@@ -1,11 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { WrappedComponentProps } from 'react-with-firebase-auth';
 
 import FirebaseContext from './components/FirebaseContext';
 import AuthPage from './pages/Auth';
 import MainPage from './pages/Main';
 
-function App({ user, signInWithEmailAndPassword }) {
+function App({ user, signInWithEmailAndPassword }: WrappedComponentProps) {
   if (typeof user === 'undefined') {
     return null;
   }
@@ -16,14 +16,9 @@ function App({ user, signInWithEmailAndPassword }) {
 
   return (
     <FirebaseContext.Consumer>
-      {(firebase) => <MainPage firebase={firebase} />}
+      {(firebase) => <MainPage />}
     </FirebaseContext.Consumer>
   );
 }
-
-App.propTypes = {
-  user: PropTypes.object,
-  signInWithEmailAndPassword: PropTypes.func,
-};
 
 export default App;

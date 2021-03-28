@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Auth = ({ onSubmit = () => {} }) => {
+const Auth = ({ onSubmit = (email, password) => {} }) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
