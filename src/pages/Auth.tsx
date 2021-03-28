@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -6,6 +6,14 @@ import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import type firebase from 'firebase/app';
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+
+interface Props {
+  firebaseAuth: firebase.auth.Auth;
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,24 +33,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Auth = ({ onSubmit = (email, password) => {} }) => {
+const Auth = ({ firebaseAuth }: Props) => {
   const classes = useStyles();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('oltodo@msn.com');
+  const [password, setPassword] = useState('DQ68sx89!');
+  const [errorShown, setErrorShown] = useState(false);
+  const [signInWithEmailAndPassword, , , error] = useSignInWithEmailAndPassword(
+    firebaseAuth,
+  );
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: FormEvent) => {
     if (email && password) {
-      onSubmit(email, password);
+      signInWithEmailAndPassword(email, password);
     }
 
     event.preventDefault();
   };
 
+  useEffect(() => {
+    if (error) {
+      setErrorShown(true);
+    }
+  }, [error]);
+
   return (
     <div className={classes.root}>
       <form onSubmit={handleSubmit}>
         <Box width={360} boxShadow={20}>
-          <Card className={classes.box}>
+          <Card>
             <CardContent className={classes.header}>Identification</CardContent>
             <CardContent className={classes.content}>
               <TextField
@@ -84,6 +102,18 @@ const Auth = ({ onSubmit = (email, password) => {} }) => {
           </Card>
         </Box>
       </form>
+
+      <Snackbar
+        open={errorShown}
+        autoHideDuration={6000}
+        onClose={() => {
+          setErrorShown(false);
+        }}
+      >
+        <Alert severity="error">
+          Connexion impossible. Veuillez vérifier vos identifiants.
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

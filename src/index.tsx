@@ -1,9 +1,6 @@
-import React, { ComponentType } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import firebase from 'firebase/app';
-import withFirebaseAuth, {
-  WrappedComponentProps,
-} from 'react-with-firebase-auth';
 import { Provider } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,20 +10,14 @@ import 'firebase/firestore';
 
 import configureStore from './redux';
 import App from './App';
-import FirebaseContext from './components/FirebaseContext';
 import createFirebaseConfig from './config/firebase';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 
-const firebaseApp: any = firebase.initializeApp(
+const firebaseApp = firebase.initializeApp(
   createFirebaseConfig(process.env.NODE_ENV),
 );
-const firebaseAppAuth = firebaseApp.auth();
 const store = configureStore(firebaseApp);
-
-const AppWithAuth = withFirebaseAuth({ firebaseAppAuth })(
-  App as ComponentType<object & WrappedComponentProps>,
-);
 
 declare module '@material-ui/core/styles/createPalette' {
   interface Palette {
@@ -63,12 +54,10 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <FirebaseContext.Provider value={firebaseApp}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <AppWithAuth />
-          </ThemeProvider>
-        </FirebaseContext.Provider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App firebase={firebaseApp} />
+        </ThemeProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

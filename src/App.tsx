@@ -1,24 +1,19 @@
 import React from 'react';
-import { WrappedComponentProps } from 'react-with-firebase-auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import type firebase from 'firebase/app';
 
-import FirebaseContext from './components/FirebaseContext';
 import AuthPage from './pages/Auth';
 import MainPage from './pages/Main';
 
-function App({ user, signInWithEmailAndPassword }: WrappedComponentProps) {
-  if (typeof user === 'undefined') {
-    return null;
-  }
+interface Props {
+  firebase: firebase.app.App;
+}
 
-  if (user === null) {
-    return <AuthPage onSubmit={signInWithEmailAndPassword} />;
-  }
+function App({ firebase }: Props) {
+  const firebaseAuth = firebase.auth();
+  const [user] = useAuthState(firebaseAuth);
 
-  return (
-    <FirebaseContext.Consumer>
-      {(firebase) => <MainPage />}
-    </FirebaseContext.Consumer>
-  );
+  return user ? <MainPage /> : <AuthPage firebaseAuth={firebaseAuth} />;
 }
 
 export default App;
