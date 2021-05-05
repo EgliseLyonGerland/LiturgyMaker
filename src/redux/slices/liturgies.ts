@@ -39,6 +39,7 @@ export const persistLiturgy = createAsyncThunk<
 >('liturgies/persistLiturgy', async (liturgy, { extra: { firebase } }) => {
   const { id, ...data } = liturgy;
   const db = firebase.firestore();
+  data.uid = firebase.auth().currentUser?.uid || '';
 
   await db.collection('liturgies').doc(`${id}`).set(data);
 

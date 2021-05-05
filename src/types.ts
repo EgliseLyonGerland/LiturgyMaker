@@ -2,6 +2,7 @@ import rootReducer from './redux/slices';
 
 export interface LiturgyDocument {
   id: number;
+  uid: string;
 }
 
 export interface RecitationDocument {
