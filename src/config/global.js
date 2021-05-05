@@ -1,4 +1,4 @@
-export const currentVersion = 5;
+export const currentVersion = 6;
 
 export const blockTypes = {
   announcements: 'Annonces',

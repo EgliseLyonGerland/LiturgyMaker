@@ -20,7 +20,7 @@ const SongsField = ({ name, disabled = false }) => {
     return (
       <div>
         <Controller
-          name={`${name}.${index}.id`}
+          name={`${name}.items.${index}.id`}
           control={control}
           defaultValue={item.id || ''}
           render={({
@@ -69,7 +69,7 @@ const SongsField = ({ name, disabled = false }) => {
           }}
         />
         <TextFieldControl
-          name={`${name}.${index}.infos`}
+          name={`${name}.items.${index}.infos`}
           label="Informations"
           defaultValue={item.infos || ''}
           disabled={disabled}
@@ -79,7 +79,7 @@ const SongsField = ({ name, disabled = false }) => {
         <FormControlLabel
           control={
             <Controller
-              name={`${name}.${index}.repeat`}
+              name={`${name}.items.${index}.repeat`}
               control={control}
               defaultValue={item.repeat || false}
               render={({
@@ -102,7 +102,7 @@ const SongsField = ({ name, disabled = false }) => {
 
   return (
     <ArraySortableControl
-      name={name}
+      name={`${name}.items`}
       defaultItem={{ id: '', infos: '', repeat: false }}
       renderItem={renderItem}
       gutters={3}

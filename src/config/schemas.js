@@ -2,36 +2,40 @@ import * as yup from 'yup';
 
 export const bibleRefSchema = yup.string();
 
-export const announcementsBlockSchema = yup.array().of(
-  yup.object().shape({
-    title: yup.string(),
-    detail: yup.string(),
-  }),
-);
+export const announcementsBlockSchema = {
+  items: yup.array().of(
+    yup.object().shape({
+      title: yup.string(),
+      detail: yup.string(),
+    }),
+  ),
+};
 
-export const readingBlockSchema = yup.object().shape({
+export const readingBlockSchema = {
   bibleRefs: yup.array().of(
     yup.object().shape({
       ref: bibleRefSchema,
       excerpt: yup.string(),
     }),
   ),
-});
+};
 
-export const songsBlockSchema = yup.array().of(
-  yup.object().shape({
-    id: yup.string().nullable(),
-    infos: yup.string(),
-    repeat: yup.boolean(),
-  }),
-);
+export const songsBlockSchema = {
+  items: yup.array().of(
+    yup.object().shape({
+      id: yup.string().nullable(),
+      infos: yup.string(),
+      repeat: yup.boolean(),
+    }),
+  ),
+};
 
-export const recitationBlockSchema = yup.object().shape({
+export const recitationBlockSchema = {
   id: yup.string().nullable(),
   infos: yup.string(),
-});
+};
 
-export const sermonBlockSchema = yup.object().shape({
+export const sermonBlockSchema = {
   title: yup.string(),
   author: yup.string(),
   bibleRefs: yup.array().of(
@@ -44,9 +48,9 @@ export const sermonBlockSchema = yup.object().shape({
       text: yup.string(),
     }),
   ),
-});
+};
 
-export const openDoorsBlockSchema = yup.object().shape({
+export const openDoorsBlockSchema = {
   title: yup.string(),
   detail: yup.string(),
   prayerTopics: yup.array().of(
@@ -59,11 +63,11 @@ export const openDoorsBlockSchema = yup.object().shape({
       text: yup.string(),
     }),
   ),
-});
+};
 
-export const sectionBlockSchema = yup.object().shape({
+export const sectionBlockSchema = {
   title: yup.string(),
-});
+};
 
 const blockSchemas = {
   announcements: announcementsBlockSchema,
@@ -81,7 +85,7 @@ export const liturgySchema = yup.object().shape({
       yup.object().shape({
         type: yup.string(),
         title: yup.string(),
-        data: blockSchemas[value.type],
+        data: yup.object().shape(blockSchemas[value.type]),
       }),
     ),
   ),

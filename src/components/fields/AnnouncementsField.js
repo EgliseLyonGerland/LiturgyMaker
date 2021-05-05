@@ -6,20 +6,20 @@ import TextFieldControl from '../controls/TextFieldControl';
 const AnnouncementsField = ({ name, disabled = false }) => {
   return (
     <ArraySortableControl
-      name={name}
+      name={`${name}.items`}
       gutters={3}
       defaultItem={{ title: '', detail: '' }}
       disabled={disabled}
       renderItem={(item, index) => (
         <div>
           <TextFieldControl
-            name={`${name}.${index}.title`}
+            name={`${name}.items.${index}.title`}
             label="Titre"
             defaultValue={item.title}
             disabled={disabled}
           />
           <TextFieldControl
-            name={`${name}.${index}.detail`}
+            name={`${name}.items.${index}.detail`}
             label="Détails"
             defaultValue={item.detail}
             disabled={disabled}

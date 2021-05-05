@@ -1527,10 +1527,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@hookform/resolvers@2.0.0-beta.15":
-  version "2.0.0-beta.15"
-  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.0.0-beta.15.tgz#00ead278be1b5e8ead7fd732f0e6328e3d27681d"
-  integrity sha512-T09hk26rodv00MSRWGEb2UnP+Dnc+JxqubVqUX3VCmnfg5spEe8heQ99OfkU2D/idLxIgkc3pMB2VAmXmpK3fg==
+"@hookform/resolvers@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.4.0.tgz#3b454463fbb5e7a0de4da029fa34e677f32d8d8d"
+  integrity sha512-KiHc7Uwd2IJMvPTMQ9vQxfss2ulq2gRYL/HYZ90qiTs+07UgGWCikiIvE2pKjjGVltEYjq5eR8x0ITmoyEjGxQ==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -10440,10 +10440,10 @@ react-firebase-hooks@3.0.3:
   resolved "https://registry.yarnpkg.com/react-firebase-hooks/-/react-firebase-hooks-3.0.3.tgz#61310fce721a23ad6f50cd1159a6ced87088adff"
   integrity sha512-g66N21BTzuYWmQhWiTkBPwkrHcK5wNVpq/xkaAyWWDOl3zo9Yx/Q3nG+yVlj966Xi3E5ABC7a/Efk2LNAzzGPA==
 
-react-hook-form@7.0.0-rc.7:
-  version "7.0.0-rc.7"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.0.0-rc.7.tgz#7f2045b355398a52166014bd5721c682c490f39d"
-  integrity sha512-xGlRM2YkgIoMWfy7bkXSgqqvORVF4V4UnVp54JkpIZS/zL2efsAdd+f+nClxXaEOF+B04WbEH93fZZFkX7JjAA==
+react-hook-form@7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.4.0.tgz#b024faf7f6eaf9ee5c25c219d6b38a654c147be6"
+  integrity sha512-47paUN7uIajM0h2aqSgMHLLDAMNtKsndgel5xTFebsWmwvAAOcYoSTM+IE7En3tNcTmmVYnlx/eLQFrYcxGkbQ==
 
 react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"

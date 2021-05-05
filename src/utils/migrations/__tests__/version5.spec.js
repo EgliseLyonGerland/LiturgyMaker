@@ -1,7 +1,8 @@
-import migrate from '../migrate';
+import version5 from '../version5';
 
 const input = {
   uid: 'kbr8FeooHxWPfRlC5Rr6PeVOPQJ3',
+  date: 1610319599999,
   blocks: [
     {
       data: [
@@ -177,14 +178,11 @@ const input = {
       id: 'c5e6f47e-987e-4736-b7c2-bf0df6ad20c4',
     },
   ],
-  date: 1610319599999,
-  version: 4,
 };
 
 const output = {
   uid: 'kbr8FeooHxWPfRlC5Rr6PeVOPQJ3',
   date: 1610319599999,
-  version: 5,
   blocks: [
     {
       type: 'announcements',
@@ -360,6 +358,6 @@ const output = {
   ],
 };
 
-test('migrate() from 4 to 5', () => {
-  expect(migrate(input)).toEqual(output);
+test('version5()', () => {
+  expect(version5(input)).toEqual(output);
 });
