@@ -15,12 +15,12 @@ function changeBackground() {
 }
 
 function generateAnnouncementsBlockCode({ data }) {
-  if (!data.length) {
+  if (!data.items.length) {
     return '';
   }
 
   const config = {
-    items: data.reduce((acc, { title, detail }) => {
+    items: data.items.reduce((acc, { title, detail }) => {
       if (!title) {
         return acc;
       }
@@ -37,7 +37,7 @@ function generateAnnouncementsBlockCode({ data }) {
 }
 
 function generateSongsBlockCode({ data }, { songs, addError }) {
-  return data
+  return data.items
     .reduce((acc, datum) => {
       let song = find(songs, ['id', datum.id]);
 

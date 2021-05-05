@@ -9,7 +9,9 @@ const shuffledVerseTemplates = shuffle(verseTemplates);
 export const createDefaultAnnouncementsBlock = () => ({
   type: 'announcements',
   title: '',
-  data: [{ title: '', detail: '' }],
+  data: {
+    items: [{ title: '', detail: '' }],
+  },
 });
 
 export const createDefaultReadingBlock = ({ title = '' } = {}) => ({
@@ -58,7 +60,9 @@ export const createDefaultSectionBlock = ({ title = '' } = {}) => ({
 export const createDefaultSongsBlock = () => ({
   type: 'songs',
   title: '',
-  data: [],
+  data: {
+    items: [],
+  },
 });
 
 export const createDefaultRecitationBlock = () => ({
@@ -90,16 +94,14 @@ export const createDefaultLiturgy = (id) => ({
   date: +converToDate(id),
   version: currentVersion,
   blocks: [
-    createDefaultAnnouncementsBlock(),
-    createDefaultRecitationBlock(),
-    createDefaultSongsBlock(),
+    createDefaultAnnouncementsBlock('announcements'),
     createDefaultReadingBlock({ title: 'Ouverture' }),
-    // createDefaultReadingBlock({ title: 'Loi de Dieu' }),
-    // createDefaultReadingBlock({ title: 'Grâce de Dieu' }),
-    // createDefaultReadingBlock({ title: 'Inter-chants' }),
+    createDefaultReadingBlock({ title: 'Loi de Dieu' }),
+    createDefaultReadingBlock({ title: 'Grâce de Dieu' }),
+    createDefaultReadingBlock({ title: 'Inter-chants' }),
     createDefaultSermonBlock(),
     createDefaultOpenDoorsBlock(),
     createDefaultSectionBlock({ title: 'Prière' }),
-    // createDefaultReadingBlock({ title: 'Envoi' }),
+    createDefaultReadingBlock({ title: 'Envoi' }),
   ],
 });
