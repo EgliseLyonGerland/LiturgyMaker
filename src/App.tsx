@@ -11,7 +11,11 @@ interface Props {
 
 function App({ firebase }: Props) {
   const firebaseAuth = firebase.auth();
-  const [user] = useAuthState(firebaseAuth);
+  const [user, loading] = useAuthState(firebaseAuth);
+
+  if (loading) {
+    return null;
+  }
 
   return user ? <MainPage /> : <AuthPage firebaseAuth={firebaseAuth} />;
 }
