@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter } from 'react-router-dom';
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
 import 'firebase/auth';
 import 'firebase/firestore';
 
@@ -13,6 +15,14 @@ import App from './App';
 import createFirebaseConfig from './config/firebase';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
+
+Sentry.init({
+  dsn:
+    'https://7718d836108d482d812a93fd548ac9d3@o50300.ingest.sentry.io/5750589',
+  integrations: [new Integrations.BrowserTracing()],
+  environment: process.env.NODE_ENV,
+  tracesSampleRate: 1.0,
+});
 
 const firebaseApp = firebase.initializeApp(
   createFirebaseConfig(process.env.NODE_ENV),
