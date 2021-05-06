@@ -1,14 +1,31 @@
 import React, { useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import upperFirst from 'lodash/upperFirst';
 import forEach from 'lodash/forEach';
 import FontFaceObserver from 'fontfaceobserver';
-import * as preview from '../utils/preview';
-import { fontFamilies, documentWidth, documentHeight } from '../config/preview';
+import { documentWidth, documentHeight } from '../config/preview';
 import { selectAllSongs } from '../redux/slices/songs';
 import { selectAllRecitations } from '../redux/slices/recitations';
+import { FontFamily, LiturgyBlock } from '../types';
+import { FieldPath, PreviewGenerateFunction } from '../utils/preview';
+import generateAnnouncementsPreview from '../utils/previews/announcements';
+import generateReadingPreview from '../utils/previews/reading';
+import generateSectionPreview from '../utils/previews/section';
+import generateSermonPreview from '../utils/previews/sermon';
+import generateSongsPreview from '../utils/previews/songs';
+import generateRecitationPreview from '../utils/previews/recitation';
+import generateOpenDoorsPreview from '../utils/previews/openDoors';
+
+const previews: Record<string, PreviewGenerateFunction<any, any>> = {
+  generateAnnouncementsPreview,
+  generateReadingPreview,
+  generateSectionPreview,
+  generateSermonPreview,
+  generateSongsPreview,
+  generateRecitationPreview,
+  generateOpenDoorsPreview,
+};
 
 const useStyles = makeStyles(
   {
@@ -29,20 +46,32 @@ const useStyles = makeStyles(
   { name: 'Preview' },
 );
 
-const Preview = ({ block, currentFieldPath }) => {
+const Preview: React.FC<{
+  block: LiturgyBlock;
+  currentFieldPath: FieldPath;
+}> = ({ block, currentFieldPath }) => {
   const classes = useStyles();
-  const canvasRef = useRef(null);
-  const imageRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const songs = useSelector(selectAllSongs);
   const recitations = useSelector(selectAllRecitations);
 
-  const clean = (ctx) => {
+  const clean = (ctx: CanvasRenderingContext2D) => {
     ctx.clearRect(0, 0, documentWidth, documentHeight);
   };
 
   const draw = async () => {
     const canvas = canvasRef.current;
+
+    if (canvas === null) {
+      return;
+    }
+
     const ctx = canvas.getContext('2d');
+
+    if (ctx === null) {
+      return;
+    }
 
     canvas.width = documentWidth;
     canvas.height = documentHeight;
@@ -55,30 +84,29 @@ const Preview = ({ block, currentFieldPath }) => {
     const { type } = block;
     const funcName = `generate${upperFirst(type)}Preview`;
 
-    if (!preview[funcName]) {
+    if (!previews[funcName]) {
       clean(ctx);
       return;
     }
 
     ctx.fillStyle = 'white';
 
-    const args = [ctx, block, currentFieldPath];
-
+    let data;
     if (type === 'songs') {
-      args.push(songs);
+      data = songs;
+    } else if (type === 'recitation') {
+      data = recitations;
     }
 
-    if (type === 'recitation') {
-      args.push(recitations);
+    await previews[funcName].apply(this, [ctx, block, currentFieldPath, data]);
+
+    if (imageRef && imageRef.current) {
+      imageRef.current.src = canvas.toDataURL('image/png');
     }
-
-    await preview[funcName].apply(this, args);
-
-    imageRef.current.src = canvas.toDataURL('image/png');
   };
 
   useEffect(() => {
-    forEach(fontFamilies, (fontFamily) => {
+    forEach(FontFamily, (fontFamily) => {
       const font = new FontFaceObserver(fontFamily);
       font.load().then(() => {
         draw();
@@ -96,12 +124,6 @@ const Preview = ({ block, currentFieldPath }) => {
       <img ref={imageRef} className={classes.image} alt="Preview" />
     </div>
   );
-};
-
-Preview.propTypes = {
-  block: PropTypes.object,
-  recitations: PropTypes.object,
-  currentFieldPath: PropTypes.array,
 };
 
 export default Preview;

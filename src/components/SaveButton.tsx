@@ -4,13 +4,21 @@ import { Check, Save } from '@material-ui/icons';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { createPortal } from 'react-dom';
 
-function SaveButton({ persisting, persisted, dirty, onClick, onHide }) {
+type Status = 'running' | 'done' | 'ready' | null;
+
+const SaveButton: React.FC<{
+  persisting: boolean;
+  persisted: boolean;
+  dirty: boolean;
+  onClick(): void;
+  onHide(): void;
+}> = ({ persisting, persisted, dirty, onClick, onHide }) => {
   const theme = useTheme();
 
-  const [currentStatus, setCurrentStatus] = useState(null);
+  const [currentStatus, setCurrentStatus] = useState<Status>(null);
   const [displayed, setDisplayed] = useState(false);
 
-  const status = persisting
+  const status: Status = persisting
     ? 'running'
     : persisted
     ? 'done'
@@ -75,7 +83,7 @@ function SaveButton({ persisting, persisted, dirty, onClick, onHide }) {
           }}
         >
           <Box width={168} display="flex" justifyContent="center">
-            <BeatLoader key="saving" color="white" size={8} sizeUnit="px" />
+            <BeatLoader key="saving" color="white" size={8} />
           </Box>
         </Fab>
       );
@@ -103,7 +111,6 @@ function SaveButton({ persisting, persisted, dirty, onClick, onHide }) {
       display="flex"
       justifyContent="center"
       width="100%"
-      transition="background .3s"
       zIndex={100}
     >
       <Zoom key={currentStatus} in={displayed}>
@@ -112,6 +119,6 @@ function SaveButton({ persisting, persisted, dirty, onClick, onHide }) {
     </Box>,
     document.body,
   );
-}
+};
 
 export default SaveButton;

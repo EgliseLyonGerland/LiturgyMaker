@@ -1,41 +1,38 @@
 import superagent from 'superagent';
 import jsonp from 'superagent-jsonp';
-import trim from 'lodash/trim';
 import deburr from 'lodash/deburr';
 import find from 'lodash/find';
 import slugify from './slugify';
 
 import books from '../config/bibleBooks.json';
 
+interface GetBibleResponse {
+  book: {
+    book_ref: string;
+    book_name: string;
+    book_nr: string;
+    chapter_nr: string;
+    chapter: Record<
+      string,
+      {
+        verse_nr: string;
+        verse: string;
+      }
+    >;
+  }[];
+}
+
+interface BibleRef {
+  book: string;
+  chapterStart: number;
+  verseStart: number | null;
+  chapterEnd: number | null;
+  verseEnd: number | null;
+}
+
 const bookNames = books.map(({ name }) => deburr(name));
 
-function merge(fields, values) {
-  return fields.reduce(
-    (acc, key, index) => ({
-      ...acc,
-      [key]: key === 'book' ? values[index] : parseInt(values[index], 10),
-    }),
-    {},
-  );
-}
-
-function stringifyContent({ book = [] } = {}) {
-  return book.reduce(
-    (acc, curr) =>
-      (
-        acc +
-        Object.values(curr.chapter)
-          .map(({ verse }) => verse.trim())
-          .join(' ')
-          .split('¶')
-          .map((text) => text.trim())
-          .join(' ')
-      ).trim(),
-    '',
-  );
-}
-
-export function parse(ref) {
+export function parse(ref: string): BibleRef | null {
   /**
    * Examples:
    *
@@ -51,46 +48,35 @@ export function parse(ref) {
     //   regExp: /^(.+?)$/,
     //   fields: ["book"]
     // },
-    {
-      regExp: /^(.+?) *(\d+)$/,
-      fields: ['book', 'chapterStart'],
-    },
-    {
-      regExp: /^(.+?) *(\d+)-(\d+)$/,
-      fields: ['book', 'chapterStart', 'chapterEnd'],
-    },
-    {
-      regExp: /^(.+?) *(\d+)\.(\d+[a-z]?)$/,
-      fields: ['book', 'chapterStart', 'verseStart'],
-    },
-    {
-      regExp: /^(.+?) *(\d+)\.(\d+[a-z]?)-(\d+[a-z]?)$/,
-      fields: ['book', 'chapterStart', 'verseStart', 'verseEnd'],
-    },
-    {
-      regExp: /^(.+?) *(\d+)\.(\d+[a-z]?)-(\d+)\.(\d+[a-z]?)$/,
-      fields: ['book', 'chapterStart', 'verseStart', 'chapterEnd', 'verseEnd'],
-    },
+    /^(?<book>.+?) *(?<chapterStart>\d+)$/,
+    /^(?<book>.+?) *(?<chapterStart>\d+)-(?<chapterEnd>\d+)$/,
+    /^(?<book>.+?) *(?<chapterStart>\d+)\.(?<verseStart>\d+[a-z]?)$/,
+    /^(?<book>.+?) *(?<chapterStart>\d+)\.(?<verseStart>\d+[a-z]?)-(?<verseEnd>\d+[a-z]?)$/,
+    /^(?<book>.+?) *(?<chapterStart>\d+)\.(?<verseStart>\d+[a-z]?)-(?<chapterEnd>\d+)\.(?<verseEnd>\d+[a-z]?)$/,
   ];
 
-  const ref$ = trim(ref);
-
-  return exprs.reverse().reduce((acc, { regExp, fields }) => {
-    const matches = regExp.exec(ref$);
-
+  return exprs.reverse().reduce<BibleRef | null>((acc, regExp) => {
     if (acc) {
       return acc;
     }
 
-    if (matches) {
-      return merge(fields, matches.slice(1));
+    const matches = regExp.exec(ref.trim());
+
+    if (!matches || !matches.groups) {
+      return null;
     }
 
-    return null;
+    return {
+      book: matches.groups.book,
+      chapterStart: Number(matches.groups.chapterStart),
+      verseStart: Number(matches.groups.verseStart) || null,
+      chapterEnd: Number(matches.groups.chapterEnd) || null,
+      verseEnd: Number(matches.groups.verseEnd) || null,
+    };
   }, null);
 }
 
-export function validate(ref) {
+export function validate(ref: string) {
   const data = parse(ref);
 
   if (!data) {
@@ -104,7 +90,23 @@ export function validate(ref) {
   return '';
 }
 
-export async function getPassage(ref) {
+function stringifyContent({ book }: GetBibleResponse = { book: [] }) {
+  return book.reduce<string>(
+    (acc, curr) =>
+      (
+        acc +
+        Object.values(curr.chapter)
+          .map(({ verse }) => verse.trim())
+          .join(' ')
+          .split('¶')
+          .map((text) => text.trim())
+          .join(' ')
+      ).trim(),
+    '',
+  );
+}
+
+export async function getPassage(ref: string) {
   const data = parse(ref);
 
   if (!data || !data.chapterStart) return null;

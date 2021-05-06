@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import okaida from 'react-syntax-highlighter/dist/esm/styles/prism/okaidia';
 import { makeStyles } from '@material-ui/core/styles';
@@ -47,7 +46,10 @@ const useStyles = makeStyles(
   { name: 'Code' },
 );
 
-const Code = ({ code, onHide = () => {} }) => {
+const Code: React.FC<{
+  code: string;
+  onHide(): void;
+}> = ({ code, onHide = () => {} }) => {
   const classes = useStyles();
   const [copied, setCopied] = useState(false);
 
@@ -74,7 +76,6 @@ const Code = ({ code, onHide = () => {} }) => {
       <div className={classes.actions}>
         <Box mr={2}>
           <Button
-            className={classes.copyButton}
             variant="contained"
             size="small"
             onClick={handleCopy}
@@ -90,10 +91,6 @@ const Code = ({ code, onHide = () => {} }) => {
     </div>,
     document.body,
   );
-};
-
-Code.propTypes = {
-  code: PropTypes.string,
 };
 
 export default Code;

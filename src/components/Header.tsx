@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Link } from '@material-ui/core';
 
@@ -21,10 +20,18 @@ const useStyles = makeStyles(
   { name: 'Header' },
 );
 
-const Header = ({ links, onClick }) => {
+interface HeaderLink {
+  title: string;
+  path: string;
+}
+
+const Header: React.FC<{
+  links: HeaderLink[];
+  onClick(link: HeaderLink): void;
+}> = ({ links, onClick }) => {
   const classes = useStyles();
 
-  const handleClick = (event, link) => {
+  const handleClick = (event: any, link: HeaderLink) => {
     event.preventDefault();
     onClick(link);
   };
@@ -37,23 +44,13 @@ const Header = ({ links, onClick }) => {
 
       {links.map((link, index) => (
         <Box key={index} mx={1}>
-          <Link href="#" onClick={(event) => handleClick(event, link)}>
+          <Link href="#" onClick={(event: any) => handleClick(event, link)}>
             {link.title}
           </Link>
         </Box>
       ))}
     </div>
   );
-};
-
-Header.propTypes = {
-  links: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
-    }),
-  ),
-  onClick: PropTypes.func,
 };
 
 export default Header;

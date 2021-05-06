@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { ButtonBase } from '@material-ui/core';
 import Menu from '@material-ui/core/Menu';
@@ -66,15 +65,18 @@ const useStyles = makeStyles(
   { name: 'Divider' },
 );
 
-const Divider = ({ onBlockSelected, disabled = false }) => {
+const Divider: React.FC<{
+  onBlockSelected(block: string): void;
+  disabled?: boolean;
+}> = ({ onBlockSelected, disabled = false }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const handleSelect = (block) => {
+  const handleSelect = (block: string) => {
     handleClose();
     onBlockSelected(block);
   };
@@ -86,7 +88,6 @@ const Divider = ({ onBlockSelected, disabled = false }) => {
       >
         <ButtonBase
           className={classes.addButton}
-          size="small"
           title="Ajouter un bloc"
           disabled={disabled}
           onClick={(event) => {
@@ -116,10 +117,6 @@ const Divider = ({ onBlockSelected, disabled = false }) => {
       </div>
     </div>
   );
-};
-
-Divider.propTypes = {
-  onBlockSelected: PropTypes.func,
 };
 
 export default Divider;

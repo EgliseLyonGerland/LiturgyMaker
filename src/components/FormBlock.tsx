@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
@@ -8,7 +7,13 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { Box } from '@material-ui/core';
 
-const FormBlock = ({
+const FormBlock: React.FC<{
+  title: string;
+  subtitle?: string;
+  disabled?: boolean;
+  onRemoveBlockClicked(): void;
+  onFillFromLastWeekClicked(): void;
+}> = ({
   title,
   subtitle = '',
   disabled = false,
@@ -16,17 +21,13 @@ const FormBlock = ({
   onFillFromLastWeekClicked,
   children,
 }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  function handleToggle(event) {
-    setAnchorEl(event.currentTarget);
-  }
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   function handleClose() {
     setAnchorEl(null);
   }
 
-  function handleClick(fn) {
+  function handleClick(fn: () => void) {
     handleClose();
     fn();
   }
@@ -56,7 +57,9 @@ const FormBlock = ({
             aria-controls="long-menu"
             aria-haspopup="true"
             disabled={disabled}
-            onClick={handleToggle}
+            onClick={(event) => {
+              setAnchorEl(event.currentTarget);
+            }}
           >
             <MoreVertIcon />
           </IconButton>
@@ -82,14 +85,6 @@ const FormBlock = ({
       </Box>
     </Box>
   );
-};
-
-FormBlock.propTypes = {
-  title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string,
-  onRemoveBlockClicked: PropTypes.func,
-  onFillFromLastWeekClicked: PropTypes.func,
-  children: PropTypes.any,
 };
 
 export default FormBlock;

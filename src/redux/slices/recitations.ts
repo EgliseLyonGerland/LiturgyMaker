@@ -12,7 +12,7 @@ export const recitationEntity = new schema.Entity<RecitationDocument>(
 );
 export const recitationsEntity = new schema.Array(recitationEntity);
 
-const recitationsAdapter = createEntityAdapter();
+const recitationsAdapter = createEntityAdapter<RecitationDocument>();
 
 export const fetchRecitations = createAsyncThunk<
   any,

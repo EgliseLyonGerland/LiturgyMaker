@@ -21,7 +21,7 @@ const defaultSong: SongDocument = {
 export const songEntity = new schema.Entity('songs');
 export const songsEntity = new schema.Array(songEntity);
 
-const songsAdapter = createEntityAdapter();
+const songsAdapter = createEntityAdapter<SongDocument>();
 
 export const fetchSongs = createAsyncThunk<
   any,

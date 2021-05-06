@@ -1,7 +1,15 @@
 import { documentWidth, documentHeight } from '../../config/preview';
+import { ReadingBlockData, ReadingTemplate } from '../../types';
 import { parse } from '../bibleRef';
+import { PreviewGenerateFunction } from '../preview';
 
-function generateVerseVertical(ctx, ref, excerpt, direction, align) {
+function generateVerseVertical(
+  ctx: CanvasRenderingContext2D,
+  ref: string,
+  excerpt: string,
+  direction: 'bottomTop' | 'topBottom' | 'rightLeft' | 'leftRight',
+  align: 'left' | 'right' | 'center',
+) {
   const margin = 80;
   const maxContentWidth = documentWidth - 400;
 
@@ -60,18 +68,23 @@ function generateVerseVertical(ctx, ref, excerpt, direction, align) {
   ctx.restore();
 }
 
-function generateVerseHorizontal(ctx, ref, excerpt, direction, align) {
+function generateVerseHorizontal(
+  ctx: CanvasRenderingContext2D,
+  ref: string,
+  excerpt: string,
+  direction: 'bottomTop' | 'topBottom' | 'rightLeft' | 'leftRight',
+  align: 'left' | 'right' | 'center',
+) {
   const margin = 80;
   const padding = 200;
   const maxContentWidth = documentWidth - padding * 2;
 
-  const parsedRef = parse(ref) || {};
-  const {
-    book = '',
-    chapterStart = '',
-    verseStart = '',
-    verseEnd = '',
-  } = parsedRef;
+  const parsedRef = parse(ref);
+  if (!parsedRef) {
+    return;
+  }
+
+  const { book, chapterStart, verseStart, verseEnd } = parsedRef;
   const title = `${book} ${chapterStart}`;
 
   let subtitle = '';
@@ -147,38 +160,74 @@ function generateVerseHorizontal(ctx, ref, excerpt, direction, align) {
   ctx.fillMultilineText(excerpt, excerptX, exerptY, maxExcerptWidth);
 }
 
-function generateVerseTopBottomLeft(ctx, ref, excerpt) {
+function generateVerseTopBottomLeft(
+  ctx: CanvasRenderingContext2D,
+  ref: string,
+  excerpt: string,
+) {
   generateVerseVertical(ctx, ref, excerpt, 'topBottom', 'left');
 }
 
-function generateVerseTopBottomCenter(ctx, ref, excerpt) {
+function generateVerseTopBottomCenter(
+  ctx: CanvasRenderingContext2D,
+  ref: string,
+  excerpt: string,
+) {
   generateVerseVertical(ctx, ref, excerpt, 'topBottom', 'center');
 }
 
-function generateVerseTopBottomRight(ctx, ref, excerpt) {
+function generateVerseTopBottomRight(
+  ctx: CanvasRenderingContext2D,
+  ref: string,
+  excerpt: string,
+) {
   generateVerseVertical(ctx, ref, excerpt, 'topBottom', 'right');
 }
 
-function generateVerseBottomTopLeft(ctx, ref, excerpt) {
+function generateVerseBottomTopLeft(
+  ctx: CanvasRenderingContext2D,
+  ref: string,
+  excerpt: string,
+) {
   generateVerseVertical(ctx, ref, excerpt, 'bottomTop', 'left');
 }
 
-function generateVerseBottomTopCenter(ctx, ref, excerpt) {
+function generateVerseBottomTopCenter(
+  ctx: CanvasRenderingContext2D,
+  ref: string,
+  excerpt: string,
+) {
   generateVerseVertical(ctx, ref, excerpt, 'bottomTop', 'center');
 }
 
-function generateVerseBottomTopRight(ctx, ref, excerpt) {
+function generateVerseBottomTopRight(
+  ctx: CanvasRenderingContext2D,
+  ref: string,
+  excerpt: string,
+) {
   generateVerseVertical(ctx, ref, excerpt, 'bottomTop', 'right');
 }
 
-function generateVerseLeftRightCenter(ctx, ref, excerpt) {
+function generateVerseLeftRightCenter(
+  ctx: CanvasRenderingContext2D,
+  ref: string,
+  excerpt: string,
+) {
   generateVerseHorizontal(ctx, ref, excerpt, 'leftRight', 'center');
 }
-function generateVerseRightLeftCenter(ctx, ref, excerpt) {
+
+function generateVerseRightLeftCenter(
+  ctx: CanvasRenderingContext2D,
+  ref: string,
+  excerpt: string,
+) {
   generateVerseHorizontal(ctx, ref, excerpt, 'rightLeft', 'center');
 }
 
-const verseGenerators = {
+const verseGenerators: Record<
+  ReadingTemplate,
+  (ctx: CanvasRenderingContext2D, ref: string, excerpt: string) => void
+> = {
   topBottomLeft: generateVerseTopBottomLeft,
   topBottomCenter: generateVerseTopBottomCenter,
   topBottomRight: generateVerseTopBottomRight,
@@ -189,11 +238,11 @@ const verseGenerators = {
   rightLeftCenter: generateVerseRightLeftCenter,
 };
 
-export default function generate(
+const generate: PreviewGenerateFunction<ReadingBlockData> = (
   ctx,
   block,
   currentFieldPath = ['bibleRefs', 0],
-) {
+) => {
   const {
     data: { bibleRefs = [] },
   } = block;
@@ -202,7 +251,10 @@ export default function generate(
     return;
   }
 
-  const bibleRefIndex = Math.min(currentFieldPath[1], bibleRefs.length - 1);
+  const bibleRefIndex = Math.min(
+    currentFieldPath?.[1] || 0,
+    bibleRefs.length - 1,
+  );
   const { template = 'topBottomCenter' } = bibleRefs[bibleRefIndex];
   let { ref, excerpt } = bibleRefs[bibleRefIndex];
 
@@ -230,4 +282,6 @@ export default function generate(
   ctx.lineTo(documentWidth, documentHeight - 150);
   ctx.stroke();
   ctx.closePath();
-}
+};
+
+export default generate;

@@ -1,7 +1,13 @@
 import { documentWidth, documentHeight } from '../../config/preview';
 import openDoorsImage from '../../images/openDoors.png';
+import { PreviewGenerateFunction } from '../preview';
+import { OpenDoorsBlockData } from '../../types';
 
-function drawSlide1(ctx, data, image) {
+function drawSlide1(
+  ctx: CanvasRenderingContext2D,
+  data: OpenDoorsBlockData,
+  image: HTMLImageElement,
+) {
   ctx.save();
   ctx.setFont('openDoorsTitle');
   const { width: titleWidth } = ctx.measureText(data.title);
@@ -41,7 +47,11 @@ function drawSlide1(ctx, data, image) {
   ctx.fillMultilineText(data.detail, detailX, detailY, detailWidth);
 }
 
-function drawSlide2(ctx, data, image) {
+function drawSlide2(
+  ctx: CanvasRenderingContext2D,
+  data: OpenDoorsBlockData,
+  image: HTMLImageElement,
+) {
   ctx.save();
   ctx.fillStyle = '#432B7E';
   ctx.beginPath();
@@ -75,14 +85,14 @@ function drawSlide2(ctx, data, image) {
     ctx.save();
     ctx.setFont('openDoorsPrayerTopic');
     const { width, height } = ctx.measureMultiligneText(
-      topic,
+      topic.text,
       prayerTopicWidth,
     );
     ctx.restore();
 
     prayerTopicMaxHeight = Math.max(prayerTopicMaxHeight, height);
 
-    return { width, height, text: topic };
+    return { width, height, text: topic.text };
   });
 
   const separatorHeight = (prayerTopicMaxHeight * 80) / 100;
@@ -163,7 +173,10 @@ function drawSlide2(ctx, data, image) {
   ctx.fillMultilineText(data.detail, detailX, detailY, detailWidth);
 }
 
-export default async function generate(ctx, block) {
+const generate: PreviewGenerateFunction<OpenDoorsBlockData> = async (
+  ctx,
+  block,
+) => {
   const data = {
     ...block.data,
     title: block.data.title || 'Lorem Ipsum',
@@ -187,7 +200,9 @@ export default async function generate(ctx, block) {
       } else {
         drawSlide1(ctx, data, image);
       }
-      resolve();
+      resolve(null);
     };
   });
-}
+};
+
+export default generate;

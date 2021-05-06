@@ -1,6 +1,8 @@
 import { documentWidth, documentHeight } from '../../config/preview';
+import { SectionBlockData } from '../../types';
+import { PreviewGenerateFunction } from '../preview';
 
-export default function generate(ctx, block) {
+const generate: PreviewGenerateFunction<SectionBlockData> = (ctx, block) => {
   const {
     data: { title = 'Lorem Ipsum' },
   } = block;
@@ -18,4 +20,6 @@ export default function generate(ctx, block) {
   const lineX = documentWidth / 2;
   const lineY = titleY + titleHeight + margin;
   ctx.fillSeparator(lineX, lineY, true);
-}
+};
+
+export default generate;

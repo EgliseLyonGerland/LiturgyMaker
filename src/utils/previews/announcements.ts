@@ -1,13 +1,20 @@
 import chunk from 'lodash/chunk';
 import { documentWidth, documentHeight } from '../../config/preview';
+import { AnnouncementsBlockData } from '../../types';
+import { PreviewGenerateFunction } from '../preview';
 
 const defaultTitle = 'Lorem ipsum';
 const defaultDetail =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
 
-export default function generate(ctx, block, currentFieldPath = [0, 'title']) {
-  const chunks = chunk(block.data, 6);
-  const chunkIndex = Math.floor(currentFieldPath[0] / 6);
+const generate: PreviewGenerateFunction<AnnouncementsBlockData> = (
+  ctx,
+  block,
+  currentFieldPath = ['items', 0, 'title'],
+) => {
+  const itemIndex = currentFieldPath?.[1] || 0;
+  const chunks = chunk(block.data.items, 6);
+  const chunkIndex = Math.floor(itemIndex / 6);
 
   let items = chunks[Math.min(chunkIndex, chunks.length - 1)];
   items = items.map(({ title, detail }) => ({
@@ -71,4 +78,6 @@ export default function generate(ctx, block, currentFieldPath = [0, 'title']) {
       currentY += titleHeight + detailHeight + 60;
     }
   });
-}
+};
+
+export default generate;

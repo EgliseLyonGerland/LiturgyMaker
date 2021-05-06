@@ -1,23 +1,28 @@
 import { typography } from '../config/preview';
+import { LiturgyBlock, RecitationDocument, SongDocument } from '../types';
 
-export { default as generateAnnouncementsPreview } from './previews/announcements';
-export { default as generateReadingPreview } from './previews/reading';
-export { default as generateSectionPreview } from './previews/section';
-export { default as generateSermonPreview } from './previews/sermon';
-export { default as generateSongsPreview } from './previews/songs';
-export { default as generateRecitationPreview } from './previews/recitation';
-export { default as generateOpenDoorsPreview } from './previews/openDoors';
+export type FieldPath = [string] | [string, number] | [string, number, string];
+
+export type PreviewGenerateFunction<
+  T,
+  U = SongDocument | RecitationDocument
+> = (
+  ctx: CanvasRenderingContext2D,
+  block: LiturgyBlock<T>,
+  currentFieldPath?: FieldPath,
+  data?: U[] | undefined,
+) => void;
 
 const lineHeight = 1.3;
 
-function getWords(text) {
+function getWords(text: string) {
   let words = text.split(' ');
 
   if (words.length < 3) {
     return words;
   }
 
-  words = words.reduce((acc, curr) => {
+  words = words.reduce<string[]>((acc, curr) => {
     if (acc.length && curr.length === 1) {
       acc[acc.length - 1] += ` ${curr}`;
     } else {
@@ -30,11 +35,15 @@ function getWords(text) {
   return words;
 }
 
-function getLines(ctx, text, width) {
+function getLines(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  width: number,
+): string[] {
   const parts = text.split('\n');
 
   if (parts.length > 1) {
-    return parts.reduce(
+    return parts.reduce<string[]>(
       (acc, curr) => [...acc, ...getLines(ctx, curr.trim(), width)],
       [],
     );
@@ -100,7 +109,9 @@ CanvasRenderingContext2D.prototype.setFont = function setFont(
 };
 
 CanvasRenderingContext2D.prototype.getCurrentFontSize = function getCurrentFontSize() {
-  return /([0-9]+)px/.exec(this.font)[1];
+  const result = /([0-9]+)px/.exec(this.font);
+
+  return result ? Number(result[0]) : 0;
 };
 
 CanvasRenderingContext2D.prototype.getCurrentLineHeight = function getCurrentLineHeight() {
@@ -154,16 +165,14 @@ CanvasRenderingContext2D.prototype.fillSeparator = function fillSeparator(
   const width = horizontal ? size : thickness;
   const height = horizontal ? thickness : size;
 
-  let finalX;
+  let finalX = x - thickness / 2;
   if (horizontal) {
     if (align === 'center') finalX = x - size / 2;
     else if (align === 'right') finalX = x - size;
     else finalX = x;
-  } else {
-    finalX = x - thickness / 2;
   }
 
-  let finalY;
+  let finalY = 0;
   if (horizontal) {
     finalY = y - thickness / 2;
   } else if (align === 'center') finalY = y - size / 2;

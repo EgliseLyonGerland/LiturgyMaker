@@ -1,5 +1,5 @@
 const superagent = require('superagent');
-const { getPassage } = require('../bibleRef');
+const { getPassage, parse } = require('../bibleRef');
 const getbibleContent = require('./getbible.json');
 
 jest.mock('superagent');
@@ -83,4 +83,43 @@ test('stringifyContent()', async () => {
   const result = await getPassage('1 Pierre 1.1-4.4');
 
   expect(result).toMatchSnapshot();
+});
+
+test('parse()', () => {
+  expect(parse('1 Pierre')).toEqual(null);
+  expect(parse('1 Pierre 15')).toEqual({
+    book: '1 Pierre',
+    chapterStart: 15,
+    verseStart: null,
+    chapterEnd: null,
+    verseEnd: null,
+  });
+  expect(parse('1 Pierre 15-16')).toEqual({
+    book: '1 Pierre',
+    chapterStart: 15,
+    verseStart: null,
+    chapterEnd: 16,
+    verseEnd: null,
+  });
+  expect(parse('1 Pierre 15.3')).toEqual({
+    book: '1 Pierre',
+    chapterStart: 15,
+    verseStart: 3,
+    chapterEnd: null,
+    verseEnd: null,
+  });
+  expect(parse('1 Pierre 15.3-8')).toEqual({
+    book: '1 Pierre',
+    chapterStart: 15,
+    verseStart: 3,
+    chapterEnd: null,
+    verseEnd: 8,
+  });
+  expect(parse('1 Pierre 15.3-16.8')).toEqual({
+    book: '1 Pierre',
+    chapterStart: 15,
+    verseStart: 3,
+    chapterEnd: 16,
+    verseEnd: 8,
+  });
 });

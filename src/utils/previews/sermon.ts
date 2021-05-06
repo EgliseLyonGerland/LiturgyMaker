@@ -1,19 +1,21 @@
 import { parse } from '../bibleRef';
 import { documentWidth, documentHeight } from '../../config/preview';
 import generateSection from './section';
+import { PreviewGenerateFunction } from '../preview';
+import { SermonBlockData } from '../../types';
 
 const documentHalfWidth = documentWidth / 2;
 
-export default function generate(ctx, block) {
+const generate: PreviewGenerateFunction<SermonBlockData> = (ctx, block) => {
   const {
     data: { title, author, bibleRefs },
   } = block;
 
-  const [bibleRef = ''] = bibleRefs || [];
-  const ref = parse(bibleRef);
+  const [bibleRef] = bibleRefs || [];
+  const ref = parse(bibleRef.ref);
 
   if (!ref) {
-    generateSection(ctx, { data: { title: 'Prédication' } });
+    generateSection(ctx, { ...block, data: { title: 'Prédication' } });
     return;
   }
 
@@ -47,11 +49,13 @@ export default function generate(ctx, block) {
   ctx.setFont('sermonBibleRef');
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
-  ctx.fillText(bibleRef, documentHalfWidth, 800);
+  ctx.fillText(bibleRef.ref, documentHalfWidth, 800);
   const bibleRefHeight = ctx.getCurrentLineHeight();
 
   ctx.setFont('sermonAuthor');
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
   ctx.fillText(author, documentHalfWidth, 800 + bibleRefHeight);
-}
+};
+
+export default generate;

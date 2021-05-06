@@ -1,7 +1,12 @@
 import find from 'lodash/find';
 import { documentWidth, documentHeight } from '../../config/preview';
+import { RecitationBlockData, RecitationDocument } from '../../types';
+import { PreviewGenerateFunction } from '../preview';
 
-export default function generate(ctx, block, currentFieldPath, recitations) {
+const generate: PreviewGenerateFunction<
+  RecitationBlockData,
+  RecitationDocument
+> = (ctx, block, currentFieldPath, recitations) => {
   const { data } = block;
 
   if (!data || !data.id) {
@@ -18,4 +23,6 @@ export default function generate(ctx, block, currentFieldPath, recitations) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(recitation.title, documentWidth / 2, documentHeight / 2);
-}
+};
+
+export default generate;
