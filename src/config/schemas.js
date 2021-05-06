@@ -1,7 +1,5 @@
 import * as yup from 'yup';
 
-export const bibleRefSchema = yup.string();
-
 export const announcementsBlockSchema = {
   items: yup.array().of(
     yup.object().shape({
@@ -14,7 +12,7 @@ export const announcementsBlockSchema = {
 export const readingBlockSchema = {
   bibleRefs: yup.array().of(
     yup.object().shape({
-      ref: bibleRefSchema,
+      ref: yup.string(),
       excerpt: yup.string(),
     }),
   ),
@@ -40,7 +38,7 @@ export const sermonBlockSchema = {
   author: yup.string(),
   bibleRefs: yup.array().of(
     yup.object().shape({
-      ref: bibleRefSchema,
+      ref: yup.string(),
     }),
   ),
   plan: yup.array().of(
@@ -54,11 +52,6 @@ export const openDoorsBlockSchema = {
   title: yup.string(),
   detail: yup.string(),
   prayerTopics: yup.array().of(
-    yup.object().shape({
-      text: bibleRefSchema,
-    }),
-  ),
-  plan: yup.array().of(
     yup.object().shape({
       text: yup.string(),
     }),
