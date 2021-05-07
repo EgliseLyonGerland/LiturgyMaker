@@ -105,6 +105,7 @@ const SongEdit = () => {
             name="number"
             label="Position dans le recueil"
             disabled={isSubmitting}
+            transform={(value) => (value === '' ? null : value)}
           />
           <TextFieldControl
             name="copyright"

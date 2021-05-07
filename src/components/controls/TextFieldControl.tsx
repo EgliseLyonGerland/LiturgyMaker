@@ -9,6 +9,7 @@ const TextFieldControl: React.FC<{
   helperText: string;
   multiline: boolean;
   disabled: boolean;
+  transform?(value: unknown): unknown;
 }> = ({
   name,
   label,
@@ -16,6 +17,7 @@ const TextFieldControl: React.FC<{
   helperText = '',
   multiline = false,
   disabled = false,
+  transform = (value) => value,
 }) => {
   const { control } = useFormContext();
   const {
@@ -23,7 +25,7 @@ const TextFieldControl: React.FC<{
     fieldState: { invalid, error },
   } = useController({ name, control, defaultValue });
 
-  const { ref, value, ...rest } = field;
+  const { ref, value, onChange, ...rest } = field;
   const params = {
     ...rest,
     value: value || '',
@@ -41,6 +43,7 @@ const TextFieldControl: React.FC<{
       helperText={error?.message || helperText}
       autoComplete="off"
       fullWidth
+      onChange={(e) => onChange(transform(e.target.value))}
       {...params}
     />
   );
