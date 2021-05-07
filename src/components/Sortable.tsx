@@ -1,15 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {
-  sortableContainer,
-  sortableElement,
-  sortableHandle,
+  SortableContainer,
+  SortableElement,
+  SortableHandle,
 } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
+import { ClassNameMap } from '@material-ui/styles';
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -35,22 +35,44 @@ const useStyles = makeStyles(
   { name: 'Sortable' },
 );
 
-const SortableContainer = sortableContainer(({ children }) => (
-  <div>{children}</div>
-));
+const SortableList = SortableContainer(
+  ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+);
 
-const DragHandle = sortableHandle(({ classes }) => (
-  <DragHandleIcon color="disabled" className={classes.handle} />
-));
+const DragHandle = SortableHandle(
+  ({ classes }: { classes: ClassNameMap<'handle'> }) => (
+    <DragHandleIcon color="disabled" className={classes.handle} />
+  ),
+);
 
-const SortableItem = sortableElement(({ children, style, classes }) => (
-  <div className={classes.item} style={style}>
-    <DragHandle classes={classes} />
-    {children}
-  </div>
-));
+const SortableItem = SortableElement(
+  ({
+    children,
+    style,
+    classes,
+  }: {
+    children: React.ReactNode;
+    style: React.CSSProperties;
+    classes: ClassNameMap<'item' | 'handle'>;
+  }) => (
+    <div className={classes.item} style={style}>
+      <DragHandle classes={classes} />
+      {children}
+    </div>
+  ),
+);
 
-const Sortable = ({
+interface Props<T> {
+  items: T[];
+  maxItems: number;
+  gutters: number;
+  disabled: boolean;
+  renderItem(item: T, index: number): void;
+  onChange(items: T[]): void;
+  getDefaultItem(): T;
+}
+
+const Sortable = <T extends any>({
   items,
   maxItems = Infinity,
   renderItem,
@@ -58,23 +80,29 @@ const Sortable = ({
   getDefaultItem,
   gutters = 0,
   disabled = false,
-}) => {
+}: Props<T>) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const handleSortEnd = ({ oldIndex, newIndex }) => {
+  const handleSortEnd = ({
+    oldIndex,
+    newIndex,
+  }: {
+    oldIndex: number;
+    newIndex: number;
+  }) => {
     onChange(arrayMove(items, oldIndex, newIndex));
   };
 
-  const handleDelete = (index) => {
+  const handleDelete = (index: number) => {
     items.splice(index, 1);
     onChange([...items]);
   };
 
-  const isLast = (index) => index === items.length - 1;
+  const isLast = (index: number) => index === items.length - 1;
 
   return (
-    <SortableContainer onSortEnd={handleSortEnd} useDragHandle>
+    <SortableList onSortEnd={handleSortEnd} useDragHandle>
       {items.map((item, index) => (
         <SortableItem
           key={index}
@@ -112,17 +140,8 @@ const Sortable = ({
       >
         Ajouter
       </Button>
-    </SortableContainer>
+    </SortableList>
   );
-};
-
-Sortable.propTypes = {
-  items: PropTypes.array,
-  maxItems: PropTypes.number,
-  gutters: PropTypes.number,
-  renderItem: PropTypes.func,
-  getDefaultItem: PropTypes.func,
-  onChange: PropTypes.func,
 };
 
 export default Sortable;

@@ -1,24 +1,25 @@
 import * as yup from 'yup';
+import { LiturgyBlock } from '../types';
 
-export const announcementsBlockSchema = {
+export const announcementsBlockSchema = yup.object().shape({
   items: yup.array().of(
     yup.object().shape({
       title: yup.string(),
       detail: yup.string(),
     }),
   ),
-};
+});
 
-export const readingBlockSchema = {
+export const readingBlockSchema = yup.object().shape({
   bibleRefs: yup.array().of(
     yup.object().shape({
       ref: yup.string(),
       excerpt: yup.string(),
     }),
   ),
-};
+});
 
-export const songsBlockSchema = {
+export const songsBlockSchema = yup.object().shape({
   items: yup.array().of(
     yup.object().shape({
       id: yup.string().nullable(),
@@ -26,14 +27,14 @@ export const songsBlockSchema = {
       repeat: yup.boolean(),
     }),
   ),
-};
+});
 
-export const recitationBlockSchema = {
+export const recitationBlockSchema = yup.object().shape({
   id: yup.string().nullable(),
   infos: yup.string(),
-};
+});
 
-export const sermonBlockSchema = {
+export const sermonBlockSchema = yup.object().shape({
   title: yup.string(),
   author: yup.string(),
   bibleRefs: yup.array().of(
@@ -46,9 +47,9 @@ export const sermonBlockSchema = {
       text: yup.string(),
     }),
   ),
-};
+});
 
-export const openDoorsBlockSchema = {
+export const openDoorsBlockSchema = yup.object().shape({
   title: yup.string(),
   detail: yup.string(),
   prayerTopics: yup.array().of(
@@ -56,11 +57,11 @@ export const openDoorsBlockSchema = {
       text: yup.string(),
     }),
   ),
-};
+});
 
-export const sectionBlockSchema = {
+export const sectionBlockSchema = yup.object().shape({
   title: yup.string(),
-};
+});
 
 const blockSchemas = {
   announcements: announcementsBlockSchema,
@@ -73,12 +74,12 @@ const blockSchemas = {
 };
 
 export const liturgySchema = yup.object().shape({
-  blocks: yup.array().of(
-    yup.lazy((value) =>
+  blocks: yup.array(
+    yup.lazy((value: LiturgyBlock) =>
       yup.object().shape({
         type: yup.string(),
         title: yup.string(),
-        data: yup.object().shape(blockSchemas[value.type]),
+        data: blockSchemas[value.type],
       }),
     ),
   ),
@@ -87,7 +88,7 @@ export const liturgySchema = yup.object().shape({
 export const songSchema = yup.object().shape({
   title: yup.string(),
   authors: yup.string().nullable(),
-  number: yup.number().min(1),
+  number: yup.number().min(1).nullable(),
   copyright: yup.string().nullable(),
   translation: yup.string().nullable(),
   collection: yup.string().nullable(),
