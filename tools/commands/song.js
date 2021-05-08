@@ -16,6 +16,12 @@ const questions = [
     default: (title = null) => title,
   },
   {
+    name: 'aka',
+    type: 'string',
+    message: 'Aka',
+    default: (aka = null) => aka,
+  },
+  {
     name: 'authors',
     type: 'string',
     message: 'Authors (separated by comma)',

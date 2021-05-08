@@ -95,6 +95,7 @@ const SongEdit = () => {
             label="Titre"
             disabled={isSubmitting}
           />
+          <TextFieldControl name="aka" label="AKA" disabled={isSubmitting} />
           <TextFieldControl
             name="authors"
             label="Auteurs"

@@ -87,6 +87,7 @@ export const liturgySchema = yup.object().shape({
 
 export const songSchema = yup.object().shape({
   title: yup.string(),
+  aka: yup.string(),
   authors: yup.string().nullable(),
   number: yup.number().min(1).nullable(),
   copyright: yup.string().nullable(),

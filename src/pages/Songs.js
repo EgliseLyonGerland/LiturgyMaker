@@ -210,6 +210,7 @@ const Songs = () => {
               <Box>
                 <Typography component="span">
                   <b>{song.title}</b>
+                  {song.aka ? ` (${song.aka})` : ''}
                 </Typography>
                 <Typography
                   variant="body2"

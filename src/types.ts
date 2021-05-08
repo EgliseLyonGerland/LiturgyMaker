@@ -130,6 +130,7 @@ export interface LyricPart {
 export interface SongDocument {
   id: string;
   title: string;
+  aka: string;
   authors: string;
   copyright: string;
   collection: string;

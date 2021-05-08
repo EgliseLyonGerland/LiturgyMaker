@@ -10,6 +10,7 @@ import { SongDocument, RootState } from '../../types';
 const defaultSong: SongDocument = {
   id: '',
   title: '',
+  aka: '',
   authors: '',
   copyright: '',
   collection: '',
