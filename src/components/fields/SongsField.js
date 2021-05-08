@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import TextField from '@material-ui/core/TextField';
+import { TextField, Box } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -38,20 +38,25 @@ const SongsField = ({ name, disabled = false }) => {
                   onChange(get(option, 'id', null));
                 }}
                 onBlur={onBlur}
-                getOptionLabel={(option) => {
-                  if (option.number) {
-                    return `${option.title} (${option.number})`;
-                  }
-
-                  const total = songs.filter(
-                    ({ title }) => title === option.title,
-                  );
-                  if (total.length > 1) {
-                    return `${option.title} (${option.authors})`;
-                  }
-
-                  return option.title;
-                }}
+                getOptionLabel={(option) => option.title}
+                renderOption={(option) => (
+                  <div>
+                    <div>
+                      <Box component="span" fontWeight={500}>
+                        {option.title}
+                      </Box>
+                      {option.aka && ` (${option.aka})`}
+                    </div>
+                    <Box
+                      fontSize="0.8em"
+                      fontStyle="italic"
+                      style={{ opacity: 0.7 }}
+                    >
+                      {option.authors || 'Aucun auteur'}
+                      {option.number && ` (${option.number})`}
+                    </Box>
+                  </div>
+                )}
                 renderInput={(params) => (
                   <TextField
                     {...params}
