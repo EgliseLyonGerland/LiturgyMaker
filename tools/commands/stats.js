@@ -1,47 +1,18 @@
-const firebase = require('firebase');
+const { readFileSync } = require('fs');
 const noop = require('lodash/noop');
 const sortBy = require('lodash/sortBy');
-const chalk = require('chalk');
-const Table = require('cli-table');
-const config = require('../utils/config');
+const { GoogleSpreadsheet } = require('google-spreadsheet');
+const googleServiceCreds = require('../config/~egliselyongerland-642b3dfa5d11.json');
+const open = require('open');
 
 module.exports.command = `stats <command>`;
 module.exports.desc = 'Display stats';
 
-async function dumpLiturgies() {
-  const db = firebase.firestore();
-  const { docs } = await db.collection('liturgies').get();
-  const liturgies = docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-  config.set('dump.liturgies', liturgies);
-
-  return liturgies;
-}
-
-async function dumpSongs() {
-  const db = firebase.firestore();
-  const { docs } = await db.collection('songs').get();
-  const songs = docs.map((doc) => {
-    const { title, authors, number } = doc.data();
-
-    return { id: doc.id, title, authors, number };
-  });
-
-  config.set('dump.songs', songs);
-
-  return songs;
-}
+const backupDir = `${__dirname}/../../.firebase/backup`;
 
 async function songsCommand({ update }) {
-  let liturgies = config.get('dump.liturgies');
-  let songs = config.get('dump.songs');
-
-  if (!liturgies || update) {
-    liturgies = await dumpLiturgies();
-  }
-  if (!songs || update) {
-    songs = await dumpSongs();
-  }
+  let liturgies = JSON.parse(readFileSync(`${backupDir}/liturgies.json`));
+  let songs = JSON.parse(readFileSync(`${backupDir}/songs.json`));
 
   const stats = songs.reduce(
     (acc, { id, title }) => ({
@@ -57,7 +28,9 @@ async function songsCommand({ update }) {
         return;
       }
 
-      block.data.forEach(({ id }) => {
+      const items = liturgy.version > 5 ? block.data.items : block.data;
+
+      items.forEach(({ id }) => {
         if (id) {
           stats[id].count += 1;
         }
@@ -65,25 +38,35 @@ async function songsCommand({ update }) {
     });
   });
 
-  const table = new Table();
+  const doc = new GoogleSpreadsheet(
+    '16KvjnOV9mygprQv1X47jrJ-jgfJQ9f2pXuA3CJA6Iig',
+  );
 
-  sortBy(stats, 'count')
-    .reverse()
-    .forEach((row) => {
-      table.push([row.title, chalk.yellow(row.count)]);
-    });
+  await doc.useServiceAccountAuth(googleServiceCreds);
+  await doc.loadInfo();
 
-  console.log(table.toString());
-  console.log(liturgies.length);
-  process.exit();
+  const sheet = doc.sheetsByTitle.Chants;
+
+  await sheet.clear();
+  await sheet.setHeaderRow(['Titre', 'Compteur']);
+  await sheet.addRows(
+    sortBy(stats, 'count')
+      .reverse()
+      .map((row) => ({ Titre: row.title, Compteur: row.count })),
+  );
+
+  await sheet.loadCells('B1:B1');
+
+  const b1 = sheet.getCell(0, 1);
+  b1.note = `Calculé sur les ${liturgies.length} derniers cultes`;
+
+  await sheet.saveUpdatedCells();
+
+  open(
+    `https://docs.google.com/spreadsheets/d/${doc.spreadsheetId}/edit#gid=0`,
+  );
 }
 
 module.exports.builder = function builder(yargs) {
-  yargs
-    .command('songs', 'Display stats about songs', noop, songsCommand)
-    .option('update', {
-      describe: 'Update cache',
-      boolean: true,
-      default: false,
-    });
+  yargs.command('songs', 'Display stats about songs', noop, songsCommand);
 };
