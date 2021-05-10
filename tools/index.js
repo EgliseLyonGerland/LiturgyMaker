@@ -1,6 +1,6 @@
 const yargs = require('yargs');
 const firebase = require('firebase');
-const createFirebaseConfig = require('../config/firebase');
+const firebaseConfig = require('../config/firebase');
 
 const loginCommand = require('./commands/login');
 const logoutCommand = require('./commands/logout');
@@ -8,6 +8,7 @@ const songCommand = require('./commands/song');
 const recitationCommand = require('./commands/recitation');
 const blockCommand = require('./commands/block');
 const statsCommand = require('./commands/stats');
+const syncCommand = require('./commands/sync');
 
 const config = require('./utils/config');
 
@@ -23,7 +24,12 @@ yargs
     config.setEnv(argv.env);
   })
   .middleware(({ env }) => {
-    firebase.initializeApp(createFirebaseConfig(env));
+    firebase.initializeApp(firebaseConfig);
+
+    if (env === 'development') {
+      firebase.auth().useEmulator('http://localhost:9099');
+      firebase.firestore().useEmulator('localhost', 8080);
+    }
 
     if (config.has('user')) {
       const data = JSON.parse(config.get('user'));
@@ -37,6 +43,7 @@ yargs
   .command(recitationCommand)
   .command(blockCommand)
   .command(statsCommand)
+  .command(syncCommand)
   .option('dev', {
     describe: 'Use development data',
     boolean: true,

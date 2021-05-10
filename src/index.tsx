@@ -12,7 +12,7 @@ import 'firebase/firestore';
 
 import configureStore from './redux';
 import App from './App';
-import createFirebaseConfig from './config/firebase';
+import firebaseConfig from './config/firebase';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 
@@ -24,10 +24,13 @@ Sentry.init({
   tracesSampleRate: 1.0,
 });
 
-const firebaseApp = firebase.initializeApp(
-  createFirebaseConfig(process.env.NODE_ENV),
-);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 const store = configureStore(firebaseApp);
+
+if (process.env.NODE_ENV === 'development') {
+  firebase.auth().useEmulator('http://localhost:9099');
+  firebase.firestore().useEmulator('localhost', 8080);
+}
 
 declare module '@material-ui/core/styles/createPalette' {
   interface Palette {
