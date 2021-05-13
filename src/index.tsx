@@ -20,8 +20,8 @@ Sentry.init({
   dsn:
     'https://7718d836108d482d812a93fd548ac9d3@o50300.ingest.sentry.io/5750589',
   integrations: [new Integrations.BrowserTracing()],
-  environment: process.env.NODE_ENV,
   tracesSampleRate: 1.0,
+  enabled: process.env.NODE_ENV === 'production',
 });
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
