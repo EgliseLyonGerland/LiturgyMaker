@@ -125,7 +125,6 @@ function Form({ liturgy }) {
   const form = useForm({
     mode: 'onChange',
     resolver: yupResolver(liturgySchema),
-    defaultValues: cloneDeep(liturgy),
   });
 
   const {
@@ -138,7 +137,7 @@ function Form({ liturgy }) {
 
   const handleSubmit = async (data) => {
     setPersisting(true);
-    await dispatch(persistLiturgy(data));
+    await dispatch(persistLiturgy(cloneDeep(data)));
     setPersisted(true);
     setPersisting(false);
   };
