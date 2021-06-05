@@ -23,7 +23,7 @@ const TextFieldControl: React.FC<{
   const {
     field,
     fieldState: { invalid, error },
-  } = useController({ name, control, defaultValue });
+  } = useController({ name, control, defaultValue: transform(defaultValue) });
 
   const { ref, value, onChange, ...rest } = field;
   const params = {
@@ -43,7 +43,10 @@ const TextFieldControl: React.FC<{
       helperText={error?.message || helperText}
       autoComplete="off"
       fullWidth
-      onChange={(e) => onChange(transform(e.target.value))}
+      onChange={(e) => {
+        console.log('->', transform(e.target.value));
+        onChange(transform(e.target.value));
+      }}
       {...params}
     />
   );
