@@ -18,8 +18,9 @@ function formatDate(date) {
   return format(date, 'd MMMM y', { locale });
 }
 
-exports.notifyChanges = functions.firestore
-  .document('liturgies/{liturgyId}')
+exports.notifyChanges = functions
+  .region('europe-west1')
+  .firestore.document('liturgies/{liturgyId}')
   .onWrite(async (change, context) => {
     const created = !change.before.exists;
     const data = change.after.data();
@@ -28,12 +29,7 @@ exports.notifyChanges = functions.firestore
     const { uid } = data;
     const db = admin.firestore();
 
-    const user = (
-      await db
-        .collection('users')
-        .doc(uid)
-        .get()
-    ).data();
+    const user = (await db.collection('users').doc(uid).get()).data();
 
     const transporter = nodemailer.createTransport(
       smtpTransport({
