@@ -27,5 +27,5 @@ export function converToDate(id) {
   const month = id.slice(4, 6);
   const day = id.slice(6, 8);
 
-  return new Date(`${year}-${month}-${day}T00:00:00`);
+  return new Date(`${year}-${month}-${day}T10:00:00`);
 }
