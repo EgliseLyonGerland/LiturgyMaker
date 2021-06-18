@@ -2,8 +2,9 @@ const { readFileSync } = require('fs');
 const noop = require('lodash/noop');
 const sortBy = require('lodash/sortBy');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const googleServiceCreds = require('../config/~egliselyongerland-642b3dfa5d11.json');
 const open = require('open');
+const { format } = require('date-fns');
+const googleServiceCreds = require('../config/~egliselyongerland-642b3dfa5d11.json');
 
 module.exports.command = `stats <command>`;
 module.exports.desc = 'Display stats';
@@ -57,8 +58,13 @@ async function songsCommand({ update }) {
 
   await sheet.loadCells('B1:B1');
 
+  const firstDate = new Date(liturgies[0].date);
+  const lastDate = new Date(liturgies[liturgies.length - 1].date);
   const b1 = sheet.getCell(0, 1);
-  b1.note = `Calculé sur les ${liturgies.length} derniers cultes`;
+  b1.note = `Calculé sur les ${liturgies.length} cultes du ${format(
+    firstDate,
+    'dd/MM/yyyy',
+  )} au ${format(lastDate, 'dd/MM/yyyy')}`;
 
   await sheet.saveUpdatedCells();
 
