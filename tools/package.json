@@ -1,0 +1,17 @@
+{
+  "name": "tools",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@types/google-spreadsheet": "3.1.1",
+    "configstore": "5.0.1",
+    "firebase": "8.4.3",
+    "google-spreadsheet": "3.1.15",
+    "inquirer": "8.0.0",
+    "lodash": "4.17.21",
+    "open": "8.0.8",
+    "uuid": "8.3.2",
+    "yargs": "17.0.1"
+  }
+}
