@@ -105,7 +105,7 @@ export interface LiturgyBlock<
     | RecitationBlockData
     | SectionBlockData
     | SermonBlockData
-    | SongsBlockData
+    | SongsBlockData,
 > {
   type: BlockType;
   data: T;

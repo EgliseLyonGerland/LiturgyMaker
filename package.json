@@ -10,18 +10,6 @@
     "@reduxjs/toolkit": "1.5.1",
     "@sentry/react": "6.3.5",
     "@sentry/tracing": "6.3.5",
-    "@testing-library/jest-dom": "5.12.0",
-    "@testing-library/react": "11.2.6",
-    "@testing-library/user-event": "13.1.8",
-    "@types/fontfaceobserver": "0.0.6",
-    "@types/jest": "26.0.23",
-    "@types/node": "15.0.2",
-    "@types/normalizr": "2.0.18",
-    "@types/react": "17.0.5",
-    "@types/react-dom": "17.0.3",
-    "@types/react-router-dom": "5.1.7",
-    "@types/react-syntax-highlighter": "13.5.0",
-    "@types/superagent": "4.1.11",
     "array-move": "3.0.1",
     "autosuggest-highlight": "3.1.1",
     "classnames": "2.3.1",
@@ -47,22 +35,35 @@
     "redux-thunk": "2.3.0",
     "superagent": "6.1.0",
     "superagent-jsonp": "0.2.1",
-    "typescript": "4.2.4",
     "uuid": "8.3.2",
     "web-vitals": "1.1.1",
     "yup": "0.32.9"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "5.12.0",
+    "@testing-library/react": "11.2.6",
+    "@testing-library/user-event": "13.1.8",
+    "@types/fontfaceobserver": "0.0.6",
     "@types/google-spreadsheet": "3.1.1",
+    "@types/jest": "26.0.23",
+    "@types/node": "15.0.2",
+    "@types/normalizr": "2.0.18",
+    "@types/react": "17.0.5",
+    "@types/react-dom": "17.0.3",
+    "@types/react-router-dom": "5.1.7",
+    "@types/react-syntax-highlighter": "13.5.0",
+    "@types/superagent": "4.1.11",
     "configstore": "5.0.1",
+    "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "3.4.0",
     "google-spreadsheet": "3.1.15",
     "husky": "6.0.0",
     "inquirer": "8.0.0",
     "lint-staged": "10.5.4",
     "open": "8.0.8",
-    "prettier": "2.2.1",
+    "prettier": "2.3.1",
     "source-map-explorer": "2.5.2",
+    "typescript": "4.2.4",
     "yargs": "17.0.1"
   },
   "scripts": {
@@ -72,20 +73,34 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src tools config",
+    "lint": "eslint .",
+    "format": "prettier --write --ignore-unknown '**/*'",
+    "format-check": "prettier --check --ignore-unknown '**/*'",
     "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:prettier/recommended"
+    ]
+  },
+  "eslintIgnore": [
+    "build"
+  ],
+  "prettier": {
+    "overrides": [
+      {
+        "files": [
+          ".eslintrc"
+        ],
+        "options": {
+          "parser": "json"
+        }
+      }
     ],
-    "plugins": [
-      "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": "error"
-    }
+    "singleQuote": true,
+    "trailingComma": "all"
   },
   "browserslist": {
     "production": [
@@ -100,8 +115,13 @@
     ]
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --write"
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*": [
+      "prettier --write --ignore-unknown",
+      "git add"
     ]
   }
 }

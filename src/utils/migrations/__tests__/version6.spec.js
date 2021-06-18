@@ -140,8 +140,7 @@ const input = {
           { text: 'Prions que Dieu protège les chrétiens du Nigéria' },
           { text: 'Prions que Dieu soutienne leur foi' },
           {
-            text:
-              "Prions que les terroristes de Boko Haram connaissent l'amour de Dieu ",
+            text: "Prions que les terroristes de Boko Haram connaissent l'amour de Dieu ",
           },
         ],
       },
@@ -328,8 +327,7 @@ const output = {
           { text: 'Prions que Dieu protège les chrétiens du Nigéria' },
           { text: 'Prions que Dieu soutienne leur foi' },
           {
-            text:
-              "Prions que les terroristes de Boko Haram connaissent l'amour de Dieu ",
+            text: "Prions que les terroristes de Boko Haram connaissent l'amour de Dieu ",
           },
         ],
       },

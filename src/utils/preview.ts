@@ -5,7 +5,7 @@ export type FieldPath = [string] | [string, number] | [string, number, string];
 
 export type PreviewGenerateFunction<
   T,
-  U = SongDocument | RecitationDocument
+  U = SongDocument | RecitationDocument,
 > = (
   ctx: CanvasRenderingContext2D,
   block: LiturgyBlock<T>,
@@ -108,49 +108,45 @@ CanvasRenderingContext2D.prototype.setFont = function setFont(
   this.font = font.trim();
 };
 
-CanvasRenderingContext2D.prototype.getCurrentFontSize = function getCurrentFontSize() {
-  const result = /([0-9]+)px/.exec(this.font);
+CanvasRenderingContext2D.prototype.getCurrentFontSize =
+  function getCurrentFontSize() {
+    const result = /([0-9]+)px/.exec(this.font);
 
-  return result ? Number(result[0]) : 0;
-};
+    return result ? Number(result[0]) : 0;
+  };
 
-CanvasRenderingContext2D.prototype.getCurrentLineHeight = function getCurrentLineHeight() {
-  const fontSize = this.getCurrentFontSize();
+CanvasRenderingContext2D.prototype.getCurrentLineHeight =
+  function getCurrentLineHeight() {
+    const fontSize = this.getCurrentFontSize();
 
-  return fontSize * lineHeight;
-};
+    return fontSize * lineHeight;
+  };
 
-CanvasRenderingContext2D.prototype.fillMultilineText = function fillMultilineText(
-  text,
-  x,
-  y,
-  width,
-) {
-  const lines = getLines(this, text, width);
-  let height = 0;
+CanvasRenderingContext2D.prototype.fillMultilineText =
+  function fillMultilineText(text, x, y, width) {
+    const lines = getLines(this, text, width);
+    let height = 0;
 
-  lines.forEach((line) => {
-    this.fillText(line, x, y + height);
-    height += this.getCurrentLineHeight();
-  });
+    lines.forEach((line) => {
+      this.fillText(line, x, y + height);
+      height += this.getCurrentLineHeight();
+    });
 
-  return height;
-};
+    return height;
+  };
 
-CanvasRenderingContext2D.prototype.measureMultiligneText = function measureMultiligneText(
-  text,
-  maxWidth,
-) {
-  const lines = getLines(this, text, maxWidth);
-  const height = lines.length * this.getCurrentLineHeight();
+CanvasRenderingContext2D.prototype.measureMultiligneText =
+  function measureMultiligneText(text, maxWidth) {
+    const lines = getLines(this, text, maxWidth);
+    const height = lines.length * this.getCurrentLineHeight();
 
-  const width = lines.reduce(
-    (acc, curr) => Math.max(acc, this.measureText(curr).width),
-    0,
-  );
+    const width = lines.reduce(
+      (acc, curr) => Math.max(acc, this.measureText(curr).width),
+      0,
+    );
 
-  return { width, height };
-};
+    return { width, height };
+  };
 
 CanvasRenderingContext2D.prototype.fillSeparator = function fillSeparator(
   x,

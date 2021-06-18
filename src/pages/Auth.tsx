@@ -38,9 +38,8 @@ const Auth = ({ firebaseAuth }: Props) => {
   const [email, setEmail] = useState('oltodo@msn.com');
   const [password, setPassword] = useState('DQ68sx89!');
   const [errorShown, setErrorShown] = useState(false);
-  const [signInWithEmailAndPassword, , , error] = useSignInWithEmailAndPassword(
-    firebaseAuth,
-  );
+  const [signInWithEmailAndPassword, , , error] =
+    useSignInWithEmailAndPassword(firebaseAuth);
 
   const handleSubmit = (event: FormEvent) => {
     if (email && password) {
