@@ -4,15 +4,15 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@types/google-spreadsheet": "3.1.1",
+    "@types/google-spreadsheet": "3.1.5",
     "configstore": "5.0.1",
-    "date-fns": "2.22.1",
+    "date-fns": "2.24.0",
     "firebase": "8.4.3",
     "google-spreadsheet": "3.1.15",
-    "inquirer": "8.0.0",
+    "inquirer": "8.1.5",
     "lodash": "4.17.21",
-    "open": "8.0.8",
+    "open": "8.2.1",
     "uuid": "8.3.2",
-    "yargs": "17.0.1"
+    "yargs": "17.1.1"
   }
 }
