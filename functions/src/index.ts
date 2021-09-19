@@ -1,16 +1,15 @@
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-const nodemailer = require('nodemailer');
-const smtpTransport = require('nodemailer-smtp-transport');
-const { format, toDate } = require('date-fns');
-const locale = require('date-fns/locale/fr');
-const deepDiff = require('deep-diff');
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import { createTransport } from 'nodemailer';
+import { format, toDate } from 'date-fns';
+import locale from 'date-fns/locale/fr';
+import { diff as deepDiff } from 'deep-diff';
 
 admin.initializeApp();
 
 const { gmail } = functions.config();
 
-function formatDate(date) {
+function formatDate(date: Date) {
   if (date.getDate() === 1) {
     return format(date, "'1er' MMMM y", { locale });
   }
@@ -24,6 +23,12 @@ exports.notifyChanges = functions
   .onWrite(async (change, context) => {
     const created = !change.before.exists;
     const data = change.after.data();
+
+    if (!data) {
+      console.log('No data');
+      return;
+    }
+
     const date = toDate(data.date);
     const formattedDate = formatDate(date);
     const { uid } = data;
@@ -31,24 +36,22 @@ exports.notifyChanges = functions
 
     const user = (await db.collection('users').doc(uid).get()).data();
 
-    const transporter = nodemailer.createTransport(
-      smtpTransport({
-        service: 'gmail',
-        auth: {
-          user: 'egliselyongerland@gmail.com',
-          pass: gmail.pass,
-        },
-      }),
-    );
+    if (!user) {
+      console.log('User ' + uid + ' not found');
+      return;
+    }
 
-    const from = 'Eglise Lyon Gerland <egliselyongerland@gmail.com>';
+    const transporter = createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'egliselyongerland@gmail.com',
+        pass: gmail.pass,
+      },
+    });
 
-    const to = [
-      'nicolas@bazille.fr',
-      'alexsarran@gmail.com',
-      'blumdenis@aol.com',
-      'mailysvenet@gmail.com',
-    ].join(', ');
+    const from =
+      'Église Lyon Gerland - Présidence <egliselyongerland@gmail.com>';
+    const to = 'culte@egliselyongerland.org';
 
     let subject = `Présidence du ${formattedDate}`;
     if (!created) {
