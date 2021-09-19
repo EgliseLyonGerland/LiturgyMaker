@@ -68,7 +68,7 @@
   "scripts": {
     "postinstall": "husky install",
     "start": "react-scripts start --no-cache",
-    "start:server": "firebase emulators:start --import=.firebase/export --export-on-exit",
+    "start:server": "firebase emulators:start --import=.firebase/export",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
