@@ -6,7 +6,7 @@ const { prompt } = require('inquirer');
 module.exports.command = `sync <command>`;
 module.exports.desc = 'Sync data';
 
-const collections = ['liturgies', 'songs', 'recitations'];
+const collections = ['liturgies', 'songs', 'recitations', 'users'];
 const backupDir = `${__dirname}/../../.firebase/backup`;
 
 async function confirm(message) {
