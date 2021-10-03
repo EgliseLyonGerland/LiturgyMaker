@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+
 import { Box, Fab, useTheme, Zoom } from '@material-ui/core';
 import { Check, Save } from '@material-ui/icons';
-import BeatLoader from 'react-spinners/BeatLoader';
 import { createPortal } from 'react-dom';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 type Status = 'running' | 'done' | 'ready' | null;
 

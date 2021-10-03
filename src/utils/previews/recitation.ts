@@ -1,7 +1,8 @@
 import find from 'lodash/find';
+
 import { documentWidth, documentHeight } from '../../config/preview';
-import { RecitationBlockData, RecitationDocument } from '../../types';
-import { PreviewGenerateFunction } from '../preview';
+import type { RecitationBlockData, RecitationDocument } from '../../types';
+import type { PreviewGenerateFunction } from '../preview';
 
 const generate: PreviewGenerateFunction<
   RecitationBlockData,

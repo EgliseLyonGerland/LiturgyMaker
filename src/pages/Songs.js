@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import {
   Accordion,
   AccordionDetails,
@@ -14,14 +15,15 @@ import {
   Typography,
 } from '@material-ui/core';
 import { CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import MiniSearch from 'minisearch';
-import sortBy from 'lodash/sortBy';
-import find from 'lodash/find';
-import deburr from 'lodash/deburr';
 import debounce from 'lodash/debounce';
-import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
+import deburr from 'lodash/deburr';
+import find from 'lodash/find';
+import sortBy from 'lodash/sortBy';
+import MiniSearch from 'minisearch';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
 
 const useStyles = makeStyles((theme) => ({
   accordionRoot: {

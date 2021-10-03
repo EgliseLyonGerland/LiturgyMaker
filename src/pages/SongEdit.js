@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import isString from 'lodash/isString';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Box, Container, Typography } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
+import isString from 'lodash/isString';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { Box, Container, Typography } from '@material-ui/core';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import SaveButton from '../components/SaveButton';
-import LyricsField from '../components/fields/LyricsField';
-import { fetchSongs, persistSong, selectSongById } from '../redux/slices/songs';
+
 import TextFieldControl from '../components/controls/TextFieldControl';
+import LyricsField from '../components/fields/LyricsField';
+import SaveButton from '../components/SaveButton';
 import { songSchema } from '../config/schemas';
+import { fetchSongs, persistSong, selectSongById } from '../redux/slices/songs';
 
 const Block = ({ header, children, ...props }) => {
   return (

@@ -1,6 +1,8 @@
 import React, { Suspense, lazy } from 'react';
+
 import { Box } from '@material-ui/core';
 import { Switch, Route, useHistory, Redirect } from 'react-router-dom';
+
 import Header from '../components/Header';
 import { getNextLiturgyId } from '../utils/liturgy';
 

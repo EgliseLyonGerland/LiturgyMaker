@@ -1,7 +1,8 @@
 const { writeFileSync, mkdirSync, readFileSync } = require('fs');
+
 const firebase = require('firebase');
-const noop = require('lodash/noop');
 const { prompt } = require('inquirer');
+const noop = require('lodash/noop');
 
 module.exports.command = `sync <command>`;
 module.exports.desc = 'Sync data';

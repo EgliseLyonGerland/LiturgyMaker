@@ -1,15 +1,14 @@
-const yargs = require('yargs');
 const firebase = require('firebase');
-const firebaseConfig = require('../config/firebase');
+const yargs = require('yargs');
 
+const firebaseConfig = require('../config/firebase');
+const blockCommand = require('./commands/block');
 const loginCommand = require('./commands/login');
 const logoutCommand = require('./commands/logout');
-const songCommand = require('./commands/song');
 const recitationCommand = require('./commands/recitation');
-const blockCommand = require('./commands/block');
+const songCommand = require('./commands/song');
 const statsCommand = require('./commands/stats');
 const syncCommand = require('./commands/sync');
-
 const config = require('./utils/config');
 
 require('firebase/auth');

@@ -1,6 +1,6 @@
 import { documentWidth, documentHeight } from '../../config/preview';
-import { SectionBlockData } from '../../types';
-import { PreviewGenerateFunction } from '../preview';
+import type { SectionBlockData } from '../../types';
+import type { PreviewGenerateFunction } from '../preview';
 
 const generate: PreviewGenerateFunction<SectionBlockData> = (ctx, block) => {
   const {

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 import { useController, useFormContext } from 'react-hook-form';
-import TextFieldSuggest from '../TextFieldSuggest';
-import TextFieldControl from '../controls/TextFieldControl';
-import { validate, getPassage } from '../../utils/bibleRef';
+
 import books from '../../config/bibleBooks.json';
+import { validate, getPassage } from '../../utils/bibleRef';
+import TextFieldControl from '../controls/TextFieldControl';
+import TextFieldSuggest from '../TextFieldSuggest';
 
 const useStyles = makeStyles(
   (theme) => ({

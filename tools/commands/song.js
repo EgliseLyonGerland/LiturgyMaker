@@ -1,8 +1,9 @@
 const firebase = require('firebase');
-const mapValues = require('lodash/mapValues');
-const omitBy = require('lodash/omitBy');
-const noop = require('lodash/noop');
 const { prompt } = require('inquirer');
+const mapValues = require('lodash/mapValues');
+const noop = require('lodash/noop');
+const omitBy = require('lodash/omitBy');
+
 const { parse, stringify } = require('../../src/utils/lyrics');
 
 module.exports.command = `song <command>`;

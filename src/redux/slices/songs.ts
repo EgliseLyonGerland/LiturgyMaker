@@ -3,9 +3,10 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import { normalize, schema } from 'normalizr';
 import type firebase from 'firebase/app';
-import { SongDocument, RootState } from '../../types';
+import { normalize, schema } from 'normalizr';
+
+import type { SongDocument, RootState } from '../../types';
 
 const defaultSong: SongDocument = {
   id: '',

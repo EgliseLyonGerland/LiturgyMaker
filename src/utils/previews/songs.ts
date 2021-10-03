@@ -1,7 +1,8 @@
 import find from 'lodash/find';
+
 import { documentWidth, documentHeight } from '../../config/preview';
-import { SongDocument, SongsBlockData } from '../../types';
-import { PreviewGenerateFunction } from '../preview';
+import type { SongDocument, SongsBlockData } from '../../types';
+import type { PreviewGenerateFunction } from '../preview';
 
 const generate: PreviewGenerateFunction<SongsBlockData, SongDocument> = (
   ctx,

@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 
+import type firebase from 'firebase/app';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import type firebase from 'firebase/app';
+
 import rootReducer from './slices';
 
 declare global {

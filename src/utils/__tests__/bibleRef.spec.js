@@ -1,4 +1,5 @@
 const superagent = require('superagent');
+
 const { getPassage, parse } = require('../bibleRef');
 const getbibleContent = require('./getbible.json');
 

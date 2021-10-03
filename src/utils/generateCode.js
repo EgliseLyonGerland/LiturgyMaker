@@ -1,6 +1,6 @@
-import upperFirst from 'lodash/upperFirst';
 import find from 'lodash/find';
 import omit from 'lodash/omit';
+import upperFirst from 'lodash/upperFirst';
 
 let currentSongBackground = 'blue';
 

@@ -1,5 +1,7 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
+
 import ArraySortableControl from '../controls/ArraySortableControl';
 import BibleRefField from './BibleRefField';
 

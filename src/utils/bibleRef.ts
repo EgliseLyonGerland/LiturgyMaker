@@ -1,10 +1,10 @@
-import superagent from 'superagent';
-import jsonp from 'superagent-jsonp';
 import deburr from 'lodash/deburr';
 import find from 'lodash/find';
-import slugify from './slugify';
+import superagent from 'superagent';
+import jsonp from 'superagent-jsonp';
 
 import books from '../config/bibleBooks.json';
+import slugify from './slugify';
 
 interface GetBibleResponse {
   book: {

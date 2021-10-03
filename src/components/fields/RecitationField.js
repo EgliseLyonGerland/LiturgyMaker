@@ -1,11 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+
 import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import find from 'lodash/find';
 import get from 'lodash/get';
+import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+
 import { selectAllRecitations } from '../../redux/slices/recitations';
 import TextFieldControl from '../controls/TextFieldControl';
 

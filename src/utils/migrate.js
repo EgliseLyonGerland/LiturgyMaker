@@ -1,6 +1,6 @@
 import range from 'lodash/range';
-import { currentVersion } from '../config/global';
 
+import { currentVersion } from '../config/global';
 import * as functions from './migrations';
 
 export default function migrate(doc) {

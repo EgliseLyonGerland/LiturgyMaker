@@ -1,12 +1,12 @@
 const { readFileSync } = require('fs');
-const noop = require('lodash/noop');
-const sortBy = require('lodash/sortBy');
-const { GoogleSpreadsheet } = require('google-spreadsheet');
-const open = require('open');
+
 const { format } = require('date-fns');
-const googleServiceCreds = require('../config/~egliselyongerland-642b3dfa5d11.json');
+const { GoogleSpreadsheet } = require('google-spreadsheet');
+const { uniq, reduce, map, sum, last } = require('lodash');
+const open = require('open');
 const { table } = require('table');
-const { uniq, reduce, map, sum, tail, last } = require('lodash');
+
+const googleServiceCreds = require('../config/~egliselyongerland-642b3dfa5d11.json');
 
 module.exports.command = `stats <command>`;
 module.exports.desc = 'Display stats';

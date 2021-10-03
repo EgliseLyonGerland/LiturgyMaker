@@ -7,6 +7,7 @@ import {
   InputBase,
 } from '@material-ui/core';
 import { Controller, useFormContext } from 'react-hook-form';
+
 import ArraySortableControl from '../controls/ArraySortableControl';
 
 function LyricsField({ name, disabled = false }) {

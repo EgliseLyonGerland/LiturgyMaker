@@ -1,20 +1,19 @@
 import { memo } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+
 import upperFirst from 'lodash/upperFirst';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { blockTypes } from '../../config/global';
 import { createDefaultBlock } from '../../utils/defaults';
-
 import Divider from '../Divider';
-import Block from '../FormBlock';
-
 import AnnouncementsField from '../fields/AnnouncementsField';
-import SongsField from '../fields/SongsField';
-import ReadingField from '../fields/ReadingField';
-import SermonField from '../fields/SermonField';
-import SectionField from '../fields/SectionField';
-import RecitationField from '../fields/RecitationField';
 import OpenDoorsField from '../fields/OpenDoorsField';
+import ReadingField from '../fields/ReadingField';
+import RecitationField from '../fields/RecitationField';
+import SectionField from '../fields/SectionField';
+import SermonField from '../fields/SermonField';
+import SongsField from '../fields/SongsField';
+import Block from '../FormBlock';
 
 const components = {
   AnnouncementsField: memo(AnnouncementsField),

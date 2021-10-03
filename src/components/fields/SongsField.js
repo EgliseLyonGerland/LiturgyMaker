@@ -1,13 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+
 import { TextField, Box } from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { Controller, useFormContext } from 'react-hook-form';
 import find from 'lodash/find';
 import get from 'lodash/get';
+import PropTypes from 'prop-types';
+import { Controller, useFormContext } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+
 import { selectAllSongs } from '../../redux/slices/songs';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';

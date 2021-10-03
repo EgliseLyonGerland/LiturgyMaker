@@ -1,17 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { makeStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
-import { verseTemplates } from '../config/preview';
+import PropTypes from 'prop-types';
 
-import { ReactComponent as TopBottomLeftPreview } from '../images/templates/topBottomLeft.svg';
-import { ReactComponent as TopBottomCenterPreview } from '../images/templates/topBottomCenter.svg';
-import { ReactComponent as TopBottomRightPreview } from '../images/templates/topBottomRight.svg';
-import { ReactComponent as BottomTopLeftPreview } from '../images/templates/bottomTopLeft.svg';
+import { verseTemplates } from '../config/preview';
 import { ReactComponent as BottomTopCenterPreview } from '../images/templates/bottomTopCenter.svg';
+import { ReactComponent as BottomTopLeftPreview } from '../images/templates/bottomTopLeft.svg';
 import { ReactComponent as BottomTopRightPreview } from '../images/templates/bottomTopRight.svg';
 import { ReactComponent as LeftRightCenterPreview } from '../images/templates/leftRightCenter.svg';
 import { ReactComponent as RightLeftCenterPreview } from '../images/templates/rightLeftCenter.svg';
+import { ReactComponent as TopBottomCenterPreview } from '../images/templates/topBottomCenter.svg';
+import { ReactComponent as TopBottomLeftPreview } from '../images/templates/topBottomLeft.svg';
+import { ReactComponent as TopBottomRightPreview } from '../images/templates/topBottomRight.svg';
 
 const useStyles = makeStyles(
   (theme) => ({

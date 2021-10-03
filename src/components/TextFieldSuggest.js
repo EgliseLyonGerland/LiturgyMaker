@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Autosuggest from 'react-autosuggest';
+
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import Autosuggest from 'react-autosuggest';
+
 import slugify from '../utils/slugify';
 
 const useStyles = makeStyles(

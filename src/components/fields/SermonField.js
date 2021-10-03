@@ -1,9 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { Box } from '@material-ui/core';
+import PropTypes from 'prop-types';
+
 import ArraySortableControl from '../controls/ArraySortableControl';
-import BibleRefField from './BibleRefField';
 import TextFieldControl from '../controls/TextFieldControl';
+import BibleRefField from './BibleRefField';
 
 const SermonField = ({ name, defaultValue, disabled = false }) => (
   <div>

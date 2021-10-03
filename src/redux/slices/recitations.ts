@@ -3,9 +3,10 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import { normalize, schema } from 'normalizr';
 import type firebase from 'firebase/app';
-import { RecitationDocument, RootState } from '../../types';
+import { normalize, schema } from 'normalizr';
+
+import type { RecitationDocument, RootState } from '../../types';
 
 export const recitationEntity = new schema.Entity<RecitationDocument>(
   'recitations',

@@ -1,7 +1,8 @@
 const firebase = require('firebase');
-const omitBy = require('lodash/omitBy');
-const noop = require('lodash/noop');
 const { prompt } = require('inquirer');
+const noop = require('lodash/noop');
+const omitBy = require('lodash/omitBy');
+
 const { parse, stringify } = require('../../src/utils/lyrics');
 
 module.exports.command = `recitation <command>`;

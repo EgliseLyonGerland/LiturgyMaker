@@ -1,39 +1,40 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector, useStore } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import CodeIcon from '@material-ui/icons/Code';
-import BeatLoader from 'react-spinners/BeatLoader';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { format, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
 import capitalize from 'lodash/capitalize';
-import debounce from 'lodash/debounce';
 import cloneDeep from 'lodash/cloneDeep';
+import debounce from 'lodash/debounce';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useDispatch, useSelector, useStore } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 import Code from '../components/Code';
-import SaveButton from '../components/SaveButton';
 import BlocksField from '../components/fields/BlocksField';
+import SaveButton from '../components/SaveButton';
 // import Preview from '../components/Preview';
-import generateCode from '../utils/generateCode';
+import { liturgySchema } from '../config/schemas';
 import {
   fetchLiturgy,
   persistLiturgy,
   selectLiturgyById,
 } from '../redux/slices/liturgies';
-import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
 import {
   fetchRecitations,
   selectAllRecitations,
 } from '../redux/slices/recitations';
+import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
+import generateCode from '../utils/generateCode';
 import { converToDate, convertToId, getNextLiturgyId } from '../utils/liturgy';
-import { liturgySchema } from '../config/schemas';
 
 // const gutters = 3;
 

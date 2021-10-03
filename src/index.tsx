@@ -1,18 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import firebase from 'firebase/app';
-import { Provider } from 'react-redux';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
+import firebase from 'firebase/app';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-import configureStore from './redux';
 import App from './App';
 import firebaseConfig from './config/firebase';
+import configureStore from './redux';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 

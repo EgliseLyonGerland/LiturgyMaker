@@ -1,7 +1,7 @@
 import { documentWidth, documentHeight } from '../../config/preview';
-import { ReadingBlockData, ReadingTemplate } from '../../types';
+import type { ReadingBlockData, ReadingTemplate } from '../../types';
 import { parse } from '../bibleRef';
-import { PreviewGenerateFunction } from '../preview';
+import type { PreviewGenerateFunction } from '../preview';
 
 function generateVerseVertical(
   ctx: CanvasRenderingContext2D,

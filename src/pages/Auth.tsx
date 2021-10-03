@@ -1,15 +1,17 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import type { FormEvent } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { Snackbar } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import type firebase from 'firebase/app';
-import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import type firebase from 'firebase/app';
+import PropTypes from 'prop-types';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
 interface Props {
   firebaseAuth: firebase.auth.Auth;

@@ -1,9 +1,9 @@
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import { createTransport } from 'nodemailer';
 import { format, toDate } from 'date-fns';
 import locale from 'date-fns/locale/fr';
 import { diff as deepDiff } from 'deep-diff';
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
+import { createTransport } from 'nodemailer';
 
 admin.initializeApp();
 

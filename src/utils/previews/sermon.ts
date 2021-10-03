@@ -1,8 +1,8 @@
-import { parse } from '../bibleRef';
 import { documentWidth, documentHeight } from '../../config/preview';
+import type { SermonBlockData } from '../../types';
+import { parse } from '../bibleRef';
+import type { PreviewGenerateFunction } from '../preview';
 import generateSection from './section';
-import { PreviewGenerateFunction } from '../preview';
-import { SermonBlockData } from '../../types';
 
 const documentHalfWidth = documentWidth / 2;
 

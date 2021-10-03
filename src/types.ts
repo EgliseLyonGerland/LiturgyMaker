@@ -1,4 +1,4 @@
-import rootReducer from './redux/slices';
+import type rootReducer from './redux/slices';
 
 declare global {
   interface CanvasRenderingContext2D {

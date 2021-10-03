@@ -1,5 +1,6 @@
 const firebase = require('firebase');
 const { prompt } = require('inquirer');
+
 const config = require('../utils/config');
 
 module.exports.command = `login`;

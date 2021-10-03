@@ -3,11 +3,12 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import { normalize, schema } from 'normalizr';
 import type firebase from 'firebase/app';
+import { normalize, schema } from 'normalizr';
+
+import type { LiturgyDocument, RootState } from '../../types';
 import { createDefaultLiturgy } from '../../utils/defaults';
 import migrate from '../../utils/migrate';
-import type { LiturgyDocument, RootState } from '../../types';
 
 export const liturgyEntity = new schema.Entity<LiturgyDocument>('liturgies');
 export const liturgiesEntity = new schema.Array(liturgyEntity);

@@ -1,7 +1,7 @@
 import { documentWidth, documentHeight } from '../../config/preview';
 import openDoorsImage from '../../images/openDoors.png';
-import { PreviewGenerateFunction } from '../preview';
-import { OpenDoorsBlockData } from '../../types';
+import type { OpenDoorsBlockData } from '../../types';
+import type { PreviewGenerateFunction } from '../preview';
 
 function drawSlide1(
   ctx: CanvasRenderingContext2D,

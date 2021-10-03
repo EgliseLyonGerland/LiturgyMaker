@@ -1,21 +1,24 @@
 import React, { useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+
 import { makeStyles } from '@material-ui/core/styles';
-import upperFirst from 'lodash/upperFirst';
-import forEach from 'lodash/forEach';
 import FontFaceObserver from 'fontfaceobserver';
+import forEach from 'lodash/forEach';
+import upperFirst from 'lodash/upperFirst';
+import { useSelector } from 'react-redux';
+
 import { documentWidth, documentHeight } from '../config/preview';
-import { selectAllSongs } from '../redux/slices/songs';
 import { selectAllRecitations } from '../redux/slices/recitations';
-import { FontFamily, LiturgyBlock } from '../types';
-import { FieldPath, PreviewGenerateFunction } from '../utils/preview';
+import { selectAllSongs } from '../redux/slices/songs';
+import type { LiturgyBlock } from '../types';
+import { FontFamily } from '../types';
+import type { FieldPath, PreviewGenerateFunction } from '../utils/preview';
 import generateAnnouncementsPreview from '../utils/previews/announcements';
+import generateOpenDoorsPreview from '../utils/previews/openDoors';
 import generateReadingPreview from '../utils/previews/reading';
+import generateRecitationPreview from '../utils/previews/recitation';
 import generateSectionPreview from '../utils/previews/section';
 import generateSermonPreview from '../utils/previews/sermon';
 import generateSongsPreview from '../utils/previews/songs';
-import generateRecitationPreview from '../utils/previews/recitation';
-import generateOpenDoorsPreview from '../utils/previews/openDoors';
 
 const previews: Record<string, PreviewGenerateFunction<any, any>> = {
   generateAnnouncementsPreview,

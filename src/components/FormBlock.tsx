@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
+
+import { Box } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
-import { Box } from '@material-ui/core';
 
 const FormBlock: React.FC<{
   title: string;

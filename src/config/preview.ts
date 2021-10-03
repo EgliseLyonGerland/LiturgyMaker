@@ -1,4 +1,5 @@
-import { FontFamily, TypographyName, Typography } from '../types';
+import type { TypographyName, Typography } from '../types';
+import { FontFamily } from '../types';
 
 export const documentWidth = 1920;
 export const documentHeight = 1080;

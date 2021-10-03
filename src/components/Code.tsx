@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import okaida from 'react-syntax-highlighter/dist/esm/styles/prism/okaidia';
-import { makeStyles } from '@material-ui/core/styles';
+
+import { Box } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import { createPortal } from 'react-dom';
-import { Box } from '@material-ui/core';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import okaida from 'react-syntax-highlighter/dist/esm/styles/prism/okaidia';
 
 const copy = require('clipboard-copy');
 

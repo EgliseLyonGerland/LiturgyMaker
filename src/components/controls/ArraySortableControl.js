@@ -1,15 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+
 import Button from '@material-ui/core/Button';
-import DragHandleIcon from '@material-ui/icons/DragHandle';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DragHandleIcon from '@material-ui/icons/DragHandle';
+import PropTypes from 'prop-types';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import {
   sortableContainer,
   sortableElement,
   sortableHandle,
 } from 'react-sortable-hoc';
-import { useFieldArray, useFormContext } from 'react-hook-form';
 
 const useStyles = makeStyles(
   (theme) => ({

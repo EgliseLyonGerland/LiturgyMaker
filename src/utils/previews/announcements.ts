@@ -1,7 +1,8 @@
 import chunk from 'lodash/chunk';
+
 import { documentWidth, documentHeight } from '../../config/preview';
-import { AnnouncementsBlockData } from '../../types';
-import { PreviewGenerateFunction } from '../preview';
+import type { AnnouncementsBlockData } from '../../types';
+import type { PreviewGenerateFunction } from '../preview';
 
 const defaultTitle = 'Lorem ipsum';
 const defaultDetail =

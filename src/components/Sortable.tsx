@@ -1,15 +1,16 @@
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+
 import Button from '@material-ui/core/Button';
-import DragHandleIcon from '@material-ui/icons/DragHandle';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DragHandleIcon from '@material-ui/icons/DragHandle';
+import type { ClassNameMap } from '@material-ui/styles';
+import arrayMove from 'array-move';
 import {
   SortableContainer,
   SortableElement,
   SortableHandle,
 } from 'react-sortable-hoc';
-import arrayMove from 'array-move';
-import { ClassNameMap } from '@material-ui/styles';
 
 const useStyles = makeStyles(
   (theme) => ({

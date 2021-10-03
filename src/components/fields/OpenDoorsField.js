@@ -1,6 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { Box } from '@material-ui/core';
+import PropTypes from 'prop-types';
+
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';
 

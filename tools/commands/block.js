@@ -1,6 +1,6 @@
 const firebase = require('firebase');
-const noop = require('lodash/noop');
 const { prompt, Separator } = require('inquirer');
+const noop = require('lodash/noop');
 const { v4: uuid } = require('uuid');
 
 module.exports.command = `block <command>`;

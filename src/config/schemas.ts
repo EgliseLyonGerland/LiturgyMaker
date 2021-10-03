@@ -1,5 +1,6 @@
 import * as yup from 'yup';
-import { LiturgyBlock } from '../types';
+
+import type { LiturgyBlock } from '../types';
 
 export const announcementsBlockSchema = yup.object().shape({
   items: yup.array().of(

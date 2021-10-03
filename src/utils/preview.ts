@@ -1,5 +1,5 @@
 import { typography } from '../config/preview';
-import { LiturgyBlock, RecitationDocument, SongDocument } from '../types';
+import type { LiturgyBlock, RecitationDocument, SongDocument } from '../types';
 
 export type FieldPath = [string] | [string, number] | [string, number, string];
 
