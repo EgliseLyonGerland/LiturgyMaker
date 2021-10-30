@@ -76,7 +76,7 @@ async function songsCommand({ dryRun }) {
   await sheet.clear();
   await sheet.setHeaderRow(header);
   await sheet.addRows(values);
-  await sheet.loadCells('B1:B1');
+  await sheet.loadCells('A1:A1');
 
   const firstDate = new Date(liturgies[0].date);
   const lastDate = new Date(liturgies[liturgies.length - 1].date);
