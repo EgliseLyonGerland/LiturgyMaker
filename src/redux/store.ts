@@ -1,6 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
-import type firebase from 'firebase/app';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
@@ -17,12 +14,8 @@ const composeEnhancers =
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
-const configureStore = (firebase: firebase.app.App) => {
-  const enhancer = composeEnhancers(
-    applyMiddleware(thunk.withExtraArgument({ firebase })),
-  );
+const enhancer = composeEnhancers(applyMiddleware(thunk));
 
-  return createStore(rootReducer, enhancer);
-};
+const store = createStore(rootReducer, enhancer);
 
-export default configureStore;
+export default store;

@@ -3,9 +3,9 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import type firebase from 'firebase/app';
 import { normalize, schema } from 'normalizr';
 
+import firebase from '../../firebase';
 import type { RecitationDocument, RootState } from '../../types';
 
 export const recitationEntity = new schema.Entity<RecitationDocument>(
@@ -15,19 +15,23 @@ export const recitationsEntity = new schema.Array(recitationEntity);
 
 const recitationsAdapter = createEntityAdapter<RecitationDocument>();
 
-export const fetchRecitations = createAsyncThunk<
-  any,
-  string,
-  { extra: { firebase: firebase.app.App } }
->('recitations/fetchRecitations', async (data, { extra: { firebase } }) => {
-  const db = firebase.firestore();
-  const { docs } = await db.collection('recitations').get();
+export const fetchRecitations = createAsyncThunk(
+  'recitations/fetchRecitations',
+  async () => {
+    const db = firebase.firestore();
+    const { docs } = await db.collection('recitations').get();
 
-  return normalize(
-    docs.map((doc) => ({ id: doc.id, ...doc.data() })),
-    recitationsEntity,
-  ).entities;
-});
+    return normalize<
+      any,
+      {
+        recitations: Record<string, RecitationDocument>;
+      }
+    >(
+      docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+      recitationsEntity,
+    ).entities;
+  },
+);
 
 const recitationsSlice = createSlice({
   name: 'recitations',

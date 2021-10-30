@@ -3,9 +3,9 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import type firebase from 'firebase/app';
 import { normalize, schema } from 'normalizr';
 
+import firebase from '../../firebase';
 import type { SongDocument, RootState } from '../../types';
 
 const defaultSong: SongDocument = {
@@ -25,32 +25,32 @@ export const songsEntity = new schema.Array(songEntity);
 
 const songsAdapter = createEntityAdapter<SongDocument>();
 
-export const fetchSongs = createAsyncThunk<
-  any,
-  string,
-  { extra: { firebase: firebase.app.App } }
->('songs/fetchSongs', async (data, { extra: { firebase } }) => {
+export const fetchSongs = createAsyncThunk('songs/fetchSongs', async () => {
   const db = firebase.firestore();
   const { docs } = await db.collection('songs').get();
 
-  return normalize(
+  return normalize<
+    any,
+    {
+      songs: Record<string, SongDocument>;
+    }
+  >(
     docs.map((doc) => ({ ...defaultSong, id: doc.id, ...doc.data() })),
     songsEntity,
   ).entities;
 });
 
-export const persistSong = createAsyncThunk<
-  any,
-  SongDocument,
-  { extra: { firebase: firebase.app.App } }
->('songs/persistSong', async (song, { extra: { firebase } }) => {
-  const { id, ...data } = song;
-  const db = firebase.firestore();
+export const persistSong = createAsyncThunk(
+  'songs/persistSong',
+  async (song: SongDocument) => {
+    const { id, ...data } = song;
+    const db = firebase.firestore();
 
-  await db.collection('songs').doc(id).set(data);
+    await db.collection('songs').doc(id).set(data);
 
-  return song;
-});
+    return song;
+  },
+);
 
 const songsSlice = createSlice({
   name: 'songs',

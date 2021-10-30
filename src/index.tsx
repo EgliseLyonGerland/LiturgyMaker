@@ -4,7 +4,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
-import firebase from 'firebase/app';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -12,8 +11,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 
 import App from './App';
-import firebaseConfig from './config/firebase';
-import configureStore from './redux';
+import store from './redux/store';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 
@@ -23,14 +21,6 @@ Sentry.init({
   tracesSampleRate: 1.0,
   enabled: process.env.NODE_ENV === 'production',
 });
-
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const store = configureStore(firebaseApp);
-
-if (process.env.NODE_ENV === 'development') {
-  firebase.auth().useEmulator('http://localhost:9099');
-  firebase.firestore().useEmulator('localhost', 8080);
-}
 
 declare module '@material-ui/core/styles/createPalette' {
   interface Palette {
@@ -69,7 +59,7 @@ ReactDOM.render(
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <App firebase={firebaseApp} />
+          <App />
         </ThemeProvider>
       </BrowserRouter>
     </Provider>

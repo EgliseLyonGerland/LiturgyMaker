@@ -1,16 +1,12 @@
 import React from 'react';
 
-import type firebase from 'firebase/app';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+import firebase from './firebase';
 import AuthPage from './pages/Auth';
 import MainPage from './pages/Main';
 
-interface Props {
-  firebase: firebase.app.App;
-}
-
-function App({ firebase }: Props) {
+function App() {
   const firebaseAuth = firebase.auth();
   const [user, loading] = useAuthState(firebaseAuth);
 
