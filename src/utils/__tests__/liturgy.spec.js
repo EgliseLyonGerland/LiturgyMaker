@@ -2,7 +2,7 @@ const { convertToId, converToDate, getNextLiturgyId } = require('../liturgy');
 
 test('converToDate()', () => {
   expect(converToDate('19830717').toISOString()).toBe(
-    '1983-07-16T22:00:00.000Z',
+    '1983-07-17T08:00:00.000Z',
   );
 });
 

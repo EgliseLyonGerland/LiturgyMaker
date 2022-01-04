@@ -14,9 +14,10 @@ import capitalize from 'lodash/capitalize';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useDispatch, useSelector, useStore } from 'react-redux';
+import { useStore } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
+import type * as Yup from 'yup';
 
 import Code from '../components/Code';
 import BlocksField from '../components/fields/BlocksField';
@@ -33,82 +34,87 @@ import {
   selectAllRecitations,
 } from '../redux/slices/recitations';
 import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
+import { useAppDispatch, useAppSelector } from '../redux/store';
+import type { LiturgyDocument } from '../types';
 import generateCode from '../utils/generateCode';
 import { converToDate, convertToId, getNextLiturgyId } from '../utils/liturgy';
 
 // const gutters = 3;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    marginBottom: '50vh',
-  },
-  // preview: {
-  //   margin: theme.spacing(gutters * 2, gutters),
-  //   maxWidth: 600,
-  //   flexGrow: 1,
-
-  //   '& > *': {
-  //     position: 'sticky',
-  //     top: theme.spacing(gutters * 2),
-  //   },
-  // },
-  navBar: {
-    display: 'flex',
-    height: theme.spacing(8),
-    padding: theme.spacing(0, 2),
-    alignItems: 'center',
-
-    '&:before': {
-      content: '""',
-      width: 50,
+const useStyles = makeStyles(
+  (theme) => ({
+    root: {
+      marginBottom: '50vh',
     },
-  },
-  sundays: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: 16,
-    fontWeight: 700,
-    margin: [[0, 'auto']],
-  },
-  sundaysName: {
-    width: 250,
-    textAlign: 'center',
-  },
-  actions: {
-    width: 50,
-  },
-  spinner: {
-    display: 'flex',
-    height: 200,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  [theme.breakpoints.down('md')]: {
     // preview: {
-    //   display: 'none',
+    //   margin: theme.spacing(gutters * 2, gutters),
+    //   maxWidth: 600,
+    //   flexGrow: 1,
+
+    //   '& > *': {
+    //     position: 'sticky',
+    //     top: theme.spacing(gutters * 2),
+    //   },
     // },
     navBar: {
-      padding: 0,
+      display: 'flex',
+      height: theme.spacing(8),
+      padding: theme.spacing(0, 2),
+      alignItems: 'center',
 
       '&:before': {
-        display: 'none',
+        content: '""',
+        width: 50,
       },
     },
     sundays: {
+      display: 'flex',
+      alignItems: 'center',
       fontSize: 16,
+      fontWeight: 700,
+      margin: theme.spacing(0, 'auto'),
     },
     sundaysName: {
-      width: 'auto',
+      width: 250,
+      textAlign: 'center',
     },
-  },
-  [theme.breakpoints.down('xs')]: {
     actions: {
-      display: 'none',
+      width: 50,
     },
-  },
-}));
+    spinner: {
+      display: 'flex',
+      height: 200,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    [theme.breakpoints.down('md')]: {
+      // preview: {
+      //   display: 'none',
+      // },
+      navBar: {
+        padding: 0,
 
-const formatDate = (date) => {
+        '&:before': {
+          display: 'none',
+        },
+      },
+      sundays: {
+        fontSize: 16,
+      },
+      sundaysName: {
+        width: 'auto',
+      },
+    },
+    [theme.breakpoints.down('xs')]: {
+      actions: {
+        display: 'none',
+      },
+    },
+  }),
+  { name: 'LiturgyEdit' },
+);
+
+const formatDate = (date: Date) => {
   if (date.getDate() === 1) {
     return format(date, "EEEE '1er' MMMM", { locale });
   }
@@ -116,16 +122,16 @@ const formatDate = (date) => {
   return format(date, 'EEEE d MMMM', { locale });
 };
 
-function Form({ liturgy }) {
+function Form({ liturgy }: { liturgy: LiturgyDocument }) {
   const store = useStore();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(true);
   const date = converToDate(liturgy.id);
 
-  const form = useForm({
+  const form = useForm<LiturgyDocument>({
     mode: 'onChange',
-    resolver: yupResolver(liturgySchema),
+    resolver: yupResolver<Yup.Asserts<Yup.AnyObjectSchema>>(liturgySchema),
   });
 
   const {
@@ -136,14 +142,14 @@ function Form({ liturgy }) {
     formState: { isDirty },
   } = form;
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (data: LiturgyDocument) => {
     setPersisting(true);
     await dispatch(persistLiturgy(cloneDeep(data)));
     setPersisted(true);
     setPersisting(false);
   };
 
-  const handleFillFromLastWeek = async (index) => {
+  const handleFillFromLastWeek = async (index: number) => {
     const previousDate = subDays(date, 7);
     const previousId = convertToId(previousDate);
 
@@ -156,11 +162,18 @@ function Form({ liturgy }) {
     }
 
     const { blocks } = getFormValues();
+
+    if (!blocks) {
+      return null;
+    }
+
     const currentBlock = blocks[index];
 
     const currentBlockNumber = blocks
       .filter((block) => block.type === currentBlock.type)
-      .findIndex((block) => block.id === currentBlock.id);
+      // @todo: check below code
+      // .findIndex((block) => block.id === currentBlock.id);
+      .findIndex((block) => block === currentBlock);
 
     const sameTypeBlocks = previousLiturgy.blocks.filter(
       (block) => block.type === currentBlock.type,
@@ -178,7 +191,7 @@ function Form({ liturgy }) {
 
   useEffect(() => {
     if (liturgy) {
-      resetForm(cloneDeep(liturgy));
+      resetForm(liturgy);
     }
   }, [liturgy, resetForm]);
 
@@ -203,16 +216,16 @@ function Form({ liturgy }) {
 function LiturgyEdit() {
   const classes = useStyles();
   const history = useHistory();
-  const { liturgyId } = useParams();
+  const { liturgyId } = useParams<{ liturgyId: string }>();
   const [displayCode, setDisplayCode] = useState(false);
-  const dispatch = useDispatch();
-  const liturgyState = useSelector((state) =>
+  const dispatch = useAppDispatch();
+  const liturgyState = useAppSelector((state) =>
     selectLiturgyById(state, liturgyId),
   );
-  const songsStatus = useSelector((state) => state.songs.status);
-  const songs = useSelector(selectAllSongs);
-  const recitationsStatus = useSelector((state) => state.recitations.status);
-  const recitations = useSelector(selectAllRecitations);
+  const songsStatus = useAppSelector((state) => state.songs.status);
+  const songs = useAppSelector(selectAllSongs);
+  const recitationsStatus = useAppSelector((state) => state.recitations.status);
+  const recitations = useAppSelector(selectAllRecitations);
 
   const currentDate = converToDate(liturgyId);
 
@@ -239,7 +252,7 @@ function LiturgyEdit() {
     }
   }, [liturgyId, dispatch, liturgyState, recitationsStatus, songsStatus]);
 
-  const handleChangeDate = (date) => {
+  const handleChangeDate = (date: Date) => {
     history.push(`/liturgies/${getNextLiturgyId(date)}/edit`);
   };
 

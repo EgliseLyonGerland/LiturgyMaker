@@ -108,6 +108,7 @@ export interface LiturgyBlock<
     | SongsBlockData,
 > {
   type: BlockType;
+  title: string;
   data: T;
 }
 
