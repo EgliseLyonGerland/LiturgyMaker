@@ -1,7 +1,6 @@
+import fetchJsonp from 'fetch-jsonp';
 import deburr from 'lodash/deburr';
 import find from 'lodash/find';
-import superagent from 'superagent';
-import jsonp from 'superagent-jsonp';
 
 import books from '../config/bibleBooks.json';
 import slugify from './slugify';
@@ -137,15 +136,14 @@ export async function getPassage(ref: string) {
     passage += `:${verseStart}`;
   }
 
-  const res = await superagent
-    .get('https://getbible.net/json')
-    .use(jsonp({ timeout: 10000 }))
-    .query({ version, passage })
-    .set('Content-Type', 'application/json')
-    .set('Accept', 'application/json');
+  const result = await fetchJsonp(
+    'https://getbible.net/json?' + new URLSearchParams({ version, passage }),
+  ).then((res) => {
+    return res.json();
+  });
 
-  if (res.body) {
-    return stringifyContent(res.body);
+  if (result) {
+    return stringifyContent(result);
   }
 
   return '';
