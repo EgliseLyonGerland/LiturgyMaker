@@ -41,10 +41,10 @@ const questions = [
     default: (collection = null) => collection,
   },
   {
-    name: 'transaltion',
+    name: 'translation',
     type: 'string',
     message: 'Translation',
-    default: (transaltion = null) => transaltion,
+    default: (translation = null) => translation,
   },
   {
     name: 'lyrics',
