@@ -22,7 +22,6 @@ import type * as Yup from 'yup';
 import Code from '../components/Code';
 import BlocksField from '../components/fields/BlocksField';
 import SaveButton from '../components/SaveButton';
-// import Preview from '../components/Preview';
 import { liturgySchema } from '../config/schemas';
 import {
   fetchLiturgy,
@@ -39,23 +38,11 @@ import type { LiturgyDocument } from '../types';
 import generateCode from '../utils/generateCode';
 import { converToDate, convertToId, getNextLiturgyId } from '../utils/liturgy';
 
-// const gutters = 3;
-
 const useStyles = makeStyles(
   (theme) => ({
     root: {
       marginBottom: '50vh',
     },
-    // preview: {
-    //   margin: theme.spacing(gutters * 2, gutters),
-    //   maxWidth: 600,
-    //   flexGrow: 1,
-
-    //   '& > *': {
-    //     position: 'sticky',
-    //     top: theme.spacing(gutters * 2),
-    //   },
-    // },
     navBar: {
       display: 'flex',
       height: theme.spacing(8),
@@ -88,9 +75,6 @@ const useStyles = makeStyles(
       justifyContent: 'center',
     },
     [theme.breakpoints.down('md')]: {
-      // preview: {
-      //   display: 'none',
-      // },
       navBar: {
         padding: 0,
 
@@ -323,12 +307,6 @@ function LiturgyEdit() {
             <Form key={liturgyState.id} liturgy={liturgyState} />
           </>
         )}
-        {/* <div className={classes.preview}>
-          <Preview
-            block={get(liturgy, ['data', 'blocks', currentBlockIndex])}
-            currentFieldPath={focusedBlock[1]}
-          />
-        </div> */}
       </Container>
     </div>
   );
