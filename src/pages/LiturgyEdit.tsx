@@ -193,7 +193,7 @@ function Form({
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      onLiturgyChanged(value);
+      onLiturgyChanged(value as LiturgyDocument);
     });
     return () => subscription.unsubscribe();
   }, [onLiturgyChanged, watch]);
