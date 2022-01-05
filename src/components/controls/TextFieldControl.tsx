@@ -45,7 +45,6 @@ const TextFieldControl: React.FC<{
       autoComplete="off"
       fullWidth
       onChange={(e) => {
-        console.log('->', transform(e.target.value));
         onChange(transform(e.target.value));
       }}
       {...params}
