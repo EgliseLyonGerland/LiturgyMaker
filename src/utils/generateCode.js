@@ -1,5 +1,4 @@
 import find from 'lodash/find';
-import omit from 'lodash/omit';
 import upperFirst from 'lodash/upperFirst';
 
 let currentSongBackground = 'blue';
@@ -53,10 +52,13 @@ function generateSongsBlockCode({ data }, { songs, addError }) {
 
       song = {
         title: song.title,
-        ...omit(song, ['id', 'number', 'lyrics']),
-        repeat: datum.repeat,
-        background: currentSongBackground,
-        lyrics: song.lyrics,
+        aka: song.aka || '',
+        authors: song.authors || '',
+        copyright: song.copyright || '',
+        collection: song.collection || '',
+        translation: song.translation || '',
+        repeat: !!song.repeat,
+        background: 'green',
       };
 
       changeBackground();
