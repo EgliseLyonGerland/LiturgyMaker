@@ -93,24 +93,25 @@ export interface SongsItem {
   infos: string;
   repeat: boolean;
 }
+
 export interface SongsBlockData {
   items: SongsItem[];
 }
 
-export interface LiturgyBlock<
-  T =
-    | AnnouncementsBlockData
-    | OpenDoorsBlockData
-    | ReadingBlockData
-    | RecitationBlockData
-    | SectionBlockData
-    | SermonBlockData
-    | SongsBlockData,
-> {
-  type: BlockType;
+interface Block<T extends BlockType, U> {
+  type: T;
+  data: U;
   title: string;
-  data: T;
 }
+
+export type LiturgyBlock =
+  | Block<'announcements', AnnouncementsBlockData>
+  | Block<'reading', ReadingBlockData>
+  | Block<'section', SectionBlockData>
+  | Block<'sermon', SermonBlockData>
+  | Block<'songs', SongsBlockData>
+  | Block<'recitation', RecitationBlockData>
+  | Block<'openDoors', OpenDoorsBlockData>;
 
 export interface LiturgyDocument {
   id: number;

@@ -9,23 +9,27 @@ import { getNextLiturgyId } from '../utils/liturgy';
 const LiturgyEditPage = lazy(() => import('./LiturgyEdit'));
 const SongsPage = lazy(() => import('./Songs'));
 const SongEditPage = lazy(() => import('./SongEdit'));
+const SlideshowPage = lazy(() => import('./Slideshow'));
 
 const Main = () => {
   const history = useHistory();
 
   return (
-    <div>
-      <Header
-        links={[
-          { title: 'Liturgies', path: '/' },
-          { title: 'Chants', path: '/songs' },
-        ]}
-        onClick={(link) => history.push(link.path)}
-      />
+    <Suspense fallback={<div />}>
+      <Switch>
+        <Route path="/slideshow">
+          <SlideshowPage />
+        </Route>
+        <div>
+          <Box pt={12} pb={12}>
+            <Header
+              links={[
+                { title: 'Liturgies', path: '/' },
+                { title: 'Chants', path: '/songs' },
+              ]}
+              onClick={(link) => history.push(link.path)}
+            />
 
-      <Box pt={12} pb={12}>
-        <Suspense fallback={<div />}>
-          <Switch>
             <Route path="/" exact>
               <Redirect to={`/liturgies/${getNextLiturgyId()}/edit`} />
             </Route>
@@ -38,10 +42,10 @@ const Main = () => {
             <Route path="/songs/:songId/edit" exact>
               <SongEditPage />
             </Route>
-          </Switch>
-        </Suspense>
-      </Box>
-    </div>
+          </Box>
+        </div>
+      </Switch>
+    </Suspense>
   );
 };
 

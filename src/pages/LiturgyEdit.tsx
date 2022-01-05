@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import CodeIcon from '@material-ui/icons/Code';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import { format, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
 import capitalize from 'lodash/capitalize';
@@ -23,6 +25,7 @@ import Code from '../components/Code';
 import BlocksField from '../components/fields/BlocksField';
 import SaveButton from '../components/SaveButton';
 import { liturgySchema } from '../config/schemas';
+import SlideshowWindowManager from '../libs/SlideshowWindowManager';
 import {
   fetchLiturgy,
   persistLiturgy,
@@ -66,7 +69,9 @@ const useStyles = makeStyles(
       textAlign: 'center',
     },
     actions: {
-      width: 50,
+      display: 'flex',
+      width: 96,
+      opacity: 0.7,
     },
     spinner: {
       display: 'flex',
@@ -106,7 +111,13 @@ const formatDate = (date: Date) => {
   return format(date, 'EEEE d MMMM', { locale });
 };
 
-function Form({ liturgy }: { liturgy: LiturgyDocument }) {
+function Form({
+  liturgy,
+  onLiturgyChanged,
+}: {
+  liturgy: LiturgyDocument;
+  onLiturgyChanged: (liturgy: LiturgyDocument) => void;
+}) {
   const store = useStore();
   const dispatch = useAppDispatch();
   const [persisting, setPersisting] = useState(false);
@@ -124,6 +135,7 @@ function Form({ liturgy }: { liturgy: LiturgyDocument }) {
     setValue: setFormValue,
     reset: resetForm,
     formState: { isDirty },
+    watch,
   } = form;
 
   const handleSubmit = async (data: LiturgyDocument) => {
@@ -179,6 +191,13 @@ function Form({ liturgy }: { liturgy: LiturgyDocument }) {
     }
   }, [liturgy, resetForm]);
 
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      onLiturgyChanged(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [onLiturgyChanged, watch]);
+
   return (
     <FormProvider {...form}>
       <BlocksField
@@ -210,6 +229,7 @@ function LiturgyEdit() {
   const songs = useAppSelector(selectAllSongs);
   const recitationsStatus = useAppSelector((state) => state.recitations.status);
   const recitations = useAppSelector(selectAllRecitations);
+  const slideshowWindowRef = useRef(new SlideshowWindowManager());
 
   const currentDate = converToDate(liturgyId);
 
@@ -224,6 +244,18 @@ function LiturgyEdit() {
     }, 1000),
   );
 
+  const handleChangeDate = (date: Date) => {
+    history.push(`/liturgies/${getNextLiturgyId(date)}/edit`);
+  };
+
+  const handleLiturgyChanged = (liturgy: LiturgyDocument) => {
+    slideshowWindowRef.current.setLiturgy(liturgy);
+  };
+
+  const handlePlay = () => {
+    slideshowWindowRef.current.open();
+  };
+
   useEffect(() => {
     if (songsStatus === 'idle') {
       dispatch(fetchSongs());
@@ -236,12 +268,13 @@ function LiturgyEdit() {
     }
   }, [liturgyId, dispatch, liturgyState, recitationsStatus, songsStatus]);
 
-  const handleChangeDate = (date: Date) => {
-    history.push(`/liturgies/${getNextLiturgyId(date)}/edit`);
-  };
+  useEffect(() => {
+    slideshowWindowRef.current.setSongs(songs);
+  }, [songs]);
 
   const renderNavBar = () => (
     <div className={classes.navBar}>
+      <div className={classes.actions}></div>
       <div className={classes.sundays}>
         <IconButton
           aria-label="delete"
@@ -273,13 +306,33 @@ function LiturgyEdit() {
       </div>
 
       <div className={classes.actions}>
-        <IconButton
-          onClick={() => {
-            setDisplayCode(true);
-          }}
-        >
-          <CodeIcon />
-        </IconButton>
+        <Box position="relative">
+          <IconButton
+            onClick={() => {
+              setDisplayCode(true);
+            }}
+          >
+            <CodeIcon />
+          </IconButton>
+          <IconButton onClick={handlePlay}>
+            <PlayArrowIcon />
+            <Box
+              position="absolute"
+              bgcolor="red"
+              color="white"
+              fontSize={10}
+              fontWeight="bold"
+              borderRadius={2}
+              height={12}
+              lineHeight={'12px'}
+              px={'2px'}
+              top={0}
+              right={-4}
+            >
+              beta
+            </Box>
+          </IconButton>
+        </Box>
       </div>
     </div>
   );
@@ -304,7 +357,11 @@ function LiturgyEdit() {
               />
             )}
 
-            <Form key={liturgyState.id} liturgy={liturgyState} />
+            <Form
+              key={liturgyState.id}
+              liturgy={liturgyState}
+              onLiturgyChanged={handleLiturgyChanged}
+            />
           </>
         )}
       </Container>

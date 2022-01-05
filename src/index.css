@@ -17,3 +17,10 @@ code {
 .firebase-emulator-warning {
   display: none;
 }
+
+.reveal {
+  height: 100vh !important;
+}
+.reveal .slides > section {
+  height: 100%;
+}
