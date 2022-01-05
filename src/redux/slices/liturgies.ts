@@ -3,9 +3,10 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { normalize, schema } from 'normalizr';
 
-import firebase from '../../firebase';
+import { auth, db } from '../../firebase';
 import type { LiturgyDocument, RootState } from '../../types';
 import { createDefaultLiturgy } from '../../utils/defaults';
 import migrate from '../../utils/migrate';
@@ -18,12 +19,11 @@ const liturgiesAdapter = createEntityAdapter<LiturgyDocument>();
 export const fetchLiturgy = createAsyncThunk(
   'liturgies/fetchLiturgy',
   async (id: string) => {
-    const db = firebase.firestore();
-    const doc = await db.doc(`liturgies/${id}`).get();
+    const liturgy = await getDoc(doc(db, 'liturgies', id));
 
     let data;
-    if (doc.exists) {
-      data = migrate(doc.data());
+    if (liturgy.exists()) {
+      data = migrate(liturgy.data());
     } else {
       data = createDefaultLiturgy(id);
     }
@@ -41,10 +41,9 @@ export const persistLiturgy = createAsyncThunk(
   'liturgies/persistLiturgy',
   async (liturgy: LiturgyDocument) => {
     const { id, ...data } = liturgy;
-    const db = firebase.firestore();
-    data.uid = firebase.auth().currentUser?.uid || '';
+    data.uid = auth.currentUser?.uid || '';
 
-    await db.collection('liturgies').doc(`${id}`).set(data);
+    await setDoc(doc(db, 'liturgies', `${id}`), data);
 
     return liturgy;
   },

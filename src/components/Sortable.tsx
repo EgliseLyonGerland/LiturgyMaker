@@ -5,7 +5,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 import type { ClassNameMap } from '@material-ui/styles';
-import arrayMove from 'array-move';
+import { arrayMoveImmutable } from 'array-move';
 import {
   SortableContainer,
   SortableElement,
@@ -92,7 +92,7 @@ const Sortable = <T extends any>({
     oldIndex: number;
     newIndex: number;
   }) => {
-    onChange(arrayMove(items, oldIndex, newIndex));
+    onChange(arrayMoveImmutable(items, oldIndex, newIndex));
   };
 
   const handleDelete = (index: number) => {

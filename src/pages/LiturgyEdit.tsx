@@ -17,7 +17,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useStore } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 import type * as Yup from 'yup';
 
@@ -193,7 +193,7 @@ function Form({
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      onLiturgyChanged(value);
+      onLiturgyChanged(value as LiturgyDocument);
     });
     return () => subscription.unsubscribe();
   }, [onLiturgyChanged, watch]);
@@ -218,12 +218,12 @@ function Form({
 
 function LiturgyEdit() {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { liturgyId } = useParams<{ liturgyId: string }>();
   const [displayCode, setDisplayCode] = useState(false);
   const dispatch = useAppDispatch();
   const liturgyState = useAppSelector((state) =>
-    selectLiturgyById(state, liturgyId),
+    selectLiturgyById(state, `${liturgyId}`),
   );
   const songsStatus = useAppSelector((state) => state.songs.status);
   const songs = useAppSelector(selectAllSongs);
@@ -231,7 +231,7 @@ function LiturgyEdit() {
   const recitations = useAppSelector(selectAllRecitations);
   const slideshowWindowRef = useRef(new SlideshowWindowManager());
 
-  const currentDate = converToDate(liturgyId);
+  const currentDate = converToDate(`${liturgyId}`);
 
   const loading =
     songsStatus === 'loading' ||
@@ -245,7 +245,7 @@ function LiturgyEdit() {
   );
 
   const handleChangeDate = (date: Date) => {
-    history.push(`/liturgies/${getNextLiturgyId(date)}/edit`);
+    navigate(`/liturgies/${getNextLiturgyId(date)}/edit`);
   };
 
   const handleLiturgyChanged = (liturgy: LiturgyDocument) => {

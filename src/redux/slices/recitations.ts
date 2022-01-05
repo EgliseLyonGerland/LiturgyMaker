@@ -3,9 +3,10 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
+import { collection, getDocs, query } from 'firebase/firestore';
 import { normalize, schema } from 'normalizr';
 
-import firebase from '../../firebase';
+import { db } from '../../firebase';
 import type { RecitationDocument, RootState } from '../../types';
 
 export const recitationEntity = new schema.Entity<RecitationDocument>(
@@ -18,8 +19,7 @@ const recitationsAdapter = createEntityAdapter<RecitationDocument>();
 export const fetchRecitations = createAsyncThunk(
   'recitations/fetchRecitations',
   async () => {
-    const db = firebase.firestore();
-    const { docs } = await db.collection('recitations').get();
+    const { docs } = await getDocs(query(collection(db, 'recitations')));
 
     return normalize<
       any,

@@ -9,12 +9,12 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Alert } from '@material-ui/lab';
-import type firebase from 'firebase/app';
+import type { Auth as FirebaseAuth } from 'firebase/auth';
 import PropTypes from 'prop-types';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
 interface Props {
-  firebaseAuth: firebase.auth.Auth;
+  firebaseAuth: FirebaseAuth;
 }
 
 const useStyles = makeStyles((theme) => ({

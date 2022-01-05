@@ -3,9 +3,10 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
+import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import { normalize, schema } from 'normalizr';
 
-import firebase from '../../firebase';
+import { db } from '../../firebase';
 import type { SongDocument, RootState } from '../../types';
 
 const defaultSong: SongDocument = {
@@ -26,8 +27,7 @@ export const songsEntity = new schema.Array(songEntity);
 const songsAdapter = createEntityAdapter<SongDocument>();
 
 export const fetchSongs = createAsyncThunk('songs/fetchSongs', async () => {
-  const db = firebase.firestore();
-  const { docs } = await db.collection('songs').get();
+  const { docs } = await getDocs(query(collection(db, 'songs')));
 
   return normalize<
     any,
@@ -44,9 +44,8 @@ export const persistSong = createAsyncThunk(
   'songs/persistSong',
   async (song: SongDocument) => {
     const { id, ...data } = song;
-    const db = firebase.firestore();
 
-    await db.collection('songs').doc(id).set(data);
+    await setDoc(doc(db, 'songs', id), data);
 
     return song;
   },

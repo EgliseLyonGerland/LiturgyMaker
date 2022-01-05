@@ -1,12 +1,15 @@
-import firebaseApp from 'firebase/app';
+import { initializeApp } from 'firebase/app';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 
 import firebaseConfig from './config/firebase';
 
-const firebase = firebaseApp.initializeApp(firebaseConfig);
+const firebase = initializeApp(firebaseConfig);
+
+export const auth = getAuth(firebase);
+export const db = getFirestore(firebase);
 
 if (process.env.NODE_ENV === 'development') {
-  firebaseApp.auth().useEmulator('http://localhost:9099');
-  firebaseApp.firestore().useEmulator('localhost', 8080);
+  connectAuthEmulator(auth, 'http://localhost:9099');
+  connectFirestoreEmulator(db, 'localhost', 8080);
 }
-
-export default firebase;
