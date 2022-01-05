@@ -54,21 +54,10 @@ export interface OpenDoorsBlockData {
   prayerTopics: { text: string }[];
 }
 
-export type ReadingTemplate =
-  | 'topBottomLeft'
-  | 'topBottomCenter'
-  | 'topBottomRight'
-  | 'bottomTopLeft'
-  | 'bottomTopCenter'
-  | 'bottomTopRight'
-  | 'leftRightCenter'
-  | 'rightLeftCenter';
-
 export interface ReadingBlockData {
   bibleRefs: {
     ref: string;
     excerpt: string;
-    template: ReadingTemplate;
   }[];
 }
 

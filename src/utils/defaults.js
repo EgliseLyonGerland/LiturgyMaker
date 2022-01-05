@@ -1,11 +1,7 @@
-import shuffle from 'lodash/shuffle';
 import upperFirst from 'lodash/upperFirst';
 
 import { currentVersion } from '../config/global';
-import { verseTemplates } from '../config/preview';
 import { converToDate } from './liturgy';
-
-const shuffledVerseTemplates = shuffle(verseTemplates);
 
 export const createDefaultAnnouncementsBlock = () => ({
   type: 'announcements',
@@ -23,7 +19,6 @@ export const createDefaultReadingBlock = ({ title = '' } = {}) => ({
       {
         ref: '',
         excerpt: '',
-        template: shuffledVerseTemplates[0],
       },
     ],
   },

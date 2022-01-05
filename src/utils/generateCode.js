@@ -105,7 +105,6 @@ function generateReadingBlockCode({ data }) {
       const config = {
         bibleRef: bibleRef.ref,
         excerpt: bibleRef.excerpt,
-        template: bibleRef.template || 'topBottomLeft',
       };
 
       return [
