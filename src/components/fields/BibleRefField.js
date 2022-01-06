@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 
+import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { Autocomplete } from '@material-ui/lab';
 import PropTypes from 'prop-types';
 import { useController, useFormContext } from 'react-hook-form';
 
 import books from '../../config/bibleBooks.json';
 import { validate, getPassage } from '../../utils/bibleRef';
 import TextFieldControl from '../controls/TextFieldControl';
-import TextFieldSuggest from '../TextFieldSuggest';
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -61,20 +62,26 @@ const BibleRefField = ({
 
   return (
     <div>
-      <TextFieldSuggest
-        label="Référence biblique"
-        value={currentRef || ''}
-        variant="filled"
-        margin="dense"
-        error={!!error}
-        helperText={error}
-        fullWidth
-        items={books}
-        field="name"
+      <Autocomplete
+        options={books.map((book) => book.name)}
         disabled={disabled}
-        inputRef={refController.field.ref}
-        onChange={refController.field.onChange}
-        onBlur={refController.field.onBlur}
+        defaultValue={defaultValue.ref}
+        freeSolo
+        autoComplete
+        autoHighlight
+        renderInput={(params) => (
+          <TextField
+            name={`${name}.ref`}
+            label="Référence biblique"
+            variant="filled"
+            margin="dense"
+            error={!!error}
+            helperText={error}
+            onChange={refController.field.onChange}
+            onBlur={refController.field.onBlur}
+            {...params}
+          />
+        )}
       />
       {withExcerpt && (
         <>
