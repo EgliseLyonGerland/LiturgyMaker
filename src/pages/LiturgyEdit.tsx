@@ -49,13 +49,7 @@ const useStyles = makeStyles(
     navBar: {
       display: 'flex',
       height: theme.spacing(8),
-      padding: theme.spacing(0, 2),
       alignItems: 'center',
-
-      '&:before': {
-        content: '""',
-        width: 50,
-      },
     },
     sundays: {
       display: 'flex',
@@ -80,13 +74,6 @@ const useStyles = makeStyles(
       justifyContent: 'center',
     },
     [theme.breakpoints.down('md')]: {
-      navBar: {
-        padding: 0,
-
-        '&:before': {
-          display: 'none',
-        },
-      },
       sundays: {
         fontSize: 16,
       },
@@ -305,35 +292,33 @@ function LiturgyEdit() {
         </IconButton>
       </div>
 
-      <div className={classes.actions}>
-        <Box position="relative">
-          <IconButton
-            onClick={() => {
-              setDisplayCode(true);
-            }}
+      <Box className={classes.actions} position="relative">
+        <IconButton
+          onClick={() => {
+            setDisplayCode(true);
+          }}
+        >
+          <CodeIcon />
+        </IconButton>
+        <IconButton onClick={handlePlay}>
+          <PlayArrowIcon />
+          <Box
+            position="absolute"
+            bgcolor="red"
+            color="white"
+            fontSize={10}
+            fontWeight="bold"
+            borderRadius={2}
+            height={12}
+            lineHeight="12px"
+            px="2px"
+            top={0}
+            right={-4}
           >
-            <CodeIcon />
-          </IconButton>
-          <IconButton onClick={handlePlay}>
-            <PlayArrowIcon />
-            <Box
-              position="absolute"
-              bgcolor="red"
-              color="white"
-              fontSize={10}
-              fontWeight="bold"
-              borderRadius={2}
-              height={12}
-              lineHeight="12px"
-              px="2px"
-              top={0}
-              right={-4}
-            >
-              beta
-            </Box>
-          </IconButton>
-        </Box>
-      </div>
+            beta
+          </Box>
+        </IconButton>
+      </Box>
     </div>
   );
 
