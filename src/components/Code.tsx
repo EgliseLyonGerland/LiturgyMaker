@@ -11,6 +11,11 @@ import okaida from 'react-syntax-highlighter/dist/esm/styles/prism/okaidia';
 
 const copy = require('clipboard-copy');
 
+interface Props {
+  code: string;
+  onHide(): void;
+}
+
 const useStyles = makeStyles(
   (theme) => ({
     root: {
@@ -47,10 +52,7 @@ const useStyles = makeStyles(
   { name: 'Code' },
 );
 
-const Code: React.FC<{
-  code: string;
-  onHide(): void;
-}> = ({ code, onHide = () => {} }) => {
+function Code({ code, onHide = () => {} }: Props) {
   const classes = useStyles();
   const [copied, setCopied] = useState(false);
 
@@ -92,6 +94,6 @@ const Code: React.FC<{
     </div>,
     document.body,
   );
-};
+}
 
 export default Code;

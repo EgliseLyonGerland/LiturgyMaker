@@ -1,22 +1,21 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
-
+import type { FormFieldProps, SectionBlockData } from '../../types';
 import TextFieldControl from '../controls/TextFieldControl';
 
-const SectionField = ({ name, defaultValue, disabled = false }) => {
+function SectionField({
+  name,
+  defaultValue,
+  disabled = false,
+}: FormFieldProps<SectionBlockData>) {
   return (
     <TextFieldControl
       name={`${name}.title`}
       label="Titre"
-      defaultValue={defaultValue.title}
+      defaultValue={defaultValue?.title}
       disabled={disabled}
     />
   );
-};
-
-SectionField.propTypes = {
-  name: PropTypes.string.isRequired,
-};
+}
 
 export default SectionField;

@@ -73,7 +73,7 @@ interface Props<T> {
   getDefaultItem(): T;
 }
 
-const Sortable = <T extends any>({
+function Sortable<T extends any>({
   items,
   maxItems = Infinity,
   renderItem,
@@ -81,7 +81,7 @@ const Sortable = <T extends any>({
   getDefaultItem,
   gutters = 0,
   disabled = false,
-}: Props<T>) => {
+}: Props<T>) {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -143,6 +143,6 @@ const Sortable = <T extends any>({
       </Button>
     </SortableList>
   );
-};
+}
 
 export default Sortable;

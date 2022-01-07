@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Box,
   Checkbox,
@@ -8,9 +10,10 @@ import {
 } from '@material-ui/core';
 import { Controller, useFormContext } from 'react-hook-form';
 
+import type { FormFieldProps, LyricPart } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 
-function LyricsField({ name, disabled = false }) {
+function LyricsField({ name, disabled = false }: FormFieldProps<LyricPart>) {
   const { control } = useFormContext();
 
   return (
@@ -36,7 +39,7 @@ function LyricsField({ name, disabled = false }) {
                 >
                   <InputBase
                     rows={6}
-                    placeholder={'Lorem ipsum dolor sit amet...'}
+                    placeholder="Lorem ipsum dolor sit amet..."
                     disabled={disabled}
                     style={{
                       lineHeight: 1.5,

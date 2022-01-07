@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, Fab, useTheme, Zoom } from '@material-ui/core';
 import { Check, Save } from '@material-ui/icons';
@@ -19,13 +19,14 @@ const SaveButton: React.FC<{
   const [currentStatus, setCurrentStatus] = useState<Status>(null);
   const [displayed, setDisplayed] = useState(false);
 
-  const status: Status = persisting
-    ? 'running'
-    : persisted
-    ? 'done'
-    : dirty
-    ? 'ready'
-    : null;
+  let status: Status = null;
+  if (persisting) {
+    status = 'running';
+  } else if (persisted) {
+    status = 'done';
+  } else if (dirty) {
+    status = 'ready';
+  }
 
   useEffect(() => {
     if (currentStatus === 'done' && displayed) {

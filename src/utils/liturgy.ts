@@ -8,6 +8,18 @@ function getClosestAboveSundayDate(date = new Date()) {
   return endOfWeek(date, { weekStartsOn: 1 });
 }
 
+export function convertToId(date: Date) {
+  return format(date, 'yMMdd');
+}
+
+export function converToDate(id: number | string) {
+  const year = `${id}`.slice(0, 4);
+  const month = `${id}`.slice(4, 6);
+  const day = `${id}`.slice(6, 8);
+
+  return new Date(`${year}-${month}-${day}T10:00:00`);
+}
+
 export function getNextLiturgyId(idOrDate: Date | number = Date.now()) {
   let date: Date;
 
@@ -20,16 +32,4 @@ export function getNextLiturgyId(idOrDate: Date | number = Date.now()) {
   }
 
   return convertToId(getClosestAboveSundayDate(date));
-}
-
-export function convertToId(date: Date) {
-  return format(date, 'yMMdd');
-}
-
-export function converToDate(id: number | string) {
-  const year = `${id}`.slice(0, 4);
-  const month = `${id}`.slice(4, 6);
-  const day = `${id}`.slice(6, 8);
-
-  return new Date(`${year}-${month}-${day}T10:00:00`);
 }

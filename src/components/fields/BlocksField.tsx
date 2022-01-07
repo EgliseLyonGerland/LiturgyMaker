@@ -1,31 +1,41 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 
-import upperFirst from 'lodash/upperFirst';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { blockTypes } from '../../config/global';
+import type { BlockType, LiturgyBlock } from '../../types';
 import { createDefaultBlock } from '../../utils/defaults';
 import Divider from '../Divider';
-import AnnouncementsField from '../fields/AnnouncementsField';
-import OpenDoorsField from '../fields/OpenDoorsField';
-import ReadingField from '../fields/ReadingField';
-import RecitationField from '../fields/RecitationField';
-import SectionField from '../fields/SectionField';
-import SermonField from '../fields/SermonField';
-import SongsField from '../fields/SongsField';
 import Block from '../FormBlock';
+import AnnouncementsField from './AnnouncementsField';
+import OpenDoorsField from './OpenDoorsField';
+import ReadingField from './ReadingField';
+import RecitationField from './RecitationField';
+import SectionField from './SectionField';
+import SermonField from './SermonField';
+import SongsField from './SongsField';
 
-const components = {
-  AnnouncementsField: memo(AnnouncementsField),
-  SongsField: memo(SongsField),
-  ReadingField: memo(ReadingField),
-  SermonField: memo(SermonField),
-  SectionField: memo(SectionField),
-  RecitationField: memo(RecitationField),
-  OpenDoorsField: memo(OpenDoorsField),
+interface Props {
+  name: string;
+  disabled: boolean;
+  onFillFromLastWeekClicked: (index: number) => void;
+}
+
+const components: Record<BlockType, any> = {
+  announcements: memo(AnnouncementsField),
+  songs: memo(SongsField),
+  reading: memo(ReadingField),
+  sermon: memo(SermonField),
+  section: memo(SectionField),
+  recitation: memo(RecitationField),
+  openDoors: memo(OpenDoorsField),
 };
 
-const BlocksField = ({ name, disabled = false, onFillFromLastWeekClicked }) => {
+function BlocksField({
+  name,
+  disabled = false,
+  onFillFromLastWeekClicked,
+}: Props) {
   const { control, register } = useFormContext();
   const { fields, insert, remove } = useFieldArray({
     name,
@@ -33,8 +43,12 @@ const BlocksField = ({ name, disabled = false, onFillFromLastWeekClicked }) => {
     keyName: 'key',
   });
 
-  const renderBlock = (block, index) => {
-    const Component = components[`${upperFirst(block.type)}Field`];
+  const renderBlock = (block: LiturgyBlock, index: number) => {
+    const Component = components[block.type];
+
+    if (!Component) {
+      return null;
+    }
 
     return (
       <Block
@@ -49,7 +63,8 @@ const BlocksField = ({ name, disabled = false, onFillFromLastWeekClicked }) => {
 
         <Component
           name={`${name}.${index}.data`}
-          defaultValue={block.data}
+          // @todo: remove this any
+          defaultValue={block.data as any}
           disabled={disabled}
         />
       </Block>
@@ -66,7 +81,8 @@ const BlocksField = ({ name, disabled = false, onFillFromLastWeekClicked }) => {
       />
       {fields.map(({ key, ...block }, index) => (
         <div key={key}>
-          {renderBlock(block, index)}
+          {/* @todo: remove the `as` flag */}
+          {renderBlock(block as LiturgyBlock, index)}
 
           <Divider
             disabled={disabled}
@@ -78,6 +94,6 @@ const BlocksField = ({ name, disabled = false, onFillFromLastWeekClicked }) => {
       ))}
     </div>
   );
-};
+}
 
 export default BlocksField;

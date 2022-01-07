@@ -44,7 +44,7 @@ function renderLyricsPart(
         ...style[position],
       }}
     >
-      {text + '\n' + ' '.repeat(Math.max(0, partIndex))}
+      {`${text}\n${' '.repeat(Math.max(0, partIndex))}`}
     </p>
   );
 }
@@ -126,9 +126,11 @@ function Slideshow() {
     <div ref={wrapperRef} className="reveal">
       <div className="slides">
         {data.blocks.reduce<JSX.Element[]>((acc, block, blockIndex) => {
+          let result = acc;
+
           switch (block.type) {
             case 'reading':
-              acc = acc.concat(
+              result = result.concat(
                 block.data.bibleRefs.map((item, itemIndex) => (
                   <section key={`${blockIndex}.${itemIndex}`}>
                     {item.ref}
@@ -148,7 +150,7 @@ function Slideshow() {
 
                 const baseKey = generateKey(blockIndex, songIndex);
 
-                acc.push(
+                result.push(
                   <section
                     key={generateKey(blockIndex, songIndex, 'title')}
                     data-auto-animate
@@ -161,7 +163,7 @@ function Slideshow() {
                   </section>,
                 );
 
-                acc.push(
+                result.push(
                   ...song.lyrics.map((part, partIndex) => {
                     return (
                       <section
@@ -187,7 +189,7 @@ function Slideshow() {
             default:
           }
 
-          return acc;
+          return result;
         }, [])}
       </div>
     </div>

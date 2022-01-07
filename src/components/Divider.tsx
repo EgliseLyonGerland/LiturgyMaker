@@ -9,6 +9,11 @@ import classnames from 'classnames';
 
 import { blockTypes } from '../config/global';
 
+interface Props {
+  onBlockSelected(block: string): void;
+  disabled: boolean;
+}
+
 const useStyles = makeStyles(
   (theme) => ({
     root: {
@@ -66,10 +71,7 @@ const useStyles = makeStyles(
   { name: 'Divider' },
 );
 
-const Divider: React.FC<{
-  onBlockSelected(block: string): void;
-  disabled?: boolean;
-}> = ({ onBlockSelected, disabled = false }) => {
+function Divider({ onBlockSelected, disabled = false }: Props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -118,6 +120,6 @@ const Divider: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 export default Divider;

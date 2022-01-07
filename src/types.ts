@@ -1,33 +1,5 @@
 import type rootReducer from './redux/slices';
 
-declare global {
-  interface CanvasRenderingContext2D {
-    setFont(
-      typographyName: TypographyName,
-      overrides?: Partial<Typography>,
-    ): void;
-    getCurrentFontSize(): number;
-    getCurrentLineHeight(): number;
-    fillMultilineText(
-      text: string,
-      x: number,
-      y: number,
-      width: number,
-    ): number;
-    measureMultiligneText(
-      text: string,
-      maxWidth: number,
-    ): { width: number; height: number };
-    fillSeparator(
-      x: number,
-      y: number,
-      horizontal?: boolean,
-      align?: 'left' | 'right' | 'center',
-      size?: number,
-    ): void;
-  }
-}
-
 export type RootState = ReturnType<typeof rootReducer>;
 
 export type BlockType =
@@ -87,7 +59,7 @@ export interface SongsBlockData {
   items: SongsItem[];
 }
 
-interface Block<T extends BlockType, U> {
+export interface Block<T extends BlockType, U> {
   type: T;
   data: U;
   title: string;
@@ -105,16 +77,20 @@ export type LiturgyBlock =
 export interface LiturgyDocument {
   id: number;
   uid: string;
+  version: number;
   blocks: LiturgyBlock[];
 }
 
 export interface RecitationDocument {
   id: string;
   title: string;
+  content: { text: string; italic: boolean }[];
 }
 
+export type LyricType = 'verse' | 'chorus';
+
 export interface LyricPart {
-  type: 'verse' | 'chorus';
+  type: LyricType;
   text: string;
 }
 
@@ -130,37 +106,8 @@ export interface SongDocument {
   lyrics: LyricPart[];
 }
 
-export enum FontFamily {
-  sansSerif = 'Source Sans Pro',
-  barlow = 'Barlow Condensed',
-  serif = 'Adobe Hebrew',
-}
-
-export type TypographyName =
-  | 'title'
-  | 'announcementTitle'
-  | 'announcementPage'
-  | 'announcementItemTitle'
-  | 'announcementItemDetail'
-  | 'verseTitle'
-  | 'verseSubtitle'
-  | 'verseExcerpt'
-  | 'songTitle'
-  | 'chapterTitle'
-  | 'sermonTitle'
-  | 'sermonBibleRef'
-  | 'sermonAuthor'
-  | 'sermonPlanNumber'
-  | 'sermonPlanTitle'
-  | 'openDoorsTitle'
-  | 'openDoorsDetail'
-  | 'openDoorsPrayerTopicsHeadline'
-  | 'openDoorsPrayerTopic';
-
-export interface Typography {
-  fontFamily: FontFamily;
-  fontSize: number;
-  fontWeight?: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 900;
-  fontStyle?: 'italic';
-  opacity?: number;
+export interface FormFieldProps<T> {
+  name: string;
+  disabled: boolean;
+  defaultValue?: T;
 }

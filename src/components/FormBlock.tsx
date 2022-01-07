@@ -7,20 +7,23 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-const FormBlock: React.FC<{
+interface Props {
   title: string;
-  subtitle?: string;
-  disabled?: boolean;
+  subtitle: string;
+  disabled: boolean;
+  children: React.ReactNode;
   onRemoveBlockClicked(): void;
   onFillFromLastWeekClicked(): void;
-}> = ({
+}
+
+function FormBlock({
   title,
   subtitle = '',
   disabled = false,
   onRemoveBlockClicked,
   onFillFromLastWeekClicked,
   children,
-}) => {
+}: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   function handleClose() {
@@ -70,7 +73,7 @@ const FormBlock: React.FC<{
           anchorEl={anchorEl}
           keepMounted
           open={!!anchorEl}
-          onClose={handleClose}
+          onClose={() => handleClose()}
         >
           <MenuItem onClick={() => handleClick(onRemoveBlockClicked)}>
             Supprimer
@@ -85,6 +88,6 @@ const FormBlock: React.FC<{
       </Box>
     </Box>
   );
-};
+}
 
 export default FormBlock;

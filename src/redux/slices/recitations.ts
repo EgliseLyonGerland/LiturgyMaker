@@ -44,10 +44,10 @@ const recitationsSlice = createSlice({
       state.status = 'success';
       recitationsAdapter.upsertMany(state, action.payload.recitations);
     });
-    builder.addCase(fetchRecitations.pending, (state, action) => {
+    builder.addCase(fetchRecitations.pending, (state) => {
       state.status = 'loading';
     });
-    builder.addCase(fetchRecitations.rejected, (state, action) => {
+    builder.addCase(fetchRecitations.rejected, (state) => {
       state.status = 'fail';
     });
   },

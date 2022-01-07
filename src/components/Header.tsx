@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Box, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -21,21 +22,17 @@ const useStyles = makeStyles(
   { name: 'Header' },
 );
 
+interface Props {
+  links: HeaderLink[];
+}
+
 interface HeaderLink {
   title: string;
   path: string;
 }
 
-const Header: React.FC<{
-  links: HeaderLink[];
-  onClick(link: HeaderLink): void;
-}> = ({ links, onClick }) => {
+function Header({ links }: Props) {
   const classes = useStyles();
-
-  const handleClick = (event: any, link: HeaderLink) => {
-    event.preventDefault();
-    onClick(link);
-  };
 
   return (
     <div className={classes.root}>
@@ -45,13 +42,13 @@ const Header: React.FC<{
 
       {links.map((link, index) => (
         <Box key={index} mx={1}>
-          <Link href="#" onClick={(event: any) => handleClick(event, link)}>
+          <Link component={NavLink} to={link.path}>
             {link.title}
           </Link>
         </Box>
       ))}
     </div>
   );
-};
+}
 
 export default Header;

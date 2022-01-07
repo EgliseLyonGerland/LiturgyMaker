@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 
 import { Box } from '@material-ui/core';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Header from '../components/Header';
 import { getNextLiturgyId } from '../utils/liturgy';
@@ -11,16 +11,14 @@ const SongsPage = lazy(() => import('./Songs'));
 const SongEditPage = lazy(() => import('./SongEdit'));
 const SlideshowPage = lazy(() => import('./Slideshow'));
 
-const Main = () => {
-  const navigate = useNavigate();
-
+function Main() {
   return (
     <Suspense fallback={<div />}>
       <Routes>
         <Route
           path="/"
           element={<Navigate to={`/liturgies/${getNextLiturgyId()}/edit`} />}
-        ></Route>
+        />
         <Route path="/slideshow" element={<SlideshowPage />} />
 
         <Route
@@ -32,7 +30,6 @@ const Main = () => {
                   { title: 'Liturgies', path: '/' },
                   { title: 'Chants', path: '/songs' },
                 ]}
-                onClick={(link) => navigate(link.path)}
               />
 
               <Routes>
@@ -49,6 +46,6 @@ const Main = () => {
       </Routes>
     </Suspense>
   );
-};
+}
 
 export default Main;

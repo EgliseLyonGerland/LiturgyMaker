@@ -17,10 +17,10 @@ function formatDate(date: Date) {
   return format(date, 'd MMMM y', { locale });
 }
 
-exports.notifyChanges = functions
+export const notifyChanges = functions
   .region('europe-west1')
   .firestore.document('liturgies/{liturgyId}')
-  .onWrite(async (change, context) => {
+  .onWrite(async (change) => {
     const created = !change.before.exists;
     const data = change.after.data();
 
@@ -37,7 +37,7 @@ exports.notifyChanges = functions
     const user = (await db.collection('users').doc(uid).get()).data();
 
     if (!user) {
-      console.log('User ' + uid + ' not found');
+      console.log(`User ${uid} not found`);
       return;
     }
 
@@ -91,3 +91,5 @@ exports.notifyChanges = functions
     await transporter.sendMail({ from, to, subject, html });
     console.log('Mail sent');
   });
+
+export default null;

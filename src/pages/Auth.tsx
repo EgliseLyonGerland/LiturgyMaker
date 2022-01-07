@@ -10,7 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Alert } from '@material-ui/lab';
 import type { Auth as FirebaseAuth } from 'firebase/auth';
-import PropTypes from 'prop-types';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
 interface Props {
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Auth = ({ firebaseAuth }: Props) => {
+function Auth({ firebaseAuth }: Props) {
   const classes = useStyles();
   const [email, setEmail] = useState('oltodo@msn.com');
   const [password, setPassword] = useState('DQ68sx89!');
@@ -117,10 +116,6 @@ const Auth = ({ firebaseAuth }: Props) => {
       </Snackbar>
     </div>
   );
-};
-
-Auth.propTypes = {
-  onSubmit: PropTypes.func,
-};
+}
 
 export default Auth;

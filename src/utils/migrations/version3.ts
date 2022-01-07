@@ -1,17 +1,17 @@
 import chunk from 'lodash/chunk';
 
-export default function migrate(doc) {
+export default function migrate(doc: any) {
   return {
     ...doc,
-    blocks: doc.blocks.map((block) => {
+    blocks: doc.blocks.map((block: any) => {
       if (block.type !== 'announcements') {
         return block;
       }
 
-      let { data = [] } = block;
+      let { data = [] }: { data: any[] } = block;
 
       data = chunk(data, 2);
-      data = data.reduce(
+      data = data.reduce<any[]>(
         (acc, curr) => {
           acc[0].push(curr[0]);
 

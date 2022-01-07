@@ -3,15 +3,17 @@ import React from 'react';
 import { TextField } from '@material-ui/core';
 import { useFormContext, useController } from 'react-hook-form';
 
-const TextFieldControl: React.FC<{
+interface Props {
   name: string;
   label: string;
-  defaultValue: unknown;
-  helperText: string;
-  multiline: boolean;
-  disabled: boolean;
+  defaultValue?: unknown;
+  helperText?: string;
+  multiline?: boolean;
+  disabled?: boolean;
   transform?(value: unknown): unknown;
-}> = ({
+}
+
+function TextFieldControl({
   name,
   label,
   defaultValue = '',
@@ -19,7 +21,7 @@ const TextFieldControl: React.FC<{
   multiline = false,
   disabled = false,
   transform = (value) => value,
-}) => {
+}: Props) {
   const { control } = useFormContext();
   const {
     field,
@@ -50,6 +52,6 @@ const TextFieldControl: React.FC<{
       {...params}
     />
   );
-};
+}
 
 export default TextFieldControl;

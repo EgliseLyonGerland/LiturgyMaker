@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import type { BoxProps } from '@material-ui/core';
 import { Box, Container, Typography } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 import isString from 'lodash/isString';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 
@@ -14,8 +14,16 @@ import LyricsField from '../components/fields/LyricsField';
 import SaveButton from '../components/SaveButton';
 import { songSchema } from '../config/schemas';
 import { fetchSongs, persistSong, selectSongById } from '../redux/slices/songs';
+import { useAppDispatch, useAppSelector } from '../redux/store';
+import type { SongDocument } from '../types';
 
-const Block = ({ header, children, ...props }) => {
+function Block({
+  header = '',
+  children,
+  ...props
+}: {
+  header: string;
+} & BoxProps) {
   return (
     <Box bgcolor="tertiary.light" borderRadius={16} {...props}>
       {header && (
@@ -39,13 +47,15 @@ const Block = ({ header, children, ...props }) => {
       </Box>
     </Box>
   );
-};
+}
 
-const SongEdit = () => {
+function SongEdit() {
   const params = useParams();
-  const songsStatus = useSelector((state) => state.songs.status);
-  const song = useSelector((state) => selectSongById(state, params.songId));
-  const dispatch = useDispatch();
+  const songsStatus = useAppSelector((state) => state.songs.status);
+  const song = useAppSelector((state) =>
+    selectSongById(state, `${params.songId}`),
+  );
+  const dispatch = useAppDispatch();
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(false);
 
@@ -59,7 +69,7 @@ const SongEdit = () => {
     formState: { isDirty, isSubmitting },
   } = form;
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (data: SongDocument) => {
     setPersisting(true);
 
     await dispatch(persistSong(data));
@@ -141,6 +151,6 @@ const SongEdit = () => {
       </FormProvider>
     </Container>
   );
-};
+}
 
 export default SongEdit;

@@ -25,7 +25,6 @@
     "lodash": "4.17.21",
     "minisearch": "3.2.0",
     "normalizr": "3.6.1",
-    "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-firebase-hooks": "4.0.1",
@@ -54,6 +53,8 @@
     "@types/react-router-dom": "5.3.2",
     "@types/react-syntax-highlighter": "13.5.2",
     "@types/superagent": "4.1.14",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-airbnb-typescript": "16.1.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "4.0.0",
     "husky": "7.0.4",
@@ -79,9 +80,23 @@
     "extends": [
       "react-app",
       "react-app/jest",
+      "airbnb",
+      "airbnb-typescript",
       "plugin:prettier/recommended"
     ],
+    "parserOptions": {
+      "project": "./tsconfig.eslint.json"
+    },
     "rules": {
+      "no-param-reassign": [
+        "error",
+        {
+          "props": true,
+          "ignorePropertyModificationsFor": [
+            "state"
+          ]
+        }
+      ],
       "import/no-extraneous-dependencies": [
         "error"
       ],
@@ -114,6 +129,9 @@
           }
         }
       ],
+      "react/no-array-index-key": "off",
+      "react/require-default-props": "off",
+      "react/jsx-props-no-spreading": "off",
       "@typescript-eslint/consistent-type-definitions": [
         "error",
         "interface"
@@ -124,7 +142,8 @@
     }
   },
   "eslintIgnore": [
-    "build"
+    "build",
+    "functions/lib"
   ],
   "prettier": {
     "overrides": [
