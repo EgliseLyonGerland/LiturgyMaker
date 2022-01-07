@@ -1,24 +1,26 @@
-function isBlankLine(text) {
+import type { LyricPart, LyricType } from '../types';
+
+function isBlankLine(text: string) {
   return text.trim() === '';
 }
 
-function isTypeLine(text) {
+function isTypeLine(text: string) {
   const trimedText = text.trim();
 
   return trimedText === '[verse]' || trimedText === '[chorus]';
 }
 
-function resolveType(text) {
-  return text.substr(1, text.length - 2);
+function resolveType(text: string): LyricType {
+  return text.substr(1, text.length - 2) === 'verse' ? 'verse' : 'chorus';
 }
 
-module.exports.format = function format(lyrics) {
-  const result = [];
+export const format = function format(lyrics: LyricPart[]) {
+  const result: LyricPart[] = [];
 
   lyrics.forEach(({ text, type }) => {
     let currentIndex = 0;
 
-    text.split('\n').forEach((line, index) => {
+    text.split('\n').forEach((line) => {
       const trimedLine = line.trim();
 
       if (trimedLine === '') {
@@ -38,25 +40,17 @@ module.exports.format = function format(lyrics) {
   return result;
 };
 
-module.exports.parse = function parse(content) {
-  let currentType = 'verse';
+export const parse = function parse(content: string): LyricPart[] {
+  let currentType: LyricType = 'verse';
 
   if (!content.trim()) {
     return [];
   }
 
-  /**
-   * [verse]
-   *
-   * [chorus]
-   *
-   * [foobar]
-   */
-
   return content
     .trim()
     .split('\n')
-    .reduce((acc, curr) => {
+    .reduce<LyricPart[]>((acc, curr) => {
       if (isBlankLine(curr)) {
         if (acc.length === 0) {
           return acc;
@@ -69,6 +63,8 @@ module.exports.parse = function parse(content) {
         return acc;
       }
 
+      const result = acc;
+
       if (isTypeLine(curr)) {
         currentType = resolveType(curr);
 
@@ -80,7 +76,7 @@ module.exports.parse = function parse(content) {
           return [...acc, { type: currentType, text: '' }];
         }
 
-        acc[acc.length - 1].type = currentType;
+        result[acc.length - 1].type = currentType;
 
         return acc;
       }
@@ -89,13 +85,13 @@ module.exports.parse = function parse(content) {
         return [...acc, { type: currentType, text: curr }];
       }
 
-      const { text } = acc[acc.length - 1];
-      acc[acc.length - 1].text = `${text}\n${curr}`.trim();
+      const { text } = result[result.length - 1];
+      result[result.length - 1].text = `${text}\n${curr}`.trim();
 
-      return acc;
+      return result;
     }, []);
 };
 
-module.exports.stringify = function stringify(lyrics) {
+export const stringify = function stringify(lyrics: LyricPart[]) {
   return lyrics.map((part) => `[${part.type}]\n${part.text}`).join('\n\n');
 };

@@ -154,13 +154,13 @@ function Form({
     const previousLiturgy = selectLiturgyById(store.getState(), previousId);
 
     if (!previousLiturgy) {
-      return null;
+      return;
     }
 
     const { blocks } = getFormValues();
 
     if (!blocks) {
-      return null;
+      return;
     }
 
     const currentBlock = blocks[index];
@@ -176,7 +176,7 @@ function Form({
     );
 
     if (sameTypeBlocks.length === 0) {
-      return null;
+      return;
     }
 
     const previousBlock =
@@ -192,7 +192,7 @@ function Form({
   }, [liturgy, resetForm]);
 
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
+    const subscription = watch((value) => {
       onLiturgyChanged(value as LiturgyDocument);
     });
     return () => subscription.unsubscribe();
@@ -274,7 +274,7 @@ function LiturgyEdit() {
 
   const renderNavBar = () => (
     <div className={classes.navBar}>
-      <div className={classes.actions}></div>
+      <div className={classes.actions} />
       <div className={classes.sundays}>
         <IconButton
           aria-label="delete"
@@ -324,8 +324,8 @@ function LiturgyEdit() {
               fontWeight="bold"
               borderRadius={2}
               height={12}
-              lineHeight={'12px'}
-              px={'2px'}
+              lineHeight="12px"
+              px="2px"
               top={0}
               right={-4}
             >

@@ -1,5 +1,25 @@
 import find from 'lodash/find';
-import upperFirst from 'lodash/upperFirst';
+
+import type {
+  AnnouncementsBlockData,
+  LiturgyBlock,
+  LiturgyDocument,
+  OpenDoorsBlockData,
+  ReadingBlockData,
+  RecitationBlockData,
+  RecitationDocument,
+  SectionBlockData,
+  SermonBlockData,
+  SongDocument,
+  SongsBlockData,
+} from '../types';
+
+interface GeneratorProps<T extends LiturgyBlock['data']> {
+  data: T;
+  songs: SongDocument[];
+  recitations: RecitationDocument[];
+  addError: (message: string) => void;
+}
 
 let currentSongBackground = 'blue';
 
@@ -13,19 +33,24 @@ function changeBackground() {
   }
 }
 
-function generateAnnouncementsBlockCode({ data }) {
+function generateAnnouncementsBlockCode({
+  data,
+}: GeneratorProps<AnnouncementsBlockData>): string {
   if (!data.items.length) {
     return '';
   }
 
   const config = {
-    items: data.items.reduce((acc, { title, detail }) => {
-      if (!title) {
-        return acc;
-      }
+    items: data.items.reduce<{ title: string; detail: string }[]>(
+      (acc, { title, detail }) => {
+        if (!title) {
+          return acc;
+        }
 
-      return [...acc, { title, detail }];
-    }, []),
+        return [...acc, { title, detail }];
+      },
+      [],
+    ),
   };
 
   if (!config.items.length) {
@@ -35,10 +60,14 @@ function generateAnnouncementsBlockCode({ data }) {
   return `createAnnouncementSlide(${JSON.stringify(config, null, '  ')})`;
 }
 
-function generateSongsBlockCode({ data }, { songs, addError }) {
+function generateSongsBlockCode({
+  data,
+  songs,
+  addError,
+}: GeneratorProps<SongsBlockData>): string {
   return data.items
-    .reduce((acc, datum) => {
-      let song = find(songs, ['id', datum.id]);
+    .reduce<string[]>((acc, datum) => {
+      const song = find(songs, ['id', datum.id]);
 
       if (!song) {
         addError(`Unable to find song "${datum.id}"`);
@@ -50,14 +79,14 @@ function generateSongsBlockCode({ data }, { songs, addError }) {
         return acc;
       }
 
-      song = {
+      const obj = {
         title: song.title,
         aka: song.aka || '',
         authors: song.authors || '',
         copyright: song.copyright || '',
         collection: song.collection || '',
         translation: song.translation || '',
-        repeat: !!song.repeat,
+        repeat: !!datum.repeat,
         background: 'green',
       };
 
@@ -67,18 +96,23 @@ function generateSongsBlockCode({ data }, { songs, addError }) {
         ...acc,
         [
           `// ${datum.id}`,
-          `createSongSlide(${JSON.stringify(song, null, 2)})`,
+          `createSongSlide(${JSON.stringify(obj, null, 2)})`,
         ].join('\n'),
       ];
     }, [])
     .join('\n\n');
 }
 
-function generateRecitationBlockCode({ data }, { recitations, addError }) {
+function generateRecitationBlockCode({
+  data,
+  recitations,
+  addError,
+}: GeneratorProps<RecitationBlockData>): string {
   const recitation = find(recitations, ['id', data.id]);
 
   if (!recitation) {
-    return addError(`Unable to find recitation "${data.id}"`);
+    addError(`Unable to find recitation "${data.id}"`);
+    return '';
   }
 
   const arg = {
@@ -95,11 +129,13 @@ function generateRecitationBlockCode({ data }, { recitations, addError }) {
   return `createSongSlide(${JSON.stringify(arg, null, 2)})`;
 }
 
-function generateReadingBlockCode({ data }) {
+function generateReadingBlockCode({
+  data,
+}: GeneratorProps<ReadingBlockData>): string {
   const { bibleRefs = [] } = data;
 
   return bibleRefs
-    .reduce((acc, bibleRef) => {
+    .reduce<string[]>((acc, bibleRef) => {
       if (!bibleRef.excerpt) {
         return acc;
       }
@@ -117,18 +153,22 @@ function generateReadingBlockCode({ data }) {
     .join('\n\n');
 }
 
-function generateSectionBlockCode(block) {
-  return `createChapterSlide({ title: '${block.data.title}' })`;
+function generateSectionBlockCode({
+  data,
+}: GeneratorProps<SectionBlockData>): string {
+  return `createChapterSlide({ title: '${data.title}' })`;
 }
 
-function generateSermonBlockCode({ data }) {
+function generateSermonBlockCode({
+  data,
+}: GeneratorProps<SermonBlockData>): string {
   const { title, author, plan = [], bibleRefs = [] } = data;
 
   if (!author || !bibleRefs.length) {
     return '';
   }
 
-  const config = {};
+  const config: Record<string, any> = {};
 
   if (title) {
     config.title = title;
@@ -146,10 +186,12 @@ function generateSermonBlockCode({ data }) {
     config.plan = plan.map((item) => item.text);
   }
 
-  return `createSermonSlide(${JSON.stringify(config, 2, '  ')})`;
+  return `createSermonSlide(${JSON.stringify(config, null, '  ')})`;
 }
 
-function generateOpenDoorsBlockCode({ data }) {
+function generateOpenDoorsBlockCode({
+  data,
+}: GeneratorProps<OpenDoorsBlockData>) {
   const { title, detail, prayerTopics = [] } = data;
 
   if (!title || !detail) {
@@ -162,46 +204,68 @@ function generateOpenDoorsBlockCode({ data }) {
     prayerTopics: prayerTopics.map((topic) => topic.text),
   };
 
-  return `createOpenDoorsSlide(${JSON.stringify(config, 2, '  ')})`;
+  return `createOpenDoorsSlide(${JSON.stringify(config, null, '  ')})`;
 }
 
 function generateGoodbyeBlockCode() {
   return `createGoodbyeSlide()`;
 }
 
-const functions = {
-  generateAnnouncementsBlockCode,
-  generateSongsBlockCode,
-  generateReadingBlockCode,
-  generateSectionBlockCode,
-  generateSermonBlockCode,
-  generateRecitationBlockCode,
-  generateOpenDoorsBlockCode,
-};
-
-function generateErrors(errors) {
+function generateErrors(errors: string[]) {
   return errors
     .map((error) => `throw new Error("${error.replace(/"/gm, '\\"')}")`)
     .join('\n');
 }
 
-export default function generateCode(doc, { songs, recitations }) {
+// @todo: remove this any
+function generate(args: any) {
+  switch (args.block.type) {
+    case 'announcements':
+      return generateAnnouncementsBlockCode(args);
+    case 'songs':
+      return generateSongsBlockCode(args);
+    case 'reading':
+      return generateReadingBlockCode(args);
+    case 'section':
+      return generateSectionBlockCode(args);
+    case 'sermon':
+      return generateSermonBlockCode(args);
+    case 'recitation':
+      return generateRecitationBlockCode(args);
+    case 'openDoors':
+      return generateOpenDoorsBlockCode(args);
+    default:
+      return null;
+  }
+}
+
+export default function generateCode(
+  doc: LiturgyDocument,
+  {
+    songs,
+    recitations,
+  }: { songs: SongDocument[]; recitations: RecitationDocument[] },
+) {
   currentSongBackground = 'blue';
 
   let code = '';
-  const errors = [];
+  const errors: string[] = [];
 
-  const addError = (msg) => {
+  const addError = (msg: string) => {
     errors.push(msg);
   };
 
   doc.blocks.forEach((block) => {
-    const funcName = `generate${upperFirst(block.type)}BlockCode`;
+    code = `\n\n${generate({
+      data: block.data,
+      songs,
+      recitations,
+      addError,
+    })}`.trim();
 
-    if (functions[funcName]) {
-      code += '\n\n';
-      code += functions[funcName](block, { songs, recitations, addError });
-    }
+    // if (fn) {
+    //   code += `\n\n${fn()}`;
+    // }
 
     code = code.trim();
   });

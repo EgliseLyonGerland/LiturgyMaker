@@ -1,8 +1,8 @@
-export default function version2(doc) {
+export default function version2(doc: any) {
   return {
     ...doc,
     version: 2,
-    blocks: doc.blocks.map((block) => {
+    blocks: doc.blocks.map((block: any) => {
       if (block.title) {
         return block;
       }

@@ -3,12 +3,20 @@ import React, { useState } from 'react';
 import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
-import PropTypes from 'prop-types';
 import { useController, useFormContext } from 'react-hook-form';
 
 import books from '../../config/bibleBooks.json';
+import type { FormFieldProps } from '../../types';
 import { validate, getPassage } from '../../utils/bibleRef';
 import TextFieldControl from '../controls/TextFieldControl';
+
+interface Props
+  extends FormFieldProps<{
+    ref: string;
+    excerpt?: string;
+  }> {
+  withExcerpt?: boolean;
+}
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -24,12 +32,12 @@ const useStyles = makeStyles(
   { name: 'BibleRefField' },
 );
 
-const BibleRefField = ({
+function BibleRefField({
   name,
   defaultValue,
   withExcerpt = true,
   disabled = false,
-}) => {
+}: Props) {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
@@ -37,17 +45,17 @@ const BibleRefField = ({
   const refController = useController({
     name: `${name}.ref`,
     control,
-    defaultValue: defaultValue.ref,
+    defaultValue: defaultValue?.ref,
   });
 
   const currentRef = refController.field.value;
 
-  let error;
+  let error: string = '';
   if (currentRef) {
     error = validate(currentRef);
   }
   if (!error) {
-    error = refController.fieldState.error?.message;
+    error = refController.fieldState.error?.message || '';
   }
 
   const handleFillPassage = async () => {
@@ -65,7 +73,7 @@ const BibleRefField = ({
       <Autocomplete
         options={books.map((book) => book.name)}
         disabled={disabled}
-        defaultValue={defaultValue.ref}
+        defaultValue={defaultValue?.ref}
         freeSolo
         autoComplete
         autoHighlight
@@ -88,7 +96,7 @@ const BibleRefField = ({
           <TextFieldControl
             name={`${name}.excerpt`}
             label="Extrait"
-            defaultValue={defaultValue.excerpt}
+            defaultValue={defaultValue?.excerpt}
             disabled={disabled}
             multiline
           />
@@ -106,14 +114,6 @@ const BibleRefField = ({
       )}
     </div>
   );
-};
-
-BibleRefField.propTypes = {
-  data: PropTypes.object,
-  withExcerpt: PropTypes.bool,
-  onChange: PropTypes.func,
-  onFocus: PropTypes.func,
-  onBlur: PropTypes.func,
-};
+}
 
 export default BibleRefField;

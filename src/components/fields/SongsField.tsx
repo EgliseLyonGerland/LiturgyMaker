@@ -6,19 +6,22 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import find from 'lodash/find';
 import get from 'lodash/get';
-import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import { selectAllSongs } from '../../redux/slices/songs';
+import type { FormFieldProps, SongsBlockData, SongsItem } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';
 
-const SongsField = ({ name, disabled = false }) => {
+function SongsField({
+  name,
+  disabled = false,
+}: FormFieldProps<SongsBlockData>) {
   const songs = useSelector(selectAllSongs);
   const { control } = useFormContext();
 
-  const renderItem = (item, index) => {
+  const renderItem = (item: SongsItem, index: number) => {
     return (
       <div>
         <Controller
@@ -108,7 +111,7 @@ const SongsField = ({ name, disabled = false }) => {
   };
 
   return (
-    <ArraySortableControl
+    <ArraySortableControl<SongsItem>
       name={`${name}.items`}
       defaultItem={{ id: '', infos: '', repeat: false }}
       renderItem={renderItem}
@@ -116,10 +119,6 @@ const SongsField = ({ name, disabled = false }) => {
       disabled={disabled}
     />
   );
-};
-
-SongsField.propTypes = {
-  name: PropTypes.string.isRequired,
-};
+}
 
 export default SongsField;

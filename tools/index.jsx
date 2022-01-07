@@ -1,7 +1,7 @@
 const firebase = require('firebase');
 const yargs = require('yargs');
 
-const firebaseConfig = require('../config/firebase');
+const firebaseConfig = require('../config/firebase.json');
 const blockCommand = require('./commands/block');
 const loginCommand = require('./commands/login');
 const logoutCommand = require('./commands/logout');
@@ -14,7 +14,7 @@ const config = require('./utils/config');
 require('firebase/auth');
 require('firebase/firestore');
 
-// eslint-disable-next-line no-unused-expressions
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 yargs
   .middleware((argv) => {
     // eslint-disable-next-line no-param-reassign

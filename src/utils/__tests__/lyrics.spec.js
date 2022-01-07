@@ -58,14 +58,13 @@ test('parse() empty', () => {
 test('format() with trailingBreak removed', () => {
   const lyrics = [
     {
-      text:
-        `
+      text: `${`
 Exercitation ullamco enim occaecat nostrud mollit
     Nostrud pariatur mollit incididunt ut
 
 Consequat sunt eu magna enim cupidatat
 Excepteur Lorem labore officia ipsum commodo ea in laborum
-      `.trim() + '\n',
+      `.trim()}\n`,
       type: 'verse',
     },
     {

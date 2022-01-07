@@ -1,11 +1,13 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
-
+import type { AnnouncementsBlockData, FormFieldProps } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';
 
-const AnnouncementsField = ({ name, disabled = false }) => {
+function AnnouncementsField({
+  name,
+  disabled = false,
+}: FormFieldProps<AnnouncementsBlockData>) {
   return (
     <ArraySortableControl
       name={`${name}.items`}
@@ -31,10 +33,6 @@ const AnnouncementsField = ({ name, disabled = false }) => {
       )}
     />
   );
-};
-
-AnnouncementsField.propTypes = {
-  name: PropTypes.string.isRequired,
-};
+}
 
 export default AnnouncementsField;

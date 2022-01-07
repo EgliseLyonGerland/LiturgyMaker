@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 
-import firebaseConfig from './config/firebase';
+import firebaseConfig from './config/firebase.json';
 
 const firebase = initializeApp(firebaseConfig);
 

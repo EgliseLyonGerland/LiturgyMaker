@@ -4,14 +4,18 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import find from 'lodash/find';
 import get from 'lodash/get';
-import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import { selectAllRecitations } from '../../redux/slices/recitations';
+import type { FormFieldProps, RecitationBlockData } from '../../types';
 import TextFieldControl from '../controls/TextFieldControl';
 
-const RecitationField = ({ name, defaultValue, disabled = false }) => {
+function RecitationField({
+  name,
+  defaultValue,
+  disabled = false,
+}: FormFieldProps<RecitationBlockData>) {
   const recitations = useSelector(selectAllRecitations);
   const { control } = useFormContext();
 
@@ -20,7 +24,7 @@ const RecitationField = ({ name, defaultValue, disabled = false }) => {
       <Controller
         name={`${name}.id`}
         control={control}
-        defaultValue={defaultValue.id || ''}
+        defaultValue={defaultValue?.id || ''}
         render={({
           field: { value, ref: inputRef, onChange, onBlur },
           fieldState: { error },
@@ -28,9 +32,7 @@ const RecitationField = ({ name, defaultValue, disabled = false }) => {
           <Autocomplete
             value={find(recitations, ['id', value]) || null}
             options={recitations}
-            getOptionLabel={(option) =>
-              `${option.title}${option.number ? ` (${option.number})` : ''}`
-            }
+            getOptionLabel={(option) => option.title}
             onChange={(event, option) => {
               onChange(get(option, 'id', null));
             }}
@@ -54,16 +56,12 @@ const RecitationField = ({ name, defaultValue, disabled = false }) => {
       <TextFieldControl
         name={`${name}.infos`}
         label="Informations"
-        defaultValue={defaultValue.infos || ''}
+        defaultValue={defaultValue?.infos || ''}
         disabled={disabled}
         multiline
       />
     </div>
   );
-};
-
-RecitationField.propTypes = {
-  name: PropTypes.string.isRequired,
-};
+}
 
 export default RecitationField;

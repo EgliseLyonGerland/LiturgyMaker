@@ -35,7 +35,7 @@ export const fetchSongs = createAsyncThunk('songs/fetchSongs', async () => {
       songs: Record<string, SongDocument>;
     }
   >(
-    docs.map((doc) => ({ ...defaultSong, id: doc.id, ...doc.data() })),
+    docs.map((item) => ({ ...defaultSong, id: item.id, ...item.data() })),
     songsEntity,
   ).entities;
 });
@@ -62,10 +62,10 @@ const songsSlice = createSlice({
       state.status = 'success';
       songsAdapter.upsertMany(state, action.payload.songs);
     });
-    builder.addCase(fetchSongs.pending, (state, action) => {
+    builder.addCase(fetchSongs.pending, (state) => {
       state.status = 'loading';
     });
-    builder.addCase(fetchSongs.rejected, (state, action) => {
+    builder.addCase(fetchSongs.rejected, (state) => {
       state.status = 'fail';
     });
     builder.addCase(persistSong.fulfilled, (state, action) => {

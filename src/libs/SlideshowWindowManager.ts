@@ -2,7 +2,9 @@ import type { LiturgyDocument, SongDocument } from '../types';
 
 class SlideshowWindowManager {
   window: Window | null = null;
+
   liturgy: LiturgyDocument | null = null;
+
   songs: SongDocument[] | null = null;
 
   constructor() {

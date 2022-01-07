@@ -70,7 +70,7 @@ export const createDefaultRecitationBlock = () => ({
   },
 });
 
-const functions = {
+const functions: Record<string, (...args: any[]) => {}> = {
   createDefaultAnnouncementsBlock,
   createDefaultReadingBlock,
   createDefaultSermonBlock,
@@ -80,17 +80,17 @@ const functions = {
   createDefaultRecitationBlock,
 };
 
-export const createDefaultBlock = (type, ...args) => {
+export const createDefaultBlock = (type: string, ...args: any[]) => {
   const funcName = `createDefault${upperFirst(type)}Block`;
 
   return functions[funcName](...args);
 };
 
-export const createDefaultLiturgy = (id) => ({
+export const createDefaultLiturgy = (id: string) => ({
   date: +converToDate(id),
   version: currentVersion,
   blocks: [
-    createDefaultAnnouncementsBlock('announcements'),
+    createDefaultAnnouncementsBlock(),
     createDefaultReadingBlock({ title: 'Ouverture' }),
     createDefaultReadingBlock({ title: 'Loi de Dieu' }),
     createDefaultReadingBlock({ title: 'Grâce de Dieu' }),

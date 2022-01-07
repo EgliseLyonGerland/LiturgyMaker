@@ -14,8 +14,8 @@ module.exports.desc = 'Display stats';
 const backupDir = `${__dirname}/../../.firebase/backup`;
 
 async function songsCommand({ dryRun }) {
-  let liturgies = JSON.parse(readFileSync(`${backupDir}/liturgies.json`));
-  let songs = JSON.parse(readFileSync(`${backupDir}/songs.json`));
+  const liturgies = JSON.parse(readFileSync(`${backupDir}/liturgies.json`));
+  const songs = JSON.parse(readFileSync(`${backupDir}/songs.json`));
 
   const stats = songs.reduce(
     (acc, { id, title }) => ({
@@ -97,8 +97,8 @@ module.exports.builder = function builder(yargs) {
   yargs.command(
     'songs',
     'Display stats about songs',
-    (yargs) => {
-      yargs.option('dry-run', { type: 'boolean', default: false });
+    (y) => {
+      y.option('dry-run', { type: 'boolean', default: false });
     },
     songsCommand,
   );

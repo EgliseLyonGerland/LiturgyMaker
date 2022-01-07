@@ -23,7 +23,7 @@ export const fetchLiturgy = createAsyncThunk(
 
     let data;
     if (liturgy.exists()) {
-      data = migrate(liturgy.data());
+      data = migrate(liturgy.data() as LiturgyDocument);
     } else {
       data = createDefaultLiturgy(id);
     }

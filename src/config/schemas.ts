@@ -75,6 +75,7 @@ const blockSchemas = {
 };
 
 export const liturgySchema = yup.object().shape({
+  // eslint-disable-next-line react/forbid-prop-types
   blocks: yup.array(
     yup.lazy((value: LiturgyBlock) =>
       yup.object().shape({

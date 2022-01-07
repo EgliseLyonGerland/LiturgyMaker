@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Accordion,
@@ -17,13 +17,17 @@ import {
 import { CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
 import debounce from 'lodash/debounce';
 import deburr from 'lodash/deburr';
-import find from 'lodash/find';
 import sortBy from 'lodash/sortBy';
 import MiniSearch from 'minisearch';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
+import { useAppDispatch, useAppSelector } from '../redux/store';
+import type { SongDocument } from '../types';
+
+type SongSearchDocument = Pick<SongDocument, 'id' | 'title' | 'authors'> & {
+  lyrics: string;
+};
 
 const useStyles = makeStyles((theme) => ({
   accordionRoot: {
@@ -63,12 +67,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function escape(str) {
+function escape(str: string) {
   return deburr(str).toLocaleLowerCase();
 }
 
-function createSearch(songs) {
-  const search = new MiniSearch({
+function createSearch(songs: SongDocument[]) {
+  const search = new MiniSearch<SongSearchDocument>({
     fields: ['title', 'authors', 'lyrics'],
     processTerm: escape,
     searchOptions: {
@@ -88,14 +92,14 @@ function createSearch(songs) {
   return search;
 }
 
-const Songs = () => {
-  const songsStatus = useSelector((state) => state.songs.status);
-  const songs = useSelector(selectAllSongs);
-  const dispatch = useDispatch();
-  const [expanded, setExpanded] = useState(false);
+function Songs() {
+  const songsStatus = useAppSelector((state) => state.songs.status);
+  const songs = useAppSelector(selectAllSongs);
+  const dispatch = useAppDispatch();
+  const [expanded, setExpanded] = useState<false | string>(false);
   const [query, setQuery] = useState('');
   const [searchInLyrics, setSearchInLyrics] = useState(true);
-  const [search, setSearch] = useState(createSearch(songs, searchInLyrics));
+  const [search, setSearch] = useState(createSearch(songs));
   const classes = useStyles();
 
   const handleSearchChange = debounce((event) => {
@@ -110,24 +114,26 @@ const Songs = () => {
 
   useEffect(() => {
     if (songsStatus === 'success') {
-      setSearch(createSearch(songs, searchInLyrics));
+      setSearch(createSearch(songs));
     }
   }, [searchInLyrics, songs, songsStatus]);
 
   let filteredSongs = songs;
 
   if (query) {
-    filteredSongs = search
+    const results = search
       .search(query, {
         prefix: true,
         fields: ['title', 'authors'].concat(searchInLyrics ? ['lyrics'] : []),
       })
-      .map(({ id }) => find(songs, ['id', id]));
+      .map(({ id }) => id);
+
+    filteredSongs = filteredSongs.filter((song) => results.includes(song.id));
   }
 
   filteredSongs = sortBy(filteredSongs, 'title');
 
-  const renderSongDetails = (song) => {
+  const renderSongDetails = (song: SongDocument) => {
     const details = [];
 
     if (song.copyright) {
@@ -246,6 +252,7 @@ const Songs = () => {
                 {song.lyrics.length ? (
                   song.lyrics.map(({ text, type }, index) => (
                     <Box
+                      // eslint-disable-next-line react/no-array-index-key
                       key={index}
                       whiteSpace="pre"
                       fontStyle={type === 'chorus' ? 'italic' : 'normal'}
@@ -268,6 +275,6 @@ const Songs = () => {
       </div>
     </Container>
   );
-};
+}
 
 export default Songs;
