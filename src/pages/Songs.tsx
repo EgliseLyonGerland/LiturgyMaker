@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -11,10 +12,9 @@ import {
   FormControlLabel,
   FormGroup,
   InputBase,
-  makeStyles,
   Typography,
-} from '@material-ui/core';
-import { CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import debounce from 'lodash/debounce';
 import deburr from 'lodash/deburr';
 import sortBy from 'lodash/sortBy';
@@ -162,7 +162,7 @@ function Songs() {
       <Box
         bgcolor="tertiary.dark"
         border="sold 1px rgba(255,255,255,0.1)"
-        borderRadius={4}
+        borderRadius="4px"
         width={200}
         mr={2}
         px={2}

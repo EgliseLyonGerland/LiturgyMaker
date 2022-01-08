@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { TextField, Box } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { TextField, Box } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import find from 'lodash/find';
 import get from 'lodash/get';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -44,7 +44,7 @@ function SongsField({
                 }}
                 onBlur={onBlur}
                 getOptionLabel={(option) => option.title}
-                renderOption={(option) => (
+                renderOption={(props, option) => (
                   <div>
                     <div>
                       <Box component="span" fontWeight={500}>

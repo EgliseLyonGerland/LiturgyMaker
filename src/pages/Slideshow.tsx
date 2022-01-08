@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { find } from 'lodash';
 import BeatLoader from 'react-spinners/BeatLoader';
 import Reveal from 'reveal.js';

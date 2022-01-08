@@ -1,14 +1,13 @@
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 
-import { Snackbar } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import { Alert } from '@material-ui/lab';
+import { Snackbar, Alert } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import TextField from '@mui/material/TextField';
+import makeStyles from '@mui/styles/makeStyles';
 import type { Auth as FirebaseAuth } from 'firebase/auth';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import find from 'lodash/find';
 import get from 'lodash/get';
 import { Controller, useFormContext } from 'react-hook-form';

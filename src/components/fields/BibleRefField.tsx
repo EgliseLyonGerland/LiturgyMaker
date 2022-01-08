@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
-import { TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { Autocomplete } from '@material-ui/lab';
+import { TextField, Autocomplete } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useController, useFormContext } from 'react-hook-form';
 
 import books from '../../config/bibleBooks.json';

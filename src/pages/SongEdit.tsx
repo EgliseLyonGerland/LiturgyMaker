@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import type { BoxProps } from '@material-ui/core';
-import { Box, Container, Typography } from '@material-ui/core';
+import type { BoxProps } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import cloneDeep from 'lodash/cloneDeep';
 import isString from 'lodash/isString';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -25,7 +25,7 @@ function Block({
   header: string;
 } & BoxProps) {
   return (
-    <Box bgcolor="tertiary.light" borderRadius={16} {...props}>
+    <Box bgcolor="tertiary.light" borderRadius="16px" {...props}>
       {header && (
         <Box
           height={72}

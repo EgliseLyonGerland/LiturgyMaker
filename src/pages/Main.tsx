@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Header from '../components/Header';

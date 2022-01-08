@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-import { Box } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Box } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 
 interface Props {
   title: string;
@@ -36,7 +36,7 @@ function FormBlock({
   }
 
   return (
-    <Box bgcolor="background.paper" borderRadius={16}>
+    <Box bgcolor="background.paper" borderRadius="16px">
       <Box
         height={72}
         pl={5}
@@ -63,6 +63,7 @@ function FormBlock({
             onClick={(event) => {
               setAnchorEl(event.currentTarget);
             }}
+            size="large"
           >
             <MoreVertIcon />
           </IconButton>

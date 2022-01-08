@@ -7,7 +7,7 @@ import {
   FormGroup,
   FormHelperText,
   InputBase,
-} from '@material-ui/core';
+} from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import type { FormFieldProps, LyricPart } from '../../types';
@@ -32,7 +32,7 @@ function LyricsField({ name, disabled = false }: FormFieldProps<LyricPart>) {
               <>
                 <Box
                   bgcolor="rgba(255,255,255,0.09)"
-                  borderRadius={4}
+                  borderRadius="4px"
                   px={3}
                   py={2}
                   mb={1}

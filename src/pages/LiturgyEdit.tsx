@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box } from '@material-ui/core';
-import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import CodeIcon from '@material-ui/icons/Code';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import CodeIcon from '@mui/icons-material/Code';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { Box } from '@mui/material';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { format, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
 import capitalize from 'lodash/capitalize';
@@ -73,7 +73,7 @@ const useStyles = makeStyles(
       alignItems: 'center',
       justifyContent: 'center',
     },
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       sundays: {
         fontSize: 16,
       },
@@ -81,7 +81,7 @@ const useStyles = makeStyles(
         width: 'auto',
       },
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       actions: {
         display: 'none',
       },
@@ -270,6 +270,7 @@ function LiturgyEdit() {
           onClick={() => {
             handleChangeDate(subDays(currentDate, 7));
           }}
+          size="large"
         >
           <ArrowLeftIcon fontSize="inherit" />
         </IconButton>
@@ -287,6 +288,7 @@ function LiturgyEdit() {
           onClick={() => {
             handleChangeDate(addDays(currentDate, 7));
           }}
+          size="large"
         >
           <ArrowRightIcon fontSize="inherit" />
         </IconButton>
@@ -297,10 +299,11 @@ function LiturgyEdit() {
           onClick={() => {
             setDisplayCode(true);
           }}
+          size="large"
         >
           <CodeIcon />
         </IconButton>
-        <IconButton onClick={handlePlay}>
+        <IconButton onClick={handlePlay} size="large">
           <PlayArrowIcon />
           <Box
             position="absolute"
@@ -308,7 +311,7 @@ function LiturgyEdit() {
             color="white"
             fontSize={10}
             fontWeight="bold"
-            borderRadius={2}
+            borderRadius="2px"
             height={12}
             lineHeight="12px"
             px="2px"

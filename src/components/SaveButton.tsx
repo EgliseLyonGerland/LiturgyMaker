@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Fab, useTheme, Zoom } from '@material-ui/core';
-import { Check, Save } from '@material-ui/icons';
+import { Check, Save } from '@mui/icons-material';
+import { Box, Fab, useTheme, Zoom } from '@mui/material';
 import { createPortal } from 'react-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 

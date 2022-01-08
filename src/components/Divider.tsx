@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { ButtonBase } from '@material-ui/core';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
+import { ButtonBase } from '@mui/material';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import makeStyles from '@mui/styles/makeStyles';
 import classnames from 'classnames';
 
 import { blockTypes } from '../config/global';

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-import { Box } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import { makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
+import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import makeStyles from '@mui/styles/makeStyles';
 import { createPortal } from 'react-dom';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import okaida from 'react-syntax-highlighter/dist/esm/styles/prism/okaidia';
@@ -87,7 +87,7 @@ function Code({ code, onHide = () => {} }: Props) {
             {copied ? 'Copié !' : 'Copier dans le presse-papier'}
           </Button>
         </Box>
-        <IconButton onClick={onHide}>
+        <IconButton onClick={onHide} size="large">
           <CloseIcon />
         </IconButton>
       </div>
