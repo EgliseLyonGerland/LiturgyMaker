@@ -1,7 +1,6 @@
 import React from 'react';
 
 import CssBaseline from '@mui/material/CssBaseline';
-import type { Theme } from '@mui/material/styles';
 import {
   ThemeProvider,
   StyledEngineProvider,
@@ -20,11 +19,6 @@ import App from './App';
 import store from './redux/store';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
-
-declare module '@mui/styles/defaultTheme' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
 
 Sentry.init({
   dsn: 'https://7718d836108d482d812a93fd548ac9d3@o50300.ingest.sentry.io/5750589',

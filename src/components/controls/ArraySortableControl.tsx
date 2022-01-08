@@ -3,9 +3,9 @@ import React from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
+import type { Theme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import {
   SortableContainer as ReactSortableContainer,
@@ -22,54 +22,37 @@ interface Props<T = any> {
   renderItem: (item: T, index: number) => void;
 }
 
-const useStyles = makeStyles(
-  (theme) => ({
-    item: {
-      position: 'relative',
-    },
-    handle: {
-      position: 'absolute',
-      top: theme.spacing(2),
-      right: '100%',
-      marginRight: theme.spacing(2),
-    },
-    trash: {
-      position: 'absolute',
-      top: theme.spacing(2),
-      left: '100%',
-      marginLeft: theme.spacing(2),
-    },
-    add: {
-      marginTop: theme.spacing(2),
-    },
-  }),
-  { name: 'ArraySortableControl' },
-);
-
 const SortableContainer = ReactSortableContainer(
   ({ children }: { children: JSX.Element }) => <div>{children}</div>,
 );
 
-const DragHandle = ReactSortableHandle(
-  ({ classes }: { classes: ReturnType<typeof useStyles> }) => (
-    <DragHandleIcon color="disabled" className={classes.handle} />
-  ),
-);
+const DragHandle = ReactSortableHandle(({ theme }: { theme: Theme }) => (
+  <Box
+    component={DragHandleIcon}
+    color="disabled"
+    sx={{
+      position: 'absolute',
+      top: theme.spacing(2),
+      right: '100%',
+      marginRight: theme.spacing(2),
+    }}
+  />
+));
 
 const SortableItem = ReactSortableElement(
   ({
     children,
     style,
-    classes,
+    theme,
   }: {
     children: JSX.Element;
     style: React.CSSProperties;
-    classes: ReturnType<typeof useStyles>;
+    theme: Theme;
   }) => (
-    <div className={classes.item} style={style}>
-      <DragHandle classes={classes} />
+    <Box style={style} sx={{ position: 'relative' }}>
+      <DragHandle theme={theme} />
       {children}
-    </div>
+    </Box>
   ),
 );
 
@@ -81,7 +64,6 @@ function ArraySortableControl<T = any>({
   defaultItem,
   renderItem,
 }: Props<T>) {
-  const classes = useStyles();
   const theme = useTheme();
   const { control } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({
@@ -103,7 +85,7 @@ function ArraySortableControl<T = any>({
             <SortableItem
               key={key}
               index={index}
-              classes={classes}
+              theme={theme}
               disabled={disabled}
               style={{
                 marginBottom:
@@ -114,12 +96,17 @@ function ArraySortableControl<T = any>({
                 {renderItem(item as T, index)}
 
                 <DeleteIcon
-                  className={classes.trash}
                   color="disabled"
                   onClick={() => {
                     if (!disabled) {
                       remove(index);
                     }
+                  }}
+                  sx={{
+                    position: 'absolute',
+                    top: theme.spacing(2),
+                    left: '100%',
+                    marginLeft: theme.spacing(2),
                   }}
                 />
               </>
@@ -132,11 +119,11 @@ function ArraySortableControl<T = any>({
         variant="contained"
         color="primary"
         size="small"
-        className={classes.add}
         disabled={disabled || maxItems === fields.length}
         onClick={() => {
           append(defaultItem);
         }}
+        sx={{ marginTop: theme.spacing(2) }}
       >
         Ajouter
       </Button>

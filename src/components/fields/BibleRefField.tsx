@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { TextField, Autocomplete } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { TextField, Autocomplete, Box, useTheme } from '@mui/material';
 import { useController, useFormContext } from 'react-hook-form';
 
 import books from '../../config/bibleBooks.json';
@@ -16,28 +15,13 @@ interface Props
   }> {
   withExcerpt?: boolean;
 }
-
-const useStyles = makeStyles(
-  (theme) => ({
-    excerptButton: {
-      background: 'transparent',
-      border: 0,
-      padding: 0,
-      color: theme.palette.text.secondary,
-      cursor: 'pointer',
-      outline: 0,
-    },
-  }),
-  { name: 'BibleRefField' },
-);
-
 function BibleRefField({
   name,
   defaultValue,
   withExcerpt = true,
   disabled = false,
 }: Props) {
-  const classes = useStyles();
+  const theme = useTheme();
   const [loading, setLoading] = useState(false);
 
   const { control, setValue } = useFormContext();
@@ -99,16 +83,24 @@ function BibleRefField({
             disabled={disabled}
             multiline
           />
-          <button
+          <Box
+            component="button"
             type="button"
-            className={classes.excerptButton}
             disabled={disabled}
             onClick={() => handleFillPassage()}
+            sx={{
+              background: 'transparent',
+              border: 0,
+              padding: 0,
+              color: theme.palette.text.secondary,
+              cursor: 'pointer',
+              outline: 0,
+            }}
           >
             {loading
               ? 'Chargement...'
               : "Remplir automatiquement l'extrait à partir de la référence"}
-          </button>
+          </Box>
         </>
       )}
     </div>

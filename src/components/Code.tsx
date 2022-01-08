@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import makeStyles from '@mui/styles/makeStyles';
 import { createPortal } from 'react-dom';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import okaida from 'react-syntax-highlighter/dist/esm/styles/prism/okaidia';
@@ -16,44 +15,8 @@ interface Props {
   onHide(): void;
 }
 
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      position: 'fixed',
-      width: '100%',
-      height: '100%',
-      top: 0,
-      left: 0,
-      zIndex: 100,
-      display: 'flex',
-      background: '#13242d',
-    },
-    inner: {
-      padding: theme.spacing(5),
-      overflowX: 'auto',
-      overflowY: 'auto',
-      position: 'relative',
-    },
-    pre: {
-      margin: `0 !important`,
-      borderRadius: `0 !important`,
-      minHeight: '100%',
-      paddingTop: '64px !important',
-      background: 'transparent !important',
-    },
-    actions: {
-      position: 'absolute',
-      top: theme.spacing(2),
-      right: theme.spacing(2),
-      display: 'flex',
-      alignItems: 'center',
-    },
-  }),
-  { name: 'Code' },
-);
-
 function Code({ code, onHide = () => {} }: Props) {
-  const classes = useStyles();
+  const theme = useTheme();
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -70,13 +33,50 @@ function Code({ code, onHide = () => {} }: Props) {
   };
 
   return createPortal(
-    <div className={classes.root}>
-      <div className={classes.inner}>
-        <SyntaxHighlighter className={classes.pre} language="js" style={okaida}>
+    <Box
+      sx={{
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        top: 0,
+        left: 0,
+        zIndex: 100,
+        display: 'flex',
+        background: '#13242d',
+      }}
+    >
+      <Box
+        sx={{
+          padding: theme.spacing(5),
+          overflowX: 'auto',
+          overflowY: 'auto',
+          position: 'relative',
+        }}
+      >
+        <Box
+          component={SyntaxHighlighter}
+          language="js"
+          style={okaida}
+          sx={{
+            margin: `0 !important`,
+            borderRadius: `0 !important`,
+            minHeight: '100%',
+            paddingTop: '64px !important',
+            background: 'transparent !important',
+          }}
+        >
           {code}
-        </SyntaxHighlighter>
-      </div>
-      <div className={classes.actions}>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: theme.spacing(2),
+          right: theme.spacing(2),
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <Box mr={2}>
           <Button
             variant="contained"
@@ -90,8 +90,8 @@ function Code({ code, onHide = () => {} }: Props) {
         <IconButton onClick={onHide} size="large">
           <CloseIcon />
         </IconButton>
-      </div>
-    </div>,
+      </Box>
+    </Box>,
     document.body,
   );
 }

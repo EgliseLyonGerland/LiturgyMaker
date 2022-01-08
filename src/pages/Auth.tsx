@@ -1,13 +1,12 @@
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 
-import { Snackbar, Alert } from '@mui/material';
+import { Snackbar, Alert, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
-import makeStyles from '@mui/styles/makeStyles';
 import type { Auth as FirebaseAuth } from 'firebase/auth';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
@@ -15,26 +14,8 @@ interface Props {
   firebaseAuth: FirebaseAuth;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100vw',
-    height: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  header: {
-    background: theme.palette.tertiary.dark,
-    color: theme.palette.text.primary,
-    ...theme.typography.h6,
-  },
-  content: {
-    padding: theme.spacing(2, 3),
-  },
-}));
-
 function Auth({ firebaseAuth }: Props) {
-  const classes = useStyles();
+  const theme = useTheme();
   const [email, setEmail] = useState('oltodo@msn.com');
   const [password, setPassword] = useState('DQ68sx89!');
   const [errorShown, setErrorShown] = useState(false);
@@ -56,12 +37,28 @@ function Auth({ firebaseAuth }: Props) {
   }, [error]);
 
   return (
-    <div className={classes.root}>
+    <Box
+      sx={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <form onSubmit={handleSubmit}>
         <Box width={360} boxShadow={20}>
           <Card>
-            <CardContent className={classes.header}>Identification</CardContent>
-            <CardContent className={classes.content}>
+            <CardContent
+              sx={{
+                background: theme.palette.tertiary.dark,
+                color: theme.palette.text.primary,
+                ...theme.typography.h6,
+              }}
+            >
+              Identification
+            </CardContent>
+            <CardContent sx={{ padding: theme.spacing(2, 3) }}>
               <TextField
                 label="Email"
                 type="email"
@@ -88,7 +85,7 @@ function Auth({ firebaseAuth }: Props) {
                 fullWidth
               />
             </CardContent>
-            <CardContent className={classes.content}>
+            <CardContent sx={{ padding: theme.spacing(2, 3) }}>
               <Button
                 color="primary"
                 variant="outlined"
@@ -113,7 +110,7 @@ function Auth({ firebaseAuth }: Props) {
           Connexion impossible. Veuillez vérifier vos identifiants.
         </Alert>
       </Snackbar>
-    </div>
+    </Box>
   );
 }
 

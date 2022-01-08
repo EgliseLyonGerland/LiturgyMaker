@@ -5,11 +5,11 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import CodeIcon from '@mui/icons-material/Code';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { Box } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material';
+import { useTheme, Box } from '@mui/material';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
 import { format, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
 import capitalize from 'lodash/capitalize';
@@ -40,55 +40,6 @@ import { useAppDispatch, useAppSelector } from '../redux/store';
 import type { LiturgyDocument } from '../types';
 import generateCode from '../utils/generateCode';
 import { converToDate, convertToId, getNextLiturgyId } from '../utils/liturgy';
-
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      marginBottom: '50vh',
-    },
-    navBar: {
-      display: 'flex',
-      height: theme.spacing(8),
-      alignItems: 'center',
-    },
-    sundays: {
-      display: 'flex',
-      alignItems: 'center',
-      fontSize: 16,
-      fontWeight: 700,
-      margin: theme.spacing(0, 'auto'),
-    },
-    sundaysName: {
-      width: 250,
-      textAlign: 'center',
-    },
-    actions: {
-      display: 'flex',
-      width: 96,
-      opacity: 0.7,
-    },
-    spinner: {
-      display: 'flex',
-      height: 200,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    [theme.breakpoints.down('lg')]: {
-      sundays: {
-        fontSize: 16,
-      },
-      sundaysName: {
-        width: 'auto',
-      },
-    },
-    [theme.breakpoints.down('sm')]: {
-      actions: {
-        display: 'none',
-      },
-    },
-  }),
-  { name: 'LiturgyEdit' },
-);
 
 const formatDate = (date: Date) => {
   if (date.getDate() === 1) {
@@ -204,7 +155,7 @@ function Form({
 }
 
 function LiturgyEdit() {
-  const classes = useStyles();
+  const theme = useTheme();
   const navigate = useNavigate();
   const { liturgyId } = useParams<{ liturgyId: string }>();
   const [displayCode, setDisplayCode] = useState(false);
@@ -259,13 +210,32 @@ function LiturgyEdit() {
     slideshowWindowRef.current.setSongs(songs);
   }, [songs]);
 
+  const actionStyles: SxProps<Theme> = {
+    display: { xs: 'none', sm: 'flex' },
+    width: 96,
+    opacity: 0.7,
+  };
+
   const renderNavBar = () => (
-    <div className={classes.navBar}>
-      <div className={classes.actions} />
-      <div className={classes.sundays}>
+    <Box
+      sx={{
+        display: 'flex',
+        height: theme.spacing(8),
+        alignItems: 'center',
+      }}
+    >
+      <Box sx={actionStyles} />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          fontSize: 16,
+          fontWeight: 700,
+          margin: theme.spacing(0, 'auto'),
+        }}
+      >
         <IconButton
           aria-label="delete"
-          className={classes.margin}
           color="inherit"
           onClick={() => {
             handleChangeDate(subDays(currentDate, 7));
@@ -275,15 +245,14 @@ function LiturgyEdit() {
           <ArrowLeftIcon fontSize="inherit" />
         </IconButton>
         <Typography
-          className={classes.sundaysName}
           variant="inherit"
           color="textSecondary"
+          sx={{ width: { xs: 'auto', lg: 250 }, textAlign: 'center' }}
         >
           {capitalize(formatDate(currentDate))}
         </Typography>
         <IconButton
           aria-label="delete"
-          className={classes.margin}
           color="inherit"
           onClick={() => {
             handleChangeDate(addDays(currentDate, 7));
@@ -292,9 +261,9 @@ function LiturgyEdit() {
         >
           <ArrowRightIcon fontSize="inherit" />
         </IconButton>
-      </div>
+      </Box>
 
-      <Box className={classes.actions} position="relative">
+      <Box position="relative" sx={actionStyles}>
         <IconButton
           onClick={() => {
             setDisplayCode(true);
@@ -322,18 +291,25 @@ function LiturgyEdit() {
           </Box>
         </IconButton>
       </Box>
-    </div>
+    </Box>
   );
 
   return (
-    <div className={classes.root}>
+    <Box sx={{ marginBottom: '50vh' }}>
       <Container maxWidth="md">
         {renderNavBar()}
 
         {loading ? (
-          <div className={classes.spinner}>
+          <Box
+            sx={{
+              display: 'flex',
+              height: 200,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <BeatLoader color="#DDD" />
-          </div>
+          </Box>
         ) : (
           <>
             {displayCode && (
@@ -353,7 +329,7 @@ function LiturgyEdit() {
           </>
         )}
       </Container>
-    </div>
+    </Box>
   );
 }
 

@@ -13,8 +13,8 @@ import {
   FormGroup,
   InputBase,
   Typography,
+  useTheme,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import debounce from 'lodash/debounce';
 import deburr from 'lodash/deburr';
 import sortBy from 'lodash/sortBy';
@@ -28,44 +28,6 @@ import type { SongDocument } from '../types';
 type SongSearchDocument = Pick<SongDocument, 'id' | 'title' | 'authors'> & {
   lyrics: string;
 };
-
-const useStyles = makeStyles((theme) => ({
-  accordionRoot: {
-    padding: theme.spacing(2, 4),
-
-    '&:first-child': {
-      borderTopLeftRadius: theme.spacing(2),
-      borderTopRightRadius: theme.spacing(2),
-      paddingTop: theme.spacing(3),
-    },
-
-    '&:last-child': {
-      borderBottomLeftRadius: theme.spacing(2),
-      borderBottomRightRadius: theme.spacing(2),
-      paddingBottom: theme.spacing(3),
-    },
-  },
-  accordionExpanded: {
-    borderRadius: 16,
-    padding: theme.spacing(4),
-  },
-  accordionSummaryRoot: {
-    padding: 0,
-  },
-  accordionSummaryContent: {
-    margin: 0,
-  },
-  accordionSummaryExpanded: {
-    '&&': {
-      margin: 0,
-      minHeight: 'auto',
-    },
-  },
-  accordionDetailsRoot: {
-    padding: 0,
-    display: 'block',
-  },
-}));
 
 function escape(str: string) {
   return deburr(str).toLocaleLowerCase();
@@ -93,6 +55,7 @@ function createSearch(songs: SongDocument[]) {
 }
 
 function Songs() {
+  const theme = useTheme();
   const songsStatus = useAppSelector((state) => state.songs.status);
   const songs = useAppSelector(selectAllSongs);
   const dispatch = useAppDispatch();
@@ -100,7 +63,6 @@ function Songs() {
   const [query, setQuery] = useState('');
   const [searchInLyrics, setSearchInLyrics] = useState(true);
   const [search, setSearch] = useState(createSearch(songs));
-  const classes = useStyles();
 
   const handleSearchChange = debounce((event) => {
     setQuery(event.target.value);
@@ -200,19 +162,41 @@ function Songs() {
             key={song.id}
             elevation={0}
             expanded={expanded === song.id}
-            classes={{
-              root: classes.accordionRoot,
-              expanded: classes.accordionExpanded,
+            sx={{
+              padding: theme.spacing(2, 4),
+
+              '&:first-child': {
+                borderTopLeftRadius: theme.spacing(2),
+                borderTopRightRadius: theme.spacing(2),
+                paddingTop: theme.spacing(3),
+              },
+              '&:last-child': {
+                borderBottomLeftRadius: theme.spacing(2),
+                borderBottomRightRadius: theme.spacing(2),
+                paddingBottom: theme.spacing(3),
+              },
+              '& .MuiAccordion-expanded': {
+                borderRadius: 16,
+                padding: theme.spacing(4),
+              },
             }}
             onChange={(event, isExpanded) => {
               setExpanded(isExpanded ? song.id : false);
             }}
           >
             <AccordionSummary
-              classes={{
-                root: classes.accordionSummaryRoot,
-                content: classes.accordionSummaryContent,
-                expanded: classes.accordionSummaryExpanded,
+              sx={{
+                padding: 0,
+
+                '& .MuiAccordionSummary-content': {
+                  margin: 0,
+                },
+                '& .MuiAccordionSummary-expanded': {
+                  '&&': {
+                    margin: 0,
+                    minHeight: 'auto',
+                  },
+                },
               }}
             >
               <Box>
@@ -241,11 +225,7 @@ function Songs() {
                 </Button>
               </Box>
             </AccordionSummary>
-            <AccordionDetails
-              classes={{
-                root: classes.accordionDetailsRoot,
-              }}
-            >
+            <AccordionDetails sx={{ padding: 0, display: 'block' }}>
               {renderSongDetails(song)}
 
               <Box mt={2} style={{ columnCount: 2, columnGap: 32 }}>

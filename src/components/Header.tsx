@@ -1,26 +1,7 @@
 import React from 'react';
 
-import { Box, Link } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, Link, useTheme } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      background: theme.palette.tertiary.dark,
-      position: 'fixed',
-      width: '100%',
-      height: 60,
-      top: 0,
-      left: 0,
-      zIndex: 100,
-      display: 'flex',
-      alignItems: 'center',
-      padding: theme.spacing(0, 5),
-    },
-  }),
-  { name: 'Header' },
-);
 
 interface Props {
   links: HeaderLink[];
@@ -32,22 +13,35 @@ interface HeaderLink {
 }
 
 function Header({ links }: Props) {
-  const classes = useStyles();
+  const theme = useTheme();
 
   return (
-    <div className={classes.root}>
+    <Box
+      sx={{
+        background: theme.palette.tertiary.dark,
+        position: 'fixed',
+        width: '100%',
+        height: 60,
+        top: 0,
+        left: 0,
+        zIndex: 100,
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(0, 5),
+      }}
+    >
       <Box fontWeight="bold" fontSize="1.1em" mr={4}>
         LiturgyMaker
       </Box>
 
       {links.map((link, index) => (
         <Box key={index} mx={1}>
-          <Link component={NavLink} to={link.path}>
+          <Link component={NavLink} to={link.path} underline="hover">
             {link.title}
           </Link>
         </Box>
       ))}
-    </div>
+    </Box>
   );
 }
 

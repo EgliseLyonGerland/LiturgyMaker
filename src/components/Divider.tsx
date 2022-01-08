@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
-import { ButtonBase } from '@mui/material';
+import { Box, ButtonBase, useTheme } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import makeStyles from '@mui/styles/makeStyles';
-import classnames from 'classnames';
 
 import { blockTypes } from '../config/global';
 
@@ -14,65 +12,8 @@ interface Props {
   disabled: boolean;
 }
 
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      position: 'relative',
-      height: 1,
-      display: 'flex',
-      alignItems: 'center',
-      margin: theme.spacing(4, 0),
-    },
-    inner: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      opacity: 0.6,
-      width: '100%',
-      zIndex: 1,
-      transition: theme.transitions.create('opacity'),
-
-      '&:before, &:after': {
-        content: '""',
-        position: 'absolute',
-        height: 1,
-        backgroundImage:
-          'linear-gradient(to right, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0) 0%)',
-        backgroundPosition: 'bottom',
-        backgroundSize: [[8, 1]],
-        backgroundRepeat: 'repeat-x',
-        top: '50%',
-      },
-
-      '&:before': {
-        left: 24,
-        right: '50%',
-        transform: 'translateX(-24px)',
-      },
-
-      '&:after': {
-        left: '50%',
-        right: 24,
-        transform: 'translateX(24px)',
-      },
-
-      '&:hover:not($disabled)': {
-        opacity: 1,
-      },
-    },
-    disabled: {},
-    addButton: {
-      width: 32,
-      height: 32,
-      borderRadius: 16,
-      background: 'rgba(255,255,255,0.1)',
-    },
-  }),
-  { name: 'Divider' },
-);
-
 function Divider({ onBlockSelected, disabled = false }: Props) {
-  const classes = useStyles();
+  const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleClose = () => {
@@ -85,16 +26,62 @@ function Divider({ onBlockSelected, disabled = false }: Props) {
   };
 
   return (
-    <div className={classes.root}>
-      <div
-        className={classnames(classes.inner, { [classes.disabled]: disabled })}
+    <Box
+      sx={{
+        position: 'relative',
+        height: 1,
+        display: 'flex',
+        alignItems: 'center',
+        margin: theme.spacing(4, 0),
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          opacity: 0.6,
+          width: '100%',
+          zIndex: 1,
+          transition: theme.transitions.create('opacity'),
+
+          '&:before, &:after': {
+            content: '""',
+            position: 'absolute',
+            height: '1px',
+            backgroundImage:
+              'linear-gradient(to right, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0) 0%)',
+            backgroundPosition: 'bottom',
+            backgroundSize: theme.spacing('8px', '1px'),
+            backgroundRepeat: 'repeat-x',
+            top: '50%',
+          },
+          '&:before': {
+            left: 24,
+            right: '50%',
+            transform: 'translateX(-24px)',
+          },
+          '&:after': {
+            left: '50%',
+            right: 24,
+            transform: 'translateX(24px)',
+          },
+          '&:hover': {
+            opacity: disabled ? 'inherit' : 1,
+          },
+        }}
       >
         <ButtonBase
-          className={classes.addButton}
           title="Ajouter un bloc"
           disabled={disabled}
           onClick={(event) => {
             setAnchorEl(event.currentTarget);
+          }}
+          sx={{
+            width: 32,
+            height: 32,
+            borderRadius: 16,
+            background: 'rgba(255,255,255,0.1)',
           }}
         >
           <AddIcon htmlColor="#aaa" />
@@ -117,8 +104,8 @@ function Divider({ onBlockSelected, disabled = false }: Props) {
             </MenuItem>
           ))}
         </Menu>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
