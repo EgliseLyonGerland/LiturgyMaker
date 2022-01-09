@@ -1,12 +1,12 @@
 import React from 'react';
 
-import CssBaseline from '@mui/material/CssBaseline';
 import {
+  CssBaseline,
+  colors,
   ThemeProvider,
   StyledEngineProvider,
   createTheme,
-  adaptV4Theme,
-} from '@mui/material/styles';
+} from '@mui/material';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import ReactDOM from 'react-dom';
@@ -40,29 +40,28 @@ declare module '@mui/material/styles/createPalette' {
   }
 }
 
-const theme = createTheme(
-  adaptV4Theme({
-    palette: {
-      mode: 'dark',
-      primary: {
-        main: '#80A4ED',
-      },
-      tertiary: {
-        light: '#1A2D3C',
-        main: '#15232E',
-        dark: '#121e27',
-      },
-      background: {
-        default: '#15232E', // same as tertiary.main
-        paper: '#1A2D3C', // same as tertiary.light
-      },
-      text: {
-        primary: 'rgba(255, 255, 255, 0.6)',
-        secondary: 'rgba(255, 255, 255, 0.4)',
-      },
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#80A4ED',
     },
-  }),
-);
+    secondary: colors.pink,
+    tertiary: {
+      light: '#1A2D3C',
+      main: '#15232E',
+      dark: '#121e27',
+    },
+    background: {
+      default: '#15232E', // same as tertiary.main
+      paper: '#1A2D3C', // same as tertiary.light
+    },
+    text: {
+      primary: 'rgba(255, 255, 255, 0.6)',
+      secondary: 'rgba(255, 255, 255, 0.4)',
+    },
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>

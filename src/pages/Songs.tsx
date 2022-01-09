@@ -144,6 +144,7 @@ function Songs() {
               icon={<CheckBoxOutlineBlank fontSize="small" />}
               checkedIcon={<CheckBox fontSize="small" />}
               onChange={() => setSearchInLyrics(!searchInLyrics)}
+              color="secondary"
             />
           }
           label="Rechercher dans les paroles"
