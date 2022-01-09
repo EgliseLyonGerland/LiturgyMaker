@@ -22,7 +22,7 @@ import type * as Yup from 'yup';
 import Code from '../components/Code';
 import BlocksField from '../components/fields/BlocksField';
 import SaveButton from '../components/SaveButton';
-import { slideshow } from '../config/global';
+import { slideshowEnabled } from '../config/global';
 import { liturgySchema } from '../config/schemas';
 import SlideshowWindowManager from '../libs/SlideshowWindowManager';
 import {
@@ -129,7 +129,7 @@ function Form({
   }, [liturgy, resetForm]);
 
   useEffect(() => {
-    if (!slideshow) {
+    if (!slideshowEnabled) {
       return () => {};
     }
 
@@ -266,7 +266,7 @@ function LiturgyEdit() {
         >
           <CodeIcon />
         </IconButton>
-        {slideshow && (
+        {slideshowEnabled && (
           <IconButton onClick={handlePlay} size="large">
             <PlayArrowIcon />
             <Box
@@ -293,7 +293,7 @@ function LiturgyEdit() {
   return (
     <Container
       maxWidth={false}
-      sx={{ maxWidth: slideshow ? 1280 : 900, marginBottom: '50vh' }}
+      sx={{ maxWidth: slideshowEnabled ? 1280 : 900, marginBottom: '50vh' }}
     >
       {renderNavBar()}
 

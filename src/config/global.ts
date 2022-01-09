@@ -10,5 +10,5 @@ export const blockTypes = {
   songs: 'Chants',
 };
 
-export const slideshow: boolean =
-  Boolean(process.env.REACT_APP_SLIDESHOW) || false;
+export const slideshowEnabled: boolean =
+  process.env.REACT_APP_SLIDESHOW_ENABLED !== 'false';

@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { blockTypes, slideshow } from '../../config/global';
+import { blockTypes, slideshowEnabled } from '../../config/global';
 import type { BlockType, LiturgyBlock } from '../../types';
 import { createDefaultBlock } from '../../utils/defaults';
 import Divider from '../Divider';
@@ -56,7 +56,12 @@ function BlocksField({
 
     return (
       <Grid container spacing={4}>
-        <Grid item xs={12} md={slideshow ? 8 : 12} xl={slideshow ? 7 : 12}>
+        <Grid
+          item
+          xs={12}
+          md={slideshowEnabled ? 8 : 12}
+          xl={slideshowEnabled ? 7 : 12}
+        >
           <Block
             title={blockTypes[block.type]}
             subtitle={block.title}
@@ -75,8 +80,13 @@ function BlocksField({
             />
           </Block>
         </Grid>
-        <Grid item xs={0} md={slideshow ? 4 : 12} xl={slideshow ? 5 : 12}>
-          {showPreview && <Preview block={block} />}
+        <Grid
+          item
+          xs={0}
+          md={slideshowEnabled ? 4 : 12}
+          xl={slideshowEnabled ? 5 : 12}
+        >
+          {slideshowEnabled && showPreview && <Preview block={block} />}
         </Grid>
       </Grid>
     );
