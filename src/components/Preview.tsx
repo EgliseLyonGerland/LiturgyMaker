@@ -46,7 +46,7 @@ function Preview({ block }: Props) {
       </RevealContainer>
 
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
-        {count && (
+        {count > 1 && (
           <Pagination
             count={count}
             page={currentSlide}
