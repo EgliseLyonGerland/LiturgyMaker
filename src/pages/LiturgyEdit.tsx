@@ -5,8 +5,7 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import CodeIcon from '@mui/icons-material/Code';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import type { SxProps, Theme } from '@mui/material';
-import { Container, useTheme, Box } from '@mui/material';
+import { Grid, Container, useTheme, Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { format, subDays, addDays } from 'date-fns';
@@ -23,6 +22,7 @@ import type * as Yup from 'yup';
 import Code from '../components/Code';
 import BlocksField from '../components/fields/BlocksField';
 import SaveButton from '../components/SaveButton';
+import { slideshow } from '../config/global';
 import { liturgySchema } from '../config/schemas';
 import SlideshowWindowManager from '../libs/SlideshowWindowManager';
 import {
@@ -209,28 +209,18 @@ function LiturgyEdit() {
     slideshowWindowRef.current.setSongs(songs);
   }, [songs]);
 
-  const actionStyles: SxProps<Theme> = {
-    display: { xs: 'none', sm: 'flex' },
-    width: 96,
-    opacity: 0.7,
-  };
-
   const renderNavBar = () => (
-    <Box
-      sx={{
-        display: 'flex',
-        height: theme.spacing(8),
-        alignItems: 'center',
-      }}
-    >
-      <Box sx={actionStyles} />
-      <Box
+    <Grid container sx={{ height: theme.spacing(8), alignItems: 'center' }}>
+      <Grid item xs={2} />
+      <Grid
+        item
+        xs={8}
         sx={{
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
           fontSize: 16,
           fontWeight: 700,
-          margin: theme.spacing(0, 'auto'),
         }}
       >
         <IconButton
@@ -260,9 +250,8 @@ function LiturgyEdit() {
         >
           <ArrowRightIcon fontSize="inherit" />
         </IconButton>
-      </Box>
-
-      <Box position="relative" sx={actionStyles}>
+      </Grid>
+      <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <IconButton
           onClick={() => {
             setDisplayCode(true);
@@ -271,30 +260,35 @@ function LiturgyEdit() {
         >
           <CodeIcon />
         </IconButton>
-        <IconButton onClick={handlePlay} size="large">
-          <PlayArrowIcon />
-          <Box
-            position="absolute"
-            bgcolor="red"
-            color="white"
-            fontSize={10}
-            fontWeight="bold"
-            borderRadius="2px"
-            height={12}
-            lineHeight="12px"
-            px="2px"
-            top={0}
-            right={-4}
-          >
-            beta
-          </Box>
-        </IconButton>
-      </Box>
-    </Box>
+        {slideshow && (
+          <IconButton onClick={handlePlay} size="large">
+            <PlayArrowIcon />
+            <Box
+              position="absolute"
+              bgcolor="red"
+              color="white"
+              fontSize={10}
+              fontWeight="bold"
+              borderRadius="2px"
+              height={12}
+              lineHeight="12px"
+              px="2px"
+              top={0}
+              right={-4}
+            >
+              beta
+            </Box>
+          </IconButton>
+        )}
+      </Grid>
+    </Grid>
   );
 
   return (
-    <Container maxWidth={false} sx={{ maxWidth: 1280, marginBottom: '50vh' }}>
+    <Container
+      maxWidth={false}
+      sx={{ maxWidth: slideshow ? 1280 : 900, marginBottom: '50vh' }}
+    >
       {renderNavBar()}
 
       {loading ? (

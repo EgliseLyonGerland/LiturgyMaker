@@ -9,3 +9,6 @@ export const blockTypes = {
   sermon: 'Prédication',
   songs: 'Chants',
 };
+
+export const slideshow: boolean =
+  Boolean(process.env.REACT_APP_SLIDESHOW) || false;
