@@ -1,59 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { find } from 'lodash';
 import BeatLoader from 'react-spinners/BeatLoader';
-import Reveal from 'reveal.js';
 
-import 'reveal.js/dist/reset.css';
-import 'reveal.js/dist/reveal.css';
-import 'reveal.js/dist/theme/black.css';
-import type { LiturgyDocument, SongDocument } from '../types';
-
-function generateKey(...items: (string | number)[]) {
-  return items.join('.');
-}
-
-function renderLyricsPart(
-  song: SongDocument,
-  partIndex: number,
-  baseKey: string,
-  position: 'first' | 'prev' | 'current' | 'next' | 'nextnext',
-): JSX.Element {
-  const style: Record<typeof position, {}> = {
-    first: { top: partIndex ? '150%' : '50%', opacity: 0 },
-    prev: { marginTop: '-50vh', opacity: 0 },
-    current: { marginTop: 50, opacity: 1 },
-    next: { top: '100%', marginTop: -250, opacity: 0.2 },
-    nextnext: { top: '150%', opacity: 0 },
-  };
-
-  const text = song.lyrics[partIndex]?.text || '';
-
-  return (
-    <p
-      key={generateKey(baseKey, 'lyrics', partIndex, position)}
-      data-hey={generateKey(baseKey, 'lyrics', partIndex, position)}
-      style={{
-        position: 'absolute',
-        top: 0,
-        width: '100%',
-        textAlign: 'center',
-        fontSize: 70,
-        whiteSpace: 'pre',
-        ...style[position],
-      }}
-    >
-      {`${text}\n${' '.repeat(Math.max(0, partIndex))}`}
-    </p>
-  );
-}
+import RevealContainer from '../components/RevealContainer';
+import SectionSlides from '../components/slides/SectionSlides';
+import SongsSlides from '../components/slides/SongsSlides';
+import type { LiturgyBlock, LiturgyDocument, SongDocument } from '../types';
 
 function Slideshow() {
   const [data, setData] = useState<LiturgyDocument | null>(null);
   const [songs, setSongs] = useState<SongDocument[] | null>(null);
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const deckRef = useRef<any>(null);
 
   useEffect(() => {
     window.opener.postMessage({ namespace: 'reveal', method: 'ready' }, '*');
@@ -84,30 +41,6 @@ function Slideshow() {
     };
   }, []);
 
-  useEffect(() => {
-    if (wrapperRef.current === null || deckRef.current !== null) {
-      return;
-    }
-
-    deckRef.current = new Reveal(wrapperRef.current, {
-      width: 1920,
-      height: 1080,
-      // embedded: true,
-      controls: true,
-      progress: false,
-      // center: false,
-      transition: 'none',
-      margin: 0,
-    });
-    deckRef.current.initialize();
-  }, [wrapperRef, data, songs]);
-
-  useEffect(() => {
-    if (deckRef.current) {
-      deckRef.current.layout();
-    }
-  }, [deckRef, data, songs]);
-
   if (!data) {
     return (
       <Box
@@ -122,77 +55,32 @@ function Slideshow() {
     );
   }
 
+  const renderSlides = (block: LiturgyBlock) => {
+    switch (block.type) {
+      case 'section':
+        return <SectionSlides data={block.data} />;
+      case 'songs':
+        return <SongsSlides data={block.data} songs={songs || []} />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div ref={wrapperRef} className="reveal">
-      <div className="slides">
-        {data.blocks.reduce<JSX.Element[]>((acc, block, blockIndex) => {
-          let result = acc;
+    <RevealContainer>
+      <>
+        {data.blocks.reduce<JSX.Element[]>((acc, block) => {
+          const slides = renderSlides(block);
 
-          switch (block.type) {
-            case 'reading':
-              result = result.concat(
-                block.data.bibleRefs.map((item, itemIndex) => (
-                  <section key={`${blockIndex}.${itemIndex}`}>
-                    {item.ref}
-                  </section>
-                )) || [],
-              );
-              break;
-
-            case 'songs':
-              block.data.items.forEach((item, songIndex) => {
-                const song = find(songs, ['id', item.id]);
-                // console.log(song);
-
-                if (!song) {
-                  return;
-                }
-
-                const baseKey = generateKey(blockIndex, songIndex);
-
-                result.push(
-                  <section
-                    key={generateKey(blockIndex, songIndex, 'title')}
-                    data-auto-animate
-                  >
-                    <p>{song.title}</p>
-                    <p>{song.authors}</p>
-
-                    {renderLyricsPart(song, 0, baseKey, 'first')}
-                    {renderLyricsPart(song, 1, baseKey, 'first')}
-                  </section>,
-                );
-
-                result.push(
-                  ...song.lyrics.map((part, partIndex) => {
-                    return (
-                      <section
-                        key={generateKey(baseKey, 'lyrics', partIndex)}
-                        data-auto-animate
-                      >
-                        {renderLyricsPart(song, partIndex - 1, baseKey, 'prev')}
-                        {renderLyricsPart(song, partIndex, baseKey, 'current')}
-                        {renderLyricsPart(song, partIndex + 1, baseKey, 'next')}
-                        {renderLyricsPart(
-                          song,
-                          partIndex + 2,
-                          baseKey,
-                          'nextnext',
-                        )}
-                      </section>
-                    );
-                  }),
-                );
-              });
-              break;
-
-            default:
+          if (slides === null) {
+            return acc;
           }
 
+          const result = acc.concat(slides);
           return result;
         }, [])}
-      </div>
-    </div>
+      </>
+    </RevealContainer>
   );
 }
 

@@ -6,8 +6,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import CodeIcon from '@mui/icons-material/Code';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import type { SxProps, Theme } from '@mui/material';
-import { useTheme, Box } from '@mui/material';
-import Container from '@mui/material/Container';
+import { Container, useTheme, Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { format, subDays, addDays } from 'date-fns';
@@ -295,41 +294,39 @@ function LiturgyEdit() {
   );
 
   return (
-    <Box sx={{ marginBottom: '50vh' }}>
-      <Container maxWidth="md">
-        {renderNavBar()}
+    <Container maxWidth={false} sx={{ maxWidth: 1280, marginBottom: '50vh' }}>
+      {renderNavBar()}
 
-        {loading ? (
-          <Box
-            sx={{
-              display: 'flex',
-              height: 200,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <BeatLoader color="#DDD" />
-          </Box>
-        ) : (
-          <>
-            {displayCode && (
-              <Code
-                code={generateCode(liturgyState, { songs, recitations })}
-                onHide={() => {
-                  setDisplayCode(false);
-                }}
-              />
-            )}
-
-            <Form
-              key={liturgyState.id}
-              liturgy={liturgyState}
-              onLiturgyChanged={handleLiturgyChanged}
+      {loading ? (
+        <Box
+          sx={{
+            display: 'flex',
+            height: 200,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <BeatLoader color="#DDD" />
+        </Box>
+      ) : (
+        <>
+          {displayCode && (
+            <Code
+              code={generateCode(liturgyState, { songs, recitations })}
+              onHide={() => {
+                setDisplayCode(false);
+              }}
             />
-          </>
-        )}
-      </Container>
-    </Box>
+          )}
+
+          <Form
+            key={liturgyState.id}
+            liturgy={liturgyState}
+            onLiturgyChanged={handleLiturgyChanged}
+          />
+        </>
+      )}
+    </Container>
   );
 }
 

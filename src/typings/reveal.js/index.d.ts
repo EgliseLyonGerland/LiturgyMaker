@@ -17,10 +17,13 @@ declare const RevealZoom: Plugin;
 
 declare module 'reveal.js' {
   export default Reveal;
+  export const RevealStatic;
 }
 
 declare class Reveal extends RevealStatic {
   constructor(revealElement: HTMLElement, config: RevealOptions);
+
+  initialize: () => Promise<any>;
 }
 
 interface RevealStatic {

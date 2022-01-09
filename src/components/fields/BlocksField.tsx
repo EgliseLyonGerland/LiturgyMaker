@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 
+import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { blockTypes } from '../../config/global';
@@ -7,6 +8,7 @@ import type { BlockType, LiturgyBlock } from '../../types';
 import { createDefaultBlock } from '../../utils/defaults';
 import Divider from '../Divider';
 import Block from '../FormBlock';
+import Preview from '../Preview';
 import AnnouncementsField from './AnnouncementsField';
 import OpenDoorsField from './OpenDoorsField';
 import ReadingField from './ReadingField';
@@ -36,6 +38,8 @@ function BlocksField({
   disabled = false,
   onFillFromLastWeekClicked,
 }: Props) {
+  const theme = useTheme();
+  const showPreview = useMediaQuery(theme.breakpoints.up('md'));
   const { control, register } = useFormContext();
   const { fields, insert, remove } = useFieldArray({
     name,
@@ -51,23 +55,30 @@ function BlocksField({
     }
 
     return (
-      <Block
-        title={blockTypes[block.type]}
-        subtitle={block.title}
-        disabled={disabled}
-        onRemoveBlockClicked={() => remove(index)}
-        onFillFromLastWeekClicked={() => onFillFromLastWeekClicked(index)}
-      >
-        <input type="hidden" {...register(`${name}.${index}.type`)} />
-        <input type="hidden" {...register(`${name}.${index}.title`)} />
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={8} xl={7}>
+          <Block
+            title={blockTypes[block.type]}
+            subtitle={block.title}
+            disabled={disabled}
+            onRemoveBlockClicked={() => remove(index)}
+            onFillFromLastWeekClicked={() => onFillFromLastWeekClicked(index)}
+          >
+            <input type="hidden" {...register(`${name}.${index}.type`)} />
+            <input type="hidden" {...register(`${name}.${index}.title`)} />
 
-        <Component
-          name={`${name}.${index}.data`}
-          // @todo: remove this any
-          defaultValue={block.data as any}
-          disabled={disabled}
-        />
-      </Block>
+            <Component
+              name={`${name}.${index}.data`}
+              // @todo: remove this any
+              defaultValue={block.data as any}
+              disabled={disabled}
+            />
+          </Block>
+        </Grid>
+        <Grid item xs={0} md={4} xl={5}>
+          {showPreview && <Preview block={block} />}
+        </Grid>
+      </Grid>
     );
   };
 

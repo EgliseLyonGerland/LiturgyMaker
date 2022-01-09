@@ -18,6 +18,10 @@ import 'firebase/firestore';
 import App from './App';
 import store from './redux/store';
 import reportWebVitals from './reportWebVitals';
+
+import 'reveal.js/dist/reset.css';
+import 'reveal.js/dist/reveal.css';
+import 'reveal.js/dist/theme/black.css';
 import './index.css';
 
 Sentry.init({
