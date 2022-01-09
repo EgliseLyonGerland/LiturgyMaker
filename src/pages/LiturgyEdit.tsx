@@ -129,6 +129,10 @@ function Form({
   }, [liturgy, resetForm]);
 
   useEffect(() => {
+    if (!slideshow) {
+      return () => {};
+    }
+
     const subscription = watch((value) => {
       onLiturgyChanged(value as LiturgyDocument);
     });
