@@ -45,13 +45,23 @@ function SongsField({
                 onBlur={onBlur}
                 getOptionLabel={(option) => option.title}
                 renderOption={(props, option) => (
-                  <div>
-                    <div>
+                  <Box
+                    component="li"
+                    key={option.id}
+                    sx={{
+                      '&.MuiAutocomplete-option': {
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                      },
+                    }}
+                    {...props}
+                  >
+                    <Box>
                       <Box component="span" fontWeight={500}>
                         {option.title}
                       </Box>
                       {option.aka && ` (${option.aka})`}
-                    </div>
+                    </Box>
                     <Box
                       fontSize="0.8em"
                       fontStyle="italic"
@@ -60,7 +70,7 @@ function SongsField({
                       {option.authors || 'Aucun auteur'}
                       {option.number && ` (${option.number})`}
                     </Box>
-                  </div>
+                  </Box>
                 )}
                 renderInput={(params) => (
                   <TextField
