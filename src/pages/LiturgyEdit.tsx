@@ -71,7 +71,7 @@ function Form({
     getValues: getFormValues,
     setValue: setFormValue,
     reset: resetForm,
-    formState: { isDirty },
+    // formState: { isDirty },
     watch,
   } = form;
 
@@ -132,6 +132,7 @@ function Form({
     const subscription = watch((value) => {
       onLiturgyChanged(value as LiturgyDocument);
     });
+
     return () => subscription.unsubscribe();
   }, [onLiturgyChanged, watch]);
 
@@ -145,7 +146,8 @@ function Form({
       <SaveButton
         persisting={persisting}
         persisted={persisted}
-        dirty={isDirty}
+        // dirty={isDirty}
+        dirty
         onClick={onSubmit(handleSubmit)}
         onHide={() => setPersisted(false)}
       />
