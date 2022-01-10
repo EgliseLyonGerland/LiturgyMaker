@@ -34,7 +34,15 @@ function toVersion(version: number, data: any) {
 export default function migrate(doc: LiturgyDocument) {
   const { version = 1 } = doc;
 
-  return range(version, currentVersion).reduce((acc, curr) => {
+  if (version >= currentVersion) {
+    return doc;
+  }
+
+  const result = range(version, currentVersion).reduce((acc, curr) => {
     return toVersion(curr + 1, acc);
   }, doc);
+
+  result.version = currentVersion;
+
+  return result;
 }
