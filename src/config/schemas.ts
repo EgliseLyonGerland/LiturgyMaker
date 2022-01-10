@@ -14,7 +14,7 @@ const announcementsBlockSchema = yup.object().shape({
 const readingBlockSchema = yup.object().shape({
   bibleRefs: yup.array().of(
     yup.object().shape({
-      ref: yup.string(),
+      id: yup.string(),
       excerpt: yup.string(),
     }),
   ),
@@ -40,7 +40,7 @@ const sermonBlockSchema = yup.object().shape({
   author: yup.string(),
   bibleRefs: yup.array().of(
     yup.object().shape({
-      ref: yup.string(),
+      id: yup.string(),
     }),
   ),
   plan: yup.array().of(

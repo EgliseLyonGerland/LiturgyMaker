@@ -33,7 +33,7 @@ function SermonField({
 
       <ArraySortableControl
         name={`${name}.bibleRefs`}
-        defaultItem={{ ref: '' }}
+        defaultItem={{ id: '' }}
         disabled={disabled}
         renderItem={(item, index) => (
           <BibleRefField

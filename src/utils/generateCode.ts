@@ -142,7 +142,7 @@ function generateReadingBlockCode({
       }
 
       const config = {
-        bibleRef: bibleRef.ref,
+        bibleRef: bibleRef.id,
         excerpt: bibleRef.excerpt,
       };
 
@@ -180,7 +180,7 @@ function generateSermonBlockCode({
   }
 
   if (bibleRefs.length) {
-    config.bibleRef = bibleRefs[0].ref;
+    config.bibleRef = bibleRefs[0].id;
   }
 
   if (plan.length) {

@@ -28,7 +28,7 @@ export interface OpenDoorsBlockData {
 
 export interface ReadingBlockData {
   bibleRefs: {
-    ref: string;
+    id: string;
     excerpt: string;
   }[];
 }
@@ -45,7 +45,7 @@ export interface SectionBlockData {
 export interface SermonBlockData {
   title: string;
   author: string;
-  bibleRefs: { ref: string }[];
+  bibleRefs: { id: string }[];
   plan: { text: string }[];
 }
 

@@ -17,7 +17,7 @@ export const createDefaultReadingBlock = ({ title = '' } = {}) => ({
   data: {
     bibleRefs: [
       {
-        ref: '',
+        id: '',
         excerpt: '',
       },
     ],
@@ -30,7 +30,7 @@ export const createDefaultSermonBlock = () => ({
   data: {
     title: '',
     author: '',
-    bibleRefs: [{ ref: '' }],
+    bibleRefs: [{ id: '' }],
     plan: [{ text: '' }],
   },
 });

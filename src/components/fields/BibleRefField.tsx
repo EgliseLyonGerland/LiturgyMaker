@@ -10,7 +10,7 @@ import TextFieldControl from '../controls/TextFieldControl';
 
 interface Props
   extends FormFieldProps<{
-    ref: string;
+    id: string;
     excerpt?: string;
   }> {
   withExcerpt?: boolean;
@@ -26,9 +26,9 @@ function BibleRefField({
 
   const { control, setValue } = useFormContext();
   const refController = useController({
-    name: `${name}.ref`,
+    name: `${name}.id`,
     control,
-    defaultValue: defaultValue?.ref,
+    defaultValue: defaultValue?.id,
   });
 
   const currentRef = refController.field.value;
@@ -46,7 +46,7 @@ function BibleRefField({
     const excerpt = await getPassage(refController.field.value);
 
     if (excerpt) {
-      setValue(name, { ref: refController.field.value, excerpt });
+      setValue(name, { id: refController.field.value, excerpt });
     }
     setLoading(false);
   };
@@ -56,13 +56,13 @@ function BibleRefField({
       <Autocomplete
         options={books.map((book) => book.name)}
         disabled={disabled}
-        defaultValue={defaultValue?.ref}
+        defaultValue={defaultValue?.id}
         freeSolo
         autoComplete
         autoHighlight
         renderInput={(params) => (
           <TextField
-            name={`${name}.ref`}
+            name={`${name}.id`}
             label="Référence biblique"
             variant="filled"
             margin="dense"

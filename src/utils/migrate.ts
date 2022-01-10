@@ -8,6 +8,7 @@ import version4 from './migrations/version4';
 import version5 from './migrations/version5';
 import version6 from './migrations/version6';
 import version7 from './migrations/version7';
+import version8 from './migrations/version8';
 
 function toVersion(version: number, data: any) {
   switch (version) {
@@ -23,6 +24,8 @@ function toVersion(version: number, data: any) {
       return version6(data);
     case 7:
       return version7(data);
+    case 8:
+      return version8(data);
     default:
       return data;
   }

@@ -16,18 +16,18 @@ jest.mock('../migrations/version7');
 beforeEach(() => {
   jest.clearAllMocks();
 
-  version2.mockReturnValue('version 2');
-  version3.mockReturnValue('version 3');
-  version4.mockReturnValue('version 4');
-  version5.mockReturnValue('version 5');
-  version6.mockReturnValue('version 6');
-  version7.mockReturnValue('version 7');
+  version2.mockReturnValue({ version: 2, blocks: [] });
+  version3.mockReturnValue({ version: 3, blocks: [] });
+  version4.mockReturnValue({ version: 4, blocks: [] });
+  version5.mockReturnValue({ version: 5, blocks: [] });
+  version6.mockReturnValue({ version: 6, blocks: [] });
+  version7.mockReturnValue({ version: 7, blocks: [] });
 });
 
 test('migrate() from version 1', () => {
-  const result = migrate({ version: 1 });
+  const result = migrate({ version: 1, blocks: [] });
 
-  expect(result).toEqual('version 7');
+  expect(result).toEqual({ version: 7, blocks: [] });
   expect(version2).toHaveBeenCalledTimes(1);
   expect(version3).toHaveBeenCalledTimes(1);
   expect(version4).toHaveBeenCalledTimes(1);
@@ -37,9 +37,9 @@ test('migrate() from version 1', () => {
 });
 
 test('migrate() from version 5', () => {
-  const result = migrate({ version: 5 });
+  const result = migrate({ version: 5, blocks: [] });
 
-  expect(result).toEqual('version 7');
+  expect(result).toEqual({ version: 7, blocks: [] });
   expect(version2).not.toHaveBeenCalled();
   expect(version3).not.toHaveBeenCalled();
   expect(version4).not.toHaveBeenCalled();
@@ -49,9 +49,9 @@ test('migrate() from version 5', () => {
 });
 
 test('migrate() from version 7', () => {
-  const result = migrate({ version: 7 });
+  const result = migrate({ version: 7, blocks: [] });
 
-  expect(result).toEqual({ version: 7 });
+  expect(result).toEqual({ version: 7, blocks: [] });
   expect(version2).not.toHaveBeenCalled();
   expect(version3).not.toHaveBeenCalled();
   expect(version4).not.toHaveBeenCalled();

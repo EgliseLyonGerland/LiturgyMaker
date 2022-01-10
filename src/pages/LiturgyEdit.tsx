@@ -71,7 +71,7 @@ function Form({
     getValues: getFormValues,
     setValue: setFormValue,
     reset: resetForm,
-    // formState: { isDirty },
+    formState: { isDirty },
     watch,
   } = form;
 
@@ -150,8 +150,7 @@ function Form({
       <SaveButton
         persisting={persisting}
         persisted={persisted}
-        // dirty={isDirty}
-        dirty
+        dirty={isDirty}
         onClick={onSubmit(handleSubmit)}
         onHide={() => setPersisted(false)}
       />

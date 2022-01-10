@@ -12,7 +12,7 @@ function ReadingField({
     <ArraySortableControl
       name={`${name}.bibleRefs`}
       gutters={3}
-      defaultItem={{ ref: '', excerpt: '' }}
+      defaultItem={{ id: '', excerpt: '' }}
       disabled={disabled}
       renderItem={(item, index) => (
         <BibleRefField
