@@ -39,13 +39,15 @@ function BlocksField({
   onFillFromLastWeekClicked,
 }: Props) {
   const theme = useTheme();
-  const showPreview = useMediaQuery(theme.breakpoints.up('md'));
+  const isMediumAndUp = useMediaQuery(theme.breakpoints.up('md'));
   const { control, register } = useFormContext();
   const { fields, insert, remove } = useFieldArray({
     name,
     control,
     keyName: 'key',
   });
+
+  const showPreview = isMediumAndUp && slideshowEnabled;
 
   const renderBlock = (block: LiturgyBlock, index: number) => {
     const Component = components[block.type];
@@ -56,12 +58,7 @@ function BlocksField({
 
     return (
       <Grid container spacing={4}>
-        <Grid
-          item
-          xs={12}
-          md={slideshowEnabled ? 8 : 12}
-          xl={slideshowEnabled ? 7 : 12}
-        >
+        <Grid item xs={12} md={showPreview ? 8 : 12} xl={showPreview ? 7 : 12}>
           <Block
             title={blockTypes[block.type]}
             subtitle={block.title}
@@ -80,14 +77,11 @@ function BlocksField({
             />
           </Block>
         </Grid>
-        <Grid
-          item
-          xs={0}
-          md={slideshowEnabled ? 4 : 12}
-          xl={slideshowEnabled ? 5 : 12}
-        >
-          {slideshowEnabled && showPreview && <Preview block={block} />}
-        </Grid>
+        {showPreview && (
+          <Grid item xs={0} md={4} xl={5}>
+            <Preview block={block} />
+          </Grid>
+        )}
       </Grid>
     );
   };
