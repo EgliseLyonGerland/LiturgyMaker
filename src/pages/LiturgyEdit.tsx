@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import { format, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
 import capitalize from 'lodash/capitalize';
-import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useStore } from 'react-redux';
@@ -77,7 +76,7 @@ function Form({
 
   const handleSubmit = async (data: LiturgyDocument) => {
     setPersisting(true);
-    await dispatch(persistLiturgy(cloneDeep(data)));
+    await dispatch(persistLiturgy(data));
     setPersisted(true);
     setPersisting(false);
   };

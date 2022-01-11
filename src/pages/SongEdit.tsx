@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import type { BoxProps } from '@mui/material';
 import { Box, Container, Typography } from '@mui/material';
-import cloneDeep from 'lodash/cloneDeep';
 import isString from 'lodash/isString';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -72,7 +71,7 @@ function SongEdit() {
   const handleSubmit = async (data: SongDocument) => {
     setPersisting(true);
 
-    await dispatch(persistSong(cloneDeep(data)));
+    await dispatch(persistSong(data));
 
     setPersisted(true);
     setPersisting(false);
@@ -80,7 +79,7 @@ function SongEdit() {
 
   useEffect(() => {
     if (song) {
-      reset(cloneDeep(song));
+      reset(song);
     }
   }, [song, reset]);
 

@@ -4,6 +4,7 @@ import {
   createEntityAdapter,
 } from '@reduxjs/toolkit';
 import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import { cloneDeep } from 'lodash';
 import { normalize, schema } from 'normalizr';
 
 import { db } from '../../firebase';
@@ -47,7 +48,7 @@ export const persistSong = createAsyncThunk(
 
     await setDoc(doc(db, 'songs', id), data);
 
-    return song;
+    return cloneDeep(song);
   },
 );
 
