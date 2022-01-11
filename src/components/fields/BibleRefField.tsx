@@ -34,7 +34,10 @@ function BibleRefField({ name, withExcerpt = true, disabled = false }: Props) {
     <div>
       <Controller
         name={`${name}.id`}
-        render={({ field: { onChange, value }, fieldState: { error } }) => (
+        render={({
+          field: { ref, onChange, value },
+          fieldState: { error },
+        }) => (
           <Autocomplete
             options={books.map((book) => book.name)}
             disabled={disabled}
@@ -45,6 +48,7 @@ function BibleRefField({ name, withExcerpt = true, disabled = false }: Props) {
             renderInput={(params) => (
               <TextField
                 {...params}
+                inputRef={ref}
                 label="Référence biblique"
                 variant="filled"
                 margin="dense"
