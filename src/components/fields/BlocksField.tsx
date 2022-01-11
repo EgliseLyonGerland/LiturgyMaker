@@ -69,12 +69,7 @@ function BlocksField({
             <input type="hidden" {...register(`${name}.${index}.type`)} />
             <input type="hidden" {...register(`${name}.${index}.title`)} />
 
-            <Component
-              name={`${name}.${index}.data`}
-              // @todo: remove this any
-              defaultValue={block.data as any}
-              disabled={disabled}
-            />
+            <Component name={`${name}.${index}.data`} disabled={disabled} />
           </Block>
         </Grid>
         {showPreview && (

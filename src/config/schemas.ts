@@ -1,6 +1,40 @@
 import * as yup from 'yup';
+import type { AnyObject, Maybe } from 'yup/lib/types';
 
 import type { LiturgyBlock } from '../types';
+import { validate } from '../utils/bibleRef';
+
+yup.addMethod(
+  yup.string,
+  'bibleRef',
+  // eslint-disable-next-line no-template-curly-in-string
+  function method(message = '${error}') {
+    return this.test({
+      message,
+      name: 'bibleRef',
+      test(value) {
+        const error = value ? validate(value) : '';
+
+        return (
+          !error ||
+          this.createError({
+            params: { error },
+          })
+        );
+      },
+    });
+  },
+);
+
+declare module 'yup' {
+  interface StringSchema<
+    TType extends Maybe<string> = string | undefined,
+    TContext extends AnyObject = AnyObject,
+    TOut extends TType = TType,
+  > extends yup.BaseSchema<TType, TContext, TOut> {
+    bibleRef(): StringSchema<TType, TContext>;
+  }
+}
 
 const announcementsBlockSchema = yup.object().shape({
   items: yup.array().of(
@@ -14,7 +48,7 @@ const announcementsBlockSchema = yup.object().shape({
 const readingBlockSchema = yup.object().shape({
   bibleRefs: yup.array().of(
     yup.object().shape({
-      id: yup.string(),
+      id: yup.string().bibleRef(),
       excerpt: yup.string(),
     }),
   ),
@@ -40,7 +74,7 @@ const sermonBlockSchema = yup.object().shape({
   author: yup.string(),
   bibleRefs: yup.array().of(
     yup.object().shape({
-      id: yup.string(),
+      id: yup.string().bibleRef(),
     }),
   ),
   plan: yup.array().of(

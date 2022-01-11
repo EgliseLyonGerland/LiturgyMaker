@@ -1,13 +1,10 @@
 import React from 'react';
 
-import type { FormFieldProps, ReadingBlockData } from '../../types';
+import type { FormFieldProps } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import BibleRefField from './BibleRefField';
 
-function ReadingField({
-  name,
-  disabled = false,
-}: FormFieldProps<ReadingBlockData>) {
+function ReadingField({ name, disabled = false }: FormFieldProps) {
   return (
     <ArraySortableControl
       name={`${name}.bibleRefs`}
@@ -17,7 +14,6 @@ function ReadingField({
       renderItem={(item, index) => (
         <BibleRefField
           name={`${name}.bibleRefs.${index}`}
-          defaultValue={item}
           disabled={disabled}
         />
       )}

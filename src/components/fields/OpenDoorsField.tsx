@@ -6,23 +6,17 @@ import type { FormFieldProps, OpenDoorsBlockData } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';
 
-function OpenDoorsField({
-  name,
-  defaultValue,
-  disabled = false,
-}: FormFieldProps<OpenDoorsBlockData>) {
+function OpenDoorsField({ name, disabled = false }: FormFieldProps) {
   return (
     <div>
       <TextFieldControl
         name={`${name}.title`}
         label="Titre"
-        defaultValue={defaultValue?.title}
         disabled={disabled}
       />
       <TextFieldControl
         name={`${name}.detail`}
         label="Informations"
-        defaultValue={defaultValue?.detail}
         disabled={disabled}
         multiline
       />
@@ -40,7 +34,6 @@ function OpenDoorsField({
           <TextFieldControl
             name={`${name}.prayerTopics.${index}.text`}
             label={`Sujet #${index + 1}`}
-            defaultValue={item.text || ''}
           />
         )}
       />

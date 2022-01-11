@@ -106,8 +106,7 @@ export interface SongDocument {
   lyrics: LyricPart[];
 }
 
-export interface FormFieldProps<T> {
+export interface FormFieldProps {
   name: string;
   disabled: boolean;
-  defaultValue?: T;
 }

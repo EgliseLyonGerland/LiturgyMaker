@@ -4,27 +4,20 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import find from 'lodash/find';
 import get from 'lodash/get';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import { selectAllRecitations } from '../../redux/slices/recitations';
-import type { FormFieldProps, RecitationBlockData } from '../../types';
+import type { FormFieldProps } from '../../types';
 import TextFieldControl from '../controls/TextFieldControl';
 
-function RecitationField({
-  name,
-  defaultValue,
-  disabled = false,
-}: FormFieldProps<RecitationBlockData>) {
+function RecitationField({ name, disabled = false }: FormFieldProps) {
   const recitations = useSelector(selectAllRecitations);
-  const { control } = useFormContext();
 
   return (
     <div>
       <Controller
         name={`${name}.id`}
-        control={control}
-        defaultValue={defaultValue?.id || ''}
         render={({
           field: { value, ref: inputRef, onChange, onBlur },
           fieldState: { error },
@@ -56,7 +49,6 @@ function RecitationField({
       <TextFieldControl
         name={`${name}.infos`}
         label="Informations"
-        defaultValue={defaultValue?.infos || ''}
         disabled={disabled}
         multiline
       />

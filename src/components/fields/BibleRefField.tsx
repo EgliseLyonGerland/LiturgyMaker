@@ -1,76 +1,58 @@
 import React, { useState } from 'react';
 
-import { TextField, Autocomplete, Box, useTheme } from '@mui/material';
-import { useController, useFormContext } from 'react-hook-form';
+import { Autocomplete, Box, TextField, useTheme } from '@mui/material';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import books from '../../config/bibleBooks.json';
 import type { FormFieldProps } from '../../types';
-import { validate, getPassage } from '../../utils/bibleRef';
+import { getPassage } from '../../utils/bibleRef';
 import TextFieldControl from '../controls/TextFieldControl';
 
-interface Props
-  extends FormFieldProps<{
-    id: string;
-    excerpt?: string;
-  }> {
+interface Props extends FormFieldProps {
   withExcerpt?: boolean;
 }
-function BibleRefField({
-  name,
-  defaultValue,
-  withExcerpt = true,
-  disabled = false,
-}: Props) {
+
+function BibleRefField({ name, withExcerpt = true, disabled = false }: Props) {
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
-
-  const { control, setValue } = useFormContext();
-  const refController = useController({
-    name: `${name}.id`,
-    control,
-    defaultValue: defaultValue?.id,
-  });
-
-  const currentRef = refController.field.value;
-
-  let error: string = '';
-  if (currentRef) {
-    error = validate(currentRef);
-  }
-  if (!error) {
-    error = refController.fieldState.error?.message || '';
-  }
+  const { setValue, getValues } = useFormContext();
 
   const handleFillPassage = async () => {
     setLoading(true);
-    const excerpt = await getPassage(refController.field.value);
+
+    const id = getValues(`${name}.id`);
+    const excerpt = await getPassage(id);
 
     if (excerpt) {
-      setValue(name, { id: refController.field.value, excerpt });
+      setValue(`${name}.excerpt`, excerpt);
     }
+
     setLoading(false);
   };
 
   return (
     <div>
-      <Autocomplete
-        options={books.map((book) => book.name)}
-        disabled={disabled}
-        defaultValue={defaultValue?.id}
-        freeSolo
-        autoComplete
-        autoHighlight
-        renderInput={(params) => (
-          <TextField
-            name={`${name}.id`}
-            label="Référence biblique"
-            variant="filled"
-            margin="dense"
-            error={!!error}
-            helperText={error}
-            onChange={refController.field.onChange}
-            onBlur={refController.field.onBlur}
-            {...params}
+      <Controller
+        name={`${name}.id`}
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
+          <Autocomplete
+            options={books.map((book) => book.name)}
+            disabled={disabled}
+            freeSolo
+            autoComplete
+            autoHighlight
+            value={value}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Référence biblique"
+                variant="filled"
+                margin="dense"
+                error={!!error}
+                helperText={error?.message}
+                onChange={onChange}
+              />
+            )}
           />
         )}
       />
@@ -79,7 +61,6 @@ function BibleRefField({
           <TextFieldControl
             name={`${name}.excerpt`}
             label="Extrait"
-            defaultValue={defaultValue?.excerpt}
             disabled={disabled}
             multiline
           />

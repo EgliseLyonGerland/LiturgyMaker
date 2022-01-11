@@ -72,7 +72,7 @@ function SongEdit() {
   const handleSubmit = async (data: SongDocument) => {
     setPersisting(true);
 
-    await dispatch(persistSong(data));
+    await dispatch(persistSong(cloneDeep(data)));
 
     setPersisted(true);
     setPersisting(false);

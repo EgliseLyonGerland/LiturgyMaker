@@ -1,18 +1,13 @@
 import React from 'react';
 
-import type { FormFieldProps, SectionBlockData } from '../../types';
+import type { FormFieldProps } from '../../types';
 import TextFieldControl from '../controls/TextFieldControl';
 
-function SectionField({
-  name,
-  defaultValue,
-  disabled = false,
-}: FormFieldProps<SectionBlockData>) {
+function SectionField({ name, disabled = false }: FormFieldProps) {
   return (
     <TextFieldControl
       name={`${name}.title`}
       label="Titre"
-      defaultValue={defaultValue?.title}
       disabled={disabled}
     />
   );

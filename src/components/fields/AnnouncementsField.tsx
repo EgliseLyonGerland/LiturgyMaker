@@ -1,13 +1,10 @@
 import React from 'react';
 
-import type { AnnouncementsBlockData, FormFieldProps } from '../../types';
+import type { FormFieldProps } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';
 
-function AnnouncementsField({
-  name,
-  disabled = false,
-}: FormFieldProps<AnnouncementsBlockData>) {
+function AnnouncementsField({ name, disabled = false }: FormFieldProps) {
   return (
     <ArraySortableControl
       name={`${name}.items`}
@@ -19,13 +16,11 @@ function AnnouncementsField({
           <TextFieldControl
             name={`${name}.items.${index}.title`}
             label="Titre"
-            defaultValue={item.title}
             disabled={disabled}
           />
           <TextFieldControl
             name={`${name}.items.${index}.detail`}
             label="Détails"
-            defaultValue={item.detail}
             disabled={disabled}
             multiline
           />

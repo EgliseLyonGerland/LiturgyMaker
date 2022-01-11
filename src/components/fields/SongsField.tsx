@@ -6,28 +6,22 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import find from 'lodash/find';
 import get from 'lodash/get';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import { selectAllSongs } from '../../redux/slices/songs';
-import type { FormFieldProps, SongsBlockData, SongsItem } from '../../types';
+import type { FormFieldProps, SongsItem } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';
 
-function SongsField({
-  name,
-  disabled = false,
-}: FormFieldProps<SongsBlockData>) {
+function SongsField({ name, disabled = false }: FormFieldProps) {
   const songs = useSelector(selectAllSongs);
-  const { control } = useFormContext();
 
   const renderItem = (item: SongsItem, index: number) => {
     return (
       <div>
         <Controller
           name={`${name}.items.${index}.id`}
-          control={control}
-          defaultValue={item.id || ''}
           render={({
             field: { value, ref, onChange, onBlur },
             fieldState: { error },
@@ -91,7 +85,6 @@ function SongsField({
         <TextFieldControl
           name={`${name}.items.${index}.infos`}
           label="Informations"
-          defaultValue={item.infos || ''}
           disabled={disabled}
           multiline
         />
@@ -100,8 +93,6 @@ function SongsField({
           control={
             <Controller
               name={`${name}.items.${index}.repeat`}
-              control={control}
-              defaultValue={item.repeat || false}
               render={({
                 field: { value, ref: inputRef, onChange, onBlur },
               }) => (

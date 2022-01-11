@@ -8,14 +8,12 @@ import {
   FormHelperText,
   InputBase,
 } from '@mui/material';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 
-import type { FormFieldProps, LyricPart } from '../../types';
+import type { FormFieldProps } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 
-function LyricsField({ name, disabled = false }: FormFieldProps<LyricPart>) {
-  const { control } = useFormContext();
-
+function LyricsField({ name, disabled = false }: FormFieldProps) {
   return (
     <ArraySortableControl
       name={name}
@@ -26,8 +24,6 @@ function LyricsField({ name, disabled = false }: FormFieldProps<LyricPart>) {
         <>
           <Controller
             name={`${name}.${index}.text`}
-            control={control}
-            defaultValue={item.text}
             render={({ field, fieldState: { error } }) => (
               <>
                 <Box
@@ -60,8 +56,6 @@ function LyricsField({ name, disabled = false }: FormFieldProps<LyricPart>) {
 
           <Controller
             name={`${name}.${index}.type`}
-            control={control}
-            defaultValue={item.type}
             render={({ field: { value, onChange, onBlur } }) => (
               <FormGroup row>
                 <FormControlLabel

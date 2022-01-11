@@ -2,28 +2,22 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 
-import type { FormFieldProps, SermonBlockData } from '../../types';
+import type { FormFieldProps } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';
 import BibleRefField from './BibleRefField';
 
-function SermonField({
-  name,
-  defaultValue,
-  disabled = false,
-}: FormFieldProps<SermonBlockData>) {
+function SermonField({ name, disabled = false }: FormFieldProps) {
   return (
     <div>
       <TextFieldControl
         name={`${name}.title`}
         label="Titre"
-        defaultValue={defaultValue?.title}
         disabled={disabled}
       />
       <TextFieldControl
         name={`${name}.author`}
         label="Auteur"
-        defaultValue={defaultValue?.author}
         disabled={disabled}
       />
 
@@ -38,7 +32,6 @@ function SermonField({
         renderItem={(item, index) => (
           <BibleRefField
             name={`${name}.bibleRefs.${index}`}
-            defaultValue={item}
             withExcerpt={false}
             disabled={disabled}
           />
@@ -56,7 +49,6 @@ function SermonField({
         renderItem={(item, index) => (
           <TextFieldControl
             name={`${name}.plan.${index}.text`}
-            defaultValue={item.text || ''}
             label={`Point #${index + 1}`}
             disabled={disabled}
           />
