@@ -1,17 +1,13 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 
+import { DndContext } from '@dnd-kit/core';
+import { useSortable, SortableContext } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
-import type { Theme } from '@mui/material';
-import { Box, useTheme } from '@mui/material';
+import { useTheme, Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import {
-  SortableContainer as ReactSortableContainer,
-  SortableElement as ReactSortableElement,
-  SortableHandle as ReactSortableHandle,
-} from 'react-sortable-hoc';
 
 interface Props<T = any> {
   name: string;
@@ -19,42 +15,66 @@ interface Props<T = any> {
   disabled: boolean;
   defaultItem: T;
   gutters?: number;
-  renderItem: (item: T, index: number) => void;
+  renderItem: (item: T, index: number) => JSX.Element;
 }
 
-const SortableContainer = ReactSortableContainer(
-  ({ children }: { children: JSX.Element }) => <div>{children}</div>,
-);
+function SortableItem({
+  id,
+  index,
+  gutters,
+  children,
+  onRemoveClicked,
+}: {
+  id: string;
+  index: number;
+  gutters: number;
+  children: JSX.Element;
+  onRemoveClicked: () => void;
+}) {
+  const theme = useTheme();
+  const { listeners, setNodeRef, transform, transition } = useSortable({ id });
 
-const DragHandle = ReactSortableHandle(({ theme }: { theme: Theme }) => (
-  <Box
-    component={DragHandleIcon}
-    color="disabled"
-    sx={{
-      position: 'absolute',
-      top: theme.spacing(2),
-      right: '100%',
-      marginRight: theme.spacing(2),
-    }}
-  />
-));
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
-const SortableItem = ReactSortableElement(
-  ({
-    children,
-    style,
-    theme,
-  }: {
-    children: JSX.Element;
-    style: React.CSSProperties;
-    theme: Theme;
-  }) => (
-    <Box style={style} sx={{ position: 'relative' }}>
-      <DragHandle theme={theme} />
+  return (
+    <Box
+      ref={setNodeRef}
+      style={style}
+      sx={{
+        position: 'relative',
+        marginTop: index === 0 ? 0 : theme.spacing(gutters),
+      }}
+    >
+      <Box
+        component={DragHandleIcon}
+        color="disabled"
+        sx={{
+          position: 'absolute',
+          top: theme.spacing(2),
+          right: '100%',
+          marginRight: theme.spacing(2),
+        }}
+        {...listeners}
+      />
+
       {children}
+
+      <DeleteIcon
+        color="disabled"
+        onClick={onRemoveClicked}
+        sx={{
+          position: 'absolute',
+          top: theme.spacing(2),
+          left: '100%',
+          marginLeft: theme.spacing(2),
+        }}
+      />
     </Box>
-  ),
-);
+  );
+}
 
 function ArraySortableControl<T = any>({
   name,
@@ -74,46 +94,36 @@ function ArraySortableControl<T = any>({
 
   return (
     <div>
-      <SortableContainer
-        onSortEnd={({ oldIndex, newIndex }) => {
-          move(oldIndex, newIndex);
-        }}
-        useDragHandle
-      >
-        <div>
-          {fields.map(({ key, ...item }, index) => (
-            <SortableItem
-              key={key}
-              index={index}
-              theme={theme}
-              disabled={disabled}
-              style={{
-                marginBottom:
-                  index === fields.length - 1 ? 0 : theme.spacing(gutters),
-              }}
-            >
-              <>
+      <div>
+        <DndContext
+          onDragEnd={({ active, over }) => {
+            if (over) {
+              move(
+                fields.findIndex((field) => field.key === active.id),
+                fields.findIndex((field) => field.key === over.id),
+              );
+            }
+          }}
+        >
+          <SortableContext items={fields.map((field) => field.key)}>
+            {fields.map(({ key, ...item }, index) => (
+              <SortableItem
+                key={key}
+                id={key}
+                index={index}
+                gutters={gutters}
+                onRemoveClicked={() => {
+                  if (!disabled) {
+                    remove(index);
+                  }
+                }}
+              >
                 {renderItem(item as T, index)}
-
-                <DeleteIcon
-                  color="disabled"
-                  onClick={() => {
-                    if (!disabled) {
-                      remove(index);
-                    }
-                  }}
-                  sx={{
-                    position: 'absolute',
-                    top: theme.spacing(2),
-                    left: '100%',
-                    marginLeft: theme.spacing(2),
-                  }}
-                />
-              </>
-            </SortableItem>
-          ))}
-        </div>
-      </SortableContainer>
+              </SortableItem>
+            ))}
+          </SortableContext>
+        </DndContext>
+      </div>
 
       <Button
         variant="contained"
