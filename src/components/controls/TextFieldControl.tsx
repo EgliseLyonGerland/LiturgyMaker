@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { TextField } from '@mui/material';
-import { useFormContext, useController } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
 interface Props {
   name: string;
@@ -22,11 +22,10 @@ function TextFieldControl({
   disabled = false,
   transform = (value) => value,
 }: Props) {
-  const { control } = useFormContext();
   const {
     field,
     fieldState: { invalid, error },
-  } = useController({ name, control, defaultValue: transform(defaultValue) });
+  } = useController({ name, defaultValue: transform(defaultValue) });
 
   const { ref, value, onChange, ...rest } = field;
   const params = {

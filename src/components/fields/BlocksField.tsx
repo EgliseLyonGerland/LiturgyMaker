@@ -40,10 +40,9 @@ function BlocksField({
 }: Props) {
   const theme = useTheme();
   const isMediumAndUp = useMediaQuery(theme.breakpoints.up('md'));
-  const { control, register } = useFormContext();
+  const { register } = useFormContext();
   const { fields, insert, remove } = useFieldArray({
     name,
-    control,
     keyName: 'key',
   });
 

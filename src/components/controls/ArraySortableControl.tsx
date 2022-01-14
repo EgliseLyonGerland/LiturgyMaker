@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { useTheme, Box } from '@mui/material';
 import Button from '@mui/material/Button';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 
 interface Props<T = any> {
   name: string;
@@ -85,10 +85,8 @@ function ArraySortableControl<T = any>({
   renderItem,
 }: Props<T>) {
   const theme = useTheme();
-  const { control } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({
     name,
-    control,
     keyName: 'key',
   });
 

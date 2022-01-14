@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { format, subDays, addDays } from 'date-fns';
 import locale from 'date-fns/locale/fr';
+import { cloneDeep } from 'lodash';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -103,8 +104,6 @@ function Form({
 
     const currentBlockNumber = blocks
       .filter((block) => block.type === currentBlock.type)
-      // @todo: check below code
-      // .findIndex((block) => block.id === currentBlock.id);
       .findIndex((block) => block === currentBlock);
 
     const sameTypeBlocks = previousLiturgy.blocks.filter(
@@ -115,10 +114,21 @@ function Form({
       return;
     }
 
-    const previousBlock =
-      sameTypeBlocks[currentBlockNumber] || sameTypeBlocks.pop();
+    const previousBlock = cloneDeep(
+      sameTypeBlocks[currentBlockNumber] || sameTypeBlocks.pop(),
+    );
 
-    setFormValue(`blocks.${index}.data`, previousBlock.data);
+    Object.keys(previousBlock.data).forEach((key) => {
+      setFormValue(
+        `blocks.${index}.data.${key}` as 'blocks.0.data.items',
+        // @todo: remove `as` flag
+        previousBlock.data[key as never],
+        {
+          shouldDirty: true,
+          shouldValidate: true,
+        },
+      );
+    });
   };
 
   useEffect(() => {
