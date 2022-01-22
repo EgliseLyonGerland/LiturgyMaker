@@ -11,4 +11,5 @@ export const blockTypes = {
 };
 
 export const slideshowEnabled: boolean =
+  'REACT_APP_SLIDESHOW_ENABLED' in process.env &&
   process.env.REACT_APP_SLIDESHOW_ENABLED !== 'false';

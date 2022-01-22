@@ -157,7 +157,11 @@ function generateReadingBlockCode({
 function generateSectionBlockCode({
   data,
 }: GeneratorProps<SectionBlockData>): string {
-  return `createChapterSlide(${JSON.stringify({ title: data.title })})`;
+  return `createChapterSlide(${JSON.stringify(
+    { title: data.title },
+    null,
+    '  ',
+  )})`;
 }
 
 function generateSermonBlockCode({
