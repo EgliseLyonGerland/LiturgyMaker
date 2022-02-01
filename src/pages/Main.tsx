@@ -2,8 +2,9 @@ import React, { Suspense, lazy } from 'react';
 
 import { Box } from '@mui/material';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { BeatLoader } from 'react-spinners';
 
-import Header from '../components/Header';
+import MainLayout from '../components/MainLayout';
 import { getNextLiturgyId } from '../utils/liturgy';
 
 const LiturgyEditPage = lazy(() => import('./LiturgyEdit'));
@@ -11,40 +12,62 @@ const SongsPage = lazy(() => import('./Songs'));
 const SongEditPage = lazy(() => import('./SongEdit'));
 const SlideshowPage = lazy(() => import('./Slideshow'));
 
+function Suspensed({ children }: { children: JSX.Element }) {
+  return (
+    <Suspense
+      fallback={
+        <Box display="flex" justifyContent="center" m={5}>
+          <BeatLoader color="#DDD" />
+        </Box>
+      }
+    >
+      {children}
+    </Suspense>
+  );
+}
+
 function Main() {
   return (
-    <Suspense fallback={<div />}>
-      <Routes>
-        <Route
-          path="/"
-          element={<Navigate to={`/liturgies/${getNextLiturgyId()}/edit`} />}
-        />
-        <Route path="/slideshow" element={<SlideshowPage />} />
+    <Routes>
+      <Route
+        element={<Navigate to={`/liturgies/${getNextLiturgyId()}/edit`} />}
+        index
+      />
+      <Route path="/slideshow" element={<SlideshowPage />} />
 
+      <Route
+        element={
+          <Suspensed>
+            <MainLayout />
+          </Suspensed>
+        }
+      >
         <Route
-          path="*"
+          path="/liturgies/:liturgyId/edit"
           element={
-            <Box pt={12} pb={12}>
-              <Header
-                links={[
-                  { title: 'Liturgies', path: '/' },
-                  { title: 'Chants', path: '/songs' },
-                ]}
-              />
-
-              <Routes>
-                <Route
-                  path="/liturgies/:liturgyId/edit"
-                  element={<LiturgyEditPage />}
-                />
-                <Route path="/songs" element={<SongsPage />} />
-                <Route path="/songs/:songId/edit" element={<SongEditPage />} />
-              </Routes>
-            </Box>
+            <Suspensed>
+              <LiturgyEditPage />
+            </Suspensed>
           }
         />
-      </Routes>
-    </Suspense>
+        <Route
+          path="/songs"
+          element={
+            <Suspensed>
+              <SongsPage />
+            </Suspensed>
+          }
+        />
+        <Route
+          path="/songs/:songId/edit"
+          element={
+            <Suspensed>
+              <SongEditPage />
+            </Suspensed>
+          }
+        />
+      </Route>
+    </Routes>
   );
 }
 

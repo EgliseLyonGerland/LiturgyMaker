@@ -306,14 +306,7 @@ function LiturgyEdit() {
       {renderNavBar()}
 
       {loading ? (
-        <Box
-          sx={{
-            display: 'flex',
-            height: 200,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <Box display="flex" justifyContent="center" m={5}>
           <BeatLoader color="#DDD" />
         </Box>
       ) : (

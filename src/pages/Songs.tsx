@@ -20,6 +20,7 @@ import deburr from 'lodash/deburr';
 import sortBy from 'lodash/sortBy';
 import MiniSearch from 'minisearch';
 import { Link } from 'react-router-dom';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
 import { useAppDispatch, useAppSelector } from '../redux/store';
@@ -153,6 +154,14 @@ function Songs() {
     </Box>
   );
 
+  if (songsStatus !== 'success') {
+    return (
+      <Box display="flex" justifyContent="center" m={5}>
+        <BeatLoader color="#DDD" />
+      </Box>
+    );
+  }
+
   return (
     <Container maxWidth="md">
       {renderToolbar()}
@@ -166,7 +175,7 @@ function Songs() {
             sx={{
               padding: theme.spacing(2, 4),
 
-              '&:first-child': {
+              '&:first-of-type': {
                 borderTopLeftRadius: theme.spacing(2),
                 borderTopRightRadius: theme.spacing(2),
                 paddingTop: theme.spacing(3),
