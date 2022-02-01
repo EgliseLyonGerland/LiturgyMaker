@@ -24,7 +24,7 @@ function BibleRefField({ name, withExcerpt = true, disabled = false }: Props) {
     const excerpt = await getPassage(id);
 
     if (excerpt) {
-      setValue(`${name}.excerpt`, excerpt);
+      setValue(`${name}.excerpt`, excerpt, { shouldDirty: true });
     }
 
     setLoading(false);
