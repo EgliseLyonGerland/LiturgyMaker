@@ -40,7 +40,7 @@ function Code({ code, onHide = () => {} }: Props) {
         height: '100%',
         top: 0,
         left: 0,
-        zIndex: 100,
+        zIndex: theme.zIndex.appBar + 100,
         display: 'flex',
         background: '#13242d',
       }}
