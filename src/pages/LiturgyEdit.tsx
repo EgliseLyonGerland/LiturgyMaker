@@ -225,10 +225,11 @@ function LiturgyEdit() {
 
   const renderNavBar = () => (
     <Grid container sx={{ height: theme.spacing(8), alignItems: 'center' }}>
-      <Grid item xs={2} />
+      <Grid item xs={0} md={2} />
       <Grid
         item
-        xs={8}
+        xs={12}
+        md={8}
         sx={{
           display: 'flex',
           alignItems: 'center',
@@ -264,7 +265,12 @@ function LiturgyEdit() {
           <ArrowRightIcon fontSize="inherit" />
         </IconButton>
       </Grid>
-      <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Grid
+        item
+        xs={0}
+        md={2}
+        sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}
+      >
         <IconButton
           color="primary"
           onClick={() => {
