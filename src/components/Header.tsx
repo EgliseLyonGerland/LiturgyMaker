@@ -13,6 +13,7 @@ import { NavLink } from 'react-router-dom';
 
 import logo from '../images/logo.svg';
 import { paper } from '../theme';
+import ModeSwitcher from './ModeSwitcher';
 
 interface Props {
   links: HeaderLink[];
@@ -87,6 +88,10 @@ function Header({ links, ...props }: Props) {
               <Typography textAlign="center">{link.title}</Typography>
             </MenuItem>
           ))}
+
+          <Box sx={{ ml: 'auto' }}>
+            <ModeSwitcher />
+          </Box>
         </Toolbar>
       </AppBar>
     </HideOnScroll>

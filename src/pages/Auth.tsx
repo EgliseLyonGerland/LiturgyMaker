@@ -10,6 +10,8 @@ import TextField from '@mui/material/TextField';
 import type { Auth as FirebaseAuth } from 'firebase/auth';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
+import ModeSwitcher from '../components/ModeSwitcher';
+
 interface Props {
   firebaseAuth: FirebaseAuth;
 }
@@ -107,6 +109,10 @@ function Auth({ firebaseAuth }: Props) {
           </Card>
         </Box>
       </form>
+
+      <Box sx={{ position: 'fixed', top: 32, right: 32 }}>
+        <ModeSwitcher />
+      </Box>
 
       <Snackbar
         open={errorShown}
