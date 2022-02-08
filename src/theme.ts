@@ -2,11 +2,12 @@ import type { PaletteMode } from '@mui/material';
 import { alpha, darken, lighten } from '@mui/material';
 import { blue, pink } from '@mui/material/colors';
 
-const background = {
+export const background = {
   light: '#f8f8f8',
   dark: '#00162d',
 };
-const paper = {
+
+export const paper = {
   light: '#fff',
   dark: '#001e3c',
 };

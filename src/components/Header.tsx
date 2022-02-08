@@ -1,7 +1,18 @@
 import React from 'react';
 
-import { Box, Link, useTheme } from '@mui/material';
+import {
+  AppBar,
+  Box,
+  MenuItem,
+  Slide,
+  Toolbar,
+  Typography,
+  useScrollTrigger,
+} from '@mui/material';
 import { NavLink } from 'react-router-dom';
+
+import logo from '../images/logo.svg';
+import { paper } from '../theme';
 
 interface Props {
   links: HeaderLink[];
@@ -12,36 +23,73 @@ interface HeaderLink {
   path: string;
 }
 
-function Header({ links }: Props) {
-  const theme = useTheme();
+function HideOnScroll(props: {
+  window?: () => Window;
+  children: React.ReactElement;
+}) {
+  const { children, window } = props;
+
+  const trigger = useScrollTrigger({
+    target: window ? window() : undefined,
+  });
 
   return (
-    <Box
-      sx={{
-        bgcolor: 'paper.background.dark',
-        borderBottom: '1px solid',
-        borderColor: 'paper.border',
-        height: 60,
-        top: 0,
-        left: 0,
-        zIndex: 100,
-        display: 'flex',
-        alignItems: 'center',
-        padding: theme.spacing(0, 5),
-      }}
-    >
-      <Box fontWeight="bold" fontSize="1.1em" mr={4}>
-        LiturgyMaker
-      </Box>
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  );
+}
 
-      {links.map((link, index) => (
-        <Box key={index} mx={1}>
-          <Link component={NavLink} to={link.path} underline="hover">
-            {link.title}
-          </Link>
-        </Box>
-      ))}
-    </Box>
+function Header({ links, ...props }: Props) {
+  return (
+    <HideOnScroll {...props}>
+      <AppBar
+        position="sticky"
+        elevation={0}
+        sx={{
+          bgcolor: paper.dark,
+          borderBottom: 'solid 1px',
+          borderColor: 'paper.border',
+        }}
+      >
+        <Toolbar sx={{ height: 72 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+              mx: 2,
+            }}
+          >
+            <Box component="img" src={logo} alt="Logo" sx={{ height: 32 }} />
+            <Box
+              sx={{
+                ml: 2,
+                fontSize: 18,
+                lineHeight: 1,
+                fontWeight: 500,
+                color: 'rgba(255,255,255,0.8)',
+                display: ['none', 'block'],
+              }}
+            >
+              Gestion du culte
+            </Box>
+          </Box>
+
+          {links.map((link) => (
+            <MenuItem
+              component={NavLink}
+              key={link.path}
+              to={link.path}
+              sx={{ color: 'text.secondary' }}
+            >
+              <Typography textAlign="center">{link.title}</Typography>
+            </MenuItem>
+          ))}
+        </Toolbar>
+      </AppBar>
+    </HideOnScroll>
   );
 }
 
