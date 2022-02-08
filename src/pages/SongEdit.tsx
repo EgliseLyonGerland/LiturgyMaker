@@ -24,15 +24,25 @@ function Block({
   header: string;
 } & BoxProps) {
   return (
-    <Box bgcolor="tertiary.light" borderRadius="16px" {...props}>
+    <Box
+      bgcolor="paper.background.main"
+      border="solid 1px"
+      borderRadius="4px"
+      borderColor="paper.border"
+      boxShadow="4px 4px 10px rgba(0,0,0,0.05)"
+      {...props}
+    >
       {header && (
         <Box
           height={72}
           px={5}
           display="flex"
           alignItems="center"
-          bgcolor="tertiary.dark"
-          borderRadius="16px 16px 0 0"
+          color="paper.headerText"
+          bgcolor="paper.header"
+          borderBottom="solid 1px"
+          borderRadius="4px 4px 0 0"
+          borderColor="paper.border"
         >
           {isString(header) ? (
             <Typography variant="h6">{header}</Typography>

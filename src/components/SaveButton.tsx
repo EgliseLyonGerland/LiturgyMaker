@@ -63,7 +63,10 @@ const SaveButton: React.FC<{
           variant="extended"
           color="secondary"
           disabled
-          style={{ background: '#17d86d', color: 'white' }}
+          style={{
+            background: theme.palette.success.main,
+            color: 'white',
+          }}
         >
           <Box width={168} display="flex" justifyContent="center">
             <Check />

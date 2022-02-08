@@ -36,15 +36,24 @@ function FormBlock({
   }
 
   return (
-    <Box bgcolor="background.paper" borderRadius="16px">
+    <Box
+      bgcolor="paper.background.main"
+      border="solid 1px"
+      borderRadius="4px"
+      borderColor="paper.border"
+      boxShadow="4px 4px 10px rgba(0,0,0,0.05)"
+    >
       <Box
         height={72}
         pl={5}
         pr={3}
         display="flex"
         alignItems="center"
-        bgcolor="tertiary.dark"
-        borderRadius="16px 16px 0 0"
+        color="paper.headerText"
+        bgcolor="paper.header"
+        borderBottom="solid 1px"
+        borderRadius="4px 4px 0 0"
+        borderColor="paper.border"
       >
         <Typography variant="h6">
           {title}
@@ -64,6 +73,9 @@ function FormBlock({
               setAnchorEl(event.currentTarget);
             }}
             size="large"
+            sx={{
+              color: 'paper.headerText',
+            }}
           >
             <MoreVertIcon />
           </IconButton>

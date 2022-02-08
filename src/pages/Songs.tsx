@@ -123,8 +123,9 @@ function Songs() {
   const renderToolbar = () => (
     <Box mb={3} display="flex">
       <Box
-        bgcolor="tertiary.dark"
-        border="sold 1px rgba(255,255,255,0.1)"
+        bgcolor="paper.background.main"
+        border="solid 1px"
+        borderColor="paper.border"
         borderRadius="4px"
         width={200}
         mr={2}
@@ -145,7 +146,6 @@ function Songs() {
               icon={<CheckBoxOutlineBlank fontSize="small" />}
               checkedIcon={<CheckBox fontSize="small" />}
               onChange={() => setSearchInLyrics(!searchInLyrics)}
-              color="secondary"
             />
           }
           label="Rechercher dans les paroles"
@@ -166,7 +166,7 @@ function Songs() {
     <Container maxWidth="md">
       {renderToolbar()}
 
-      <div>
+      <Box>
         {filteredSongs.map((song) => (
           <Accordion
             key={song.id}
@@ -176,13 +176,13 @@ function Songs() {
               padding: theme.spacing(2, 4),
 
               '&:first-of-type': {
-                borderTopLeftRadius: theme.spacing(2),
-                borderTopRightRadius: theme.spacing(2),
+                borderTopLeftRadius: theme.spacing(0.5),
+                borderTopRightRadius: theme.spacing(0.5),
                 paddingTop: theme.spacing(3),
               },
               '&:last-child': {
-                borderBottomLeftRadius: theme.spacing(2),
-                borderBottomRightRadius: theme.spacing(2),
+                borderBottomLeftRadius: theme.spacing(0.5),
+                borderBottomRightRadius: theme.spacing(0.5),
                 paddingBottom: theme.spacing(3),
               },
               '& .MuiAccordion-expanded': {
@@ -262,7 +262,7 @@ function Songs() {
             </AccordionDetails>
           </Accordion>
         ))}
-      </div>
+      </Box>
     </Container>
   );
 }

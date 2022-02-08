@@ -50,7 +50,9 @@ function Divider({ onBlockSelected, disabled = false }: Props) {
             position: 'absolute',
             height: '1px',
             backgroundImage:
-              'linear-gradient(to right, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0) 0%)',
+              theme.palette.mode === 'dark'
+                ? 'linear-gradient(to right, rgba(255,255,255,0.2) 40%, rgba(255,255,255,0) 0%)'
+                : 'linear-gradient(to right, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 0%)',
             backgroundPosition: 'bottom',
             backgroundSize: theme.spacing('8px', '1px'),
             backgroundRepeat: 'repeat-x',
@@ -81,7 +83,10 @@ function Divider({ onBlockSelected, disabled = false }: Props) {
             width: 32,
             height: 32,
             borderRadius: 16,
-            background: 'rgba(255,255,255,0.1)',
+            background:
+              theme.palette.mode === 'dark'
+                ? 'rgba(255,255,255,0.1)'
+                : 'rgba(0,0,0,0.1)',
           }}
         >
           <AddIcon htmlColor="#aaa" />

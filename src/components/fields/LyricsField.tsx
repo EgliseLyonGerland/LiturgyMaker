@@ -1,12 +1,11 @@
 import React from 'react';
 
 import {
-  Box,
   Checkbox,
   FormControlLabel,
   FormGroup,
   FormHelperText,
-  InputBase,
+  TextField,
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
 
@@ -26,26 +25,20 @@ function LyricsField({ name, disabled = false }: FormFieldProps) {
             name={`${name}.${index}.text`}
             render={({ field, fieldState: { error } }) => (
               <>
-                <Box
-                  bgcolor="rgba(255,255,255,0.09)"
-                  borderRadius="4px"
-                  px={3}
-                  py={2}
-                  mb={1}
-                >
-                  <InputBase
-                    rows={6}
-                    placeholder="Lorem ipsum dolor sit amet..."
-                    disabled={disabled}
-                    style={{
-                      lineHeight: 1.5,
-                      fontSize: 18,
-                    }}
-                    fullWidth
-                    multiline
-                    {...field}
-                  />
-                </Box>
+                <TextField
+                  rows={6}
+                  label={`Paroles #${index + 1}`}
+                  variant="filled"
+                  placeholder="Lorem ipsum dolor sit amet..."
+                  disabled={disabled}
+                  // style={{
+                  //   lineHeight: 1.5,
+                  //   fontSize: 18,
+                  // }}
+                  fullWidth
+                  multiline
+                  {...field}
+                />
 
                 {error && (
                   <FormHelperText error>{error.message}</FormHelperText>

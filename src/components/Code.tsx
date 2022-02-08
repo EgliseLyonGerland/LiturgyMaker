@@ -42,7 +42,7 @@ function Code({ code, onHide = () => {} }: Props) {
         left: 0,
         zIndex: theme.zIndex.appBar + 100,
         display: 'flex',
-        background: '#13242d',
+        bgcolor: 'background.default',
       }}
     >
       <Box

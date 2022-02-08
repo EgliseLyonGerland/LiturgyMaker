@@ -18,7 +18,9 @@ function Header({ links }: Props) {
   return (
     <Box
       sx={{
-        background: theme.palette.tertiary.dark,
+        bgcolor: 'paper.background.dark',
+        borderBottom: '1px solid',
+        borderColor: 'paper.border',
         height: 60,
         top: 0,
         left: 0,

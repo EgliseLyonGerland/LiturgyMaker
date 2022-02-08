@@ -249,7 +249,6 @@ function LiturgyEdit() {
         </IconButton>
         <Typography
           variant="inherit"
-          color="textSecondary"
           sx={{ width: { xs: 'auto', lg: 250 }, textAlign: 'center' }}
         >
           {capitalize(formatDate(currentDate))}
@@ -267,6 +266,7 @@ function LiturgyEdit() {
       </Grid>
       <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <IconButton
+          color="primary"
           onClick={() => {
             setDisplayCode(true);
           }}

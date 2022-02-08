@@ -47,12 +47,21 @@ function Auth({ firebaseAuth }: Props) {
       }}
     >
       <form onSubmit={handleSubmit}>
-        <Box width={360} boxShadow={20}>
-          <Card>
+        <Box width={360}>
+          <Card
+            sx={{
+              border: 'solid 1px',
+              borderRadius: '4px',
+              borderColor: 'paper.border',
+              boxShadow: '4px 4px 10px rgba(0,0,0,0.05)',
+            }}
+          >
             <CardContent
               sx={{
-                background: theme.palette.tertiary.dark,
-                color: theme.palette.text.primary,
+                bgcolor: 'paper.header',
+                color: 'paper.headerText',
+                borderBottom: 'solid 1px',
+                borderColor: 'paper.border',
                 ...theme.typography.h6,
               }}
             >

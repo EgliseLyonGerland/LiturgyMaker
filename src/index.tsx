@@ -1,12 +1,5 @@
 import React from 'react';
 
-import {
-  CssBaseline,
-  colors,
-  ThemeProvider,
-  StyledEngineProvider,
-  createTheme,
-} from '@mui/material';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import ReactDOM from 'react-dom';
@@ -31,48 +24,11 @@ Sentry.init({
   enabled: process.env.NODE_ENV === 'production',
 });
 
-declare module '@mui/material/styles/createPalette' {
-  interface Palette {
-    tertiary: Palette['primary'];
-  }
-  interface PaletteOptions {
-    tertiary: PaletteOptions['primary'];
-  }
-}
-
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#80A4ED',
-    },
-    secondary: colors.pink,
-    tertiary: {
-      light: '#1A2D3C',
-      main: '#15232E',
-      dark: '#121e27',
-    },
-    background: {
-      default: '#15232E', // same as tertiary.main
-      paper: '#1A2D3C', // same as tertiary.light
-    },
-    text: {
-      primary: 'rgba(255, 255, 255, 0.6)',
-      secondary: 'rgba(255, 255, 255, 0.4)',
-    },
-  },
-});
-
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <App />
-          </ThemeProvider>
-        </StyledEngineProvider>
+        <App />
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,
