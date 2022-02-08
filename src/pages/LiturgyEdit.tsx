@@ -301,7 +301,7 @@ function LiturgyEdit() {
   return (
     <Container
       maxWidth={false}
-      sx={{ maxWidth: slideshowEnabled ? 1280 : 900, marginBottom: '50vh' }}
+      sx={{ maxWidth: slideshowEnabled ? 1280 : 900 }}
     >
       {renderNavBar()}
 

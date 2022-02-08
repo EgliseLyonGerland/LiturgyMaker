@@ -7,7 +7,7 @@ import Header from './Header';
 
 function MainLayout() {
   return (
-    <div>
+    <Box pb="50vh">
       <Box sx={{ position: 'sticky', top: '0', mb: 4, zIndex: 'appBar' }}>
         <Header
           links={[
@@ -19,7 +19,7 @@ function MainLayout() {
       </Box>
 
       <Outlet />
-    </div>
+    </Box>
   );
 }
 
