@@ -1,5 +1,5 @@
 import type { PaletteMode } from '@mui/material';
-import { alpha, darken, lighten } from '@mui/material';
+import { createTheme, alpha, darken, lighten } from '@mui/material';
 import { blue, pink } from '@mui/material/colors';
 
 export const background = {
@@ -59,10 +59,13 @@ const darkPalette = {
   },
 };
 
-export default (mode: PaletteMode) => ({
+export const buildTheme = (mode: PaletteMode) => ({
   palette: {
     mode,
     ...defaultPalette,
     ...(mode === 'light' ? lightPalette : darkPalette),
   },
 });
+
+export const lightTheme = createTheme(buildTheme('light'));
+export const darkTheme = createTheme(buildTheme('dark'));
