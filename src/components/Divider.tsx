@@ -32,7 +32,7 @@ function Divider({ onBlockSelected, disabled = false }: Props) {
         height: 1,
         display: 'flex',
         alignItems: 'center',
-        margin: theme.spacing(4, 0),
+        margin: theme.spacing(2, 0),
       }}
     >
       <Box
