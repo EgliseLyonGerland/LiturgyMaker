@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box } from '@mui/material';
+import { Box, ThemeProvider } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+
+import { darkTheme } from '../theme';
 
 interface Props {
   title: string;
@@ -49,37 +51,35 @@ function FormBlock({
         pr={3}
         display="flex"
         alignItems="center"
-        color="paper.headerText"
         bgcolor="paper.header"
         borderBottom="solid 1px"
         borderRadius="4px 4px 0 0"
         borderColor="paper.border"
       >
-        <Typography variant="h6">
-          {title}
-          {' \u00A0'}
-          <Typography component="span" variant="subtitle1">
-            {subtitle}
+        <ThemeProvider theme={darkTheme}>
+          <Typography variant="h6">
+            {title}
+            {' \u00A0'}
+            <Typography component="span" variant="subtitle1">
+              {subtitle}
+            </Typography>
           </Typography>
-        </Typography>
 
-        <Box ml="auto">
-          <IconButton
-            aria-label="more"
-            aria-controls="long-menu"
-            aria-haspopup="true"
-            disabled={disabled}
-            onClick={(event) => {
-              setAnchorEl(event.currentTarget);
-            }}
-            size="large"
-            sx={{
-              color: 'paper.headerText',
-            }}
-          >
-            <MoreVertIcon />
-          </IconButton>
-        </Box>
+          <Box ml="auto">
+            <IconButton
+              aria-label="more"
+              aria-controls="long-menu"
+              aria-haspopup="true"
+              disabled={disabled}
+              size="large"
+              onClick={(event) => {
+                setAnchorEl(event.currentTarget);
+              }}
+            >
+              <MoreVertIcon />
+            </IconButton>
+          </Box>
+        </ThemeProvider>
 
         <Menu
           id="long-menu"

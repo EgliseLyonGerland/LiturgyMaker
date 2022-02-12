@@ -1,25 +1,24 @@
 import React from 'react';
 
-import { Box, LinearProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 import Header from './Header';
 
 function MainLayout() {
   return (
-    <Box pb="50vh">
-      <Box sx={{ position: 'sticky', top: '0', mb: 4, zIndex: 'appBar' }}>
-        <Header
-          links={[
-            { title: 'Liturgies', path: '/' },
-            { title: 'Chants', path: '/songs' },
-          ]}
-        />
-        <LinearProgress sx={{ visibility: 'hidden' }} />
-      </Box>
+    <>
+      <Header
+        links={[
+          { title: 'Liturgies', path: '/' },
+          { title: 'Chants', path: '/songs' },
+        ]}
+      />
 
-      <Outlet />
-    </Box>
+      <Box sx={{ mt: 4, mb: '50vh' }}>
+        <Outlet />
+      </Box>
+    </>
   );
 }
 
