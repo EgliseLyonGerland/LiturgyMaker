@@ -57,7 +57,7 @@ function ModeSwitcher() {
   return (
     <>
       <IconButton aria-describedby={id} onClick={handleClick}>
-        <Brightness4TwoTone color="primary" />
+        <Brightness4TwoTone sx={{ opacity: 0.7 }} />
       </IconButton>
       <Popover
         id={id}

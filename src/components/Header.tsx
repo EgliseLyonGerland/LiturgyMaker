@@ -5,6 +5,7 @@ import {
   Box,
   MenuItem,
   Slide,
+  ThemeProvider,
   Toolbar,
   Typography,
   useScrollTrigger,
@@ -12,7 +13,7 @@ import {
 import { NavLink } from 'react-router-dom';
 
 import logo from '../images/logo.svg';
-import { paper } from '../theme';
+import { darkTheme, paper } from '../theme';
 import ModeSwitcher from './ModeSwitcher';
 
 interface Props {
@@ -43,58 +44,60 @@ function HideOnScroll(props: {
 
 function Header({ links, ...props }: Props) {
   return (
-    <HideOnScroll {...props}>
-      <AppBar
-        position="sticky"
-        elevation={0}
-        sx={{
-          bgcolor: paper.dark,
-          borderBottom: 'solid 1px',
-          borderColor: 'paper.border',
-        }}
-      >
-        <Toolbar sx={{ height: 72 }}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
-              mx: 2,
-            }}
-          >
-            <Box component="img" src={logo} alt="Logo" sx={{ height: 32 }} />
+    <ThemeProvider theme={darkTheme}>
+      <HideOnScroll {...props}>
+        <AppBar
+          position="sticky"
+          elevation={0}
+          sx={{
+            bgcolor: paper.dark,
+            borderBottom: 'solid 1px',
+            borderColor: 'paper.border',
+          }}
+        >
+          <Toolbar sx={{ height: 72 }}>
             <Box
               sx={{
-                ml: 2,
-                fontSize: 18,
-                lineHeight: 1,
-                fontWeight: 500,
-                color: 'rgba(255,255,255,0.8)',
-                display: ['none', 'block'],
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+                mx: 2,
               }}
             >
-              Gestion du culte
+              <Box component="img" src={logo} alt="Logo" sx={{ height: 32 }} />
+              <Box
+                sx={{
+                  ml: 2,
+                  fontSize: 18,
+                  lineHeight: 1,
+                  fontWeight: 500,
+                  color: 'rgba(255,255,255,0.8)',
+                  display: ['none', 'block'],
+                }}
+              >
+                Gestion du culte
+              </Box>
             </Box>
-          </Box>
 
-          {links.map((link) => (
-            <MenuItem
-              component={NavLink}
-              key={link.path}
-              to={link.path}
-              sx={{ color: 'text.secondary' }}
-            >
-              <Typography textAlign="center">{link.title}</Typography>
-            </MenuItem>
-          ))}
+            {links.map((link) => (
+              <MenuItem
+                component={NavLink}
+                key={link.path}
+                to={link.path}
+                sx={{ color: 'text.secondary' }}
+              >
+                <Typography textAlign="center">{link.title}</Typography>
+              </MenuItem>
+            ))}
 
-          <Box sx={{ ml: 'auto' }}>
-            <ModeSwitcher />
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </HideOnScroll>
+            <Box sx={{ ml: 'auto' }}>
+              <ModeSwitcher />
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </HideOnScroll>
+    </ThemeProvider>
   );
 }
 
