@@ -38,7 +38,6 @@ function Block({
           px={5}
           display="flex"
           alignItems="center"
-          color="paper.headerText"
           bgcolor="paper.header"
           borderBottom="solid 1px"
           borderRadius="4px 4px 0 0"

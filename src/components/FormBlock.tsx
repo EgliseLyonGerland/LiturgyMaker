@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, ThemeProvider } from '@mui/material';
+import { Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
-
-import { darkTheme } from '../theme';
 
 interface Props {
   title: string;
@@ -56,30 +54,28 @@ function FormBlock({
         borderRadius="4px 4px 0 0"
         borderColor="paper.border"
       >
-        <ThemeProvider theme={darkTheme}>
-          <Typography variant="h6">
-            {title}
-            {' \u00A0'}
-            <Typography component="span" variant="subtitle1">
-              {subtitle}
-            </Typography>
+        <Typography variant="h6">
+          {title}
+          {' \u00A0'}
+          <Typography component="span" variant="subtitle1">
+            {subtitle}
           </Typography>
+        </Typography>
 
-          <Box ml="auto">
-            <IconButton
-              aria-label="more"
-              aria-controls="long-menu"
-              aria-haspopup="true"
-              disabled={disabled}
-              size="large"
-              onClick={(event) => {
-                setAnchorEl(event.currentTarget);
-              }}
-            >
-              <MoreVertIcon />
-            </IconButton>
-          </Box>
-        </ThemeProvider>
+        <Box ml="auto">
+          <IconButton
+            aria-label="more"
+            aria-controls="long-menu"
+            aria-haspopup="true"
+            disabled={disabled}
+            size="large"
+            onClick={(event) => {
+              setAnchorEl(event.currentTarget);
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        </Box>
 
         <Menu
           id="long-menu"

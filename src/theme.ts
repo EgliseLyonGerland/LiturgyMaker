@@ -36,8 +36,7 @@ const lightPalette = {
       main: paper.light,
       dark: darken(paper.light, 0.1),
     },
-    header: lighten(paper.dark, 0.1),
-    headerText: '#fff',
+    header: darken(paper.light, 0.07),
     border: 'transparent',
   },
 };
@@ -54,7 +53,6 @@ const darkPalette = {
       dark: darken(paper.dark, 0.1),
     },
     header: darken(paper.dark, 0.1),
-    headerText: '#fff',
     border: alpha('#fff', 0.08),
   },
 };

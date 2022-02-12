@@ -61,7 +61,6 @@ function Auth({ firebaseAuth }: Props) {
             <CardContent
               sx={{
                 bgcolor: 'paper.header',
-                color: 'paper.headerText',
                 borderBottom: 'solid 1px',
                 borderColor: 'paper.border',
                 ...theme.typography.h6,
