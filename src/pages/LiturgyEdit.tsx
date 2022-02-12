@@ -272,7 +272,6 @@ function LiturgyEdit() {
         sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}
       >
         <IconButton
-          color="primary"
           onClick={() => {
             setDisplayCode(true);
           }}
