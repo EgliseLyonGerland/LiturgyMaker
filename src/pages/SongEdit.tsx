@@ -67,7 +67,7 @@ function SongEdit() {
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(false);
 
-  const form = useForm({
+  const form = useForm<SongDocument>({
     mode: 'onChange',
     resolver: yupResolver(songSchema),
   });
