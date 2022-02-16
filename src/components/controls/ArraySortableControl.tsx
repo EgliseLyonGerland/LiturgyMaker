@@ -85,10 +85,7 @@ function ArraySortableControl<T = any>({
   renderItem,
 }: Props<T>) {
   const theme = useTheme();
-  const { fields, append, remove, move } = useFieldArray({
-    name,
-    keyName: 'key',
-  });
+  const { fields, append, remove, move } = useFieldArray({ name });
 
   return (
     <div>
@@ -97,17 +94,17 @@ function ArraySortableControl<T = any>({
           onDragEnd={({ active, over }) => {
             if (over) {
               move(
-                fields.findIndex((field) => field.key === active.id),
-                fields.findIndex((field) => field.key === over.id),
+                fields.findIndex((field) => field.id === active.id),
+                fields.findIndex((field) => field.id === over.id),
               );
             }
           }}
         >
-          <SortableContext items={fields.map((field) => field.key)}>
-            {fields.map(({ key, ...item }, index) => (
+          <SortableContext items={fields.map((field) => field.id)}>
+            {fields.map(({ id, ...item }, index) => (
               <SortableItem
-                key={key}
-                id={key}
+                key={id}
+                id={id}
                 index={index}
                 gutters={gutters}
                 onRemoveClicked={() => {
