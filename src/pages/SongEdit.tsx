@@ -161,7 +161,7 @@ function SongEdit() {
           <TextFieldControl
             name="collection"
             label="Collections"
-            helperText="Séparés par une virgule (ex. Paul Baloche, Matt Redman)"
+            helperText="Séparées par une virgule (ex. ARC 123, JEM 456)"
             disabled={isSubmitting}
           />
         </Block>
