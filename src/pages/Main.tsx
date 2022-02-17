@@ -66,6 +66,14 @@ function Main() {
             </Suspensed>
           }
         />
+        <Route
+          path="/songs/new"
+          element={
+            <Suspensed>
+              <SongEditPage />
+            </Suspensed>
+          }
+        />
       </Route>
     </Routes>
   );

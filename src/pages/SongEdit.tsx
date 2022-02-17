@@ -5,7 +5,7 @@ import type { BoxProps } from '@mui/material';
 import { Box, Container, Typography } from '@mui/material';
 import isString from 'lodash/isString';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 
 import TextFieldControl from '../components/controls/TextFieldControl';
@@ -59,6 +59,7 @@ function Block({
 
 function SongEdit() {
   const params = useParams();
+  const navigate = useNavigate();
   const songsStatus = useAppSelector((state) => state.songs.status);
   const song = useAppSelector((state) =>
     selectSongById(state, `${params.songId}`),
@@ -84,6 +85,12 @@ function SongEdit() {
 
     setPersisted(true);
     setPersisting(false);
+
+    if (!params.songId) {
+      navigate(`/songs/${(payload as SongDocument).id}/edit`, {
+        replace: true,
+      });
+    }
   };
 
   useEffect(() => {
@@ -98,7 +105,7 @@ function SongEdit() {
     }
   }, [dispatch, songsStatus]);
 
-  if (!song) {
+  if (params.songId && !song) {
     return (
       <Box display="flex" justifyContent="center" m={5}>
         <BeatLoader color="#DDD" />

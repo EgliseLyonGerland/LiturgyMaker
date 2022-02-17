@@ -139,7 +139,7 @@ function Songs() {
   };
 
   const renderToolbar = () => (
-    <Box mb={3} display="flex">
+    <Box display="flex" sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
       <Box
         bgcolor="paper.background.main"
         border="solid 1px"
@@ -178,6 +178,16 @@ function Songs() {
           )}
         />
       </FormGroup>
+      <Box sx={{ ml: 'auto' }}>
+        <Button
+          component={Link}
+          to="/songs/new"
+          variant="contained"
+          size="small"
+        >
+          Nouveau
+        </Button>
+      </Box>
     </Box>
   );
 

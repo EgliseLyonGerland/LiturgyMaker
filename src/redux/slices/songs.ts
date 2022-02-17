@@ -3,7 +3,14 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+} from 'firebase/firestore';
 import { cloneDeep } from 'lodash';
 import { normalize, schema } from 'normalizr';
 
@@ -46,6 +53,15 @@ export const persistSong = createAsyncThunk(
   async (song: SongDocument) => {
     const { id, ...data } = song;
 
+    if (!id) {
+      const ref = await addDoc(collection(db, 'songs'), data);
+
+      return {
+        id: ref.id,
+        ...cloneDeep(data),
+      };
+    }
+
     await setDoc(doc(db, 'songs', id), data);
 
     return cloneDeep(song);
@@ -70,8 +86,7 @@ const songsSlice = createSlice({
       state.status = 'fail';
     });
     builder.addCase(persistSong.fulfilled, (state, action) => {
-      const { id, ...changes } = action.payload;
-      songsAdapter.updateOne(state, { id, changes });
+      songsAdapter.upsertOne(state, action.payload);
     });
   },
 });
