@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
 import {
@@ -16,9 +16,9 @@ import {
   useTheme,
 } from '@mui/material';
 import debounce from 'lodash/debounce';
-import deburr from 'lodash/deburr';
 import sortBy from 'lodash/sortBy';
 import MiniSearch from 'minisearch';
+import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 
@@ -30,27 +30,13 @@ type SongSearchDocument = Pick<SongDocument, 'id' | 'title' | 'authors'> & {
   lyrics: string;
 };
 
-function escape(str: string) {
-  return deburr(str).toLocaleLowerCase();
-}
-
-function createSearch(songs: SongDocument[]) {
+function createSearch() {
   const search = new MiniSearch<SongSearchDocument>({
     fields: ['title', 'authors', 'lyrics'],
-    processTerm: escape,
     searchOptions: {
-      processTerm: escape,
+      boost: { title: 2 },
     },
   });
-
-  search.addAll(
-    songs.map(({ id, title, authors, lyrics }) => ({
-      id,
-      title,
-      authors,
-      lyrics: lyrics.map((part) => part.text).join(' '),
-    })),
-  );
 
   return search;
 }
@@ -61,13 +47,44 @@ function Songs() {
   const songs = useAppSelector(selectAllSongs);
   const dispatch = useAppDispatch();
   const [expanded, setExpanded] = useState<false | string>(false);
-  const [query, setQuery] = useState('');
-  const [searchInLyrics, setSearchInLyrics] = useState(true);
-  const [search, setSearch] = useState(createSearch(songs));
+  const [results, setResults] = useState<SongDocument[]>([]);
 
-  const handleSearchChange = debounce((event) => {
-    setQuery(event.target.value);
-  }, 200);
+  const search = useMemo(() => createSearch(), []);
+
+  const { control, getValues, watch } = useForm<{
+    query: string;
+    includeLyrics: boolean;
+  }>({
+    mode: 'onChange',
+    defaultValues: {
+      includeLyrics: true,
+    },
+  });
+
+  const handleFilter = useMemo(
+    () =>
+      debounce(() => {
+        if (!getValues('query')) {
+          setResults(sortBy(songs, 'title'));
+          return;
+        }
+
+        const hits = search.search(getValues('query'), {
+          prefix: true,
+          fields: ['title', 'authors'].concat(
+            getValues('includeLyrics') ? ['lyrics'] : [],
+          ),
+        });
+
+        setResults(
+          hits.reduce<SongDocument[]>((acc, hit) => {
+            const song = songs.find((item) => item.id === hit.id);
+            return song ? acc.concat(song) : acc;
+          }, []),
+        );
+      }, 500),
+    [getValues, search, songs],
+  );
 
   useEffect(() => {
     if (songsStatus === 'idle') {
@@ -77,24 +94,25 @@ function Songs() {
 
   useEffect(() => {
     if (songsStatus === 'success') {
-      setSearch(createSearch(songs));
+      search.addAll(
+        songs.map(({ id, title, authors, lyrics }) => ({
+          id,
+          title,
+          authors,
+          lyrics: lyrics.map((part) => part.text).join(' '),
+        })),
+      );
+
+      handleFilter();
     }
-  }, [searchInLyrics, songs, songsStatus]);
+  }, [handleFilter, search, songs, songsStatus]);
 
-  let filteredSongs = songs;
-
-  if (query) {
-    const results = search
-      .search(query, {
-        prefix: true,
-        fields: ['title', 'authors'].concat(searchInLyrics ? ['lyrics'] : []),
-      })
-      .map(({ id }) => id);
-
-    filteredSongs = filteredSongs.filter((song) => results.includes(song.id));
-  }
-
-  filteredSongs = sortBy(filteredSongs, 'title');
+  useEffect(() => {
+    const subscription = watch(() => {
+      handleFilter();
+    });
+    return () => subscription.unsubscribe();
+  }, [getValues, handleFilter, search, songs, watch]);
 
   const renderSongDetails = (song: SongDocument) => {
     const details = [];
@@ -132,29 +150,38 @@ function Songs() {
         px={2}
         py={0.5}
       >
-        <InputBase
-          placeholder="Recherche"
-          fullWidth
-          onChange={handleSearchChange}
+        <Controller
+          control={control}
+          name="query"
+          defaultValue=""
+          render={({ field }) => (
+            <InputBase placeholder="Recherche" fullWidth {...field} />
+          )}
         />
       </Box>
       <FormGroup row>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={searchInLyrics}
-              icon={<CheckBoxOutlineBlank fontSize="small" />}
-              checkedIcon={<CheckBox fontSize="small" />}
-              onChange={() => setSearchInLyrics(!searchInLyrics)}
+        <Controller
+          control={control}
+          name="includeLyrics"
+          render={({ field: { value, onChange } }) => (
+            <FormControlLabel
+              label="Rechercher dans les paroles"
+              control={
+                <Checkbox
+                  checked={value}
+                  icon={<CheckBoxOutlineBlank fontSize="small" />}
+                  checkedIcon={<CheckBox fontSize="small" />}
+                  onChange={onChange}
+                />
+              }
             />
-          }
-          label="Rechercher dans les paroles"
+          )}
         />
       </FormGroup>
     </Box>
   );
 
-  if (songsStatus !== 'success') {
+  if (songsStatus !== 'success' || search.documentCount === 0) {
     return (
       <Box display="flex" justifyContent="center" m={5}>
         <BeatLoader color="#DDD" />
@@ -167,7 +194,11 @@ function Songs() {
       {renderToolbar()}
 
       <Box>
-        {filteredSongs.map((song) => (
+        {results.length === 0 && (
+          <Typography fontStyle="italic">Aucun résultat</Typography>
+        )}
+
+        {results.map((song) => (
           <Accordion
             key={song.id}
             elevation={0}
