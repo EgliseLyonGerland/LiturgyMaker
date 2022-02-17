@@ -27,14 +27,10 @@ function LyricsField({ name, disabled = false }: FormFieldProps) {
               <>
                 <TextField
                   rows={6}
-                  label={`Paroles #${index + 1}`}
+                  // label={`Paroles #${index + 1}`}
                   variant="filled"
                   placeholder="Lorem ipsum dolor sit amet..."
                   disabled={disabled}
-                  // style={{
-                  //   lineHeight: 1.5,
-                  //   fontSize: 18,
-                  // }}
                   fullWidth
                   multiline
                   {...field}

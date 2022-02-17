@@ -71,6 +71,9 @@ function SongEdit() {
   const form = useForm<SongDocument>({
     mode: 'onChange',
     resolver: yupResolver(songSchema),
+    defaultValues: {
+      lyrics: [{ text: '', type: 'verse' }],
+    },
   });
   const {
     reset,
@@ -81,7 +84,12 @@ function SongEdit() {
   const handleSubmit = async (data: SongDocument) => {
     setPersisting(true);
 
-    await dispatch(persistSong(data));
+    const { payload } = await dispatch(
+      persistSong({
+        ...data,
+        lyrics: data.lyrics.filter((part) => part.text.trim() !== ''),
+      }),
+    );
 
     setPersisted(true);
     setPersisting(false);
@@ -95,7 +103,12 @@ function SongEdit() {
 
   useEffect(() => {
     if (song) {
-      reset(song);
+      reset({
+        ...song,
+        lyrics: song.lyrics.length
+          ? song.lyrics
+          : [{ text: '', type: 'verse' }],
+      });
     }
   }, [song, reset]);
 
