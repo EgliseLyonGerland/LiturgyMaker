@@ -119,8 +119,8 @@ function generateRecitationBlockCode({
   const arg = {
     title: recitation.title,
     background: currentSongBackground,
-    lyrics: recitation.content.map(({ text, italic = false }) => ({
-      type: italic ? 'chorus' : 'verse',
+    lyrics: recitation.content.map(({ text }) => ({
+      type: 'verse',
       text,
     })),
   };

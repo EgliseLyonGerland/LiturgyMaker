@@ -3,7 +3,15 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
-import { collection, getDocs, query } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+} from 'firebase/firestore';
+import { cloneDeep } from 'lodash';
 import { normalize, schema } from 'normalizr';
 
 import { db } from '../../firebase';
@@ -27,9 +35,29 @@ export const fetchRecitations = createAsyncThunk(
         recitations: Record<string, RecitationDocument>;
       }
     >(
-      docs.map((doc) => ({ id: doc.id, ...doc.data() })),
+      docs.map((item) => ({ id: item.id, ...item.data() })),
       recitationsEntity,
     ).entities;
+  },
+);
+
+export const persistRecitation = createAsyncThunk(
+  'recitations/persistRecitation',
+  async (recitation: RecitationDocument) => {
+    const { id, ...data } = recitation;
+
+    if (!id) {
+      const ref = await addDoc(collection(db, 'recitations'), data);
+
+      return {
+        id: ref.id,
+        ...cloneDeep(data),
+      };
+    }
+
+    await setDoc(doc(db, 'recitations', id), data);
+
+    return cloneDeep(recitation);
   },
 );
 
@@ -49,6 +77,9 @@ const recitationsSlice = createSlice({
     });
     builder.addCase(fetchRecitations.rejected, (state) => {
       state.status = 'fail';
+    });
+    builder.addCase(persistRecitation.fulfilled, (state, action) => {
+      recitationsAdapter.upsertOne(state, action.payload);
     });
   },
 });

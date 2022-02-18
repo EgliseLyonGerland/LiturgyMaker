@@ -10,6 +10,8 @@ import { getNextLiturgyId } from '../utils/liturgy';
 const LiturgyEditPage = lazy(() => import('./LiturgyEdit'));
 const SongsPage = lazy(() => import('./Songs'));
 const SongEditPage = lazy(() => import('./SongEdit'));
+const RecitationsPage = lazy(() => import('./Recitations'));
+const RecitationEditPage = lazy(() => import('./RecitationEdit'));
 const SlideshowPage = lazy(() => import('./Slideshow'));
 
 function Suspensed({ children }: { children: JSX.Element }) {
@@ -71,6 +73,30 @@ function Main() {
           element={
             <Suspensed>
               <SongEditPage />
+            </Suspensed>
+          }
+        />
+        <Route
+          path="/recitations"
+          element={
+            <Suspensed>
+              <RecitationsPage />
+            </Suspensed>
+          }
+        />
+        <Route
+          path="/recitations/:recitationId/edit"
+          element={
+            <Suspensed>
+              <RecitationEditPage />
+            </Suspensed>
+          }
+        />
+        <Route
+          path="/recitations/new"
+          element={
+            <Suspensed>
+              <RecitationEditPage />
             </Suspensed>
           }
         />

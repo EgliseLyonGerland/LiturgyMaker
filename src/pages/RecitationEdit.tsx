@@ -9,12 +9,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 
 import TextFieldControl from '../components/controls/TextFieldControl';
-import LyricsField from '../components/fields/LyricsField';
 import SaveButton from '../components/SaveButton';
-import { songSchema } from '../config/schemas';
-import { fetchSongs, persistSong, selectSongById } from '../redux/slices/songs';
+import { recitationSchema } from '../config/schemas';
+import {
+  fetchRecitations,
+  persistRecitation,
+  selectRecitationById,
+} from '../redux/slices/recitations';
 import { useAppDispatch, useAppSelector } from '../redux/store';
-import type { SongDocument } from '../types';
+import type { RecitationDocument } from '../types';
 
 function Block({
   header = '',
@@ -57,22 +60,22 @@ function Block({
   );
 }
 
-function SongEdit() {
+function RecitationEdit() {
   const params = useParams();
   const navigate = useNavigate();
-  const songsStatus = useAppSelector((state) => state.songs.status);
-  const song = useAppSelector((state) =>
-    selectSongById(state, `${params.songId}`),
+  const recitationsStatus = useAppSelector((state) => state.recitations.status);
+  const recitation = useAppSelector((state) =>
+    selectRecitationById(state, `${params.recitationId}`),
   );
   const dispatch = useAppDispatch();
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(false);
 
-  const form = useForm<SongDocument>({
+  const form = useForm<RecitationDocument>({
     mode: 'onChange',
-    resolver: yupResolver(songSchema),
+    resolver: yupResolver(recitationSchema),
     defaultValues: {
-      lyrics: [{ text: '', type: 'verse' }],
+      content: [{ text: '' }],
     },
   });
   const {
@@ -81,44 +84,39 @@ function SongEdit() {
     formState: { isDirty, isSubmitting },
   } = form;
 
-  const handleSubmit = async (data: SongDocument) => {
+  const handleSubmit = async (data: RecitationDocument) => {
     setPersisting(true);
 
-    const { payload } = await dispatch(
-      persistSong({
-        ...data,
-        lyrics: data.lyrics.filter((part) => part.text.trim() !== ''),
-      }),
-    );
+    const { payload } = await dispatch(persistRecitation(data));
 
     setPersisted(true);
     setPersisting(false);
 
-    if (!params.songId) {
-      navigate(`/songs/${(payload as SongDocument).id}/edit`, {
+    if (!params.recitationId) {
+      navigate(`/recitations/${(payload as RecitationDocument).id}/edit`, {
         replace: true,
       });
     }
   };
 
   useEffect(() => {
-    if (song) {
+    if (recitation) {
       reset({
-        ...song,
-        lyrics: song.lyrics.length
-          ? song.lyrics
-          : [{ text: '', type: 'verse' }],
+        ...recitation,
+        content: recitation.content.length
+          ? recitation.content
+          : [{ text: '' }],
       });
     }
-  }, [song, reset]);
+  }, [recitation, reset]);
 
   useEffect(() => {
-    if (songsStatus === 'idle') {
-      dispatch(fetchSongs());
+    if (recitationsStatus === 'idle') {
+      dispatch(fetchRecitations());
     }
-  }, [dispatch, songsStatus]);
+  }, [dispatch, recitationsStatus]);
 
-  if (params.songId && !song) {
+  if (params.recitationId && !recitation) {
     return (
       <Box display="flex" justifyContent="center" m={5}>
         <BeatLoader color="#DDD" />
@@ -135,38 +133,18 @@ function SongEdit() {
             label="Titre"
             disabled={isSubmitting}
           />
-          <TextFieldControl name="aka" label="AKA" disabled={isSubmitting} />
           <TextFieldControl
-            name="authors"
-            label="Auteurs"
-            helperText="Séparés par une virgule (ex. Paul Baloche, Matt Redman)"
+            name="content"
+            label="Texte"
+            multiline
             disabled={isSubmitting}
+            transformIn={(data: RecitationDocument['content']) =>
+              data.map((item) => item.text).join('\n\n')
+            }
+            transformOut={(data): RecitationDocument['content'] =>
+              data.split(/\n{2,}/).map((text) => ({ text })) || []
+            }
           />
-          <TextFieldControl
-            name="number"
-            label="Position dans le recueil"
-            disabled={isSubmitting}
-            transformOut={(value) => (value === '' ? null : value)}
-          />
-          <TextFieldControl
-            name="copyright"
-            label="Copyright"
-            disabled={isSubmitting}
-          />
-          <TextFieldControl
-            name="translation"
-            label="Traduction"
-            disabled={isSubmitting}
-          />
-          <TextFieldControl
-            name="collection"
-            label="Collections"
-            helperText="Séparées par une virgule (ex. ARC 123, JEM 456)"
-            disabled={isSubmitting}
-          />
-        </Block>
-        <Block header="Paroles" mt={5}>
-          <LyricsField name="lyrics" disabled={isSubmitting} />
         </Block>
 
         <SaveButton
@@ -181,4 +159,4 @@ function SongEdit() {
   );
 }
 
-export default SongEdit;
+export default RecitationEdit;

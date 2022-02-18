@@ -136,3 +136,12 @@ export const songSchema = yup.object().shape({
     }),
   ),
 });
+
+export const recitationSchema = yup.object().shape({
+  title: yup.string().required(),
+  content: yup.array().of(
+    yup.object().shape({
+      text: yup.string(),
+    }),
+  ),
+});

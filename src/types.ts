@@ -84,7 +84,7 @@ export interface LiturgyDocument {
 export interface RecitationDocument {
   id: string;
   title: string;
-  content: { text: string; italic: boolean }[];
+  content: { text: string }[];
 }
 
 export type LyricType = 'verse' | 'chorus';

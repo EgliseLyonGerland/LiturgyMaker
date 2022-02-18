@@ -12,6 +12,7 @@ function MainLayout() {
         links={[
           { title: 'Liturgies', path: '/' },
           { title: 'Chants', path: '/songs' },
+          { title: 'Récitations', path: '/recitations' },
         ]}
       />
 
