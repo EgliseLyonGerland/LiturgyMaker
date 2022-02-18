@@ -41,7 +41,10 @@ function BlocksField({
   const theme = useTheme();
   const isMediumAndUp = useMediaQuery(theme.breakpoints.up('md'));
   const { register } = useFormContext();
-  const { fields, insert, remove } = useFieldArray({ name });
+  const { fields, insert, remove } = useFieldArray({
+    name,
+    keyName: 'key',
+  });
 
   const showPreview = isMediumAndUp && slideshowEnabled;
 
@@ -85,8 +88,8 @@ function BlocksField({
           insert(0, createDefaultBlock(type));
         }}
       />
-      {fields.map(({ id, ...block }, index) => (
-        <div key={id}>
+      {fields.map(({ key, ...block }, index) => (
+        <div key={key}>
           {/* @todo: remove the `as` flag */}
           {renderBlock(block as LiturgyBlock, index)}
 
