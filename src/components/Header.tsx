@@ -62,7 +62,7 @@ function Header({ links, ...props }: Props) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '100%',
-                mx: 2,
+                mx: [1, 2],
               }}
             >
               <Box component="img" src={logo} alt="Logo" sx={{ height: 32 }} />
@@ -85,7 +85,7 @@ function Header({ links, ...props }: Props) {
                 component={NavLink}
                 key={link.path}
                 to={link.path}
-                sx={{ color: 'text.secondary' }}
+                sx={{ color: 'text.secondary', px: [1, 2] }}
               >
                 <Typography textAlign="center">{link.title}</Typography>
               </MenuItem>
