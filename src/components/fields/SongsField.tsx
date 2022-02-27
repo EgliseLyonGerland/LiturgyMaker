@@ -172,6 +172,18 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
               </Typography>
             </Box>
 
+            {song.previewUrl && (
+              <Box mb={4}>
+                <iframe
+                  title={`${song.title} preview`}
+                  frameBorder="0"
+                  width="100%"
+                  height="140"
+                  src={song.previewUrl.replace('/view', '/preview')}
+                />
+              </Box>
+            )}
+
             {song.lyrics.length ? (
               song.lyrics.map(({ text, type }, index) => (
                 <Box
