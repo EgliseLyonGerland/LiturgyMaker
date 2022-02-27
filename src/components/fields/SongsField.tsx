@@ -4,9 +4,8 @@ import {
   TextField,
   Box,
   Typography,
-  alpha,
   Button,
-  Tooltip,
+  SwipeableDrawer,
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import Checkbox from '@mui/material/Checkbox';
@@ -25,9 +24,21 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
   const songs = useSelector(selectAllSongs);
   const [showLyrics, setShowLyrics] = useState(false);
   const id = useWatch({ name: `${name}.id` });
-
   const song = find(songs, ['id', id]);
-  const hasLyrics = song && song.lyrics.length > 0;
+
+  const toggleLyrics =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event &&
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
+
+      setShowLyrics(open);
+    };
 
   return (
     <div>
@@ -120,86 +131,66 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
         {song && (
           <Box sx={{ marginLeft: 'auto' }}>
             <span>
-              <Button
-                size="small"
-                disabled={!hasLyrics}
-                onClick={() => {
-                  setShowLyrics(!showLyrics);
-                }}
-              >
-                {(() => {
-                  if (!hasLyrics) {
-                    return 'Aucune parole';
-                  }
-
-                  return showLyrics
-                    ? 'Masquer les paroles'
-                    : 'Afficher les paroles';
-                })()}
+              <Button size="small" onClick={toggleLyrics(true)}>
+                Informations
               </Button>
             </span>
           </Box>
         )}
       </Box>
 
-      {hasLyrics && showLyrics && (
-        <Box
-          sx={{
-            my: 1,
-            mx: -3,
-            p: 3,
-            columnCount: 2,
-            columnGap: 2,
-            background: alpha('#000', 0.2),
-          }}
-        >
-          {song.lyrics.map(({ text, type }, index) => (
-            <Box
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
-              sx={{
-                mb: 2,
-                breakInside: 'avoid',
-                pageBreakInside: 'avoid',
-                overflowX: 'hidden',
-                maskImage:
-                  'linear-gradient(to left, transparent 0%, black 10%)',
-
-                '&:last-of-type': { m: 0 },
-              }}
-            >
-              <Typography
-                component="div"
-                sx={{
-                  whiteSpace: 'pre',
-                  ...(type === 'chorus'
-                    ? {
-                        fontStyle: 'italic',
-                        fontFamily: 'Adobe Hebrew',
-                        opacity: 0.8,
-                      }
-                    : {}),
-                }}
-              >
-                {text.split('\n').map((line) => (
-                  <Tooltip
-                    key={line}
-                    title={line}
-                    followCursor
-                    enterDelay={1000}
-                    sx={{
-                      maxWidth: 'none',
-                      background: 'ocean',
-                    }}
-                  >
-                    <div>{line}</div>
-                  </Tooltip>
-                ))}
+      <SwipeableDrawer
+        anchor="right"
+        open={showLyrics}
+        onOpen={toggleLyrics(true)}
+        onClose={toggleLyrics(false)}
+      >
+        {song && (
+          <Box sx={{ maxWidth: 450, width: '95vw', p: 2 }}>
+            <Box mb={4}>
+              <Typography component="span" fontSize="1.2em">
+                <b>{song.title}</b>
+                {song.aka ? ` (${song.aka})` : ''}
+              </Typography>
+              <Typography color="textSecondary" component="span">
+                {song.number ? ` (${song.number})` : ''}
+              </Typography>
+              <Typography color="textSecondary" variant="body2" mt={1}>
+                {song.authors || <i>Aucun auteur</i>}
               </Typography>
             </Box>
-          ))}
-        </Box>
-      )}
+
+            {song.lyrics.length ? (
+              song.lyrics.map(({ text, type }, index) => (
+                <Box
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  mb={2}
+                >
+                  <Typography
+                    component="div"
+                    sx={{
+                      whiteSpace: 'pre',
+                      ...(type === 'chorus'
+                        ? {
+                            fontStyle: 'italic',
+                            fontFamily: 'Adobe Hebrew',
+                          }
+                        : {}),
+                    }}
+                  >
+                    {text.split('\n').map((line) => (
+                      <div key={line}>{line}</div>
+                    ))}
+                  </Typography>
+                </Box>
+              ))
+            ) : (
+              <Box sx={{ fontStyle: 'italic' }}>Aucune parole</Box>
+            )}
+          </Box>
+        )}
+      </SwipeableDrawer>
     </div>
   );
 }
