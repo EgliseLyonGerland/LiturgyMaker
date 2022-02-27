@@ -129,6 +129,7 @@ export const songSchema = yup.object().shape({
   copyright: yup.string().nullable(),
   translation: yup.string().nullable(),
   collection: yup.string().nullable(),
+  previewUrl: yup.string().url(),
   lyrics: yup.array().of(
     yup.object().shape({
       text: yup.string(),

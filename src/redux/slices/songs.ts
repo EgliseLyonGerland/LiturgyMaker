@@ -26,6 +26,7 @@ const defaultSong: SongDocument = {
   collection: '',
   translation: '',
   number: '',
+  previewUrl: '',
   lyrics: [],
 };
 

@@ -165,6 +165,14 @@ function SongEdit() {
             disabled={isSubmitting}
           />
         </Block>
+        <Block header="Liens" mt={5}>
+          <TextFieldControl
+            name="previewUrl"
+            label="Lien de l'aperçu audio"
+            helperText="URL du fichier Google Drive"
+            disabled={isSubmitting}
+          />
+        </Block>
         <Block header="Paroles" mt={5}>
           <LyricsField name="lyrics" disabled={isSubmitting} />
         </Block>

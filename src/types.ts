@@ -103,6 +103,7 @@ export interface SongDocument {
   collection: string;
   translation: string;
   number: string;
+  previewUrl: string;
   lyrics: LyricPart[];
 }
 
