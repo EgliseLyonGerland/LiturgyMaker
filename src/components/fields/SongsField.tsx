@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 
+import { InfoTwoTone } from '@mui/icons-material';
 import {
   TextField,
   Box,
   Typography,
   Button,
   SwipeableDrawer,
+  useMediaQuery,
+  useTheme,
+  IconButton,
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import Checkbox from '@mui/material/Checkbox';
@@ -24,6 +28,8 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
   const songs = useSelector(selectAllSongs);
   const [showLyrics, setShowLyrics] = useState(false);
   const id = useWatch({ name: `${name}.id` });
+  const theme = useTheme();
+  const upSmall = useMediaQuery(theme.breakpoints.up('sm'));
   const song = find(songs, ['id', id]);
 
   const toggleLyrics =
@@ -131,9 +137,15 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
         {song && (
           <Box sx={{ marginLeft: 'auto' }}>
             <span>
-              <Button size="small" onClick={toggleLyrics(true)}>
-                Informations
-              </Button>
+              {upSmall ? (
+                <Button size="small" onClick={toggleLyrics(true)}>
+                  Informations
+                </Button>
+              ) : (
+                <IconButton size="small" onClick={toggleLyrics(true)}>
+                  <InfoTwoTone />
+                </IconButton>
+              )}
             </span>
           </Box>
         )}
@@ -146,7 +158,7 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
         onClose={toggleLyrics(false)}
       >
         {song && (
-          <Box sx={{ maxWidth: 450, width: '95vw', p: 2 }}>
+          <Box sx={{ maxWidth: 450, width: '90vw', p: 2 }}>
             <Box mb={4}>
               <Typography component="span" fontSize="1.2em">
                 <b>{song.title}</b>
