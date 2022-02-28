@@ -4,9 +4,7 @@ import { InfoTwoTone } from '@mui/icons-material';
 import {
   TextField,
   Box,
-  Typography,
   Button,
-  SwipeableDrawer,
   useMediaQuery,
   useTheme,
   IconButton,
@@ -23,28 +21,15 @@ import { selectAllSongs } from '../../redux/slices/songs';
 import type { FormFieldProps, SongsItem } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';
+import SongDetails from '../SongDetails';
 
 function Item({ name, disabled }: { name: string; disabled: boolean }) {
   const songs = useSelector(selectAllSongs);
-  const [showLyrics, setShowLyrics] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const id = useWatch({ name: `${name}.id` });
   const theme = useTheme();
   const upSmall = useMediaQuery(theme.breakpoints.up('sm'));
   const song = find(songs, ['id', id]);
-
-  const toggleLyrics =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event &&
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' ||
-          (event as React.KeyboardEvent).key === 'Shift')
-      ) {
-        return;
-      }
-
-      setShowLyrics(open);
-    };
 
   return (
     <div>
@@ -138,11 +123,11 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
           <Box sx={{ marginLeft: 'auto' }}>
             <span>
               {upSmall ? (
-                <Button size="small" onClick={toggleLyrics(true)}>
+                <Button size="small" onClick={() => setShowDetails(true)}>
                   Informations
                 </Button>
               ) : (
-                <IconButton size="small" onClick={toggleLyrics(true)}>
+                <IconButton size="small" onClick={() => setShowDetails(true)}>
                   <InfoTwoTone />
                 </IconButton>
               )}
@@ -151,70 +136,13 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
         )}
       </Box>
 
-      <SwipeableDrawer
-        anchor="right"
-        open={showLyrics}
-        onOpen={toggleLyrics(true)}
-        onClose={toggleLyrics(false)}
-      >
-        {song && (
-          <Box sx={{ maxWidth: 450, width: '90vw', p: 2 }}>
-            <Box mb={4}>
-              <Typography component="span" fontSize="1.2em">
-                <b>{song.title}</b>
-                {song.aka ? ` (${song.aka})` : ''}
-              </Typography>
-              <Typography color="textSecondary" component="span">
-                {song.number ? ` (${song.number})` : ''}
-              </Typography>
-              <Typography color="textSecondary" variant="body2" mt={1}>
-                {song.authors || <i>Aucun auteur</i>}
-              </Typography>
-            </Box>
-
-            {song.previewUrl && (
-              <Box mb={4}>
-                <iframe
-                  title={`${song.title} preview`}
-                  frameBorder="0"
-                  width="100%"
-                  height="140"
-                  src={song.previewUrl.replace('/view', '/preview')}
-                />
-              </Box>
-            )}
-
-            {song.lyrics.length ? (
-              song.lyrics.map(({ text, type }, index) => (
-                <Box
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={index}
-                  mb={2}
-                >
-                  <Typography
-                    component="div"
-                    sx={{
-                      whiteSpace: 'pre',
-                      ...(type === 'chorus'
-                        ? {
-                            fontStyle: 'italic',
-                            fontFamily: 'Adobe Hebrew',
-                          }
-                        : {}),
-                    }}
-                  >
-                    {text.split('\n').map((line) => (
-                      <div key={line}>{line}</div>
-                    ))}
-                  </Typography>
-                </Box>
-              ))
-            ) : (
-              <Box sx={{ fontStyle: 'italic' }}>Aucune parole</Box>
-            )}
-          </Box>
-        )}
-      </SwipeableDrawer>
+      {song && (
+        <SongDetails
+          data={song}
+          open={showDetails}
+          onClose={() => setShowDetails(false)}
+        />
+      )}
     </div>
   );
 }

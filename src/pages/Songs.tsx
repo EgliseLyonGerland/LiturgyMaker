@@ -2,26 +2,24 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box,
   Button,
+  ButtonBase,
   Checkbox,
   Container,
   FormControlLabel,
   FormGroup,
   InputBase,
   Typography,
-  useTheme,
 } from '@mui/material';
 import debounce from 'lodash/debounce';
 import sortBy from 'lodash/sortBy';
 import MiniSearch from 'minisearch';
 import { Controller, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 
+import SongDetails from '../components/SongDetails';
 import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import type { SongDocument } from '../types';
@@ -42,12 +40,12 @@ function createSearch() {
 }
 
 function Songs() {
-  const theme = useTheme();
   const songsStatus = useAppSelector((state) => state.songs.status);
   const songs = useAppSelector(selectAllSongs);
   const dispatch = useAppDispatch();
-  const [expanded, setExpanded] = useState<false | string>(false);
   const [results, setResults] = useState<SongDocument[]>([]);
+  const [songDetails, setSongDetails] = useState<SongDocument | null>(null);
+  const navigate = useNavigate();
 
   const search = useMemo(() => createSearch(), []);
 
@@ -114,30 +112,6 @@ function Songs() {
     return () => subscription.unsubscribe();
   }, [getValues, handleFilter, search, songs, watch]);
 
-  const renderSongDetails = (song: SongDocument) => {
-    const details = [];
-
-    if (song.copyright) {
-      details.push(`© ${song.copyright}`);
-    }
-    if (song.collection) {
-      details.push(song.collection);
-    }
-    if (song.translation) {
-      details.push(`Traduit par ${song.translation}`);
-    }
-
-    if (details.length === 0) {
-      return null;
-    }
-
-    return (
-      <Typography component="span" color="textSecondary" variant="body2">
-        {details.join(' – ')}
-      </Typography>
-    );
-  };
-
   const renderToolbar = () => (
     <Box display="flex" sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
       <Box
@@ -201,6 +175,12 @@ function Songs() {
 
   return (
     <Container maxWidth="md">
+      <SongDetails
+        data={songDetails}
+        open={Boolean(songDetails)}
+        onClose={() => setSongDetails(null)}
+      />
+
       {renderToolbar()}
 
       <Box>
@@ -208,46 +188,22 @@ function Songs() {
           <Typography fontStyle="italic">Aucun résultat</Typography>
         )}
 
-        {results.map((song) => (
-          <Accordion
-            key={song.id}
-            elevation={0}
-            expanded={expanded === song.id}
-            sx={{
-              padding: theme.spacing(2, 4),
-
-              '&:first-of-type': {
-                borderTopLeftRadius: theme.spacing(0.5),
-                borderTopRightRadius: theme.spacing(0.5),
-                paddingTop: theme.spacing(3),
-              },
-              '&:last-child': {
-                borderBottomLeftRadius: theme.spacing(0.5),
-                borderBottomRightRadius: theme.spacing(0.5),
-                paddingBottom: theme.spacing(3),
-              },
-              '& .MuiAccordion-expanded': {
-                borderRadius: 16,
-                padding: theme.spacing(4),
-              },
-            }}
-            onChange={(event, isExpanded) => {
-              setExpanded(isExpanded ? song.id : false);
-            }}
-          >
-            <AccordionSummary
+        <Box
+          bgcolor="paper.background.main"
+          border="solid 1px"
+          borderRadius="4px"
+          borderColor="paper.border"
+          boxShadow="4px 4px 10px rgba(0,0,0,0.05)"
+        >
+          {results.map((song) => (
+            <ButtonBase
+              component="div"
+              onClick={() => setSongDetails(song)}
               sx={{
-                padding: 0,
-
-                '& .MuiAccordionSummary-content': {
-                  margin: 0,
-                },
-                '& .MuiAccordionSummary-expanded': {
-                  '&&': {
-                    margin: 0,
-                    minHeight: 'auto',
-                  },
-                },
+                display: 'flex',
+                p: 2,
+                borderBottom: 'solid 1px',
+                borderColor: 'paper.border',
               }}
             >
               <Box>
@@ -268,41 +224,16 @@ function Songs() {
               </Box>
               <Box ml="auto" alignSelf="center">
                 <Button
-                  component={Link}
-                  to={`/songs/${song.id}/edit`}
                   size="small"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={() => navigate(`/songs/${song.id}/edit`)}
                 >
                   Édtier
                 </Button>
               </Box>
-            </AccordionSummary>
-            <AccordionDetails sx={{ padding: 0, display: 'block' }}>
-              {renderSongDetails(song)}
-
-              <Box mt={2} style={{ columnCount: 2, columnGap: 32 }}>
-                {song.lyrics.length ? (
-                  song.lyrics.map(({ text, type }, index) => (
-                    <Box
-                      // eslint-disable-next-line react/no-array-index-key
-                      key={index}
-                      whiteSpace="pre"
-                      fontStyle={type === 'chorus' ? 'italic' : 'normal'}
-                      mb={2}
-                      style={{
-                        breakInside: 'avoid',
-                        pageBreakInside: 'avoid',
-                      }}
-                    >
-                      <Typography>{text}</Typography>
-                    </Box>
-                  ))
-                ) : (
-                  <i>Aucune parole</i>
-                )}
-              </Box>
-            </AccordionDetails>
-          </Accordion>
-        ))}
+            </ButtonBase>
+          ))}
+        </Box>
       </Box>
     </Container>
   );

@@ -37,7 +37,7 @@ const lightPalette = {
       dark: darken(paper.light, 0.1),
     },
     header: darken(paper.light, 0.07),
-    border: 'transparent',
+    border: alpha('#000', 0.03),
   },
 };
 
