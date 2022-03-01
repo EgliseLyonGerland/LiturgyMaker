@@ -88,7 +88,7 @@ function generateSongsBlockCode({
         translation: song.translation || '',
         repeat: !!datum.repeat,
         background: 'green',
-        lyrics: song.lyrics,
+        lyrics: datum.lyrics || song.lyrics,
       };
 
       changeBackground();

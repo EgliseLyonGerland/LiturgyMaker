@@ -53,6 +53,7 @@ export interface SongsItem {
   id: string;
   infos: string;
   repeat: boolean;
+  lyrics: SongDocument['lyrics'] | null;
 }
 
 export interface SongsBlockData {
