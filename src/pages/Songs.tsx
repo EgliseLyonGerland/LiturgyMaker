@@ -197,6 +197,7 @@ function Songs() {
         >
           {results.map((song) => (
             <ButtonBase
+              key={song.id}
               component="div"
               onClick={() => setSongDetails(song)}
               sx={{
