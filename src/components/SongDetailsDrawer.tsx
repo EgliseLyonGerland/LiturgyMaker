@@ -10,7 +10,7 @@ interface Props {
   onClose: () => void;
 }
 
-function SongDetails({ data, open, onClose }: Props) {
+function SongDetailsDrawer({ data, open, onClose }: Props) {
   return (
     <Portal>
       <Drawer anchor="right" open={open} onClose={onClose}>
@@ -78,4 +78,4 @@ function SongDetails({ data, open, onClose }: Props) {
   );
 }
 
-export default SongDetails;
+export default SongDetailsDrawer;

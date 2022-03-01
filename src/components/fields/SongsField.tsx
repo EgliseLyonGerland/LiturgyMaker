@@ -21,7 +21,7 @@ import { selectAllSongs } from '../../redux/slices/songs';
 import type { FormFieldProps, SongsItem } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';
-import SongDetails from '../SongDetails';
+import SongDetailsDrawer from '../SongDetailsDrawer';
 
 function Item({ name, disabled }: { name: string; disabled: boolean }) {
   const songs = useSelector(selectAllSongs);
@@ -137,7 +137,7 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
       </Box>
 
       {song && (
-        <SongDetails
+        <SongDetailsDrawer
           data={song}
           open={showDetails}
           onClose={() => setShowDetails(false)}

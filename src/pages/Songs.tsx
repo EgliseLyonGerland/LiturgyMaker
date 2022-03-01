@@ -19,7 +19,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 
-import SongDetails from '../components/SongDetails';
+import SongDetailsDrawer from '../components/SongDetailsDrawer';
 import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import type { SongDocument } from '../types';
@@ -175,7 +175,7 @@ function Songs() {
 
   return (
     <Container maxWidth="md">
-      <SongDetails
+      <SongDetailsDrawer
         data={songDetails}
         open={Boolean(songDetails)}
         onClose={() => setSongDetails(null)}
