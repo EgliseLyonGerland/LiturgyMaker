@@ -16,7 +16,7 @@ function LyricsField({ name, disabled = false }: FormFieldProps) {
   return (
     <ArraySortableControl
       name={name}
-      gutters={5}
+      gutters={3}
       defaultItem={{ text: '', type: 'verse' }}
       disabled={disabled}
       renderItem={(item, index) => (
