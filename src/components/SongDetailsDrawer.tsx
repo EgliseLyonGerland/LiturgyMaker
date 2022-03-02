@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Drawer, Typography, Box, Button, Paper } from '@mui/material';
+import { Drawer, Typography, Box, Button, Paper, Alert } from '@mui/material';
 
 import type { SongDocument } from '../types';
 import LyricsEditDrawer from './LyricsEditDrawer';
@@ -9,8 +9,9 @@ interface Props {
   data: SongDocument | null;
   open: boolean;
   editable?: boolean;
+  overridedLyrics?: SongDocument['lyrics'] | null;
   onClose: () => void;
-  onLyricsChanged?: (lyrics: SongDocument['lyrics']) => void;
+  onLyricsChanged?: (lyrics: SongDocument['lyrics'] | null) => void;
 }
 
 const widthProps = {
@@ -24,19 +25,44 @@ function SongDetailsDrawer({
   data,
   open,
   editable = false,
+  overridedLyrics = null,
   onClose,
   onLyricsChanged = () => {},
 }: Props) {
   const [editing, setEditing] = useState(false);
 
+  const lyrics: SongDocument['lyrics'] = overridedLyrics || data?.lyrics || [];
+
   const renderLyrics = () => {
-    if (!data?.lyrics.length) {
+    if (!lyrics.length) {
       return <Box sx={{ fontStyle: 'italic' }}>Aucune parole</Box>;
     }
 
     return (
       <>
-        {data.lyrics.map(({ text, type }, index) => (
+        {overridedLyrics && (
+          <Alert
+            severity="warning"
+            variant="outlined"
+            sx={{ my: 2 }}
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  onLyricsChanged(null);
+                }}
+              >
+                Rétablir
+              </Button>
+            }
+          >
+            Les paroles qui s‘affichent ci-dessous correspondent à la version
+            modifiée.
+          </Alert>
+        )}
+
+        {lyrics.map(({ text, type }, index) => (
           <Box key={index} mb={2}>
             <Typography
               component="div"
@@ -131,9 +157,9 @@ function SongDetailsDrawer({
       {data && editable && (
         <LyricsEditDrawer
           open={editing}
-          lyrics={data?.lyrics}
-          onChange={(lyrics) => {
-            onLyricsChanged(lyrics);
+          lyrics={lyrics}
+          onChange={(newLyrics) => {
+            onLyricsChanged(newLyrics);
             setEditing(false);
           }}
           onClose={() => setEditing(false)}

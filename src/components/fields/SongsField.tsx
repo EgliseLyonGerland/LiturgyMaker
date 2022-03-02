@@ -163,11 +163,9 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
 
       {song && (
         <SongDetailsDrawer
-          data={{
-            ...song,
-            lyrics: lyrics || song.lyrics,
-          }}
+          data={song}
           open={showDetails}
+          overridedLyrics={lyrics}
           editable
           onClose={() => setShowDetails(false)}
           onLyricsChanged={(data) => {
