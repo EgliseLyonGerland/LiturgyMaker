@@ -20,7 +20,7 @@ import SongsField from './SongsField';
 interface Props {
   name: string;
   disabled: boolean;
-  onFillFromLastWeekClicked: (index: number) => void;
+  getPreviousWeekBlock: (index: number) => Promise<LiturgyBlock | null>;
 }
 
 const components: Record<BlockType, any> = {
@@ -33,15 +33,11 @@ const components: Record<BlockType, any> = {
   openDoors: memo(OpenDoorsField),
 };
 
-function BlocksField({
-  name,
-  disabled = false,
-  onFillFromLastWeekClicked,
-}: Props) {
+function BlocksField({ name, disabled = false, getPreviousWeekBlock }: Props) {
   const theme = useTheme();
   const isMediumAndUp = useMediaQuery(theme.breakpoints.up('md'));
   const { register } = useFormContext();
-  const { fields, insert, remove } = useFieldArray({
+  const { fields, insert, remove, update } = useFieldArray({
     name,
     keyName: 'key',
   });
@@ -63,7 +59,13 @@ function BlocksField({
             subtitle={block.title}
             disabled={disabled}
             onRemoveBlockClicked={() => remove(index)}
-            onFillFromLastWeekClicked={() => onFillFromLastWeekClicked(index)}
+            onFillFromLastWeekClicked={async () => {
+              const previousBlock = await getPreviousWeekBlock(index);
+
+              if (previousBlock) {
+                update(index, previousBlock);
+              }
+            }}
           >
             <input type="hidden" {...register(`${name}.${index}.type`)} />
             <input type="hidden" {...register(`${name}.${index}.title`)} />

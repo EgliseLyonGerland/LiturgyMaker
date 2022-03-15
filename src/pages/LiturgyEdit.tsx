@@ -36,7 +36,7 @@ import {
 } from '../redux/slices/recitations';
 import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
 import { useAppDispatch, useAppSelector } from '../redux/store';
-import type { LiturgyDocument } from '../types';
+import type { LiturgyBlock, LiturgyDocument } from '../types';
 import generateCode from '../utils/generateCode';
 import { converToDate, convertToId, getNextLiturgyId } from '../utils/liturgy';
 
@@ -69,7 +69,6 @@ function Form({
   const {
     handleSubmit: onSubmit,
     getValues: getFormValues,
-    setValue: setFormValue,
     reset: resetForm,
     formState: { isDirty },
     watch,
@@ -82,7 +81,12 @@ function Form({
     setPersisting(false);
   };
 
-  const handleFillFromLastWeek = async (index: number) => {
+  const getPreviousWeekBlock = async (
+    index: number,
+  ): Promise<LiturgyBlock | null> => {
+    const { blocks } = getFormValues();
+    const currentBlock = blocks[index];
+
     const previousDate = subDays(date, 7);
     const previousId = convertToId(previousDate);
 
@@ -91,16 +95,12 @@ function Form({
     const previousLiturgy = selectLiturgyById(store.getState(), previousId);
 
     if (!previousLiturgy) {
-      return;
+      return null;
     }
-
-    const { blocks } = getFormValues();
 
     if (!blocks) {
-      return;
+      return null;
     }
-
-    const currentBlock = blocks[index];
 
     const currentBlockNumber = blocks
       .filter((block) => block.type === currentBlock.type)
@@ -111,24 +111,12 @@ function Form({
     );
 
     if (sameTypeBlocks.length === 0) {
-      return;
+      return null;
     }
 
-    const previousBlock = cloneDeep(
+    return cloneDeep(
       sameTypeBlocks[currentBlockNumber] || sameTypeBlocks.pop(),
     );
-
-    Object.keys(previousBlock.data).forEach((key) => {
-      setFormValue(
-        `blocks.${index}.data.${key}` as 'blocks.0.data.items',
-        // @todo: remove `as` flag
-        previousBlock.data[key as never],
-        {
-          shouldDirty: true,
-          shouldValidate: true,
-        },
-      );
-    });
   };
 
   useEffect(() => {
@@ -154,7 +142,7 @@ function Form({
       <BlocksField
         name="blocks"
         disabled={persisting}
-        onFillFromLastWeekClicked={handleFillFromLastWeek}
+        getPreviousWeekBlock={getPreviousWeekBlock}
       />
       <SaveButton
         persisting={persisting}
