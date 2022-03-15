@@ -2,11 +2,8 @@ const firebase = require('firebase');
 const yargs = require('yargs');
 
 const firebaseConfig = require('../config/firebase.json');
-const blockCommand = require('./commands/block');
 const loginCommand = require('./commands/login');
 const logoutCommand = require('./commands/logout');
-const recitationCommand = require('./commands/recitation');
-const songCommand = require('./commands/song');
 const statsCommand = require('./commands/stats');
 const syncCommand = require('./commands/sync');
 const config = require('./utils/config');
@@ -14,7 +11,6 @@ const config = require('./utils/config');
 require('firebase/auth');
 require('firebase/firestore');
 
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 yargs
   .middleware((argv) => {
     // eslint-disable-next-line no-param-reassign
@@ -38,9 +34,6 @@ yargs
   })
   .command(loginCommand)
   .command(logoutCommand)
-  .command(songCommand)
-  .command(recitationCommand)
-  .command(blockCommand)
   .command(statsCommand)
   .command(syncCommand)
   .option('dev', {
@@ -51,4 +44,5 @@ yargs
   .demandCommand()
   .recommendCommands()
   .strict()
-  .help().argv;
+  .help()
+  .parse();
