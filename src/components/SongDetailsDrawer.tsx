@@ -4,6 +4,7 @@ import { Drawer, Typography, Box, Button, Paper, Alert } from '@mui/material';
 
 import type { SongDocument } from '../types';
 import LyricsEditDrawer from './LyricsEditDrawer';
+import SongPreview from './SongPreview';
 
 interface Props {
   data: SongDocument | null;
@@ -15,7 +16,7 @@ interface Props {
 }
 
 const widthProps = {
-  maxWidth: 450,
+  maxWidth: 600,
   width: '90vw',
 };
 
@@ -108,13 +109,7 @@ function SongDetailsDrawer({
 
         {data.previewUrl && (
           <Box mb={4}>
-            <iframe
-              title={`${data.title} preview`}
-              frameBorder="0"
-              width="100%"
-              height="140"
-              src={data.previewUrl.replace('/view', '/preview')}
-            />
+            <SongPreview title={data.title} url={data.previewUrl} />
           </Box>
         )}
 

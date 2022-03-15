@@ -169,7 +169,7 @@ function SongEdit() {
           <TextFieldControl
             name="previewUrl"
             label="Lien de l'aperçu audio"
-            helperText="URL du fichier Google Drive"
+            helperText="URL vers Google Drive, YouTube, DailyMotion, etc."
             disabled={isSubmitting}
           />
         </Block>
