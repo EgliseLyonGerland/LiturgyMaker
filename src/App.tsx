@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import * as Sentry from '@sentry/react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { auth } from './firebase';
@@ -17,6 +18,15 @@ function App() {
     () => (mode === 'dark' ? darkTheme : lightTheme),
     [mode],
   );
+
+  useEffect(() => {
+    if (user) {
+      Sentry.setUser({
+        email: user.email || 'unknown',
+        username: user.displayName || 'unknown',
+      });
+    }
+  }, [user]);
 
   if (loading) {
     return null;
