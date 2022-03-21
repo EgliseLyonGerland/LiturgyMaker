@@ -23,7 +23,17 @@ Sentry.init({
   tracesSampleRate: 1.0,
   environment: process.env.NODE_ENV,
   release: process.env.REACT_APP_REVISION || 'unknown',
+  debug: process.env.NODE_ENV !== 'production',
   enabled: process.env.NODE_ENV === 'production',
+  beforeSend(event) {
+    if (event.exception) {
+      Sentry.showReportDialog({
+        eventId: event.event_id,
+        user: { name: event.user?.username },
+      });
+    }
+    return event;
+  },
 });
 
 ReactDOM.render(

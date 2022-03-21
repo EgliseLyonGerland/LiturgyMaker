@@ -24,3 +24,7 @@ code {
 .reveal .slides > section {
   height: 100%;
 }
+
+.sentry-error-embed-wrapper {
+  z-index: 10000 !important;
+}
