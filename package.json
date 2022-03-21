@@ -73,7 +73,7 @@
     "postinstall": "husky install",
     "start": "react-scripts start",
     "start:server": "firebase emulators:start --import=.firebase/export",
-    "build": "react-scripts build",
+    "build": " REACT_APP_REVISION=$(git rev-parse HEAD) react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --max-warnings=0 .",

@@ -21,6 +21,8 @@ Sentry.init({
   dsn: 'https://7718d836108d482d812a93fd548ac9d3@o50300.ingest.sentry.io/5750589',
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
+  environment: process.env.NODE_ENV,
+  release: process.env.REACT_APP_REVISION || 'unknown',
   enabled: process.env.NODE_ENV === 'production',
 });
 

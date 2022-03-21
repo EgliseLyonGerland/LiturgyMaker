@@ -1,0 +1,25 @@
+name: Create a Sentry release
+
+on:
+  push:
+    branches: [master]
+
+env:
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+  SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --frozen
+      - run: yarn build
+      - uses: getsentry/action-release@v1
+        with:
+          environment: production
+      - uses: getsentry/action-release@v1.0.0
+        with:
+          environment: production
+          sourcemaps: ./build/static/js
