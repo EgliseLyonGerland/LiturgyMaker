@@ -125,7 +125,19 @@ export const songSchema = yup.object().shape({
   title: yup.string().ensure().required(),
   aka: yup.string().ensure(),
   authors: yup.string().ensure().nullable(),
-  number: yup.number().min(1).nullable(),
+  number: yup
+    .number()
+    .min(1)
+    .nullable(true)
+    .transform((_, val) => {
+      if (Number.isNaN(val)) {
+        return null;
+      }
+      if (Number(val)) {
+        return Number(val);
+      }
+      return val;
+    }),
   copyright: yup.string().ensure().nullable(),
   translation: yup.string().ensure().nullable(),
   collection: yup.string().ensure().nullable(),
