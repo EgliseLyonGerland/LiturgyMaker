@@ -122,17 +122,17 @@ export const liturgySchema = yup.object().shape({
 });
 
 export const songSchema = yup.object().shape({
-  title: yup.string().required(),
-  aka: yup.string(),
-  authors: yup.string().nullable(),
+  title: yup.string().ensure().required(),
+  aka: yup.string().ensure(),
+  authors: yup.string().ensure().nullable(),
   number: yup.number().min(1).nullable(),
-  copyright: yup.string().nullable(),
-  translation: yup.string().nullable(),
-  collection: yup.string().nullable(),
-  previewUrl: yup.string().url(),
+  copyright: yup.string().ensure().nullable(),
+  translation: yup.string().ensure().nullable(),
+  collection: yup.string().ensure().nullable(),
+  previewUrl: yup.string().ensure().url(),
   lyrics: yup.array().of(
     yup.object().shape({
-      text: yup.string(),
+      text: yup.string().ensure(),
       type: yup.string().oneOf(['verse', 'chorus']),
     }),
   ),
@@ -142,7 +142,7 @@ export const recitationSchema = yup.object().shape({
   title: yup.string().required(),
   content: yup.array().of(
     yup.object().shape({
-      text: yup.string(),
+      text: yup.string().ensure(),
     }),
   ),
 });
