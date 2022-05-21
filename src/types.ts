@@ -60,20 +60,27 @@ export interface SongsBlockData {
   items: SongsItem[];
 }
 
-export interface Block<T extends BlockType, U> {
-  type: T;
-  data: U;
-  title: string;
-}
-
-export type LiturgyBlock =
-  | Block<'announcements', AnnouncementsBlockData>
-  | Block<'reading', ReadingBlockData>
-  | Block<'section', SectionBlockData>
-  | Block<'sermon', SermonBlockData>
-  | Block<'songs', SongsBlockData>
-  | Block<'recitation', RecitationBlockData>
-  | Block<'openDoors', OpenDoorsBlockData>;
+export type LiturgyBlock<T = BlockType> = T extends BlockType
+  ? {
+      type: T;
+      title: string;
+      data: T extends 'announcements'
+        ? AnnouncementsBlockData
+        : T extends 'reading'
+        ? ReadingBlockData
+        : T extends 'section'
+        ? SectionBlockData
+        : T extends 'sermon'
+        ? SermonBlockData
+        : T extends 'songs'
+        ? SongsBlockData
+        : T extends 'recitation'
+        ? RecitationBlockData
+        : T extends 'openDoors'
+        ? OpenDoorsBlockData
+        : never;
+    }
+  : never;
 
 export interface LiturgyDocument {
   id: number;
