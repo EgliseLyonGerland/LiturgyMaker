@@ -5,7 +5,7 @@ import { Box, ThemeProvider, useTheme } from '@mui/material';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { createPortal } from 'react-dom';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import okaida from 'react-syntax-highlighter/dist/esm/styles/prism/okaidia';
 
 import { darkTheme } from '../theme';
@@ -15,6 +15,15 @@ const copy = require('clipboard-copy');
 interface Props {
   code: string;
   onHide(): void;
+}
+
+function Content({ className, code }: { className: string; code: string }) {
+  return (
+    // @ts-ignore
+    <SyntaxHighlighter language="js" className={className} style={okaida}>
+      {code}
+    </SyntaxHighlighter>
+  );
 }
 
 function Code({ code, onHide = () => {} }: Props) {
@@ -57,9 +66,8 @@ function Code({ code, onHide = () => {} }: Props) {
           }}
         >
           <Box
-            component={SyntaxHighlighter}
-            language="js"
-            style={okaida}
+            component={Content}
+            code={code}
             sx={{
               margin: `0 !important`,
               borderRadius: `0 !important`,
@@ -67,9 +75,7 @@ function Code({ code, onHide = () => {} }: Props) {
               paddingTop: '64px !important',
               background: 'transparent !important',
             }}
-          >
-            {code}
-          </Box>
+          />
         </Box>
         <Box
           sx={{

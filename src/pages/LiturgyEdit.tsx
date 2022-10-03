@@ -14,7 +14,6 @@ import { cloneDeep } from 'lodash';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useStore } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 import type * as Yup from 'yup';
@@ -35,7 +34,7 @@ import {
   selectAllRecitations,
 } from '../redux/slices/recitations';
 import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
-import { useAppDispatch, useAppSelector } from '../redux/store';
+import { useAppDispatch, useAppSelector, useAppStore } from '../redux/store';
 import type { LiturgyBlock, LiturgyDocument } from '../types';
 import generateCode from '../utils/generateCode';
 import { converToDate, convertToId, getNextLiturgyId } from '../utils/liturgy';
@@ -55,7 +54,7 @@ function Form({
   liturgy: LiturgyDocument;
   onLiturgyChanged: (liturgy: LiturgyDocument) => void;
 }) {
-  const store = useStore();
+  const store = useAppStore();
   const dispatch = useAppDispatch();
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(true);
