@@ -1,5 +1,3 @@
-import React from 'react';
-
 import type { FormFieldProps } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';

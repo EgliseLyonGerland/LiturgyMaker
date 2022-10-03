@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { Autocomplete, Box, TextField, useTheme } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';

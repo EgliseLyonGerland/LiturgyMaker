@@ -4,7 +4,8 @@
     "react-app/jest",
     "airbnb",
     "airbnb-typescript",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:react/jsx-runtime"
   ],
   "parserOptions": {
     "project": "./tsconfig.eslint.json"

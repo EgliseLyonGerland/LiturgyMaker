@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { Box, Pagination } from '@mui/material';
 import { useSelector } from 'react-redux';

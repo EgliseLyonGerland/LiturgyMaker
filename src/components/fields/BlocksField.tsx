@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 
 import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useFieldArray, useFormContext } from 'react-hook-form';

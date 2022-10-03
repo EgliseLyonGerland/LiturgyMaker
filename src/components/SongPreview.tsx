@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Player from 'react-player/lazy';
 
 interface Props {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { Box, Button, Drawer, Paper } from '@mui/material';
 import { FormProvider, useForm } from 'react-hook-form';

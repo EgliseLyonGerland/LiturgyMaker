@@ -1,5 +1,3 @@
-import React from 'react';
-
 import type { SectionBlockData } from '../../types';
 
 interface Props {

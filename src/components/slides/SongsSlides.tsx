@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { find } from 'lodash';
 
 import type { SongDocument, SongsBlockData } from '../../types';

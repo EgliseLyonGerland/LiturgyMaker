@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 
 import { Box } from '@mui/material';
 import { Routes, Route, Navigate } from 'react-router-dom';

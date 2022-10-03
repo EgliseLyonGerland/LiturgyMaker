@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import type * as React from 'react';
 
 import { Check, Save } from '@mui/icons-material';
 import { Box, Fab, useTheme, Zoom } from '@mui/material';

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type * as React from 'react';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box } from '@mui/material';
