@@ -18,8 +18,8 @@ interface Props {
 
 function Auth({ firebaseAuth }: Props) {
   const theme = useTheme();
-  const [email, setEmail] = useState('oltodo@msn.com');
-  const [password, setPassword] = useState('DQ68sx89!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errorShown, setErrorShown] = useState(false);
   const [signInWithEmailAndPassword, , , error] =
     useSignInWithEmailAndPassword(firebaseAuth);
