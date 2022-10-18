@@ -1,13 +1,20 @@
 import { initializeApp } from 'firebase/app';
-import { connectAuthEmulator, getAuth } from 'firebase/auth';
-import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import {
+  connectAuthEmulator,
+  debugErrorMap,
+  initializeAuth,
+} from 'firebase/auth';
+import {
+  connectFirestoreEmulator,
+  initializeFirestore,
+} from 'firebase/firestore';
 
-import firebaseConfig from './config/firebase.json';
+import config from './config/firebase.json';
 
-const firebase = initializeApp(firebaseConfig);
+const app = initializeApp(config);
 
-export const auth = getAuth(firebase);
-export const db = getFirestore(firebase);
+export const auth = initializeAuth(app, { errorMap: debugErrorMap });
+export const db = initializeFirestore(app, {});
 
 if (process.env.NODE_ENV === 'development') {
   connectAuthEmulator(auth, 'http://localhost:9099');
