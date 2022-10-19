@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import * as Sentry from '@sentry/react';
+import { SnackbarProvider } from 'notistack';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { auth } from './firebase';
@@ -34,8 +35,10 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {user ? <MainPage /> : <AuthPage firebaseAuth={auth} />}
+      <SnackbarProvider>
+        <CssBaseline />
+        {user ? <MainPage /> : <AuthPage firebaseAuth={auth} />}
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }
