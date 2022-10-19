@@ -2,17 +2,17 @@ import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { Snackbar, Alert, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import type { Auth as FirebaseAuth } from 'firebase/auth';
-import {
-  useSendPasswordResetEmail,
-  useSignInWithEmailAndPassword,
-} from 'react-firebase-hooks/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import type { OptionsObject } from 'notistack';
+import { useSnackbar } from 'notistack';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
 import ModeSwitcher from '../components/ModeSwitcher';
 
@@ -20,16 +20,29 @@ interface Props {
   firebaseAuth: FirebaseAuth;
 }
 
+function isErrorWithMessage(error: unknown): error is { message: string } {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error &&
+    typeof (error as Record<string, unknown>).message === 'string'
+  );
+}
+
+const defaultSnackbarOptions: OptionsObject = {
+  anchorOrigin: { vertical: 'top', horizontal: 'center' },
+  preventDuplicate: true,
+  autoHideDuration: 8000,
+};
+
 function Auth({ firebaseAuth }: Props) {
   const theme = useTheme();
   const [email, setEmail] = useState('oltodo@msn.com');
   const [password, setPassword] = useState('');
-  const [errorShown, setErrorShown] = useState(false);
   const [lostPasswordShown, setLostPasswordShown] = useState(false);
   const [signInWithEmailAndPassword, , , authError] =
     useSignInWithEmailAndPassword(firebaseAuth);
-  const [sendPasswordResetEmail, , resetEmailError] =
-    useSendPasswordResetEmail(firebaseAuth);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -42,17 +55,27 @@ function Auth({ firebaseAuth }: Props) {
   const handleLostPassword = async (event: FormEvent) => {
     event.preventDefault();
 
-    sendPasswordResetEmail(email);
-    setLostPasswordShown(false);
+    try {
+      await sendPasswordResetEmail(firebaseAuth, email);
+    } catch (error) {
+      let message = "Impossible d'envoyer l'email de reinitialisation";
+
+      if (isErrorWithMessage(error)) {
+        message += ` (${error.message})`;
+      }
+
+      enqueueSnackbar(message, { ...defaultSnackbarOptions, variant: 'error' });
+    }
   };
 
   useEffect(() => {
-    if (authError || resetEmailError) {
-      setErrorShown(true);
+    if (authError) {
+      enqueueSnackbar(`Impossible de s'authentifier (${authError.message})`, {
+        ...defaultSnackbarOptions,
+        variant: 'error',
+      });
     }
-  }, [authError, resetEmailError]);
-
-  const error = authError || resetEmailError;
+  }, [authError, enqueueSnackbar]);
 
   return (
     <>
@@ -214,14 +237,6 @@ function Auth({ firebaseAuth }: Props) {
       <Box sx={{ position: 'fixed', top: 32, right: 32 }}>
         <ModeSwitcher />
       </Box>
-      <Snackbar
-        open={errorShown}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert severity="error" onClose={() => setErrorShown(false)}>
-          {error?.message}
-        </Alert>
-      </Snackbar>
     </>
   );
 }
