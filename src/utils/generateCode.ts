@@ -6,6 +6,7 @@ import type {
   RecitationDocument,
   SongDocument,
   BlockType,
+  SongsItem,
 } from '../types';
 
 const isEmpty: {
@@ -15,6 +16,12 @@ const isEmpty: {
     return block.data.title.trim() === '';
   },
 };
+
+function getSong(data: SongsItem, songs: SongDocument[]) {
+  const song = find(songs, ['id', data.id])!;
+
+  return { ...song, lyrics: data.lyrics || song.lyrics };
+}
 
 export default function generateCode(
   doc: LiturgyDocument,
@@ -33,7 +40,7 @@ export default function generateCode(
         return acc.concat(
           block.data.items.map((data) => ({
             type: 'song',
-            data: { ...data, ...find(songs, ['id', data.id]) },
+            data: { ...data, ...getSong(data, songs) },
           })),
         );
       }
