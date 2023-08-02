@@ -1,4 +1,6 @@
-const { convertToId, converToDate, getNextLiturgyId } = require('../liturgy');
+import { test, expect, vi } from 'vitest';
+
+import { convertToId, converToDate, getNextLiturgyId } from '../liturgy';
 
 test('converToDate()', () => {
   expect(converToDate('19830717').toISOString()).toBe(
@@ -11,10 +13,10 @@ test('convertToId()', () => {
 });
 
 test('getCurrentLiturgy() without argument', () => {
-  Date.now = jest.fn(() => 426808800000);
+  Date.now = vi.fn(() => 426808800000);
   expect(getNextLiturgyId()).toBe('19830717');
 
-  Date.now = jest.fn(() => 427240800000);
+  Date.now = vi.fn(() => 427240800000);
   expect(getNextLiturgyId()).toBe('19830717');
 });
 

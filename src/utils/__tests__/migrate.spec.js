@@ -1,3 +1,5 @@
+import { beforeEach, expect, test, vi } from 'vitest';
+
 import migrate from '../migrate';
 import version2 from '../migrations/version2';
 import version3 from '../migrations/version3';
@@ -7,16 +9,16 @@ import version6 from '../migrations/version6';
 import version7 from '../migrations/version7';
 import version8 from '../migrations/version8';
 
-jest.mock('../migrations/version2');
-jest.mock('../migrations/version3');
-jest.mock('../migrations/version4');
-jest.mock('../migrations/version5');
-jest.mock('../migrations/version6');
-jest.mock('../migrations/version7');
-jest.mock('../migrations/version8');
+vi.mock('../migrations/version2');
+vi.mock('../migrations/version3');
+vi.mock('../migrations/version4');
+vi.mock('../migrations/version5');
+vi.mock('../migrations/version6');
+vi.mock('../migrations/version7');
+vi.mock('../migrations/version8');
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 
   version2.mockImplementation((value) => value);
   version3.mockImplementation((value) => value);

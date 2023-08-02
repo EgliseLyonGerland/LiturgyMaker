@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
 
+import BibleRefField from './BibleRefField';
 import type { FormFieldProps } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
 import TextFieldControl from '../controls/TextFieldControl';
-import BibleRefField from './BibleRefField';
 
 function SermonField({ name, disabled = false }: FormFieldProps) {
   return (

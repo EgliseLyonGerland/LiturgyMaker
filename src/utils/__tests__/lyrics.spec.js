@@ -1,4 +1,6 @@
-const { parse, format } = require('../lyrics');
+import { expect, test } from 'vitest';
+
+import { parse, format } from '../lyrics';
 
 test('parse() starts by a verse', () => {
   const text = `

@@ -3,12 +3,6 @@ import { memo } from 'react';
 import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { blockTypes, slideshowEnabled } from '../../config/global';
-import type { BlockType, LiturgyBlock } from '../../types';
-import { createDefaultBlock } from '../../utils/defaults';
-import Divider from '../Divider';
-import Block from '../FormBlock';
-import Preview from '../Preview';
 import AnnouncementsField from './AnnouncementsField';
 import OpenDoorsField from './OpenDoorsField';
 import ReadingField from './ReadingField';
@@ -16,6 +10,12 @@ import RecitationField from './RecitationField';
 import SectionField from './SectionField';
 import SermonField from './SermonField';
 import SongsField from './SongsField';
+import { blockTypes, slideshowEnabled } from '../../config/global';
+import type { BlockType, LiturgyBlock } from '../../types';
+import { createDefaultBlock } from '../../utils/defaults';
+import Divider from '../Divider';
+import Block from '../FormBlock';
+import Preview from '../Preview';
 
 interface Props {
   name: string;

@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 import { Drawer, Typography, Box, Button, Paper, Alert } from '@mui/material';
 
-import type { SongDocument } from '../types';
 import LyricsEditDrawer from './LyricsEditDrawer';
 import SongPreview from './SongPreview';
+import type { SongDocument } from '../types';
 
 interface Props {
   data: SongDocument | null;

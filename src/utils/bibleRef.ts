@@ -2,8 +2,8 @@ import fetchJsonp from 'fetch-jsonp';
 import deburr from 'lodash/deburr';
 import find from 'lodash/find';
 
-import books from '../config/bibleBooks.json';
 import slugify from './slugify';
+import books from '../config/bibleBooks.json';
 
 interface GetBibleResponse {
   book: {

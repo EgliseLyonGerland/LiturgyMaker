@@ -16,7 +16,7 @@ const app = initializeApp(config);
 export const auth = initializeAuth(app, { errorMap: debugErrorMap });
 export const db = initializeFirestore(app, {});
 
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.NODE_ENV === 'development') {
   connectAuthEmulator(auth, 'http://localhost:9099');
   connectFirestoreEmulator(db, 'localhost', 8080);
 }

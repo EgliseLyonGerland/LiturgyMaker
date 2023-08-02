@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { Box, Pagination } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-import { selectAllSongs } from '../redux/slices/songs';
-import type { LiturgyBlock } from '../types';
 import RevealContainer from './RevealContainer';
 import SectionSlides from './slides/SectionSlides';
 import SongsSlides from './slides/SongsSlides';
+import { selectAllSongs } from '../redux/slices/songs';
+import type { LiturgyBlock } from '../types';
 
 interface Props {
   block: LiturgyBlock;

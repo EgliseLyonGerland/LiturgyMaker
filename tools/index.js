@@ -1,12 +1,12 @@
 const firebase = require('firebase');
 const yargs = require('yargs');
 
-const firebaseConfig = require('../config/firebase.json');
 const loginCommand = require('./commands/login');
 const logoutCommand = require('./commands/logout');
 const statsCommand = require('./commands/stats');
 const syncCommand = require('./commands/sync');
 const config = require('./utils/config');
+const firebaseConfig = require('../config/firebase.json');
 
 require('firebase/auth');
 require('firebase/firestore');

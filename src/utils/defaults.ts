@@ -1,7 +1,7 @@
 import upperFirst from 'lodash/upperFirst';
 
-import { currentVersion } from '../config/global';
 import { converToDate } from './liturgy';
+import { currentVersion } from '../config/global';
 
 export const createDefaultAnnouncementsBlock = () => ({
   type: 'announcements',

@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import 'firebase/auth';
@@ -10,7 +10,6 @@ import 'firebase/firestore';
 
 import App from './App';
 import store from './redux/store';
-import reportWebVitals from './reportWebVitals';
 
 import 'reveal.js/dist/reset.css';
 import 'reveal.js/dist/reveal.css';
@@ -21,10 +20,10 @@ Sentry.init({
   dsn: 'https://7718d836108d482d812a93fd548ac9d3@o50300.ingest.sentry.io/5750589',
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
-  environment: process.env.NODE_ENV,
-  release: process.env.REACT_APP_REVISION || 'unknown',
-  debug: process.env.NODE_ENV !== 'production',
-  enabled: process.env.NODE_ENV === 'production',
+  environment: import.meta.env.NODE_ENV,
+  release: import.meta.env.REACT_APP_REVISION || 'unknown',
+  debug: import.meta.env.NODE_ENV !== 'production',
+  enabled: import.meta.env.NODE_ENV === 'production',
   beforeSend(event) {
     if (event.exception) {
       Sentry.showReportDialog({
@@ -36,7 +35,7 @@ Sentry.init({
   },
 });
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
@@ -44,10 +43,4 @@ ReactDOM.render(
       </BrowserRouter>
     </Provider>
   </StrictMode>,
-  document.getElementById('root'),
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

@@ -1,12 +1,14 @@
+import { beforeEach, expect, test, vi } from 'vitest';
+
 import SlideshowWindowManager from '../SlideshowWindowManager';
 
 const fakeWindow = {
-  postMessage: jest.fn(),
+  postMessage: vi.fn(),
 };
 
-window.open = jest.fn();
-window.removeEventListener = jest.fn();
-window.addEventListener = jest.fn();
+window.open = vi.fn();
+window.removeEventListener = vi.fn();
+window.addEventListener = vi.fn();
 
 beforeEach(() => {
   window.open.mockReturnValue(fakeWindow);
@@ -34,7 +36,7 @@ test('open()', () => {
 
 test('handleMessage()', () => {
   const manager = new SlideshowWindowManager();
-  manager.sendMessage = jest.fn();
+  manager.sendMessage = vi.fn();
 
   manager.setLiturgy('foo');
   manager.setSongs('bar');
@@ -67,7 +69,7 @@ test('sendMessage()', () => {
 
 test('setLiturgy()', () => {
   const manager = new SlideshowWindowManager();
-  manager.sendMessage = jest.fn();
+  manager.sendMessage = vi.fn();
   manager.setLiturgy('foo');
 
   expect(manager.liturgy).toEqual('foo');
@@ -76,7 +78,7 @@ test('setLiturgy()', () => {
 
 test('setSongs()', () => {
   const manager = new SlideshowWindowManager();
-  manager.sendMessage = jest.fn();
+  manager.sendMessage = vi.fn();
   manager.setSongs('foo');
 
   expect(manager.songs).toEqual('foo');

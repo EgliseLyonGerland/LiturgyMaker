@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import version5 from '../version5';
 
 const input = {

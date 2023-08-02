@@ -1,4 +1,4 @@
-import Player from 'react-player/lazy';
+import Player from 'react-player';
 
 interface Props {
   title: string;

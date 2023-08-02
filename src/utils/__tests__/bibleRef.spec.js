@@ -1,15 +1,16 @@
-const fetchJsonp = require('fetch-jsonp');
+import fetchJsonp from 'fetch-jsonp';
+import { vi, expect, test, beforeEach } from 'vitest';
 
-const { getPassage, parse } = require('../bibleRef');
-const getbibleContent = require('./getbible.json');
+import getbibleContent from './getbible.json';
+import { getPassage, parse } from '../bibleRef';
 
-jest.mock('fetch-jsonp');
+vi.mock('fetch-jsonp');
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 
   fetchJsonp.mockResolvedValue({
-    json: jest.fn().mockResolvedValue(getbibleContent),
+    json: vi.fn().mockResolvedValue(getbibleContent),
   });
 });
 

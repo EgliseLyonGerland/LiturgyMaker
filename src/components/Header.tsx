@@ -12,9 +12,9 @@ import {
 } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
+import ModeSwitcher from './ModeSwitcher';
 import logo from '../images/logo.svg';
 import { darkTheme, paper } from '../theme';
-import ModeSwitcher from './ModeSwitcher';
 
 interface Props {
   links: HeaderLink[];

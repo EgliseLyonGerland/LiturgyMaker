@@ -1,6 +1,6 @@
+import BibleRefField from './BibleRefField';
 import type { FormFieldProps } from '../../types';
 import ArraySortableControl from '../controls/ArraySortableControl';
-import BibleRefField from './BibleRefField';
 
 function ReadingField({ name, disabled = false }: FormFieldProps) {
   return (

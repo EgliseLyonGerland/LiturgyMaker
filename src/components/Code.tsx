@@ -4,13 +4,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Box, ThemeProvider, useTheme } from '@mui/material';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import copy from 'clipboard-copy';
 import { createPortal } from 'react-dom';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import okaida from 'react-syntax-highlighter/dist/esm/styles/prism/okaidia';
 
 import { darkTheme } from '../theme';
-
-const copy = require('clipboard-copy');
 
 interface Props {
   code: string;

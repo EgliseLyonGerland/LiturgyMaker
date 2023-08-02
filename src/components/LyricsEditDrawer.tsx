@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { Box, Button, Drawer, Paper } from '@mui/material';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import type { SongDocument } from '../types';
 import LyricsField from './fields/LyricsField';
+import type { SongDocument } from '../types';
 
 interface Props {
   open: boolean;
