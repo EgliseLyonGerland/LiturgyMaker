@@ -137,7 +137,10 @@ export async function getPassage(ref: string) {
   }
 
   const result = await fetchJsonp(
-    `https://getbible.net/json?${new URLSearchParams({ version, passage })}`,
+    `https://archived.getbible.net/json?${new URLSearchParams({
+      version,
+      passage,
+    })}`,
   ).then((res) => {
     return res.json();
   });
