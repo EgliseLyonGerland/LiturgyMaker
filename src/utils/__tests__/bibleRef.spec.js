@@ -1,95 +1,103 @@
-import fetchJsonp from 'fetch-jsonp';
 import { vi, expect, test, beforeEach } from 'vitest';
 
-import getbibleContent from './getbible.json';
+import getbible1Pierre1Fixtures from './__fixtures__/getbible-60-1.json';
+import getbible1Pierre2Fixtures from './__fixtures__/getbible-60-2.json';
+import getbible1Pierre3Fixtures from './__fixtures__/getbible-60-3.json';
 import { getPassage, parse } from '../bibleRef';
-
-vi.mock('fetch-jsonp');
 
 beforeEach(() => {
   vi.clearAllMocks();
 
-  fetchJsonp.mockResolvedValue({
-    json: vi.fn().mockResolvedValue(getbibleContent),
-  });
+  global.fetch = vi.fn();
+
+  fetch
+    .mockResolvedValueOnce({
+      ok: true,
+      json: vi.fn().mockResolvedValue(getbible1Pierre1Fixtures),
+    })
+    .mockResolvedValueOnce({
+      ok: true,
+      json: vi.fn().mockResolvedValue(getbible1Pierre2Fixtures),
+    })
+    .mockResolvedValueOnce({
+      ok: true,
+      json: vi.fn().mockResolvedValue(getbible1Pierre3Fixtures),
+    })
+    .mockResolvedValueOnce({
+      ok: false,
+      json: vi.fn().mockResolvedValue(null),
+    });
 });
 
-function encode(str) {
-  return encodeURIComponent(str).replace(/%20/g, '+');
-}
+const endpoint = 'https://api.getbible.net/v2/ls1910';
 
 test('getPassage() with "1 Pierre 1"', async () => {
-  await getPassage('1 Pierre 1');
+  const result = await getPassage('1 Pierre 1');
 
-  expect(fetchJsonp).toHaveBeenCalledWith(
-    `https://archived.getbible.net/json?version=ls1910&passage=${encode(
-      '1 Pe 1',
-    )}`,
-  );
+  expect(fetch).toHaveBeenCalledTimes(1);
+  expect(fetch).toHaveBeenCalledWith(`${endpoint}/60/1.json`);
+
+  expect(result).toMatchSnapshot();
 });
 
 test('getPassage() with "1 Pierre 1-2"', async () => {
-  await getPassage('1 Pierre 1-2');
+  const result = await getPassage('1 Pierre 1-2');
 
-  expect(fetchJsonp).toHaveBeenCalledWith(
-    `https://archived.getbible.net/json?version=ls1910&passage=${encode(
-      '1 Pe 1:1-999;2:1-999',
-    )}`,
-  );
+  expect(fetch).toHaveBeenCalledTimes(2);
+  expect(fetch).toHaveBeenNthCalledWith(1, `${endpoint}/60/1.json`);
+  expect(fetch).toHaveBeenNthCalledWith(2, `${endpoint}/60/2.json`);
+
+  expect(result).toMatchSnapshot();
 });
 
 test('getPassage() with "1 Pierre 1-4"', async () => {
-  await getPassage('1 Pierre 1-4');
+  const result = await getPassage('1 Pierre 1-4');
 
-  expect(fetchJsonp).toHaveBeenCalledWith(
-    `https://archived.getbible.net/json?version=ls1910&passage=${encode(
-      '1 Pe 1:1-999;2:1-999;3:1-999;4:1-999',
-    )}`,
-  );
+  expect(fetch).toHaveBeenCalledTimes(4);
+  expect(fetch).toHaveBeenNthCalledWith(1, `${endpoint}/60/1.json`);
+  expect(fetch).toHaveBeenNthCalledWith(2, `${endpoint}/60/2.json`);
+  expect(fetch).toHaveBeenNthCalledWith(3, `${endpoint}/60/3.json`);
+  expect(fetch).toHaveBeenNthCalledWith(4, `${endpoint}/60/4.json`);
+
+  expect(result).toMatchSnapshot();
 });
 
 test('getPassage() with "1 Pierre 1.1"', async () => {
-  await getPassage('1 Pierre 1.1');
+  const result = await getPassage('1 Pierre 1.1');
 
-  expect(fetchJsonp).toHaveBeenCalledWith(
-    `https://archived.getbible.net/json?version=ls1910&passage=${encode(
-      '1 Pe 1:1',
-    )}`,
-  );
+  expect(fetch).toHaveBeenCalledTimes(1);
+  expect(fetch).toHaveBeenCalledWith(`${endpoint}/60/1.json`);
+
+  expect(result).toMatchSnapshot();
 });
 
 test('getPassage() with "1 Pierre 1.1-4"', async () => {
-  await getPassage('1 Pierre 1.1-4');
+  const result = await getPassage('1 Pierre 1.1-4');
 
-  expect(fetchJsonp).toHaveBeenCalledWith(
-    `https://archived.getbible.net/json?version=ls1910&passage=${encode(
-      '1 Pe 1:1-4',
-    )}`,
-  );
+  expect(fetch).toHaveBeenCalledTimes(1);
+  expect(fetch).toHaveBeenCalledWith(`${endpoint}/60/1.json`);
+
+  expect(result).toMatchSnapshot();
 });
 
-test('getPassage() with "1 Pierre 1.1-2.2"', async () => {
-  await getPassage('1 Pierre 1.1-2.2');
+test('getPassage() with "1 Pierre 1.10-2.2"', async () => {
+  const result = await getPassage('1 Pierre 1.10-2.2');
 
-  expect(fetchJsonp).toHaveBeenCalledWith(
-    `https://archived.getbible.net/json?version=ls1910&passage=${encode(
-      '1 Pe 1:1-999;2:1-2',
-    )}`,
-  );
+  expect(fetch).toHaveBeenCalledTimes(2);
+  expect(fetch).toHaveBeenNthCalledWith(1, `${endpoint}/60/1.json`);
+  expect(fetch).toHaveBeenNthCalledWith(2, `${endpoint}/60/2.json`);
+
+  expect(result).toMatchSnapshot();
 });
 
 test('getPassage() with "1 Pierre 1.1-4.4"', async () => {
-  await getPassage('1 Pierre 1.1-4.4');
-
-  expect(fetchJsonp).toHaveBeenCalledWith(
-    `https://archived.getbible.net/json?version=ls1910&passage=${encode(
-      '1 Pe 1:1-999;2:1-999;3:1-999;4:1-4',
-    )}`,
-  );
-});
-
-test('stringifyContent()', async () => {
   const result = await getPassage('1 Pierre 1.1-4.4');
+
+  expect(fetch).toHaveBeenCalledTimes(4);
+  expect(fetch).toHaveBeenNthCalledWith(1, `${endpoint}/60/1.json`);
+  expect(fetch).toHaveBeenNthCalledWith(2, `${endpoint}/60/2.json`);
+  expect(fetch).toHaveBeenNthCalledWith(3, `${endpoint}/60/3.json`);
+  expect(fetch).toHaveBeenNthCalledWith(4, `${endpoint}/60/4.json`);
 
   expect(result).toMatchSnapshot();
 });
@@ -130,5 +138,19 @@ test('parse()', () => {
     verseStart: 3,
     chapterEnd: 16,
     verseEnd: 8,
+  });
+  expect(parse('Psaumes 1')).toEqual({
+    book: 'Psaumes',
+    chapterStart: 1,
+    verseStart: null,
+    chapterEnd: null,
+    verseEnd: null,
+  });
+  expect(parse('Psaume 1')).toEqual({
+    book: 'Psaume',
+    chapterStart: 1,
+    verseStart: null,
+    chapterEnd: null,
+    verseEnd: null,
   });
 });

@@ -1,7 +1,5 @@
 /// <reference types="vite/client" />
 
-declare module 'superagent-jsonp';
-
 declare module '@mui/material/styles' {
   interface Theme {}
 

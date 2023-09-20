@@ -39,7 +39,13 @@ function BibleRefField({ name, withExcerpt = true, disabled = false }: Props) {
           fieldState: { error },
         }) => (
           <Autocomplete
-            options={books.map((book) => book.name)}
+            options={books.reduce<string[]>(
+              (acc, book) =>
+                book.alt
+                  ? acc.concat(book.name).concat(book.alt)
+                  : acc.concat(book.name),
+              [],
+            )}
             disabled={disabled}
             freeSolo
             autoComplete

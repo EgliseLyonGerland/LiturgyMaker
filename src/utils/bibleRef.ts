@@ -1,23 +1,15 @@
-import fetchJsonp from 'fetch-jsonp';
+import { range } from 'lodash';
 import deburr from 'lodash/deburr';
-import find from 'lodash/find';
 
-import slugify from './slugify';
 import books from '../config/bibleBooks.json';
 
 interface GetBibleResponse {
-  book: {
-    book_ref: string;
-    book_name: string;
-    book_nr: string;
-    chapter_nr: string;
-    chapter: Record<
-      string,
-      {
-        verse_nr: string;
-        verse: string;
-      }
-    >;
+  chapter: number;
+  verses: {
+    chapter: number;
+    verse: number;
+    name: string;
+    text: string;
   }[];
 }
 
@@ -29,7 +21,13 @@ interface BibleRef {
   verseEnd: number | null;
 }
 
-const bookNames = books.map(({ name }) => deburr(name));
+const bookNames = books.reduce<string[]>(
+  (acc, { name, alt }) =>
+    alt
+      ? acc.concat(deburr(name)).concat(deburr(alt))
+      : acc.concat(deburr(name)),
+  [],
+);
 
 export function parse(ref: string): BibleRef | null {
   /**
@@ -89,65 +87,55 @@ export function validate(ref: string) {
   return '';
 }
 
-function stringifyContent({ book }: GetBibleResponse = { book: [] }) {
-  return book.reduce<string>(
-    (acc, curr) =>
-      (
-        acc +
-        Object.values(curr.chapter)
-          .map(({ verse }) => verse.trim())
-          .join(' ')
-          .split('¶')
-          .map((text) => text.trim())
-          .join(' ')
-      ).trim(),
-    '',
-  );
+function sanitize(text: string) {
+  return text.replace(/([^ ])([:;?!])/g, '$1 $2');
 }
 
 export async function getPassage(ref: string) {
   const data = parse(ref);
 
-  if (!data || !data.chapterStart) return null;
+  if (!data || !data.chapterStart) {
+    return null;
+  }
 
   const version = 'ls1910';
-  const book = find(books, ['slug', slugify(data.book)]);
+  const bookId =
+    books.findIndex(
+      ({ name, alt }) => name === data.book || alt === data.book,
+    ) + 1;
 
-  if (!book) return null;
+  if (!bookId) return null;
 
-  const { id: bookId } = book;
-  const { chapterStart, chapterEnd, verseStart, verseEnd } = data;
+  const { chapterStart } = data;
+  const chapterEnd = data.chapterEnd || chapterStart;
+  const verseStart = data.verseStart || 1;
+  const verseEnd = data.verseStart ? data.verseEnd || verseStart : Infinity;
 
-  let passage = `${bookId} ${chapterStart}`;
-
-  if (chapterEnd && chapterEnd > chapterStart) {
-    passage += ':1-999';
-
-    for (let i = chapterStart + 1; i <= chapterEnd; i += 1) {
-      if (verseEnd && i === chapterEnd) {
-        passage += `;${i}:1-${verseEnd}`;
-      } else {
-        passage += `;${i}:1-999`;
-      }
+  const result = (
+    await Promise.all(
+      range(chapterStart, chapterEnd + 1).map((chapter) =>
+        fetch(
+          `https://api.getbible.net/v2/${version}/${bookId}/${chapter}.json`,
+        ).then((res) =>
+          res.ok ? (res.json() as Promise<GetBibleResponse>) : null,
+        ),
+      ),
+    )
+  ).reduce((acc, chapter) => {
+    if (!chapter) {
+      return acc;
     }
-  } else if (verseEnd) {
-    passage += `:${verseStart}-${verseEnd}`;
-  } else if (verseStart) {
-    passage += `:${verseStart}`;
-  }
 
-  const result = await fetchJsonp(
-    `https://archived.getbible.net/json?${new URLSearchParams({
-      version,
-      passage,
-    })}`,
-  ).then((res) => {
-    return res.json();
-  });
+    const content = chapter.verses
+      .slice(
+        chapter.chapter === chapterStart ? verseStart - 1 : 0,
+        chapter.chapter === chapterEnd ? verseEnd : chapter.verses.length,
+      )
+      .map((verse) => verse.text)
+      .join(' ');
 
-  if (result) {
-    return stringifyContent(result);
-  }
+    return `${acc}\n\n${content}`.trim();
+  }, '');
 
-  return '';
+  return sanitize(result);
 }
