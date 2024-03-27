@@ -1,4 +1,7 @@
-import { endOfWeek, format } from 'date-fns';
+import { endOfWeek, format } from "date-fns";
+
+import { blockTypes } from "../config/global";
+import { BlockType } from "../types";
 
 function isLiturgyId(value: number) {
   return /^[0-9]{8}$/.test(`${value}`);
@@ -9,7 +12,7 @@ function getClosestAboveSundayDate(date = new Date()) {
 }
 
 export function convertToId(date: Date) {
-  return format(date, 'yMMdd');
+  return format(date, "yMMdd");
 }
 
 export function converToDate(id: number | string) {
@@ -32,4 +35,8 @@ export function getNextLiturgyId(idOrDate: Date | number = Date.now()) {
   }
 
   return convertToId(getClosestAboveSundayDate(date));
+}
+
+export function isBlockType(name: string): name is BlockType {
+  return name in blockTypes;
 }

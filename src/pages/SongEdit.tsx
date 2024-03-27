@@ -1,23 +1,23 @@
-import { useEffect, useState } from 'react';
+import { yupResolver } from "@hookform/resolvers/yup";
+import type { BoxProps } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
+import isString from "lodash/isString";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import BeatLoader from "react-spinners/BeatLoader";
+import { InferType } from "yup";
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import type { BoxProps } from '@mui/material';
-import { Box, Container, Typography } from '@mui/material';
-import isString from 'lodash/isString';
-import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import BeatLoader from 'react-spinners/BeatLoader';
-
-import TextFieldControl from '../components/controls/TextFieldControl';
-import LyricsField from '../components/fields/LyricsField';
-import SaveButton from '../components/SaveButton';
-import { songSchema } from '../config/schemas';
-import { fetchSongs, persistSong, selectSongById } from '../redux/slices/songs';
-import { useAppDispatch, useAppSelector } from '../redux/store';
-import type { SongDocument } from '../types';
+import TextFieldControl from "../components/controls/TextFieldControl";
+import LyricsField from "../components/fields/LyricsField";
+import SaveButton from "../components/SaveButton";
+import { songSchema } from "../config/schemas";
+import { fetchSongs, persistSong, selectSongById } from "../redux/slices/songs";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import type { SongDocument } from "../types";
 
 function Block({
-  header = '',
+  header = "",
   children,
   ...props
 }: {
@@ -27,21 +27,21 @@ function Block({
     <Box
       bgcolor="paper.background.main"
       border="solid 1px"
-      borderRadius="4px"
       borderColor="paper.border"
+      borderRadius="4px"
       boxShadow="4px 4px 10px rgba(0,0,0,0.05)"
       {...props}
     >
       {header && (
         <Box
-          height={72}
-          px={5}
-          display="flex"
           alignItems="center"
           bgcolor="paper.header"
           borderBottom="solid 1px"
-          borderRadius="4px 4px 0 0"
           borderColor="paper.border"
+          borderRadius="4px 4px 0 0"
+          display="flex"
+          height={72}
+          px={5}
         >
           {isString(header) ? (
             <Typography variant="h6">{header}</Typography>
@@ -57,6 +57,8 @@ function Block({
   );
 }
 
+type FormValues = InferType<typeof songSchema>;
+
 function SongEdit() {
   const params = useParams();
   const navigate = useNavigate();
@@ -68,11 +70,11 @@ function SongEdit() {
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(false);
 
-  const form = useForm<SongDocument>({
-    mode: 'onChange',
+  const form = useForm<FormValues>({
+    mode: "onChange",
     resolver: yupResolver(songSchema),
     defaultValues: {
-      lyrics: [{ text: '', type: 'verse' }],
+      lyrics: [{ text: "", type: "verse" }],
     },
   });
   const {
@@ -81,13 +83,15 @@ function SongEdit() {
     formState: { isDirty, isSubmitting },
   } = form;
 
-  const handleSubmit = async (data: SongDocument) => {
+  const handleSubmit = async (data: FormValues) => {
     setPersisting(true);
+
+    const song = songSchema.cast(data);
 
     const { payload } = await dispatch(
       persistSong({
-        ...data,
-        lyrics: data.lyrics.filter((part) => part.text.trim() !== ''),
+        ...song,
+        lyrics: song.lyrics.filter((part) => part.text.trim() !== "") || [],
       }),
     );
 
@@ -107,13 +111,13 @@ function SongEdit() {
         ...song,
         lyrics: song.lyrics.length
           ? song.lyrics
-          : [{ text: '', type: 'verse' }],
+          : [{ text: "", type: "verse" }],
       });
     }
   }, [song, reset]);
 
   useEffect(() => {
-    if (songsStatus === 'idle') {
+    if (songsStatus === "idle") {
       dispatch(fetchSongs());
     }
   }, [dispatch, songsStatus]);
@@ -131,58 +135,58 @@ function SongEdit() {
       <FormProvider {...form}>
         <Block header="Informations générales">
           <TextFieldControl
-            name="title"
+            disabled={isSubmitting}
             label="Titre"
-            disabled={isSubmitting}
+            name="title"
           />
-          <TextFieldControl name="aka" label="AKA" disabled={isSubmitting} />
+          <TextFieldControl disabled={isSubmitting} label="AKA" name="aka" />
           <TextFieldControl
-            name="authors"
-            label="Auteurs"
+            disabled={isSubmitting}
             helperText="Séparés par une virgule (ex. Paul Baloche, Matt Redman)"
-            disabled={isSubmitting}
+            label="Auteurs"
+            name="authors"
           />
           <TextFieldControl
-            name="number"
+            disabled={isSubmitting}
             label="Position dans le recueil"
-            disabled={isSubmitting}
-            transformOut={(value) => (value === '' ? null : value)}
+            name="number"
+            transformOut={(value) => (value === "" ? null : value)}
           />
           <TextFieldControl
-            name="copyright"
+            disabled={isSubmitting}
             label="Copyright"
-            disabled={isSubmitting}
+            name="copyright"
           />
           <TextFieldControl
-            name="translation"
+            disabled={isSubmitting}
             label="Traduction"
-            disabled={isSubmitting}
+            name="translation"
           />
           <TextFieldControl
-            name="collection"
-            label="Collections"
-            helperText="Séparées par une virgule (ex. ARC 123, JEM 456)"
             disabled={isSubmitting}
+            helperText="Séparées par une virgule (ex. ARC 123, JEM 456)"
+            label="Collections"
+            name="collection"
           />
         </Block>
         <Block header="Liens" mt={5}>
           <TextFieldControl
-            name="previewUrl"
-            label="Lien de l'aperçu audio"
-            helperText="URL vers Google Drive, YouTube, DailyMotion, etc."
             disabled={isSubmitting}
+            helperText="URL vers Google Drive, YouTube, DailyMotion, etc."
+            label="Lien de l'aperçu audio"
+            name="previewUrl"
           />
         </Block>
         <Block header="Paroles" mt={5}>
-          <LyricsField name="lyrics" disabled={isSubmitting} />
+          <LyricsField disabled={isSubmitting} name="lyrics" />
         </Block>
 
         <SaveButton
-          persisting={persisting}
-          persisted={persisted}
           dirty={isDirty}
           onClick={submitForm(handleSubmit)}
           onHide={() => setPersisted(false)}
+          persisted={persisted}
+          persisting={persisting}
         />
       </FormProvider>
     </Container>

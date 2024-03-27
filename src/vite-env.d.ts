@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-declare module '@mui/material/styles' {
+declare module "@mui/material/styles" {
   interface Theme {}
 
   interface Palette {

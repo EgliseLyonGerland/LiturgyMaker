@@ -1,21 +1,20 @@
-import { memo } from 'react';
+import { Grid, useMediaQuery, useTheme } from "@mui/material";
+import { FC, memo, MemoExoticComponent } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { Grid, useMediaQuery, useTheme } from '@mui/material';
-import { useFieldArray, useFormContext } from 'react-hook-form';
-
-import AnnouncementsField from './AnnouncementsField';
-import OpenDoorsField from './OpenDoorsField';
-import ReadingField from './ReadingField';
-import RecitationField from './RecitationField';
-import SectionField from './SectionField';
-import SermonField from './SermonField';
-import SongsField from './SongsField';
-import { blockTypes, slideshowEnabled } from '../../config/global';
-import type { BlockType, LiturgyBlock } from '../../types';
-import { createDefaultBlock } from '../../utils/defaults';
-import Divider from '../Divider';
-import Block from '../FormBlock';
-import Preview from '../Preview';
+import AnnouncementsField from "./AnnouncementsField";
+import OpenDoorsField from "./OpenDoorsField";
+import ReadingField from "./ReadingField";
+import RecitationField from "./RecitationField";
+import SectionField from "./SectionField";
+import SermonField from "./SermonField";
+import SongsField from "./SongsField";
+import { blockTypes, slideshowEnabled } from "../../config/global";
+import type { BlockType, FormFieldProps, LiturgyBlock } from "../../types";
+import { createDefaultBlock } from "../../utils/defaults";
+import Divider from "../Divider";
+import Block from "../FormBlock";
+import Preview from "../Preview";
 
 interface Props {
   name: string;
@@ -23,7 +22,7 @@ interface Props {
   getPreviousWeekBlock: (index: number) => Promise<LiturgyBlock | null>;
 }
 
-const components: Record<BlockType, any> = {
+const components: Record<BlockType, MemoExoticComponent<FC<FormFieldProps>>> = {
   announcements: memo(AnnouncementsField),
   songs: memo(SongsField),
   reading: memo(ReadingField),
@@ -35,11 +34,11 @@ const components: Record<BlockType, any> = {
 
 function BlocksField({ name, disabled = false, getPreviousWeekBlock }: Props) {
   const theme = useTheme();
-  const isMediumAndUp = useMediaQuery(theme.breakpoints.up('md'));
+  const isMediumAndUp = useMediaQuery(theme.breakpoints.up("md"));
   const { register } = useFormContext();
   const { fields, insert, remove, update } = useFieldArray({
     name,
-    keyName: 'key',
+    keyName: "key",
   });
 
   const showPreview = isMediumAndUp && slideshowEnabled;
@@ -53,12 +52,9 @@ function BlocksField({ name, disabled = false, getPreviousWeekBlock }: Props) {
 
     return (
       <Grid container spacing={4}>
-        <Grid item xs={12} md={showPreview ? 8 : 12} xl={showPreview ? 7 : 12}>
+        <Grid item md={showPreview ? 8 : 12} xl={showPreview ? 7 : 12} xs={12}>
           <Block
-            title={blockTypes[block.type]}
-            subtitle={block.title}
             disabled={disabled}
-            onRemoveBlockClicked={() => remove(index)}
             onFillFromLastWeekClicked={async () => {
               const previousBlock = await getPreviousWeekBlock(index);
 
@@ -66,15 +62,18 @@ function BlocksField({ name, disabled = false, getPreviousWeekBlock }: Props) {
                 update(index, previousBlock);
               }
             }}
+            onRemoveBlockClicked={() => remove(index)}
+            subtitle={block.title}
+            title={blockTypes[block.type]}
           >
             <input type="hidden" {...register(`${name}.${index}.type`)} />
             <input type="hidden" {...register(`${name}.${index}.title`)} />
 
-            <Component name={`${name}.${index}.data`} disabled={disabled} />
+            <Component disabled={disabled} name={`${name}.${index}.data`} />
           </Block>
         </Grid>
         {showPreview && (
-          <Grid item xs={0} md={4} xl={5}>
+          <Grid item md={4} xl={5} xs={0}>
             <Preview block={block} />
           </Grid>
         )}

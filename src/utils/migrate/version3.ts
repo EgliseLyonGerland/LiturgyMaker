@@ -1,10 +1,10 @@
-import chunk from 'lodash/chunk';
+import chunk from "lodash/chunk";
 
 export default function migrate(doc: any) {
   return {
     ...doc,
     blocks: doc.blocks.map((block: any) => {
-      if (block.type !== 'announcements') {
+      if (block.type !== "announcements") {
         return block;
       }
 

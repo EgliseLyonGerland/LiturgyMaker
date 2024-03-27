@@ -1,21 +1,21 @@
-import { beforeEach, expect, test, vi } from 'vitest';
+import { beforeEach, expect, test, vi } from "vitest";
 
-import migrate from '../migrate';
-import version2 from '../migrations/version2';
-import version3 from '../migrations/version3';
-import version4 from '../migrations/version4';
-import version5 from '../migrations/version5';
-import version6 from '../migrations/version6';
-import version7 from '../migrations/version7';
-import version8 from '../migrations/version8';
+import migrate from "..";
+import version2 from "../version2";
+import version3 from "../version3";
+import version4 from "../version4";
+import version5 from "../version5";
+import version6 from "../version6";
+import version7 from "../version7";
+import version8 from "../version8";
 
-vi.mock('../migrations/version2');
-vi.mock('../migrations/version3');
-vi.mock('../migrations/version4');
-vi.mock('../migrations/version5');
-vi.mock('../migrations/version6');
-vi.mock('../migrations/version7');
-vi.mock('../migrations/version8');
+vi.mock("../version2");
+vi.mock("../version3");
+vi.mock("../version4");
+vi.mock("../version5");
+vi.mock("../version6");
+vi.mock("../version7");
+vi.mock("../version8");
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -29,7 +29,7 @@ beforeEach(() => {
   version8.mockImplementation((value) => value);
 });
 
-test('migrate() from version 1', () => {
+test("migrate() from version 1", () => {
   const result = migrate({ version: 1, blocks: [] });
 
   expect(result).toEqual({ version: 8, blocks: [] });
@@ -42,7 +42,7 @@ test('migrate() from version 1', () => {
   expect(version8).toHaveBeenCalledTimes(1);
 });
 
-test('migrate() from version 5', () => {
+test("migrate() from version 5", () => {
   const result = migrate({ version: 5, blocks: [] });
 
   expect(result).toEqual({ version: 8, blocks: [] });
@@ -55,7 +55,7 @@ test('migrate() from version 5', () => {
   expect(version8).toHaveBeenCalledTimes(1);
 });
 
-test('migrate() from version 7', () => {
+test("migrate() from version 7", () => {
   const result = migrate({ version: 999, blocks: [] });
 
   expect(result).toEqual({ version: 999, blocks: [] });

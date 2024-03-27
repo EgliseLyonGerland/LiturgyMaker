@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
-import type * as React from 'react';
+import { Check, Save } from "@mui/icons-material";
+import { Box, Fab, useTheme, Zoom } from "@mui/material";
+import { useEffect, useState } from "react";
+import type * as React from "react";
+import { createPortal } from "react-dom";
+import BeatLoader from "react-spinners/BeatLoader";
 
-import { Check, Save } from '@mui/icons-material';
-import { Box, Fab, useTheme, Zoom } from '@mui/material';
-import { createPortal } from 'react-dom';
-import BeatLoader from 'react-spinners/BeatLoader';
-
-type Status = 'running' | 'done' | 'ready' | null;
+type Status = "running" | "done" | "ready" | null;
 
 const SaveButton: React.FC<{
   persisting: boolean;
@@ -22,27 +21,27 @@ const SaveButton: React.FC<{
 
   let status: Status = null;
   if (persisting) {
-    status = 'running';
+    status = "running";
   } else if (persisted) {
-    status = 'done';
+    status = "done";
   } else if (dirty) {
-    status = 'ready';
+    status = "ready";
   }
 
   useEffect(() => {
-    if (currentStatus === 'done' && displayed) {
+    if (currentStatus === "done" && displayed) {
       return;
     }
 
     switch (status) {
-      case 'running':
-      case 'ready': {
+      case "running":
+      case "ready": {
         setCurrentStatus(status);
         setDisplayed(true);
         break;
       }
-      case 'done': {
-        setCurrentStatus('done');
+      case "done": {
+        setCurrentStatus("done");
 
         setTimeout(() => {
           setDisplayed(false);
@@ -58,18 +57,18 @@ const SaveButton: React.FC<{
   }, [currentStatus, displayed, onHide, status]);
 
   const renderButton = () => {
-    if (currentStatus === 'done') {
+    if (currentStatus === "done") {
       return (
         <Fab
-          variant="extended"
           color="secondary"
           disabled
           style={{
             background: theme.palette.success.main,
-            color: 'white',
+            color: "white",
           }}
+          variant="extended"
         >
-          <Box width={168} display="flex" justifyContent="center">
+          <Box display="flex" justifyContent="center" width={168}>
             <Check />
             <Box ml={2}>Enregistré</Box>
           </Box>
@@ -77,19 +76,19 @@ const SaveButton: React.FC<{
       );
     }
 
-    if (currentStatus === 'running') {
+    if (currentStatus === "running") {
       return (
         <Fab
-          variant="extended"
           color="secondary"
           disabled
           style={{
             background: theme.palette.secondary.main,
-            color: 'white',
+            color: "white",
           }}
+          variant="extended"
         >
-          <Box width={168} display="flex" justifyContent="center">
-            <BeatLoader key="saving" color="white" size={8} />
+          <Box display="flex" justifyContent="center" width={168}>
+            <BeatLoader color="white" key="saving" size={8} />
           </Box>
         </Fab>
       );
@@ -98,11 +97,11 @@ const SaveButton: React.FC<{
     return (
       <Fab
         aria-label="Enregistrer"
-        variant="extended"
         color="secondary"
         onClick={onClick}
+        variant="extended"
       >
-        <Box width={168} display="flex" justifyContent="center">
+        <Box display="flex" justifyContent="center" width={168}>
           <Save />
           <Box ml={2}>Enregistrer</Box>
         </Box>
@@ -112,14 +111,14 @@ const SaveButton: React.FC<{
 
   return createPortal(
     <Box
-      position="fixed"
       bottom={32}
       display="flex"
       justifyContent="center"
+      position="fixed"
       width="100%"
       zIndex={100}
     >
-      <Zoom key={currentStatus} in={displayed}>
+      <Zoom in={displayed} key={currentStatus}>
         {renderButton()}
       </Zoom>
     </Box>,

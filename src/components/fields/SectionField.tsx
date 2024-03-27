@@ -1,12 +1,12 @@
-import type { FormFieldProps } from '../../types';
-import TextFieldControl from '../controls/TextFieldControl';
+import type { FormFieldProps } from "../../types";
+import TextFieldControl from "../controls/TextFieldControl";
 
 function SectionField({ name, disabled = false }: FormFieldProps) {
   return (
     <TextFieldControl
-      name={`${name}.title`}
-      label="Titre"
       disabled={disabled}
+      label="Titre"
+      name={`${name}.title`}
     />
   );
 }

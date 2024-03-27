@@ -1,38 +1,37 @@
-import * as React from 'react';
-
 import {
   Brightness4TwoTone,
   DarkModeTwoTone,
   LightModeTwoTone,
   SettingsBrightnessTwoTone,
-} from '@mui/icons-material';
-import type { SvgIcon } from '@mui/material';
+} from "@mui/icons-material";
+import type { SvgIcon } from "@mui/material";
 import {
   IconButton,
   Popover,
   ToggleButtonGroup,
   ToggleButton,
   Box,
-} from '@mui/material';
+} from "@mui/material";
+import * as React from "react";
 
-import useDarkMode from '../libs/hooks/useDarkMode';
+import useDarkMode from "../libs/hooks/useDarkMode";
 
-type Mode = 'light' | 'dark' | 'system';
+type Mode = "light" | "dark" | "system";
 
 const options: { key: Mode; label: string; icon: typeof SvgIcon }[] = [
   {
-    key: 'light',
-    label: 'Clair',
+    key: "light",
+    label: "Clair",
     icon: LightModeTwoTone,
   },
   {
-    key: 'system',
-    label: 'Système',
+    key: "system",
+    label: "Système",
     icon: SettingsBrightnessTwoTone,
   },
   {
-    key: 'dark',
-    label: 'Sombre',
+    key: "dark",
+    label: "Sombre",
     icon: DarkModeTwoTone,
   },
 ];
@@ -52,7 +51,7 @@ function ModeSwitcher() {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const id = open ? "simple-popover" : undefined;
 
   return (
     <>
@@ -60,33 +59,33 @@ function ModeSwitcher() {
         <Brightness4TwoTone sx={{ opacity: 0.7 }} />
       </IconButton>
       <Popover
-        id={id}
-        open={open}
         anchorEl={anchorEl}
-        onClose={handleClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
+          vertical: "bottom",
+          horizontal: "left",
         }}
+        id={id}
+        onClose={handleClose}
+        open={open}
       >
         <ToggleButtonGroup
-          value={mode}
+          aria-label="Theme mode"
           exclusive
           size="small"
-          aria-label="Theme mode"
+          value={mode}
         >
           {options.map(({ icon: Icon, ...option }) => (
             <ToggleButton
-              key={option.key}
-              value={option.key}
               aria-label="left aligned"
+              key={option.key}
               onClick={() => setMode(option.key)}
+              value={option.key}
             >
               <Box
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   mx: 1,
                 }}
               >

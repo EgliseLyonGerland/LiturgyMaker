@@ -1,50 +1,49 @@
-import { useState, useEffect, useRef } from 'react';
+import { yupResolver } from "@hookform/resolvers/yup";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import CodeIcon from "@mui/icons-material/Code";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { Grid, Container, useTheme, Box } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { format, subDays, addDays } from "date-fns";
+import { fr as locale } from "date-fns/locale/fr";
+import { cloneDeep } from "lodash";
+import capitalize from "lodash/capitalize";
+import debounce from "lodash/debounce";
+import { useState, useEffect, useRef } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import BeatLoader from "react-spinners/BeatLoader";
+import type * as Yup from "yup";
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import CodeIcon from '@mui/icons-material/Code';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { Grid, Container, useTheme, Box } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { format, subDays, addDays } from 'date-fns';
-import locale from 'date-fns/locale/fr';
-import { cloneDeep } from 'lodash';
-import capitalize from 'lodash/capitalize';
-import debounce from 'lodash/debounce';
-import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import BeatLoader from 'react-spinners/BeatLoader';
-import type * as Yup from 'yup';
-
-import Code from '../components/Code';
-import BlocksField from '../components/fields/BlocksField';
-import SaveButton from '../components/SaveButton';
-import { slideshowEnabled } from '../config/global';
-import { liturgySchema } from '../config/schemas';
-import SlideshowWindowManager from '../libs/SlideshowWindowManager';
+import Code from "../components/Code";
+import BlocksField from "../components/fields/BlocksField";
+import SaveButton from "../components/SaveButton";
+import { slideshowEnabled } from "../config/global";
+import { liturgySchema } from "../config/schemas";
+import SlideshowWindowManager from "../libs/SlideshowWindowManager";
 import {
   fetchLiturgy,
   persistLiturgy,
   selectLiturgyById,
-} from '../redux/slices/liturgies';
+} from "../redux/slices/liturgies";
 import {
   fetchRecitations,
   selectAllRecitations,
-} from '../redux/slices/recitations';
-import { fetchSongs, selectAllSongs } from '../redux/slices/songs';
-import { useAppDispatch, useAppSelector, useAppStore } from '../redux/store';
-import type { LiturgyBlock, LiturgyDocument } from '../types';
-import generateCode from '../utils/generateCode';
-import { converToDate, convertToId, getNextLiturgyId } from '../utils/liturgy';
+} from "../redux/slices/recitations";
+import { fetchSongs, selectAllSongs } from "../redux/slices/songs";
+import { useAppDispatch, useAppSelector, useAppStore } from "../redux/store";
+import type { LiturgyBlock, LiturgyDocument } from "../types";
+import generateCode from "../utils/generateCode";
+import { converToDate, convertToId, getNextLiturgyId } from "../utils/liturgy";
 
 const formatDate = (date: Date) => {
   if (date.getDate() === 1) {
     return format(date, "EEEE '1er' MMMM", { locale });
   }
 
-  return format(date, 'EEEE d MMMM', { locale });
+  return format(date, "EEEE d MMMM", { locale });
 };
 
 function Form({
@@ -61,7 +60,7 @@ function Form({
   const date = converToDate(liturgy.id);
 
   const form = useForm<LiturgyDocument>({
-    mode: 'onChange',
+    mode: "onChange",
     resolver: yupResolver<Yup.Asserts<Yup.AnyObjectSchema>>(liturgySchema),
   });
 
@@ -139,16 +138,16 @@ function Form({
   return (
     <FormProvider {...form}>
       <BlocksField
-        name="blocks"
         disabled={persisting}
         getPreviousWeekBlock={getPreviousWeekBlock}
+        name="blocks"
       />
       <SaveButton
-        persisting={persisting}
-        persisted={persisted}
         dirty={isDirty}
         onClick={onSubmit(handleSubmit)}
         onHide={() => setPersisted(false)}
+        persisted={persisted}
+        persisting={persisting}
       />
     </FormProvider>
   );
@@ -172,8 +171,8 @@ function LiturgyEdit() {
   const currentDate = converToDate(`${liturgyId}`);
 
   const loading =
-    songsStatus === 'loading' ||
-    recitationsStatus === 'loading' ||
+    songsStatus === "loading" ||
+    recitationsStatus === "loading" ||
     !liturgyState;
 
   const debouncedFetchLiturgy = useRef(
@@ -195,10 +194,10 @@ function LiturgyEdit() {
   };
 
   useEffect(() => {
-    if (songsStatus === 'idle') {
+    if (songsStatus === "idle") {
       dispatch(fetchSongs());
     }
-    if (recitationsStatus === 'idle') {
+    if (recitationsStatus === "idle") {
       dispatch(fetchRecitations());
     }
     if (!liturgyState) {
@@ -211,19 +210,19 @@ function LiturgyEdit() {
   }, [songs]);
 
   const renderNavBar = () => (
-    <Grid container sx={{ height: theme.spacing(8), alignItems: 'center' }}>
-      <Grid item xs={0} md={2} />
+    <Grid container sx={{ height: theme.spacing(8), alignItems: "center" }}>
+      <Grid item md={2} xs={0} />
       <Grid
         item
-        xs={12}
         md={8}
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           fontSize: 16,
           fontWeight: 700,
         }}
+        xs={12}
       >
         <IconButton
           aria-label="delete"
@@ -236,8 +235,8 @@ function LiturgyEdit() {
           <ArrowLeftIcon fontSize="inherit" />
         </IconButton>
         <Typography
+          sx={{ width: { xs: "auto", lg: 250 }, textAlign: "center" }}
           variant="inherit"
-          sx={{ width: { xs: 'auto', lg: 250 }, textAlign: 'center' }}
         >
           {capitalize(formatDate(currentDate))}
         </Typography>
@@ -254,9 +253,9 @@ function LiturgyEdit() {
       </Grid>
       <Grid
         item
-        xs={0}
         md={2}
-        sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}
+        sx={{ display: { xs: "none", md: "flex" }, justifyContent: "flex-end" }}
+        xs={0}
       >
         <IconButton
           onClick={() => {
@@ -270,17 +269,17 @@ function LiturgyEdit() {
           <IconButton onClick={handlePlay} size="large">
             <PlayArrowIcon />
             <Box
-              position="absolute"
               bgcolor="red"
+              borderRadius="2px"
               color="white"
               fontSize={10}
               fontWeight="bold"
-              borderRadius="2px"
               height={12}
               lineHeight="12px"
+              position="absolute"
               px="2px"
-              top={0}
               right={-4}
+              top={0}
             >
               beta
             </Box>

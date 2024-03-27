@@ -1,11 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
-import type { TypedUseSelectorHook } from 'react-redux';
-import { useStore, useDispatch, useSelector } from 'react-redux';
-import type { compose } from 'redux';
+import { configureStore } from "@reduxjs/toolkit";
+import type { TypedUseSelectorHook } from "react-redux";
+import { useStore, useDispatch, useSelector } from "react-redux";
+import type { compose } from "redux";
 
-import liturgies from './slices/liturgies';
-import recitations from './slices/recitations';
-import songs from './slices/songs';
+import liturgies from "./slices/liturgies";
+import recitations from "./slices/recitations";
+import songs from "./slices/songs";
 
 declare global {
   interface Window {

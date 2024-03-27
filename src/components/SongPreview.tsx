@@ -1,4 +1,4 @@
-import Player from 'react-player';
+import Player from "react-player";
 
 interface Props {
   title: string;
@@ -6,14 +6,14 @@ interface Props {
 }
 
 function SongPreview({ title, url }: Props) {
-  if (url.includes('drive.google.com')) {
+  if (url.includes("drive.google.com")) {
     return (
       <iframe
-        title={`${title} preview`}
         frameBorder="0"
-        width="100%"
         height="140"
-        src={url.replace('/view', '/preview')}
+        src={url.replace("/view", "/preview")}
+        title={`${title} preview`}
+        width="100%"
       />
     );
   }

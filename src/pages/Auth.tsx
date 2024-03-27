@@ -1,20 +1,19 @@
-import type { FormEvent } from 'react';
-import { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import { useTheme } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import TextField from "@mui/material/TextField";
+import type { Auth as FirebaseAuth } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
+import type { OptionsObject } from "notistack";
+import { useSnackbar } from "notistack";
+import { useEffect, useState } from "react";
+import type { FormEvent } from "react";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { useTheme } from '@mui/material';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import TextField from '@mui/material/TextField';
-import type { Auth as FirebaseAuth } from 'firebase/auth';
-import { sendPasswordResetEmail } from 'firebase/auth';
-import type { OptionsObject } from 'notistack';
-import { useSnackbar } from 'notistack';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-
-import ModeSwitcher from '../components/ModeSwitcher';
+import ModeSwitcher from "../components/ModeSwitcher";
 
 interface Props {
   firebaseAuth: FirebaseAuth;
@@ -22,23 +21,23 @@ interface Props {
 
 function isErrorWithMessage(error: unknown): error is { message: string } {
   return (
-    typeof error === 'object' &&
+    typeof error === "object" &&
     error !== null &&
-    'message' in error &&
-    typeof (error as Record<string, unknown>).message === 'string'
+    "message" in error &&
+    typeof (error as Record<string, unknown>).message === "string"
   );
 }
 
 const defaultSnackbarOptions: OptionsObject = {
-  anchorOrigin: { vertical: 'top', horizontal: 'center' },
+  anchorOrigin: { vertical: "top", horizontal: "center" },
   preventDuplicate: true,
   autoHideDuration: 8000,
 };
 
 function Auth({ firebaseAuth }: Props) {
   const theme = useTheme();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [lostPasswordShown, setLostPasswordShown] = useState(false);
   const [signInWithEmailAndPassword, , , authError] =
     useSignInWithEmailAndPassword(firebaseAuth);
@@ -64,7 +63,7 @@ function Auth({ firebaseAuth }: Props) {
         message += ` (${error.message})`;
       }
 
-      enqueueSnackbar(message, { ...defaultSnackbarOptions, variant: 'error' });
+      enqueueSnackbar(message, { ...defaultSnackbarOptions, variant: "error" });
     }
   };
 
@@ -72,7 +71,7 @@ function Auth({ firebaseAuth }: Props) {
     if (authError) {
       enqueueSnackbar(`Impossible de s'authentifier (${authError.message})`, {
         ...defaultSnackbarOptions,
-        variant: 'error',
+        variant: "error",
       });
     }
   }, [authError, enqueueSnackbar]);
@@ -81,37 +80,37 @@ function Auth({ firebaseAuth }: Props) {
     <>
       <Box
         sx={{
-          position: 'fixed',
-          width: '100vw',
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          transition: theme.transitions.create(['transform', 'opacity']),
+          position: "fixed",
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          transition: theme.transitions.create(["transform", "opacity"]),
           ...(lostPasswordShown
             ? {
-                transform: 'translateX(-100px)',
+                transform: "translateX(-100px)",
                 opacity: 0,
-                pointerEvents: 'none',
+                pointerEvents: "none",
               }
-            : { transform: 'none' }),
+            : { transform: "none" }),
         }}
       >
         <form onSubmit={handleSubmit}>
           <Box width={360}>
             <Card
               sx={{
-                border: 'solid 1px',
-                borderRadius: '4px',
-                borderColor: 'paper.border',
-                boxShadow: '4px 4px 10px rgba(0,0,0,0.05)',
+                border: "solid 1px",
+                borderRadius: "4px",
+                borderColor: "paper.border",
+                boxShadow: "4px 4px 10px rgba(0,0,0,0.05)",
               }}
             >
               <CardContent
                 sx={{
-                  bgcolor: 'paper.header',
-                  borderBottom: 'solid 1px',
-                  borderColor: 'paper.border',
+                  bgcolor: "paper.header",
+                  borderBottom: "solid 1px",
+                  borderColor: "paper.border",
                   ...theme.typography.h6,
                 }}
               >
@@ -119,43 +118,43 @@ function Auth({ firebaseAuth }: Props) {
               </CardContent>
               <CardContent sx={{ padding: theme.spacing(2, 3) }}>
                 <TextField
-                  label="Email"
-                  type="email"
-                  margin="normal"
-                  variant="filled"
                   autoComplete="off"
-                  value={email}
+                  autoFocus
+                  fullWidth
+                  label="Email"
+                  margin="normal"
                   onChange={(event) => {
                     setEmail(event.target.value);
                   }}
-                  autoFocus
-                  fullWidth
+                  type="email"
+                  value={email}
+                  variant="filled"
                 />
                 <TextField
-                  label="Mot de passe"
-                  type="password"
-                  margin="normal"
-                  variant="filled"
                   autoComplete="off"
-                  value={password}
+                  fullWidth
+                  label="Mot de passe"
+                  margin="normal"
                   onChange={(event) => {
                     setPassword(event.target.value);
                   }}
-                  fullWidth
+                  type="password"
+                  value={password}
+                  variant="filled"
                 />
               </CardContent>
               <CardContent sx={{ padding: theme.spacing(2, 3) }}>
-                <Button color="primary" variant="outlined" type="submit">
+                <Button color="primary" type="submit" variant="outlined">
                   Valider
                 </Button>
               </CardContent>
             </Card>
           </Box>
-          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'right' }}>
+          <Box sx={{ mt: 4, display: "flex", justifyContent: "right" }}>
             <Button
-              variant="text"
               color="inherit"
               onClick={() => setLostPasswordShown(true)}
+              variant="text"
             >
               Mot de passe perdu <ChevronRight />
             </Button>
@@ -164,19 +163,19 @@ function Auth({ firebaseAuth }: Props) {
       </Box>
       <Box
         sx={{
-          position: 'fixed',
-          width: '100vw',
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          transition: theme.transitions.create(['transform', 'opacity']),
+          position: "fixed",
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          transition: theme.transitions.create(["transform", "opacity"]),
           ...(lostPasswordShown
-            ? { transform: 'none' }
+            ? { transform: "none" }
             : {
-                transform: 'translateX(100px)',
+                transform: "translateX(100px)",
                 opacity: 0,
-                pointerEvents: 'none',
+                pointerEvents: "none",
               }),
         }}
       >
@@ -184,17 +183,17 @@ function Auth({ firebaseAuth }: Props) {
           <Box width={360}>
             <Card
               sx={{
-                border: 'solid 1px',
-                borderRadius: '4px',
-                borderColor: 'paper.border',
-                boxShadow: '4px 4px 10px rgba(0,0,0,0.05)',
+                border: "solid 1px",
+                borderRadius: "4px",
+                borderColor: "paper.border",
+                boxShadow: "4px 4px 10px rgba(0,0,0,0.05)",
               }}
             >
               <CardContent
                 sx={{
-                  bgcolor: 'paper.header',
-                  borderBottom: 'solid 1px',
-                  borderColor: 'paper.border',
+                  bgcolor: "paper.header",
+                  borderBottom: "solid 1px",
+                  borderColor: "paper.border",
                   ...theme.typography.h6,
                 }}
               >
@@ -202,21 +201,21 @@ function Auth({ firebaseAuth }: Props) {
               </CardContent>
               <CardContent sx={{ padding: theme.spacing(2, 3) }}>
                 <TextField
-                  label="Email"
-                  type="email"
-                  margin="normal"
-                  variant="filled"
                   autoComplete="off"
-                  value={email}
+                  autoFocus
+                  fullWidth
+                  label="Email"
+                  margin="normal"
                   onChange={(event) => {
                     setEmail(event.target.value);
                   }}
-                  autoFocus
-                  fullWidth
+                  type="email"
+                  value={email}
+                  variant="filled"
                 />
               </CardContent>
               <CardContent sx={{ padding: theme.spacing(2, 3) }}>
-                <Button color="primary" variant="outlined" type="submit">
+                <Button color="primary" type="submit" variant="outlined">
                   Valider
                 </Button>
               </CardContent>
@@ -224,9 +223,9 @@ function Auth({ firebaseAuth }: Props) {
           </Box>
           <Box sx={{ mt: 4 }}>
             <Button
-              variant="text"
               color="inherit"
               onClick={() => setLostPasswordShown(false)}
+              variant="text"
             >
               <ChevronLeft /> Retour
             </Button>
@@ -234,7 +233,7 @@ function Auth({ firebaseAuth }: Props) {
         </form>
       </Box>
 
-      <Box sx={{ position: 'fixed', top: 32, right: 32 }}>
+      <Box sx={{ position: "fixed", top: 32, right: 32 }}>
         <ModeSwitcher />
       </Box>
     </>

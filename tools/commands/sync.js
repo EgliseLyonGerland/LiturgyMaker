@@ -1,22 +1,22 @@
-const { writeFileSync, mkdirSync, readFileSync } = require('fs');
+const { writeFileSync, mkdirSync, readFileSync } = require("fs");
 
-const firebase = require('firebase');
-const { prompt } = require('inquirer');
-const noop = require('lodash/noop');
+const firebase = require("firebase");
+const { prompt } = require("inquirer");
+const noop = require("lodash/noop");
 
-module.exports.command = `sync <command>`;
-module.exports.desc = 'Sync data';
+module.exports.command = "sync <command>";
+module.exports.desc = "Sync data";
 
-const collections = ['liturgies', 'songs', 'recitations', 'users'];
+const collections = ["liturgies", "songs", "recitations", "users"];
 const backupDir = `${__dirname}/../../.firebase/backup`;
 
 async function confirm(message) {
   return (
     await prompt([
       {
-        name: 'ok',
+        name: "ok",
         message,
-        type: 'confirm',
+        type: "confirm",
         default: false,
       },
     ])
@@ -40,18 +40,18 @@ async function backupCommand() {
     }),
   );
 
-  console.log('Done');
+  console.log("Done");
   process.exit();
 }
 
 async function restoreCommand({ env }) {
   if (
-    env === 'production' &&
+    env === "production" &&
     !(await confirm(
-      'Are you sure you want to restore data on production database?',
+      "Are you sure you want to restore data on production database?",
     ))
   ) {
-    console.log('Aborted');
+    console.log("Aborted");
     process.exit();
   }
 
@@ -72,11 +72,11 @@ async function restoreCommand({ env }) {
     }),
   );
 
-  console.log('Done');
+  console.log("Done");
   process.exit();
 }
 
 module.exports.builder = function builder(yargs) {
-  yargs.command('backup', 'backup data', noop, backupCommand);
-  yargs.command('restore', 'Restore backup data', noop, restoreCommand);
+  yargs.command("backup", "backup data", noop, backupCommand);
+  yargs.command("restore", "Restore backup data", noop, restoreCommand);
 };

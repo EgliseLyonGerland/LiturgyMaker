@@ -1,15 +1,15 @@
-const { readFileSync } = require('fs');
+const { readFileSync } = require("fs");
 
-const { format } = require('date-fns');
-const { GoogleSpreadsheet } = require('google-spreadsheet');
-const { uniq, reduce, map, sum, last } = require('lodash');
-const open = require('open');
-const { table } = require('table');
+const { format } = require("date-fns");
+const { GoogleSpreadsheet } = require("google-spreadsheet");
+const { uniq, reduce, map, sum, last } = require("lodash");
+const open = require("open");
+const { table } = require("table");
 
-const googleServiceCreds = require('../config/~egliselyongerland-642b3dfa5d11.json');
+const googleServiceCreds = require("../config/~egliselyongerland-642b3dfa5d11.json");
 
-module.exports.command = `stats <command>`;
-module.exports.desc = 'Display stats';
+module.exports.command = "stats <command>";
+module.exports.desc = "Display stats";
 
 const backupDir = `${__dirname}/../../.firebase/backup`;
 
@@ -29,7 +29,7 @@ async function songsCommand({ dryRun }) {
     const year = new Date(liturgy.date).getFullYear() + 0;
 
     liturgy.blocks.forEach((block) => {
-      if (block.type !== 'songs') {
+      if (block.type !== "songs") {
         return;
       }
 
@@ -51,7 +51,7 @@ async function songsCommand({ dryRun }) {
     reduce(stats, (acc, curr) => acc.concat(Object.keys(curr.count)), []),
   );
 
-  const header = ['Titre', ...years, 'Total'];
+  const header = ["Titre", ...years, "Total"];
 
   const values = map(stats, (item) => [
     item.title,
@@ -65,7 +65,7 @@ async function songsCommand({ dryRun }) {
   }
 
   const doc = new GoogleSpreadsheet(
-    '16KvjnOV9mygprQv1X47jrJ-jgfJQ9f2pXuA3CJA6Iig',
+    "16KvjnOV9mygprQv1X47jrJ-jgfJQ9f2pXuA3CJA6Iig",
   );
 
   await doc.useServiceAccountAuth(googleServiceCreds);
@@ -76,15 +76,15 @@ async function songsCommand({ dryRun }) {
   await sheet.clear();
   await sheet.setHeaderRow(header);
   await sheet.addRows(values);
-  await sheet.loadCells('A1:A1');
+  await sheet.loadCells("A1:A1");
 
   const firstDate = new Date(liturgies[0].date);
   const lastDate = new Date(liturgies[liturgies.length - 1].date);
   const b1 = sheet.getCell(0, 0);
   b1.note = `Calculé sur les ${liturgies.length} cultes du ${format(
     firstDate,
-    'dd/MM/yyyy',
-  )} au ${format(lastDate, 'dd/MM/yyyy')}`;
+    "dd/MM/yyyy",
+  )} au ${format(lastDate, "dd/MM/yyyy")}`;
 
   await sheet.saveUpdatedCells();
 
@@ -95,10 +95,10 @@ async function songsCommand({ dryRun }) {
 
 module.exports.builder = function builder(yargs) {
   yargs.command(
-    'songs',
-    'Display stats about songs',
+    "songs",
+    "Display stats about songs",
     (y) => {
-      y.option('dry-run', { type: 'boolean', default: false });
+      y.option("dry-run", { type: "boolean", default: false });
     },
     songsCommand,
   );

@@ -1,54 +1,54 @@
-import { Box } from '@mui/material';
+import { Box } from "@mui/material";
 
-import BibleRefField from './BibleRefField';
-import type { FormFieldProps } from '../../types';
-import ArraySortableControl from '../controls/ArraySortableControl';
-import TextFieldControl from '../controls/TextFieldControl';
+import BibleRefField from "./BibleRefField";
+import type { FormFieldProps } from "../../types";
+import ArraySortableControl from "../controls/ArraySortableControl";
+import TextFieldControl from "../controls/TextFieldControl";
 
 function SermonField({ name, disabled = false }: FormFieldProps) {
   return (
     <div>
       <TextFieldControl
-        name={`${name}.title`}
-        label="Titre"
         disabled={disabled}
+        label="Titre"
+        name={`${name}.title`}
       />
       <TextFieldControl
-        name={`${name}.author`}
-        label="Auteur"
         disabled={disabled}
+        label="Auteur"
+        name={`${name}.author`}
       />
 
-      <Box fontSize={16} fontWeight={900} mt={4} mb={2}>
+      <Box fontSize={16} fontWeight={900} mb={2} mt={4}>
         Passage(s) biblique(s)
       </Box>
 
       <ArraySortableControl
-        name={`${name}.bibleRefs`}
-        defaultItem={{ id: '' }}
+        defaultItem={{ id: "" }}
         disabled={disabled}
+        name={`${name}.bibleRefs`}
         renderItem={(item, index) => (
           <BibleRefField
+            disabled={disabled}
             name={`${name}.bibleRefs.${index}`}
             withExcerpt={false}
-            disabled={disabled}
           />
         )}
       />
 
-      <Box fontSize={16} fontWeight={900} mt={4} mb={2}>
+      <Box fontSize={16} fontWeight={900} mb={2} mt={4}>
         Plan
       </Box>
 
       <ArraySortableControl
-        name={`${name}.plan`}
-        defaultItem={{ text: '' }}
+        defaultItem={{ text: "" }}
         disabled={disabled}
+        name={`${name}.plan`}
         renderItem={(item, index) => (
           <TextFieldControl
-            name={`${name}.plan.${index}.text`}
-            label={`Point #${index + 1}`}
             disabled={disabled}
+            label={`Point #${index + 1}`}
+            name={`${name}.plan.${index}.text`}
           />
         )}
       />

@@ -1,13 +1,13 @@
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import find from 'lodash/find';
-import get from 'lodash/get';
-import { Controller } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import find from "lodash/find";
+import get from "lodash/get";
+import { Controller } from "react-hook-form";
+import { useSelector } from "react-redux";
 
-import { selectAllRecitations } from '../../redux/slices/recitations';
-import type { FormFieldProps } from '../../types';
-import TextFieldControl from '../controls/TextFieldControl';
+import { selectAllRecitations } from "../../redux/slices/recitations";
+import type { FormFieldProps } from "../../types";
+import TextFieldControl from "../controls/TextFieldControl";
 
 function RecitationField({ name, disabled = false }: FormFieldProps) {
   const recitations = useSelector(selectAllRecitations);
@@ -21,34 +21,34 @@ function RecitationField({ name, disabled = false }: FormFieldProps) {
           fieldState: { error },
         }) => (
           <Autocomplete
-            value={find(recitations, ['id', value]) || null}
-            options={recitations}
-            getOptionLabel={(option) => option.title}
-            onChange={(event, option) => {
-              onChange(get(option, 'id', null));
-            }}
-            onBlur={onBlur}
+            autoComplete
             disabled={disabled}
+            getOptionLabel={(option) => option.title}
+            onBlur={onBlur}
+            onChange={(event, option) => {
+              onChange(get(option, "id", null));
+            }}
+            options={recitations}
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Titre"
-                variant="filled"
-                margin="dense"
-                inputRef={inputRef}
                 error={!!error}
                 helperText={error?.message}
+                inputRef={inputRef}
+                label="Titre"
+                margin="dense"
+                variant="filled"
               />
             )}
-            autoComplete
+            value={find(recitations, ["id", value]) || null}
           />
         )}
       />
       <TextFieldControl
-        name={`${name}.infos`}
-        label="Informations"
         disabled={disabled}
+        label="Informations"
         multiline
+        name={`${name}.infos`}
       />
     </div>
   );

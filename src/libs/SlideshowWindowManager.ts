@@ -1,4 +1,21 @@
-import type { LiturgyDocument, SongDocument } from '../types';
+import type { LiturgyDocument, SongDocument } from "../types";
+
+export type Message =
+  | {
+      namespace: "reveal";
+      method: "ready";
+      args: [];
+    }
+  | {
+      namespace: "reveal";
+      method: "updateLiturgy";
+      args: [LiturgyDocument];
+    }
+  | {
+      namespace: "reveal";
+      method: "updateSongs";
+      args: [SongDocument[]];
+    };
 
 class SlideshowWindowManager {
   window: Window | null = null;
@@ -13,36 +30,40 @@ class SlideshowWindowManager {
 
   open() {
     this.window = window.open(
-      '/slideshow',
-      'slideshow',
-      'toolbar=off,location=off',
+      "/slideshow",
+      "slideshow",
+      "toolbar=off,location=off",
     );
 
-    window.removeEventListener('message', this.handleMessage);
-    window.addEventListener('message', this.handleMessage);
+    window.removeEventListener("message", this.handleMessage);
+    window.addEventListener("message", this.handleMessage);
   }
 
-  handleMessage(event: MessageEvent) {
-    if (event.data.namespace === 'reveal' && event.data.method === 'ready') {
-      this.sendMessage('updateLiturgy', [this.liturgy]);
-      this.sendMessage('updateSongs', [this.songs]);
+  handleMessage(event: MessageEvent<Message>) {
+    if (event.data.namespace === "reveal" && event.data.method === "ready") {
+      if (this.liturgy) {
+        this.sendMessage("updateLiturgy", [this.liturgy]);
+      }
+      if (this.songs) {
+        this.sendMessage("updateSongs", [this.songs]);
+      }
     }
   }
 
-  sendMessage(method: string, args: any[]) {
+  sendMessage(method: Message["method"], args: Message["args"]) {
     if (this.window) {
-      this.window.postMessage({ namespace: 'reveal', method, args }, '*');
+      this.window.postMessage({ namespace: "reveal", method, args }, "*");
     }
   }
 
   setLiturgy(liturgy: LiturgyDocument) {
     this.liturgy = liturgy;
-    this.sendMessage('updateLiturgy', [this.liturgy]);
+    this.sendMessage("updateLiturgy", [this.liturgy]);
   }
 
   setSongs(songs: SongDocument[]) {
     this.songs = songs;
-    this.sendMessage('updateSongs', [this.songs]);
+    this.sendMessage("updateSongs", [this.songs]);
   }
 }
 

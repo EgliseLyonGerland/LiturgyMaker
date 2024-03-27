@@ -9,23 +9,23 @@ export default function version2(doc: any) {
 
       let title;
       switch (block.type) {
-        case 'announcements':
-          title = 'Annonces';
+        case "announcements":
+          title = "Annonces";
           break;
-        case 'reading':
+        case "reading":
           title = block.data.title;
           break;
-        case 'songs':
-          title = 'Chants';
+        case "songs":
+          title = "Chants";
           break;
-        case 'sermon':
-          title = 'Prédication';
+        case "sermon":
+          title = "Prédication";
           break;
-        case 'section':
+        case "section":
           title = null;
           break;
         default:
-          title = '';
+          title = "";
       }
 
       return { ...block, title };

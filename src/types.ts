@@ -1,15 +1,15 @@
-import type rootReducer from './redux/slices';
+import type rootReducer from "./redux/slices";
 
 export type RootState = ReturnType<typeof rootReducer>;
 
 export type BlockType =
-  | 'announcements'
-  | 'reading'
-  | 'section'
-  | 'sermon'
-  | 'songs'
-  | 'recitation'
-  | 'openDoors';
+  | "announcements"
+  | "reading"
+  | "section"
+  | "sermon"
+  | "songs"
+  | "recitation"
+  | "openDoors";
 
 export interface AnnouncementsItem {
   title: string;
@@ -53,37 +53,56 @@ export interface SongsItem {
   id: string;
   infos: string;
   repeat: boolean;
-  lyrics: SongDocument['lyrics'] | null;
+  lyrics: SongDocument["lyrics"] | null;
 }
 
 export interface SongsBlockData {
   items: SongsItem[];
 }
 
-export type LiturgyBlock<T = BlockType> = T extends BlockType
-  ? {
-      type: T;
+export type LiturgyBlock =
+  | {
+      type: "announcements";
       title: string;
-      data: T extends 'announcements'
-        ? AnnouncementsBlockData
-        : T extends 'reading'
-        ? ReadingBlockData
-        : T extends 'section'
-        ? SectionBlockData
-        : T extends 'sermon'
-        ? SermonBlockData
-        : T extends 'songs'
-        ? SongsBlockData
-        : T extends 'recitation'
-        ? RecitationBlockData
-        : T extends 'openDoors'
-        ? OpenDoorsBlockData
-        : never;
+      data: AnnouncementsBlockData;
     }
-  : never;
+  | {
+      type: "reading";
+      title: string;
+      data: ReadingBlockData;
+    }
+  | {
+      type: "section";
+      title: string;
+      data: SectionBlockData;
+    }
+  | {
+      type: "sermon";
+      title: string;
+      data: SermonBlockData;
+    }
+  | {
+      type: "songs";
+      title: string;
+      data: SongsBlockData;
+    }
+  | {
+      type: "recitation";
+      title: string;
+      data: RecitationBlockData;
+    }
+  | {
+      type: "openDoors";
+      title: string;
+      data: OpenDoorsBlockData;
+    };
+
+export type LiturgyBlocks = {
+  [U in LiturgyBlock as U["type"]]: U;
+};
 
 export interface LiturgyDocument {
-  id: number;
+  id: string;
   uid: string;
   version: number;
   blocks: LiturgyBlock[];
@@ -95,7 +114,7 @@ export interface RecitationDocument {
   content: { text: string }[];
 }
 
-export type LyricType = 'verse' | 'chorus';
+export type LyricType = "verse" | "chorus";
 
 export interface LyricPart {
   type: LyricType;

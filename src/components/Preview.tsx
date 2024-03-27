@@ -1,13 +1,12 @@
-import { useState } from 'react';
+import { Box, Pagination } from "@mui/material";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
-import { Box, Pagination } from '@mui/material';
-import { useSelector } from 'react-redux';
-
-import RevealContainer from './RevealContainer';
-import SectionSlides from './slides/SectionSlides';
-import SongsSlides from './slides/SongsSlides';
-import { selectAllSongs } from '../redux/slices/songs';
-import type { LiturgyBlock } from '../types';
+import RevealContainer from "./RevealContainer";
+import SectionSlides from "./slides/SectionSlides";
+import SongsSlides from "./slides/SongsSlides";
+import { selectAllSongs } from "../redux/slices/songs";
+import type { LiturgyBlock } from "../types";
 
 interface Props {
   block: LiturgyBlock;
@@ -20,9 +19,9 @@ function Preview({ block }: Props) {
 
   const renderSlides = () => {
     switch (block.type) {
-      case 'section':
+      case "section":
         return <SectionSlides data={block.data} />;
-      case 'songs':
+      case "songs":
         return <SongsSlides data={block.data} songs={songs} />;
       default:
         return null;
@@ -36,24 +35,24 @@ function Preview({ block }: Props) {
   }
 
   return (
-    <Box sx={{ position: 'sticky', top: 92 }}>
+    <Box sx={{ position: "sticky", top: 92 }}>
       <RevealContainer
         currentSlide={currentSlide}
-        onCountChanged={setCount}
         embedded
+        onCountChanged={setCount}
       >
         {slides}
       </RevealContainer>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
         {count > 1 && (
           <Pagination
             count={count}
-            page={currentSlide}
-            siblingCount={0}
             onChange={(event, value) => {
               setCurrentSlide(value);
             }}
+            page={currentSlide}
+            siblingCount={0}
           />
         )}
       </Box>

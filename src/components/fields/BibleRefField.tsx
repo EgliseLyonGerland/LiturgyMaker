@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import { Autocomplete, Box, TextField, useTheme } from "@mui/material";
+import { useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 
-import { Autocomplete, Box, TextField, useTheme } from '@mui/material';
-import { Controller, useFormContext } from 'react-hook-form';
-
-import books from '../../config/bibleBooks.json';
-import type { FormFieldProps } from '../../types';
-import { getPassage } from '../../utils/bibleRef';
-import TextFieldControl from '../controls/TextFieldControl';
+import books from "../../config/bibleBooks.json";
+import type { FormFieldProps } from "../../types";
+import { getPassage } from "../../utils/bibleRef";
+import TextFieldControl from "../controls/TextFieldControl";
 
 interface Props extends FormFieldProps {
   withExcerpt?: boolean;
@@ -39,6 +38,10 @@ function BibleRefField({ name, withExcerpt = true, disabled = false }: Props) {
           fieldState: { error },
         }) => (
           <Autocomplete
+            autoComplete
+            autoHighlight
+            disabled={disabled}
+            freeSolo
             options={books.reduce<string[]>(
               (acc, book) =>
                 book.alt
@@ -46,50 +49,46 @@ function BibleRefField({ name, withExcerpt = true, disabled = false }: Props) {
                   : acc.concat(book.name),
               [],
             )}
-            disabled={disabled}
-            freeSolo
-            autoComplete
-            autoHighlight
-            value={value}
             renderInput={(params) => (
               <TextField
                 {...params}
-                inputRef={ref}
-                label="Référence biblique"
-                variant="filled"
-                margin="dense"
                 error={!!error}
                 helperText={error?.message}
+                inputRef={ref}
+                label="Référence biblique"
+                margin="dense"
                 onChange={onChange}
+                variant="filled"
               />
             )}
+            value={value}
           />
         )}
       />
       {withExcerpt && (
         <>
           <TextFieldControl
-            name={`${name}.excerpt`}
-            label="Extrait"
             disabled={disabled}
+            label="Extrait"
             multiline
+            name={`${name}.excerpt`}
           />
           <Box
             component="button"
-            type="button"
             disabled={disabled}
             onClick={() => handleFillPassage()}
             sx={{
-              background: 'transparent',
+              background: "transparent",
               border: 0,
               padding: 0,
               color: theme.palette.text.secondary,
-              cursor: 'pointer',
+              cursor: "pointer",
               outline: 0,
             }}
+            type="button"
           >
             {loading
-              ? 'Chargement...'
+              ? "Chargement..."
               : "Remplir automatiquement l'extrait à partir de la référence"}
           </Box>
         </>

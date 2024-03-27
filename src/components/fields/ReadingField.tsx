@@ -1,18 +1,18 @@
-import BibleRefField from './BibleRefField';
-import type { FormFieldProps } from '../../types';
-import ArraySortableControl from '../controls/ArraySortableControl';
+import BibleRefField from "./BibleRefField";
+import type { FormFieldProps } from "../../types";
+import ArraySortableControl from "../controls/ArraySortableControl";
 
 function ReadingField({ name, disabled = false }: FormFieldProps) {
   return (
     <ArraySortableControl
-      name={`${name}.bibleRefs`}
-      gutters={3}
-      defaultItem={{ id: '', excerpt: '' }}
+      defaultItem={{ id: "", excerpt: "" }}
       disabled={disabled}
+      gutters={3}
+      name={`${name}.bibleRefs`}
       renderItem={(item, index) => (
         <BibleRefField
-          name={`${name}.bibleRefs.${index}`}
           disabled={disabled}
+          name={`${name}.bibleRefs.${index}`}
         />
       )}
     />

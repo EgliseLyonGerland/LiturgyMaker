@@ -1,7 +1,7 @@
-import { range } from 'lodash';
-import deburr from 'lodash/deburr';
+import { range } from "lodash";
+import deburr from "lodash/deburr";
 
-import books from '../config/bibleBooks.json';
+import books from "../config/bibleBooks.json";
 
 interface GetBibleResponse {
   chapter: number;
@@ -77,18 +77,18 @@ export function validate(ref: string) {
   const data = parse(ref);
 
   if (!data) {
-    return 'Format incorrect';
+    return "Format incorrect";
   }
 
   if (!bookNames.includes(deburr(data.book))) {
-    return 'Livre non-reconnu';
+    return "Livre non-reconnu";
   }
 
-  return '';
+  return "";
 }
 
 function sanitize(text: string) {
-  return text.replace(/([^ ])([:;?!])/g, '$1 $2');
+  return text.replace(/([^ ])([:;?!])/g, "$1 $2");
 }
 
 export async function getPassage(ref: string) {
@@ -98,7 +98,7 @@ export async function getPassage(ref: string) {
     return null;
   }
 
-  const version = 'ls1910';
+  const version = "ls1910";
   const bookId =
     books.findIndex(
       ({ name, alt }) => name === data.book || alt === data.book,
@@ -132,10 +132,10 @@ export async function getPassage(ref: string) {
         chapter.chapter === chapterEnd ? verseEnd : chapter.verses.length,
       )
       .map((verse) => verse.text)
-      .join(' ');
+      .join(" ");
 
     return `${acc}\n\n${content}`.trim();
-  }, '');
+  }, "");
 
   return sanitize(result);
 }

@@ -4,15 +4,15 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@types/google-spreadsheet": "3.1.5",
-    "configstore": "5.0.1",
-    "date-fns": "2.28.0",
-    "firebase": "8.10.0",
-    "google-spreadsheet": "3.2.0",
-    "inquirer": "8.2.0",
+    "@types/google-spreadsheet": "4.0.0",
+    "configstore": "6.0.0",
+    "date-fns": "3.6.0",
+    "firebase": "10.9.0",
+    "google-spreadsheet": "4.1.1",
+    "inquirer": "9.2.16",
     "lodash": "4.17.21",
-    "open": "8.4.0",
-    "table": "6.8.0",
-    "yargs": "17.3.1"
+    "open": "10.1.0",
+    "table": "6.8.2",
+    "yargs": "17.7.2"
   }
 }

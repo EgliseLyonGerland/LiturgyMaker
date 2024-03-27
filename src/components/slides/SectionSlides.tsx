@@ -1,4 +1,4 @@
-import type { SectionBlockData } from '../../types';
+import type { SectionBlockData } from "../../types";
 
 interface Props {
   data: SectionBlockData;

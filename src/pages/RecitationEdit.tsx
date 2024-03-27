@@ -1,26 +1,26 @@
-import { useEffect, useState } from 'react';
+import { yupResolver } from "@hookform/resolvers/yup";
+import type { BoxProps } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
+import isString from "lodash/isString";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import BeatLoader from "react-spinners/BeatLoader";
+import { InferType } from "yup";
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import type { BoxProps } from '@mui/material';
-import { Box, Container, Typography } from '@mui/material';
-import isString from 'lodash/isString';
-import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import BeatLoader from 'react-spinners/BeatLoader';
-
-import TextFieldControl from '../components/controls/TextFieldControl';
-import SaveButton from '../components/SaveButton';
-import { recitationSchema } from '../config/schemas';
+import TextFieldControl from "../components/controls/TextFieldControl";
+import SaveButton from "../components/SaveButton";
+import { recitationSchema } from "../config/schemas";
 import {
   fetchRecitations,
   persistRecitation,
   selectRecitationById,
-} from '../redux/slices/recitations';
-import { useAppDispatch, useAppSelector } from '../redux/store';
-import type { RecitationDocument } from '../types';
+} from "../redux/slices/recitations";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import type { RecitationDocument } from "../types";
 
 function Block({
-  header = '',
+  header = "",
   children,
   ...props
 }: {
@@ -30,21 +30,21 @@ function Block({
     <Box
       bgcolor="paper.background.main"
       border="solid 1px"
-      borderRadius="4px"
       borderColor="paper.border"
+      borderRadius="4px"
       boxShadow="4px 4px 10px rgba(0,0,0,0.05)"
       {...props}
     >
       {header && (
         <Box
-          height={72}
-          px={5}
-          display="flex"
           alignItems="center"
           bgcolor="paper.header"
           borderBottom="solid 1px"
-          borderRadius="4px 4px 0 0"
           borderColor="paper.border"
+          borderRadius="4px 4px 0 0"
+          display="flex"
+          height={72}
+          px={5}
         >
           {isString(header) ? (
             <Typography variant="h6">{header}</Typography>
@@ -60,6 +60,8 @@ function Block({
   );
 }
 
+type FormValues = InferType<typeof recitationSchema>;
+
 function RecitationEdit() {
   const params = useParams();
   const navigate = useNavigate();
@@ -71,11 +73,11 @@ function RecitationEdit() {
   const [persisting, setPersisting] = useState(false);
   const [persisted, setPersisted] = useState(false);
 
-  const form = useForm<RecitationDocument>({
-    mode: 'onChange',
+  const form = useForm<FormValues>({
+    mode: "onChange",
     resolver: yupResolver(recitationSchema),
     defaultValues: {
-      content: [{ text: '' }],
+      content: [{ text: "" }],
     },
   });
   const {
@@ -84,7 +86,7 @@ function RecitationEdit() {
     formState: { isDirty, isSubmitting },
   } = form;
 
-  const handleSubmit = async (data: RecitationDocument) => {
+  const handleSubmit = async (data: FormValues) => {
     setPersisting(true);
 
     const { payload } = await dispatch(persistRecitation(data));
@@ -105,13 +107,13 @@ function RecitationEdit() {
         ...recitation,
         content: recitation.content.length
           ? recitation.content
-          : [{ text: '' }],
+          : [{ text: "" }],
       });
     }
   }, [recitation, reset]);
 
   useEffect(() => {
-    if (recitationsStatus === 'idle') {
+    if (recitationsStatus === "idle") {
       dispatch(fetchRecitations());
     }
   }, [dispatch, recitationsStatus]);
@@ -129,30 +131,30 @@ function RecitationEdit() {
       <FormProvider {...form}>
         <Block header="Informations générales">
           <TextFieldControl
-            name="title"
-            label="Titre"
             disabled={isSubmitting}
+            label="Titre"
+            name="title"
           />
           <TextFieldControl
-            name="content"
+            disabled={isSubmitting}
             label="Texte"
             multiline
-            disabled={isSubmitting}
-            transformIn={(data: RecitationDocument['content']) =>
-              data.map((item) => item.text).join('\n\n')
+            name="content"
+            transformIn={(data: RecitationDocument["content"]) =>
+              data.map((item) => item.text).join("\n\n")
             }
-            transformOut={(data): RecitationDocument['content'] =>
+            transformOut={(data): RecitationDocument["content"] =>
               data.split(/\n{2,}/).map((text) => ({ text })) || []
             }
           />
         </Block>
 
         <SaveButton
-          persisting={persisting}
-          persisted={persisted}
           dirty={isDirty}
           onClick={submitForm(handleSubmit)}
           onHide={() => setPersisted(false)}
+          persisted={persisted}
+          persisting={persisting}
         />
       </FormProvider>
     </Container>

@@ -2,7 +2,7 @@ import {
   createSlice,
   createAsyncThunk,
   createEntityAdapter,
-} from '@reduxjs/toolkit';
+} from "@reduxjs/toolkit";
 import {
   addDoc,
   collection,
@@ -10,27 +10,28 @@ import {
   getDocs,
   query,
   setDoc,
-} from 'firebase/firestore';
-import { cloneDeep } from 'lodash';
-import { normalize, schema } from 'normalizr';
+} from "firebase/firestore";
+import { cloneDeep } from "lodash";
+import { normalize, schema } from "normalizr";
+import type { SetOptional } from "type-fest";
 
-import { db } from '../../firebase';
-import type { RecitationDocument, RootState } from '../../types';
+import { db } from "../../firebase";
+import type { RecitationDocument, RootState } from "../../types";
 
 export const recitationEntity = new schema.Entity<RecitationDocument>(
-  'recitations',
+  "recitations",
 );
 export const recitationsEntity = new schema.Array(recitationEntity);
 
 const recitationsAdapter = createEntityAdapter<RecitationDocument>();
 
 export const fetchRecitations = createAsyncThunk(
-  'recitations/fetchRecitations',
+  "recitations/fetchRecitations",
   async () => {
-    const { docs } = await getDocs(query(collection(db, 'recitations')));
+    const { docs } = await getDocs(query(collection(db, "recitations")));
 
     return normalize<
-      any,
+      RecitationDocument,
       {
         recitations: Record<string, RecitationDocument>;
       }
@@ -42,41 +43,35 @@ export const fetchRecitations = createAsyncThunk(
 );
 
 export const persistRecitation = createAsyncThunk(
-  'recitations/persistRecitation',
-  async (recitation: RecitationDocument) => {
-    const { id, ...data } = recitation;
-
-    if (!id) {
-      const ref = await addDoc(collection(db, 'recitations'), data);
-
-      return {
-        id: ref.id,
-        ...cloneDeep(data),
-      };
+  "recitations/persistRecitation",
+  async (recitation: SetOptional<RecitationDocument, "id">) => {
+    if (!recitation.id) {
+      const ref = await addDoc(collection(db, "recitations"), recitation);
+      recitation.id = ref.id;
+    } else {
+      await setDoc(doc(db, "recitations", recitation.id), recitation);
     }
 
-    await setDoc(doc(db, 'recitations', id), data);
-
-    return cloneDeep(recitation);
+    return cloneDeep(recitation) as RecitationDocument;
   },
 );
 
 const recitationsSlice = createSlice({
-  name: 'recitations',
+  name: "recitations",
   initialState: recitationsAdapter.getInitialState({
-    status: 'idle',
+    status: "idle",
   }),
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchRecitations.fulfilled, (state, action) => {
-      state.status = 'success';
+      state.status = "success";
       recitationsAdapter.upsertMany(state, action.payload.recitations);
     });
     builder.addCase(fetchRecitations.pending, (state) => {
-      state.status = 'loading';
+      state.status = "loading";
     });
     builder.addCase(fetchRecitations.rejected, (state) => {
-      state.status = 'fail';
+      state.status = "fail";
     });
     builder.addCase(persistRecitation.fulfilled, (state, action) => {
       recitationsAdapter.upsertOne(state, action.payload);

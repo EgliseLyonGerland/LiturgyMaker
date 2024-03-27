@@ -1,8 +1,8 @@
-const Configstore = require('configstore');
+const Configstore = require("configstore");
 
-let ENV = 'dev';
+let ENV = "dev";
 
-const config = new Configstore('liturgy-maker');
+const config = new Configstore("liturgy-maker");
 
 module.exports.setEnv = (env) => {
   ENV = env;

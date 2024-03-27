@@ -1,54 +1,53 @@
-import { useEffect, useState } from 'react';
+import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
+import BeatLoader from "react-spinners/BeatLoader";
 
-import { Box } from '@mui/material';
-import BeatLoader from 'react-spinners/BeatLoader';
-
-import RevealContainer from '../components/RevealContainer';
-import SectionSlides from '../components/slides/SectionSlides';
-import SongsSlides from '../components/slides/SongsSlides';
-import type { LiturgyBlock, LiturgyDocument, SongDocument } from '../types';
+import RevealContainer from "../components/RevealContainer";
+import SectionSlides from "../components/slides/SectionSlides";
+import SongsSlides from "../components/slides/SongsSlides";
+import { Message } from "../libs/SlideshowWindowManager";
+import type { LiturgyBlock, LiturgyDocument, SongDocument } from "../types";
 
 function Slideshow() {
   const [data, setData] = useState<LiturgyDocument | null>(null);
   const [songs, setSongs] = useState<SongDocument[] | null>(null);
 
   useEffect(() => {
-    window.opener.postMessage({ namespace: 'reveal', method: 'ready' }, '*');
+    window.opener.postMessage({ namespace: "reveal", method: "ready" }, "*");
   }, []);
 
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // console.log(event.data);
-      if (event.data.namespace !== 'reveal') {
+    const handleMessage = (event: MessageEvent<Message>) => {
+      if (event.data.namespace !== "reveal") {
         return;
       }
 
       switch (event.data.method) {
-        case 'updateLiturgy':
+        case "updateLiturgy":
           setData(event.data.args[0]);
           break;
-        case 'updateSongs':
+        case "updateSongs":
           setSongs(event.data.args[0]);
           break;
         default:
       }
     };
 
-    window.addEventListener('message', handleMessage);
+    window.addEventListener("message", handleMessage);
 
     return () => {
-      window.removeEventListener('message', handleMessage);
+      window.removeEventListener("message", handleMessage);
     };
   }, []);
 
   if (!data) {
     return (
       <Box
-        width="100vw"
-        height="100vh"
-        display="flex"
         alignItems="center"
+        display="flex"
+        height="100vh"
         justifyContent="center"
+        width="100vw"
       >
         <BeatLoader color="#DDD" />
       </Box>
@@ -57,9 +56,9 @@ function Slideshow() {
 
   const renderSlides = (block: LiturgyBlock) => {
     switch (block.type) {
-      case 'section':
+      case "section":
         return <SectionSlides data={block.data} />;
-      case 'songs':
+      case "songs":
         return <SongsSlides data={block.data} songs={songs || []} />;
       default:
         return null;

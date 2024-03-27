@@ -1,22 +1,26 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 import {
+  browserSessionPersistence,
   connectAuthEmulator,
   debugErrorMap,
   initializeAuth,
-} from 'firebase/auth';
+} from "firebase/auth";
 import {
   connectFirestoreEmulator,
   initializeFirestore,
-} from 'firebase/firestore';
+} from "firebase/firestore";
 
-import config from './config/firebase.json';
+import config from "./config/firebase.json";
 
 const app = initializeApp(config);
 
-export const auth = initializeAuth(app, { errorMap: debugErrorMap });
+export const auth = initializeAuth(app, {
+  errorMap: debugErrorMap,
+  persistence: browserSessionPersistence,
+});
 export const db = initializeFirestore(app, {});
 
-if (import.meta.env.NODE_ENV === 'development') {
-  connectAuthEmulator(auth, 'http://localhost:9099');
-  connectFirestoreEmulator(db, 'localhost', 8080);
+if (import.meta.env.DEV) {
+  connectAuthEmulator(auth, "http://localhost:9099");
+  connectFirestoreEmulator(db, "localhost", 8080);
 }

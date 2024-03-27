@@ -1,18 +1,17 @@
-import { Suspense, lazy } from 'react';
+import { Box } from "@mui/material";
+import { Suspense, lazy } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 
-import { Box } from '@mui/material';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { BeatLoader } from 'react-spinners';
+import MainLayout from "../components/MainLayout";
+import { getNextLiturgyId } from "../utils/liturgy";
 
-import MainLayout from '../components/MainLayout';
-import { getNextLiturgyId } from '../utils/liturgy';
-
-const LiturgyEditPage = lazy(() => import('./LiturgyEdit'));
-const SongsPage = lazy(() => import('./Songs'));
-const SongEditPage = lazy(() => import('./SongEdit'));
-const RecitationsPage = lazy(() => import('./Recitations'));
-const RecitationEditPage = lazy(() => import('./RecitationEdit'));
-const SlideshowPage = lazy(() => import('./Slideshow'));
+const LiturgyEditPage = lazy(() => import("./LiturgyEdit"));
+const SongsPage = lazy(() => import("./Songs"));
+const SongEditPage = lazy(() => import("./SongEdit"));
+const RecitationsPage = lazy(() => import("./Recitations"));
+const RecitationEditPage = lazy(() => import("./RecitationEdit"));
+const SlideshowPage = lazy(() => import("./Slideshow"));
 
 function Suspensed({ children }: { children: JSX.Element }) {
   return (
@@ -35,7 +34,7 @@ function Main() {
         element={<Navigate to={`/liturgies/${getNextLiturgyId()}/edit`} />}
         index
       />
-      <Route path="/slideshow" element={<SlideshowPage />} />
+      <Route element={<SlideshowPage />} path="/slideshow" />
 
       <Route
         element={
@@ -45,60 +44,60 @@ function Main() {
         }
       >
         <Route
-          path="/liturgies/:liturgyId/edit"
           element={
             <Suspensed>
               <LiturgyEditPage />
             </Suspensed>
           }
+          path="/liturgies/:liturgyId/edit"
         />
         <Route
-          path="/songs"
           element={
             <Suspensed>
               <SongsPage />
             </Suspensed>
           }
+          path="/songs"
         />
         <Route
+          element={
+            <Suspensed>
+              <SongEditPage />
+            </Suspensed>
+          }
           path="/songs/:songId/edit"
+        />
+        <Route
           element={
             <Suspensed>
               <SongEditPage />
             </Suspensed>
           }
-        />
-        <Route
           path="/songs/new"
-          element={
-            <Suspensed>
-              <SongEditPage />
-            </Suspensed>
-          }
         />
         <Route
-          path="/recitations"
           element={
             <Suspensed>
               <RecitationsPage />
             </Suspensed>
           }
+          path="/recitations"
         />
         <Route
+          element={
+            <Suspensed>
+              <RecitationEditPage />
+            </Suspensed>
+          }
           path="/recitations/:recitationId/edit"
-          element={
-            <Suspensed>
-              <RecitationEditPage />
-            </Suspensed>
-          }
         />
         <Route
-          path="/recitations/new"
           element={
             <Suspensed>
               <RecitationEditPage />
             </Suspensed>
           }
+          path="/recitations/new"
         />
       </Route>
     </Routes>

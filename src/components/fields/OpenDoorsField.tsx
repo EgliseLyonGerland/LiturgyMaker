@@ -1,37 +1,37 @@
-import { Box } from '@mui/material';
+import { Box } from "@mui/material";
 
-import type { FormFieldProps, OpenDoorsBlockData } from '../../types';
-import ArraySortableControl from '../controls/ArraySortableControl';
-import TextFieldControl from '../controls/TextFieldControl';
+import type { FormFieldProps, OpenDoorsBlockData } from "../../types";
+import ArraySortableControl from "../controls/ArraySortableControl";
+import TextFieldControl from "../controls/TextFieldControl";
 
 function OpenDoorsField({ name, disabled = false }: FormFieldProps) {
   return (
     <div>
       <TextFieldControl
-        name={`${name}.title`}
-        label="Titre"
         disabled={disabled}
+        label="Titre"
+        name={`${name}.title`}
       />
       <TextFieldControl
-        name={`${name}.detail`}
-        label="Informations"
         disabled={disabled}
+        label="Informations"
         multiline
+        name={`${name}.detail`}
       />
 
-      <Box fontSize={16} fontWeight={900} mt={4} mb={2}>
+      <Box fontSize={16} fontWeight={900} mb={2} mt={4}>
         Sujets de prière
       </Box>
 
-      <ArraySortableControl<OpenDoorsBlockData['prayerTopics'][number]>
-        name={`${name}.prayerTopics`}
-        maxItems={3}
-        defaultItem={{ text: '' }}
+      <ArraySortableControl<OpenDoorsBlockData["prayerTopics"][number]>
+        defaultItem={{ text: "" }}
         disabled={disabled}
+        maxItems={3}
+        name={`${name}.prayerTopics`}
         renderItem={(item, index) => (
           <TextFieldControl
-            name={`${name}.prayerTopics.${index}.text`}
             label={`Sujet #${index + 1}`}
+            name={`${name}.prayerTopics.${index}.text`}
           />
         )}
       />

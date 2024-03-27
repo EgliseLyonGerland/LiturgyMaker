@@ -1,24 +1,24 @@
-import find from 'lodash/find';
+import find from "lodash/find";
 
 import type {
   LiturgyDocument,
-  LiturgyBlock,
   RecitationDocument,
   SongDocument,
   BlockType,
   SongsItem,
-} from '../types';
+  LiturgyBlocks,
+} from "../types";
 
 const isEmpty: {
-  [K in BlockType]?: (block: LiturgyBlock<K>) => boolean;
+  [K in BlockType]?: (block: LiturgyBlocks[K]) => boolean;
 } = {
   openDoors: (block) => {
-    return block.data.title.trim() === '';
+    return block.data.title.trim() === "";
   },
 };
 
 function getSong(data: SongsItem, songs: SongDocument[]) {
-  const song = find(songs, ['id', data.id])!;
+  const song = find(songs, ["id", data.id])!;
 
   return { ...song, lyrics: data.lyrics || song.lyrics };
 }
@@ -30,43 +30,42 @@ export default function generateCode(
     recitations,
   }: { songs: SongDocument[]; recitations: RecitationDocument[] },
 ) {
-  const result = doc.blocks.reduce<{ type: string; data: any }[]>(
-    (acc, block) => {
-      if (block.type === 'openDoors' && isEmpty.openDoors?.(block)) {
-        return acc;
-      }
+  const result = doc.blocks.reduce<unknown[]>((acc, block) => {
+    const { type } = block;
 
-      if (block.type === 'songs') {
-        return acc.concat(
-          block.data.items.map((data) => ({
-            type: 'song',
-            data: { ...data, ...getSong(data, songs) },
-          })),
-        );
-      }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    if (type in isEmpty && isEmpty?.[type]?.(block)) {
+      return acc;
+    }
 
-      if (block.type === 'recitation') {
-        return acc.concat([
-          {
-            type: 'recitation',
-            data: find(recitations, ['id', block.data.id]),
-          },
-        ]);
-      }
+    if (type === "songs") {
+      return acc.concat(
+        block.data.items.map((data) => ({
+          type: "song",
+          data: { ...data, ...getSong(data, songs) },
+        })),
+      );
+    }
 
-      if (block.type === 'reading') {
-        return acc.concat(
-          block.data.bibleRefs.map((data) => ({
-            type: 'verse',
-            data,
-          })),
-        );
-      }
+    if (type === "recitation") {
+      return acc.concat({
+        type: "recitation",
+        data: find(recitations, ["id", block.data.id]),
+      });
+    }
 
-      return acc.concat([{ type: block.type, data: block.data }]);
-    },
-    [],
-  );
+    if (type === "reading") {
+      return acc.concat(
+        block.data.bibleRefs.map((data) => ({
+          type: "verse",
+          data,
+        })),
+      );
+    }
 
-  return JSON.stringify(result, null, '  ');
+    return acc.concat(block);
+  }, []);
+
+  return JSON.stringify(result, null, "  ");
 }

@@ -1,12 +1,11 @@
-import { useState } from 'react';
-import type * as React from 'react';
-
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Box } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
+import type * as React from "react";
+import { useState } from "react";
 
 interface Props {
   title: string;
@@ -19,7 +18,7 @@ interface Props {
 
 function FormBlock({
   title,
-  subtitle = '',
+  subtitle = "",
   disabled = false,
   onRemoveBlockClicked,
   onFillFromLastWeekClicked,
@@ -40,24 +39,24 @@ function FormBlock({
     <Box
       bgcolor="paper.background.main"
       border="solid 1px"
-      borderRadius="4px"
       borderColor="paper.border"
+      borderRadius="4px"
       boxShadow="4px 4px 10px rgba(0,0,0,0.05)"
     >
       <Box
-        height={72}
-        pl={5}
-        pr={3}
-        display="flex"
         alignItems="center"
         bgcolor="paper.header"
         borderBottom="solid 1px"
-        borderRadius="4px 4px 0 0"
         borderColor="paper.border"
+        borderRadius="4px 4px 0 0"
+        display="flex"
+        height={72}
+        pl={5}
+        pr={3}
       >
         <Typography variant="h6">
           {title}
-          {' \u00A0'}
+          {" \u00A0"}
           <Typography component="span" variant="subtitle1">
             {subtitle}
           </Typography>
@@ -65,25 +64,25 @@ function FormBlock({
 
         <Box ml="auto">
           <IconButton
-            aria-label="more"
             aria-controls="long-menu"
             aria-haspopup="true"
+            aria-label="more"
             disabled={disabled}
-            size="large"
             onClick={(event) => {
               setAnchorEl(event.currentTarget);
             }}
+            size="large"
           >
             <MoreVertIcon />
           </IconButton>
         </Box>
 
         <Menu
-          id="long-menu"
           anchorEl={anchorEl}
+          id="long-menu"
           keepMounted
-          open={!!anchorEl}
           onClose={() => handleClose()}
+          open={!!anchorEl}
         >
           <MenuItem onClick={() => handleClick(onRemoveBlockClicked)}>
             Supprimer

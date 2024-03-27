@@ -1,13 +1,13 @@
-import { DndContext } from '@dnd-kit/core';
-import { useSortable, SortableContext } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DragHandleIcon from '@mui/icons-material/DragHandle';
-import { useTheme, Box } from '@mui/material';
-import Button from '@mui/material/Button';
-import { useFieldArray } from 'react-hook-form';
+import { DndContext } from "@dnd-kit/core";
+import { useSortable, SortableContext } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
+import { useTheme, Box } from "@mui/material";
+import Button from "@mui/material/Button";
+import { useFieldArray } from "react-hook-form";
 
-interface Props<T = any> {
+interface Props<T = unknown> {
   name: string;
   maxItems?: number;
   disabled: boolean;
@@ -42,17 +42,17 @@ function SortableItem({
       ref={setNodeRef}
       style={style}
       sx={{
-        position: 'relative',
+        position: "relative",
         marginTop: index === 0 ? 0 : theme.spacing(gutters),
       }}
     >
       <Box
-        component={DragHandleIcon}
         color="disabled"
+        component={DragHandleIcon}
         sx={{
-          position: 'absolute',
+          position: "absolute",
           top: theme.spacing(2),
-          right: '100%',
+          right: "100%",
           marginRight: theme.spacing(2),
         }}
         {...listeners}
@@ -64,9 +64,9 @@ function SortableItem({
         color="disabled"
         onClick={onRemoveClicked}
         sx={{
-          position: 'absolute',
+          position: "absolute",
           top: theme.spacing(2),
-          left: '100%',
+          left: "100%",
           marginLeft: theme.spacing(2),
         }}
       />
@@ -74,7 +74,7 @@ function SortableItem({
   );
 }
 
-function ArraySortableControl<T = any>({
+function ArraySortableControl<T = unknown>({
   name,
   maxItems = Infinity,
   disabled,
@@ -85,7 +85,7 @@ function ArraySortableControl<T = any>({
   const theme = useTheme();
   const { fields, append, remove, move } = useFieldArray({
     name,
-    keyName: 'key',
+    keyName: "key",
   });
 
   return (
@@ -104,10 +104,10 @@ function ArraySortableControl<T = any>({
           <SortableContext items={fields.map((field) => field.key)}>
             {fields.map(({ key, ...item }, index) => (
               <SortableItem
-                key={key}
+                gutters={gutters}
                 id={key}
                 index={index}
-                gutters={gutters}
+                key={key}
                 onRemoveClicked={() => {
                   if (!disabled) {
                     remove(index);
@@ -122,14 +122,14 @@ function ArraySortableControl<T = any>({
       </div>
 
       <Button
-        variant="contained"
         color="primary"
-        size="small"
         disabled={disabled || maxItems === fields.length}
         onClick={() => {
           append(defaultItem);
         }}
+        size="small"
         sx={{ marginTop: theme.spacing(2) }}
+        variant="contained"
       >
         Ajouter
       </Button>

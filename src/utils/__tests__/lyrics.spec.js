@@ -1,8 +1,8 @@
-import { expect, test } from 'vitest';
+import { expect, test } from "vitest";
 
-import { parse, format } from '../lyrics';
+import { parse, format } from "../lyrics";
 
-test('parse() starts by a verse', () => {
+test("parse() starts by a verse", () => {
   const text = `
 [verse]
 Foobar
@@ -10,13 +10,13 @@ Foobar
 
   expect(parse(text)).toEqual([
     {
-      text: 'Foobar',
-      type: 'verse',
+      text: "Foobar",
+      type: "verse",
     },
   ]);
 });
 
-test('parse() starts by a chorus', () => {
+test("parse() starts by a chorus", () => {
   const text = `
 [chorus]
 Foobar
@@ -24,13 +24,13 @@ Foobar
 
   expect(parse(text)).toEqual([
     {
-      text: 'Foobar',
-      type: 'chorus',
+      text: "Foobar",
+      type: "chorus",
     },
   ]);
 });
 
-test('parse() without tag', () => {
+test("parse() without tag", () => {
   const text = `
 Foobar
 
@@ -39,17 +39,17 @@ Barfoo
 
   expect(parse(text)).toEqual([
     {
-      text: 'Foobar',
-      type: 'verse',
+      text: "Foobar",
+      type: "verse",
     },
     {
-      text: 'Barfoo',
-      type: 'verse',
+      text: "Barfoo",
+      type: "verse",
     },
   ]);
 });
 
-test('parse() empty', () => {
+test("parse() empty", () => {
   const text = `
 
 `;
@@ -57,7 +57,7 @@ test('parse() empty', () => {
   expect(parse(text)).toEqual([]);
 });
 
-test('format() with trailingBreak removed', () => {
+test("format() with trailingBreak removed", () => {
   const lyrics = [
     {
       text: `${`
@@ -67,7 +67,7 @@ Exercitation ullamco enim occaecat nostrud mollit
 Consequat sunt eu magna enim cupidatat
 Excepteur Lorem labore officia ipsum commodo ea in laborum
       `.trim()}\n`,
-      type: 'verse',
+      type: "verse",
     },
     {
       text: `
@@ -80,12 +80,12 @@ Veniam anim adipisicing cillum tempor
 Nostrud occaecat duis commodo do
 Excepteur fugiat sit deserunt non consectetur
       `.trim(),
-      type: 'verse',
+      type: "verse",
     },
     {
       text: `
       `,
-      type: 'verse',
+      type: "verse",
     },
   ];
 
@@ -97,7 +97,7 @@ Nostrud pariatur mollit incididunt ut
 Consequat sunt eu magna enim cupidatat
 Excepteur Lorem labore officia ipsum commodo ea in laborum
       `.trim(),
-      type: 'verse',
+      type: "verse",
     },
     {
       text: `
@@ -108,14 +108,14 @@ Non est et labore exercitation esse.
 Anim eiusmod Lorem occaecat veniam est
 Veniam anim adipisicing cillum tempor
       `.trim(),
-      type: 'verse',
+      type: "verse",
     },
     {
       text: `
 Nostrud occaecat duis commodo do
 Excepteur fugiat sit deserunt non consectetur
       `.trim(),
-      type: 'verse',
+      type: "verse",
     },
   ]);
 });

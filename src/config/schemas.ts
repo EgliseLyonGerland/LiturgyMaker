@@ -1,19 +1,19 @@
-import * as yup from 'yup';
-import type { AnyObject, Maybe } from 'yup/lib/types';
+import * as yup from "yup";
+import type { AnyObject, Maybe } from "yup";
 
-import type { LiturgyBlock } from '../types';
-import { validate } from '../utils/bibleRef';
+import type { LiturgyBlock } from "../types";
+import { validate } from "../utils/bibleRef";
 
 yup.addMethod(
   yup.string,
-  'bibleRef',
+  "bibleRef",
   // eslint-disable-next-line no-template-curly-in-string
-  function method(message = '${error}') {
+  function method(message = "${error}") {
     return this.test({
       message,
-      name: 'bibleRef',
+      name: "bibleRef",
       test(value) {
-        const error = value ? validate(value) : '';
+        const error = value ? validate(value) : "";
 
         return (
           !error ||
@@ -26,12 +26,13 @@ yup.addMethod(
   },
 );
 
-declare module 'yup' {
+declare module "yup" {
   interface StringSchema<
     TType extends Maybe<string> = string | undefined,
-    TContext extends AnyObject = AnyObject,
-    TOut extends TType = TType,
-  > extends yup.BaseSchema<TType, TContext, TOut> {
+    TContext = AnyObject,
+    TDefault = undefined,
+    TFlags extends yup.Flags = "",
+  > extends yup.Schema<TType, TContext, TDefault, TFlags> {
     bibleRef(): StringSchema<TType, TContext>;
   }
 }
@@ -124,37 +125,31 @@ export const liturgySchema = yup.object().shape({
 export const songSchema = yup.object().shape({
   title: yup.string().ensure().required(),
   aka: yup.string().ensure(),
-  authors: yup.string().ensure().nullable(),
-  number: yup
-    .number()
-    .min(1)
-    .nullable(true)
-    .transform((_, val) => {
-      if (Number.isNaN(val)) {
-        return null;
-      }
-      if (Number(val)) {
-        return Number(val);
-      }
-      return val;
-    }),
-  copyright: yup.string().ensure().nullable(),
-  translation: yup.string().ensure().nullable(),
-  collection: yup.string().ensure().nullable(),
+  authors: yup.string().ensure(),
+  number: yup.string().ensure(),
+  copyright: yup.string().ensure(),
+  translation: yup.string().ensure(),
+  collection: yup.string().ensure(),
   previewUrl: yup.string().ensure().url(),
-  lyrics: yup.array().of(
-    yup.object().shape({
-      text: yup.string().ensure(),
-      type: yup.string().oneOf(['verse', 'chorus']),
-    }),
-  ),
+  lyrics: yup
+    .array()
+    .of(
+      yup.object().shape({
+        text: yup.string().ensure(),
+        type: yup.string().oneOf(["verse", "chorus"]).ensure(),
+      }),
+    )
+    .required(),
 });
 
 export const recitationSchema = yup.object().shape({
   title: yup.string().required(),
-  content: yup.array().of(
-    yup.object().shape({
-      text: yup.string().ensure(),
-    }),
-  ),
+  content: yup
+    .array()
+    .of(
+      yup.object().shape({
+        text: yup.string().ensure(),
+      }),
+    )
+    .required(),
 });

@@ -1,5 +1,3 @@
-import type * as React from 'react';
-
 import {
   AppBar,
   Box,
@@ -9,12 +7,13 @@ import {
   Toolbar,
   Typography,
   useScrollTrigger,
-} from '@mui/material';
-import { NavLink } from 'react-router-dom';
+} from "@mui/material";
+import type * as React from "react";
+import { NavLink } from "react-router-dom";
 
-import ModeSwitcher from './ModeSwitcher';
-import logo from '../images/logo.svg';
-import { darkTheme, paper } from '../theme';
+import ModeSwitcher from "./ModeSwitcher";
+import logo from "../images/logo.svg";
+import { darkTheme, paper } from "../theme";
 
 interface Props {
   links: HeaderLink[];
@@ -47,33 +46,33 @@ function Header({ links, ...props }: Props) {
     <ThemeProvider theme={darkTheme}>
       <HideOnScroll {...props}>
         <AppBar
-          position="sticky"
           elevation={0}
+          position="sticky"
           sx={{
             bgcolor: paper.dark,
-            borderBottom: 'solid 1px',
-            borderColor: 'paper.border',
+            borderBottom: "solid 1px",
+            borderColor: "paper.border",
           }}
         >
           <Toolbar sx={{ height: 72 }}>
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100%',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
                 mx: [1, 2],
               }}
             >
-              <Box component="img" src={logo} alt="Logo" sx={{ height: 32 }} />
+              <Box alt="Logo" component="img" src={logo} sx={{ height: 32 }} />
               <Box
                 sx={{
                   ml: 2,
                   fontSize: 18,
                   lineHeight: 1,
                   fontWeight: 500,
-                  color: 'rgba(255,255,255,0.8)',
-                  display: ['none', 'block'],
+                  color: "rgba(255,255,255,0.8)",
+                  display: ["none", "block"],
                 }}
               >
                 Gestion du culte
@@ -84,14 +83,14 @@ function Header({ links, ...props }: Props) {
               <MenuItem
                 component={NavLink}
                 key={link.path}
+                sx={{ color: "text.secondary", px: [1, 2] }}
                 to={link.path}
-                sx={{ color: 'text.secondary', px: [1, 2] }}
               >
                 <Typography textAlign="center">{link.title}</Typography>
               </MenuItem>
             ))}
 
-            <Box sx={{ ml: 'auto' }}>
+            <Box sx={{ ml: "auto" }}>
               <ModeSwitcher />
             </Box>
           </Toolbar>

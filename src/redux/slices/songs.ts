@@ -2,7 +2,7 @@ import {
   createSlice,
   createAsyncThunk,
   createEntityAdapter,
-} from '@reduxjs/toolkit';
+} from "@reduxjs/toolkit";
 import {
   addDoc,
   collection,
@@ -10,36 +10,37 @@ import {
   getDocs,
   query,
   setDoc,
-} from 'firebase/firestore';
-import { cloneDeep } from 'lodash';
-import { normalize, schema } from 'normalizr';
+} from "firebase/firestore";
+import { cloneDeep } from "lodash";
+import { normalize, schema } from "normalizr";
+import { SetOptional } from "type-fest";
 
-import { db } from '../../firebase';
-import type { SongDocument, RootState } from '../../types';
+import { db } from "../../firebase";
+import type { SongDocument, RootState } from "../../types";
 
 const defaultSong: SongDocument = {
-  id: '',
-  title: '',
-  aka: '',
-  authors: '',
-  copyright: '',
-  collection: '',
-  translation: '',
-  number: '',
-  previewUrl: '',
+  id: "",
+  title: "",
+  aka: "",
+  authors: "",
+  copyright: "",
+  collection: "",
+  translation: "",
+  number: "",
+  previewUrl: "",
   lyrics: [],
 };
 
-export const songEntity = new schema.Entity('songs');
+export const songEntity = new schema.Entity("songs");
 export const songsEntity = new schema.Array(songEntity);
 
 const songsAdapter = createEntityAdapter<SongDocument>();
 
-export const fetchSongs = createAsyncThunk('songs/fetchSongs', async () => {
-  const { docs } = await getDocs(query(collection(db, 'songs')));
+export const fetchSongs = createAsyncThunk("songs/fetchSongs", async () => {
+  const { docs } = await getDocs(query(collection(db, "songs")));
 
   return normalize<
-    any,
+    SongDocument,
     {
       songs: Record<string, SongDocument>;
     }
@@ -50,41 +51,35 @@ export const fetchSongs = createAsyncThunk('songs/fetchSongs', async () => {
 });
 
 export const persistSong = createAsyncThunk(
-  'songs/persistSong',
-  async (song: SongDocument) => {
-    const { id, ...data } = song;
-
-    if (!id) {
-      const ref = await addDoc(collection(db, 'songs'), data);
-
-      return {
-        id: ref.id,
-        ...cloneDeep(data),
-      };
+  "songs/persistSong",
+  async (song: SetOptional<SongDocument, "id">) => {
+    if (!song.id) {
+      const ref = await addDoc(collection(db, "songs"), song);
+      song.id = ref.id;
+    } else {
+      await setDoc(doc(db, "songs", song.id), song);
     }
 
-    await setDoc(doc(db, 'songs', id), data);
-
-    return cloneDeep(song);
+    return cloneDeep(song) as SongDocument;
   },
 );
 
 const songsSlice = createSlice({
-  name: 'songs',
+  name: "songs",
   initialState: songsAdapter.getInitialState({
-    status: 'idle',
+    status: "idle",
   }),
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchSongs.fulfilled, (state, action) => {
-      state.status = 'success';
+      state.status = "success";
       songsAdapter.upsertMany(state, action.payload.songs);
     });
     builder.addCase(fetchSongs.pending, (state) => {
-      state.status = 'loading';
+      state.status = "loading";
     });
     builder.addCase(fetchSongs.rejected, (state) => {
-      state.status = 'fail';
+      state.status = "fail";
     });
     builder.addCase(persistSong.fulfilled, (state, action) => {
       songsAdapter.upsertOne(state, action.payload);
