@@ -17,7 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import BeatLoader from "react-spinners/BeatLoader";
 import type * as Yup from "yup";
 
-import Code from "../components/Code";
+import CodeDialog from "../components/CodeDialog";
 import BlocksField from "../components/fields/BlocksField";
 import SaveButton from "../components/SaveButton";
 import { slideshowEnabled } from "../config/global";
@@ -302,14 +302,13 @@ function LiturgyEdit() {
         </Box>
       ) : (
         <>
-          {displayCode && (
-            <Code
-              code={generateCode(liturgyState, { songs, recitations })}
-              onHide={() => {
-                setDisplayCode(false);
-              }}
-            />
-          )}
+          <CodeDialog
+            code={generateCode(liturgyState, { songs, recitations })}
+            onHide={() => {
+              setDisplayCode(false);
+            }}
+            open={displayCode}
+          />
 
           <Form
             key={liturgyState.id}
