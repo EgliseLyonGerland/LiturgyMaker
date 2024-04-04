@@ -18,7 +18,11 @@ const isEmpty: {
 };
 
 function getSong(data: SongsItem, songs: SongDocument[]) {
-  const song = find(songs, ["id", data.id])!;
+  const song = find(songs, ["id", data.id]);
+
+  if (!song) {
+    return null;
+  }
 
   return { ...song, lyrics: data.lyrics || song.lyrics };
 }
