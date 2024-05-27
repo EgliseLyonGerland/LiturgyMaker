@@ -1,5 +1,5 @@
-import type { FormFieldProps } from "../../types";
-import TextFieldControl from "../controls/TextFieldControl";
+import type { FormFieldProps } from '../../types'
+import TextFieldControl from '../controls/TextFieldControl'
 
 function SectionField({ name, disabled = false }: FormFieldProps) {
   return (
@@ -8,7 +8,7 @@ function SectionField({ name, disabled = false }: FormFieldProps) {
       label="Titre"
       name={`${name}.title`}
     />
-  );
+  )
 }
 
-export default SectionField;
+export default SectionField

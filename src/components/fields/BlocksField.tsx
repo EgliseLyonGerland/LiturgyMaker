@@ -1,25 +1,26 @@
-import { Grid, useMediaQuery, useTheme } from "@mui/material";
-import { FC, memo, MemoExoticComponent } from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { Grid, useMediaQuery, useTheme } from '@mui/material'
+import type { FC, MemoExoticComponent } from 'react'
+import { memo } from 'react'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 
-import AnnouncementsField from "./AnnouncementsField";
-import OpenDoorsField from "./OpenDoorsField";
-import ReadingField from "./ReadingField";
-import RecitationField from "./RecitationField";
-import SectionField from "./SectionField";
-import SermonField from "./SermonField";
-import SongsField from "./SongsField";
-import { blockTypes, slideshowEnabled } from "../../config/global";
-import type { BlockType, FormFieldProps, LiturgyBlock } from "../../types";
-import { createDefaultBlock } from "../../utils/defaults";
-import Divider from "../Divider";
-import Block from "../FormBlock";
-import Preview from "../Preview";
+import { blockTypes, slideshowEnabled } from '../../config/global'
+import type { BlockType, FormFieldProps, LiturgyBlock } from '../../types'
+import { createDefaultBlock } from '../../utils/defaults'
+import Divider from '../Divider'
+import Block from '../FormBlock'
+import Preview from '../Preview'
+import AnnouncementsField from './AnnouncementsField'
+import OpenDoorsField from './OpenDoorsField'
+import ReadingField from './ReadingField'
+import RecitationField from './RecitationField'
+import SectionField from './SectionField'
+import SermonField from './SermonField'
+import SongsField from './SongsField'
 
 interface Props {
-  name: string;
-  disabled: boolean;
-  getPreviousWeekBlock: (index: number) => Promise<LiturgyBlock | null>;
+  name: string
+  disabled: boolean
+  getPreviousWeekBlock: (index: number) => Promise<LiturgyBlock | null>
 }
 
 const components: Record<BlockType, MemoExoticComponent<FC<FormFieldProps>>> = {
@@ -30,24 +31,24 @@ const components: Record<BlockType, MemoExoticComponent<FC<FormFieldProps>>> = {
   section: memo(SectionField),
   recitation: memo(RecitationField),
   openDoors: memo(OpenDoorsField),
-};
+}
 
 function BlocksField({ name, disabled = false, getPreviousWeekBlock }: Props) {
-  const theme = useTheme();
-  const isMediumAndUp = useMediaQuery(theme.breakpoints.up("md"));
-  const { register } = useFormContext();
+  const theme = useTheme()
+  const isMediumAndUp = useMediaQuery(theme.breakpoints.up('md'))
+  const { register } = useFormContext()
   const { fields, insert, remove, update } = useFieldArray({
     name,
-    keyName: "key",
-  });
+    keyName: 'key',
+  })
 
-  const showPreview = isMediumAndUp && slideshowEnabled;
+  const showPreview = isMediumAndUp && slideshowEnabled
 
   const renderBlock = (block: LiturgyBlock, index: number) => {
-    const Component = components[block.type];
+    const Component = components[block.type]
 
     if (!Component) {
-      return null;
+      return null
     }
 
     return (
@@ -56,10 +57,10 @@ function BlocksField({ name, disabled = false, getPreviousWeekBlock }: Props) {
           <Block
             disabled={disabled}
             onFillFromLastWeekClicked={async () => {
-              const previousBlock = await getPreviousWeekBlock(index);
+              const previousBlock = await getPreviousWeekBlock(index)
 
               if (previousBlock) {
-                update(index, previousBlock);
+                update(index, previousBlock)
               }
             }}
             onRemoveBlockClicked={() => remove(index)}
@@ -78,15 +79,15 @@ function BlocksField({ name, disabled = false, getPreviousWeekBlock }: Props) {
           </Grid>
         )}
       </Grid>
-    );
-  };
+    )
+  }
 
   return (
     <div>
       <Divider
         disabled={disabled}
         onBlockSelected={(type) => {
-          insert(0, createDefaultBlock(type));
+          insert(0, createDefaultBlock(type))
         }}
       />
       {fields.map(({ key, ...block }, index) => (
@@ -97,13 +98,13 @@ function BlocksField({ name, disabled = false, getPreviousWeekBlock }: Props) {
           <Divider
             disabled={disabled}
             onBlockSelected={(type) => {
-              insert(index + 1, createDefaultBlock(type));
+              insert(index + 1, createDefaultBlock(type))
             }}
           />
         </div>
       ))}
     </div>
-  );
+  )
 }
 
-export default BlocksField;
+export default BlocksField

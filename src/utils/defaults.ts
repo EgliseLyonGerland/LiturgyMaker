@@ -1,73 +1,87 @@
-import { converToDate } from "./liturgy";
-import { currentVersion } from "../config/global";
-import { BlockType } from "../types";
+import { currentVersion } from '../config/global'
+import type { BlockType } from '../types'
+import { converToDate } from './liturgy'
 
-export const createDefaultAnnouncementsBlock = () => ({
-  type: "announcements",
-  title: "",
-  data: {
-    items: [{ title: "", detail: "" }],
-  },
-});
+export function createDefaultAnnouncementsBlock() {
+  return {
+    type: 'announcements',
+    title: '',
+    data: {
+      items: [{ title: '', detail: '' }],
+    },
+  }
+}
 
-export const createDefaultReadingBlock = ({ title = "" } = {}) => ({
-  type: "reading",
-  title,
-  data: {
-    bibleRefs: [
-      {
-        id: "",
-        excerpt: "",
-      },
-    ],
-  },
-});
-
-export const createDefaultSermonBlock = () => ({
-  type: "sermon",
-  title: "",
-  data: {
-    title: "",
-    author: "",
-    bibleRefs: [{ id: "" }],
-    plan: [{ text: "" }],
-  },
-});
-
-export const createDefaultOpenDoorsBlock = () => ({
-  type: "openDoors",
-  title: "",
-  data: {
-    title: "",
-    detail: "",
-    prayerTopics: [{ text: "" }],
-  },
-});
-
-export const createDefaultSectionBlock = ({ title = "" } = {}) => ({
-  type: "section",
-  title: "",
-  data: {
+export function createDefaultReadingBlock({ title = '' } = {}) {
+  return {
+    type: 'reading',
     title,
-  },
-});
+    data: {
+      bibleRefs: [
+        {
+          id: '',
+          excerpt: '',
+        },
+      ],
+    },
+  }
+}
 
-export const createDefaultSongsBlock = () => ({
-  type: "songs",
-  title: "",
-  data: {
-    items: [],
-  },
-});
+export function createDefaultSermonBlock() {
+  return {
+    type: 'sermon',
+    title: '',
+    data: {
+      title: '',
+      author: '',
+      bibleRefs: [{ id: '' }],
+      plan: [{ text: '' }],
+    },
+  }
+}
 
-export const createDefaultRecitationBlock = () => ({
-  type: "recitation",
-  title: "",
-  data: {
-    id: "",
-    infos: "",
-  },
-});
+export function createDefaultOpenDoorsBlock() {
+  return {
+    type: 'openDoors',
+    title: '',
+    data: {
+      title: '',
+      detail: '',
+      prayerTopics: [{ text: '' }],
+    },
+  }
+}
+
+export function createDefaultSectionBlock({ title = '' } = {}) {
+  return {
+    type: 'section',
+    title: '',
+    data: {
+      title,
+    },
+  }
+}
+
+export function createDefaultSongsBlock() {
+  return {
+    type: 'songs',
+    title: '',
+    data: {
+      items: [],
+    },
+  }
+}
+
+export function createDefaultRecitationBlock() {
+  return {
+    type: 'recitation',
+    title: '',
+    data: {
+      id: '',
+      infos: '',
+    },
+  }
+}
 
 const functions = {
   announcements: createDefaultAnnouncementsBlock,
@@ -77,27 +91,26 @@ const functions = {
   section: createDefaultSectionBlock,
   songs: createDefaultSongsBlock,
   recitation: createDefaultRecitationBlock,
-} as const;
+} as const
 
-export const createDefaultBlock = <T extends BlockType>(
-  type: T,
-  ...args: Parameters<(typeof functions)[T]>
-) => {
-  return functions[type](...args);
-};
+export function createDefaultBlock<T extends BlockType>(type: T, ...args: Parameters<(typeof functions)[T]>) {
+  return functions[type](...args)
+}
 
-export const createDefaultLiturgy = (id: string) => ({
-  date: +converToDate(id),
-  version: currentVersion,
-  blocks: [
-    createDefaultAnnouncementsBlock(),
-    createDefaultReadingBlock({ title: "Ouverture" }),
-    createDefaultReadingBlock({ title: "Loi de Dieu" }),
-    createDefaultReadingBlock({ title: "Grâce de Dieu" }),
-    createDefaultReadingBlock({ title: "Inter-chants" }),
-    createDefaultSermonBlock(),
-    createDefaultSectionBlock({ title: "Sainte cène" }),
-    createDefaultOpenDoorsBlock(),
-    createDefaultReadingBlock({ title: "Envoi" }),
-  ],
-});
+export function createDefaultLiturgy(id: string) {
+  return {
+    date: +converToDate(id),
+    version: currentVersion,
+    blocks: [
+      createDefaultAnnouncementsBlock(),
+      createDefaultReadingBlock({ title: 'Ouverture' }),
+      createDefaultReadingBlock({ title: 'Loi de Dieu' }),
+      createDefaultReadingBlock({ title: 'Grâce de Dieu' }),
+      createDefaultReadingBlock({ title: 'Inter-chants' }),
+      createDefaultSermonBlock(),
+      createDefaultSectionBlock({ title: 'Sainte cène' }),
+      createDefaultOpenDoorsBlock(),
+      createDefaultReadingBlock({ title: 'Envoi' }),
+    ],
+  }
+}

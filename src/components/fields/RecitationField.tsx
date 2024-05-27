@@ -1,16 +1,16 @@
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import find from "lodash/find";
-import get from "lodash/get";
-import { Controller } from "react-hook-form";
-import { useSelector } from "react-redux";
+import Autocomplete from '@mui/material/Autocomplete'
+import TextField from '@mui/material/TextField'
+import find from 'lodash/find'
+import get from 'lodash/get'
+import { Controller } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 
-import { selectAllRecitations } from "../../redux/slices/recitations";
-import type { FormFieldProps } from "../../types";
-import TextFieldControl from "../controls/TextFieldControl";
+import { selectAllRecitations } from '../../redux/slices/recitations'
+import type { FormFieldProps } from '../../types'
+import TextFieldControl from '../controls/TextFieldControl'
 
 function RecitationField({ name, disabled = false }: FormFieldProps) {
-  const recitations = useSelector(selectAllRecitations);
+  const recitations = useSelector(selectAllRecitations)
 
   return (
     <div>
@@ -23,13 +23,13 @@ function RecitationField({ name, disabled = false }: FormFieldProps) {
           <Autocomplete
             autoComplete
             disabled={disabled}
-            getOptionLabel={(option) => option.title}
+            getOptionLabel={option => option.title}
             onBlur={onBlur}
             onChange={(event, option) => {
-              onChange(get(option, "id", null));
+              onChange(get(option, 'id', null))
             }}
             options={recitations}
-            renderInput={(params) => (
+            renderInput={params => (
               <TextField
                 {...params}
                 error={!!error}
@@ -40,7 +40,7 @@ function RecitationField({ name, disabled = false }: FormFieldProps) {
                 variant="filled"
               />
             )}
-            value={find(recitations, ["id", value]) || null}
+            value={find(recitations, ['id', value]) || null}
           />
         )}
       />
@@ -51,7 +51,7 @@ function RecitationField({ name, disabled = false }: FormFieldProps) {
         name={`${name}.infos`}
       />
     </div>
-  );
+  )
 }
 
-export default RecitationField;
+export default RecitationField

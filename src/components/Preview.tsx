@@ -1,41 +1,41 @@
-import { Box, Pagination } from "@mui/material";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { Box, Pagination } from '@mui/material'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import RevealContainer from "./RevealContainer";
-import SectionSlides from "./slides/SectionSlides";
-import SongsSlides from "./slides/SongsSlides";
-import { selectAllSongs } from "../redux/slices/songs";
-import type { LiturgyBlock } from "../types";
+import { selectAllSongs } from '../redux/slices/songs'
+import type { LiturgyBlock } from '../types'
+import RevealContainer from './RevealContainer'
+import SectionSlides from './slides/SectionSlides'
+import SongsSlides from './slides/SongsSlides'
 
 interface Props {
-  block: LiturgyBlock;
+  block: LiturgyBlock
 }
 
 function Preview({ block }: Props) {
-  const [count, setCount] = useState(0);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const songs = useSelector(selectAllSongs);
+  const [count, setCount] = useState(0)
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const songs = useSelector(selectAllSongs)
 
   const renderSlides = () => {
     switch (block.type) {
-      case "section":
-        return <SectionSlides data={block.data} />;
-      case "songs":
-        return <SongsSlides data={block.data} songs={songs} />;
+      case 'section':
+        return <SectionSlides data={block.data} />
+      case 'songs':
+        return <SongsSlides data={block.data} songs={songs} />
       default:
-        return null;
+        return null
     }
-  };
+  }
 
-  const slides = renderSlides();
+  const slides = renderSlides()
 
   if (slides === null) {
-    return null;
+    return null
   }
 
   return (
-    <Box sx={{ position: "sticky", top: 92 }}>
+    <Box sx={{ position: 'sticky', top: 92 }}>
       <RevealContainer
         currentSlide={currentSlide}
         embedded
@@ -44,12 +44,12 @@ function Preview({ block }: Props) {
         {slides}
       </RevealContainer>
 
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
         {count > 1 && (
           <Pagination
             count={count}
             onChange={(event, value) => {
-              setCurrentSlide(value);
+              setCurrentSlide(value)
             }}
             page={currentSlide}
             siblingCount={0}
@@ -57,7 +57,7 @@ function Preview({ block }: Props) {
         )}
       </Box>
     </Box>
-  );
+  )
 }
 
-export default Preview;
+export default Preview

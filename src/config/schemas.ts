@@ -1,39 +1,39 @@
-import * as yup from "yup";
-import type { AnyObject, Maybe } from "yup";
+import * as yup from 'yup'
+import type { AnyObject, Maybe } from 'yup'
 
-import type { LiturgyBlock } from "../types";
-import { validate } from "../utils/bibleRef";
+import type { LiturgyBlock } from '../types'
+import { validate } from '../utils/bibleRef'
 
 yup.addMethod(
   yup.string,
-  "bibleRef",
+  'bibleRef',
   // eslint-disable-next-line no-template-curly-in-string
-  function method(message = "${error}") {
+  function method(message = '${error}') {
     return this.test({
       message,
-      name: "bibleRef",
+      name: 'bibleRef',
       test(value) {
-        const error = value ? validate(value) : "";
+        const error = value ? validate(value) : ''
 
         return (
-          !error ||
-          this.createError({
+          !error
+          || this.createError({
             params: { error },
           })
-        );
+        )
       },
-    });
+    })
   },
-);
+)
 
-declare module "yup" {
+declare module 'yup' {
   interface StringSchema<
     TType extends Maybe<string> = string | undefined,
     TContext = AnyObject,
     TDefault = undefined,
-    TFlags extends yup.Flags = "",
+    TFlags extends yup.Flags = '',
   > extends yup.Schema<TType, TContext, TDefault, TFlags> {
-    bibleRef(): StringSchema<TType, TContext>;
+    bibleRef: () => StringSchema<TType, TContext>
   }
 }
 
@@ -44,7 +44,7 @@ const announcementsBlockSchema = yup.object().shape({
       detail: yup.string(),
     }),
   ),
-});
+})
 
 const readingBlockSchema = yup.object().shape({
   bibleRefs: yup.array().of(
@@ -53,7 +53,7 @@ const readingBlockSchema = yup.object().shape({
       excerpt: yup.string(),
     }),
   ),
-});
+})
 
 const songsBlockSchema = yup.object().shape({
   items: yup.array().of(
@@ -63,12 +63,12 @@ const songsBlockSchema = yup.object().shape({
       repeat: yup.boolean(),
     }),
   ),
-});
+})
 
 const recitationBlockSchema = yup.object().shape({
   id: yup.string().nullable(),
   infos: yup.string(),
-});
+})
 
 const sermonBlockSchema = yup.object().shape({
   title: yup.string(),
@@ -83,7 +83,7 @@ const sermonBlockSchema = yup.object().shape({
       text: yup.string(),
     }),
   ),
-});
+})
 
 const openDoorsBlockSchema = yup.object().shape({
   title: yup.string(),
@@ -93,11 +93,11 @@ const openDoorsBlockSchema = yup.object().shape({
       text: yup.string(),
     }),
   ),
-});
+})
 
 const sectionBlockSchema = yup.object().shape({
   title: yup.string(),
-});
+})
 
 const blockSchemas = {
   announcements: announcementsBlockSchema,
@@ -107,10 +107,9 @@ const blockSchemas = {
   openDoors: openDoorsBlockSchema,
   songs: songsBlockSchema,
   recitation: recitationBlockSchema,
-};
+}
 
 export const liturgySchema = yup.object().shape({
-  // eslint-disable-next-line react/forbid-prop-types
   blocks: yup.array(
     yup.lazy((value: LiturgyBlock) =>
       yup.object().shape({
@@ -120,7 +119,7 @@ export const liturgySchema = yup.object().shape({
       }),
     ),
   ),
-});
+})
 
 export const songSchema = yup.object().shape({
   title: yup.string().ensure().required(),
@@ -136,11 +135,11 @@ export const songSchema = yup.object().shape({
     .of(
       yup.object().shape({
         text: yup.string().ensure(),
-        type: yup.string().oneOf(["verse", "chorus"]).ensure(),
+        type: yup.string().oneOf(['verse', 'chorus']).ensure(),
       }),
     )
     .required(),
-});
+})
 
 export const recitationSchema = yup.object().shape({
   title: yup.string().required(),
@@ -152,4 +151,4 @@ export const recitationSchema = yup.object().shape({
       }),
     )
     .required(),
-});
+})

@@ -1,19 +1,19 @@
-import { DndContext } from "@dnd-kit/core";
-import { useSortable, SortableContext } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
-import { useTheme, Box } from "@mui/material";
-import Button from "@mui/material/Button";
-import { useFieldArray } from "react-hook-form";
+import { DndContext } from '@dnd-kit/core'
+import { SortableContext, useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import DeleteIcon from '@mui/icons-material/Delete'
+import DragHandleIcon from '@mui/icons-material/DragHandle'
+import { Box, useTheme } from '@mui/material'
+import Button from '@mui/material/Button'
+import { useFieldArray } from 'react-hook-form'
 
 interface Props<T = unknown> {
-  name: string;
-  maxItems?: number;
-  disabled: boolean;
-  defaultItem: T;
-  gutters?: number;
-  renderItem: (item: T, index: number) => JSX.Element;
+  name: string
+  maxItems?: number
+  disabled: boolean
+  defaultItem: T
+  gutters?: number
+  renderItem: (item: T, index: number) => JSX.Element
 }
 
 function SortableItem({
@@ -23,26 +23,26 @@ function SortableItem({
   children,
   onRemoveClicked,
 }: {
-  id: string;
-  index: number;
-  gutters: number;
-  children: JSX.Element;
-  onRemoveClicked: () => void;
+  id: string
+  index: number
+  gutters: number
+  children: JSX.Element
+  onRemoveClicked: () => void
 }) {
-  const theme = useTheme();
-  const { listeners, setNodeRef, transform, transition } = useSortable({ id });
+  const theme = useTheme()
+  const { listeners, setNodeRef, transform, transition } = useSortable({ id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-  };
+  }
 
   return (
     <Box
       ref={setNodeRef}
       style={style}
       sx={{
-        position: "relative",
+        position: 'relative',
         marginTop: index === 0 ? 0 : theme.spacing(gutters),
       }}
     >
@@ -50,9 +50,9 @@ function SortableItem({
         color="disabled"
         component={DragHandleIcon}
         sx={{
-          position: "absolute",
+          position: 'absolute',
           top: theme.spacing(2),
-          right: "100%",
+          right: '100%',
           marginRight: theme.spacing(2),
         }}
         {...listeners}
@@ -64,14 +64,14 @@ function SortableItem({
         color="disabled"
         onClick={onRemoveClicked}
         sx={{
-          position: "absolute",
+          position: 'absolute',
           top: theme.spacing(2),
-          left: "100%",
+          left: '100%',
           marginLeft: theme.spacing(2),
         }}
       />
     </Box>
-  );
+  )
 }
 
 function ArraySortableControl<T = unknown>({
@@ -82,11 +82,11 @@ function ArraySortableControl<T = unknown>({
   defaultItem,
   renderItem,
 }: Props<T>) {
-  const theme = useTheme();
+  const theme = useTheme()
   const { fields, append, remove, move } = useFieldArray({
     name,
-    keyName: "key",
-  });
+    keyName: 'key',
+  })
 
   return (
     <div>
@@ -95,13 +95,13 @@ function ArraySortableControl<T = unknown>({
           onDragEnd={({ active, over }) => {
             if (over) {
               move(
-                fields.findIndex((field) => field.key === active.id),
-                fields.findIndex((field) => field.key === over.id),
-              );
+                fields.findIndex(field => field.key === active.id),
+                fields.findIndex(field => field.key === over.id),
+              )
             }
           }}
         >
-          <SortableContext items={fields.map((field) => field.key)}>
+          <SortableContext items={fields.map(field => field.key)}>
             {fields.map(({ key, ...item }, index) => (
               <SortableItem
                 gutters={gutters}
@@ -110,7 +110,7 @@ function ArraySortableControl<T = unknown>({
                 key={key}
                 onRemoveClicked={() => {
                   if (!disabled) {
-                    remove(index);
+                    remove(index)
                   }
                 }}
               >
@@ -125,7 +125,7 @@ function ArraySortableControl<T = unknown>({
         color="primary"
         disabled={disabled || maxItems === fields.length}
         onClick={() => {
-          append(defaultItem);
+          append(defaultItem)
         }}
         size="small"
         sx={{ marginTop: theme.spacing(2) }}
@@ -134,7 +134,7 @@ function ArraySortableControl<T = unknown>({
         Ajouter
       </Button>
     </div>
-  );
+  )
 }
 
-export default ArraySortableControl;
+export default ArraySortableControl

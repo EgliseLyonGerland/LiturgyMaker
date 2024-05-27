@@ -1,8 +1,8 @@
-import { Box } from "@mui/material";
+import { Box } from '@mui/material'
 
-import type { FormFieldProps, OpenDoorsBlockData } from "../../types";
-import ArraySortableControl from "../controls/ArraySortableControl";
-import TextFieldControl from "../controls/TextFieldControl";
+import type { FormFieldProps, OpenDoorsBlockData } from '../../types'
+import ArraySortableControl from '../controls/ArraySortableControl'
+import TextFieldControl from '../controls/TextFieldControl'
 
 function OpenDoorsField({ name, disabled = false }: FormFieldProps) {
   return (
@@ -23,8 +23,8 @@ function OpenDoorsField({ name, disabled = false }: FormFieldProps) {
         Sujets de prière
       </Box>
 
-      <ArraySortableControl<OpenDoorsBlockData["prayerTopics"][number]>
-        defaultItem={{ text: "" }}
+      <ArraySortableControl<OpenDoorsBlockData['prayerTopics'][number]>
+        defaultItem={{ text: '' }}
         disabled={disabled}
         maxItems={3}
         name={`${name}.prayerTopics`}
@@ -36,7 +36,7 @@ function OpenDoorsField({ name, disabled = false }: FormFieldProps) {
         )}
       />
     </div>
-  );
+  )
 }
 
-export default OpenDoorsField;
+export default OpenDoorsField

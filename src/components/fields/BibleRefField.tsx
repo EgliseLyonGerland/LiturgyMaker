@@ -1,33 +1,33 @@
-import { Autocomplete, Box, TextField, useTheme } from "@mui/material";
-import { useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Autocomplete, Box, TextField, useTheme } from '@mui/material'
+import { useState } from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
 
-import books from "../../config/bibleBooks.json";
-import type { FormFieldProps } from "../../types";
-import { getPassage } from "../../utils/bibleRef";
-import TextFieldControl from "../controls/TextFieldControl";
+import books from '../../config/bibleBooks.json'
+import type { FormFieldProps } from '../../types'
+import { getPassage } from '../../utils/bibleRef'
+import TextFieldControl from '../controls/TextFieldControl'
 
 interface Props extends FormFieldProps {
-  withExcerpt?: boolean;
+  withExcerpt?: boolean
 }
 
 function BibleRefField({ name, withExcerpt = true, disabled = false }: Props) {
-  const theme = useTheme();
-  const [loading, setLoading] = useState(false);
-  const { setValue, getValues } = useFormContext();
+  const theme = useTheme()
+  const [loading, setLoading] = useState(false)
+  const { setValue, getValues } = useFormContext()
 
   const handleFillPassage = async () => {
-    setLoading(true);
+    setLoading(true)
 
-    const id = getValues(`${name}.id`);
-    const excerpt = await getPassage(id);
+    const id = getValues(`${name}.id`)
+    const excerpt = await getPassage(id)
 
     if (excerpt) {
-      setValue(`${name}.excerpt`, excerpt, { shouldDirty: true });
+      setValue(`${name}.excerpt`, excerpt, { shouldDirty: true })
     }
 
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
   return (
     <div>
@@ -49,7 +49,7 @@ function BibleRefField({ name, withExcerpt = true, disabled = false }: Props) {
                   : acc.concat(book.name),
               [],
             )}
-            renderInput={(params) => (
+            renderInput={params => (
               <TextField
                 {...params}
                 error={!!error}
@@ -78,23 +78,23 @@ function BibleRefField({ name, withExcerpt = true, disabled = false }: Props) {
             disabled={disabled}
             onClick={() => handleFillPassage()}
             sx={{
-              background: "transparent",
+              background: 'transparent',
               border: 0,
               padding: 0,
               color: theme.palette.text.secondary,
-              cursor: "pointer",
+              cursor: 'pointer',
               outline: 0,
             }}
             type="button"
           >
             {loading
-              ? "Chargement..."
-              : "Remplir automatiquement l'extrait à partir de la référence"}
+              ? 'Chargement...'
+              : 'Remplir automatiquement l\'extrait à partir de la référence'}
           </Box>
         </>
       )}
     </div>
-  );
+  )
 }
 
-export default BibleRefField;
+export default BibleRefField

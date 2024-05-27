@@ -1,25 +1,25 @@
-import { Drawer, Typography, Box, Button, Paper, Alert } from "@mui/material";
-import { useState } from "react";
+import { Alert, Box, Button, Drawer, Paper, Typography } from '@mui/material'
+import { useState } from 'react'
 
-import LyricsEditDrawer from "./LyricsEditDrawer";
-import SongPreview from "./SongPreview";
-import type { SongDocument } from "../types";
+import type { SongDocument } from '../types'
+import LyricsEditDrawer from './LyricsEditDrawer'
+import SongPreview from './SongPreview'
 
 interface Props {
-  data: SongDocument | null;
-  open: boolean;
-  editable?: boolean;
-  overridedLyrics?: SongDocument["lyrics"] | null;
-  onClose: () => void;
-  onLyricsChanged?: (lyrics: SongDocument["lyrics"] | null) => void;
+  data: SongDocument | null
+  open: boolean
+  editable?: boolean
+  overridedLyrics?: SongDocument['lyrics'] | null
+  onClose: () => void
+  onLyricsChanged?: (lyrics: SongDocument['lyrics'] | null) => void
 }
 
 const widthProps = {
   maxWidth: 600,
-  width: "90vw",
-};
+  width: '90vw',
+}
 
-const actionAreaHeight = 11;
+const actionAreaHeight = 11
 
 function SongDetailsDrawer({
   data,
@@ -27,32 +27,32 @@ function SongDetailsDrawer({
   editable = false,
   overridedLyrics = null,
   onClose,
-  onLyricsChanged = () => {},
+  onLyricsChanged,
 }: Props) {
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(false)
 
-  const lyrics: SongDocument["lyrics"] = overridedLyrics || data?.lyrics || [];
+  const lyrics: SongDocument['lyrics'] = overridedLyrics || data?.lyrics || []
 
   const renderLyrics = () => {
     if (!lyrics.length) {
-      return <Box sx={{ fontStyle: "italic" }}>Aucune parole</Box>;
+      return <Box sx={{ fontStyle: 'italic' }}>Aucune parole</Box>
     }
 
     return (
       <>
         {overridedLyrics && (
           <Alert
-            action={
+            action={(
               <Button
                 color="inherit"
                 onClick={() => {
-                  onLyricsChanged(null);
+                  onLyricsChanged?.(null)
                 }}
                 size="small"
               >
                 Rétablir
               </Button>
-            }
+            )}
             severity="warning"
             sx={{ my: 2 }}
             variant="outlined"
@@ -63,32 +63,34 @@ function SongDetailsDrawer({
         )}
 
         {lyrics.map(({ text, type }, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Box key={index} mb={2}>
             <Typography
               component="div"
               sx={{
-                whiteSpace: "pre",
-                ...(type === "chorus"
+                whiteSpace: 'pre',
+                ...(type === 'chorus'
                   ? {
-                      fontStyle: "italic",
-                      fontFamily: "Adobe Hebrew",
+                      fontStyle: 'italic',
+                      fontFamily: 'Adobe Hebrew',
                     }
                   : {}),
               }}
             >
-              {text.split("\n").map((line, lineIndex) => (
+              {text.split('\n').map((line, lineIndex) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <div key={lineIndex}>{line}</div>
               ))}
             </Typography>
           </Box>
         ))}
       </>
-    );
-  };
+    )
+  }
 
   const renderContent = () => {
     if (!data) {
-      return null;
+      return null
     }
 
     return (
@@ -96,10 +98,10 @@ function SongDetailsDrawer({
         <Box mb={4}>
           <Typography component="span" fontSize="1.2em">
             <b>{data.title}</b>
-            {data.aka ? ` (${data.aka})` : ""}
+            {data.aka ? ` (${data.aka})` : ''}
           </Typography>
           <Typography color="textSecondary" component="span">
-            {data.number ? ` (${data.number})` : ""}
+            {data.number ? ` (${data.number})` : ''}
           </Typography>
           <Typography color="textSecondary" mt={1} variant="body2">
             {data.authors || <i>Aucun auteur</i>}
@@ -114,8 +116,8 @@ function SongDetailsDrawer({
 
         {renderLyrics()}
       </>
-    );
-  };
+    )
+  }
 
   return (
     <Drawer anchor="right" onClose={onClose} open={open}>
@@ -129,13 +131,13 @@ function SongDetailsDrawer({
           square
           sx={{
             ...widthProps,
-            position: "fixed",
+            position: 'fixed',
             right: 0,
             bottom: 0,
             height: actionAreaHeight * 8,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Button
@@ -152,15 +154,15 @@ function SongDetailsDrawer({
         <LyricsEditDrawer
           lyrics={lyrics}
           onChange={(newLyrics) => {
-            onLyricsChanged(newLyrics);
-            setEditing(false);
+            onLyricsChanged?.(newLyrics)
+            setEditing(false)
           }}
           onClose={() => setEditing(false)}
           open={editing}
         />
       )}
     </Drawer>
-  );
+  )
 }
 
-export default SongDetailsDrawer;
+export default SongDetailsDrawer

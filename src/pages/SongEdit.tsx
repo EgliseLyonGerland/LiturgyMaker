@@ -1,27 +1,27 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import type { BoxProps } from "@mui/material";
-import { Box, Container, Typography } from "@mui/material";
-import isString from "lodash/isString";
-import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
-import BeatLoader from "react-spinners/BeatLoader";
-import { InferType } from "yup";
+import { yupResolver } from '@hookform/resolvers/yup'
+import type { BoxProps } from '@mui/material'
+import { Box, Container, Typography } from '@mui/material'
+import isString from 'lodash/isString'
+import { useEffect, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { useNavigate, useParams } from 'react-router-dom'
+import BeatLoader from 'react-spinners/BeatLoader'
+import type { InferType } from 'yup'
 
-import TextFieldControl from "../components/controls/TextFieldControl";
-import LyricsField from "../components/fields/LyricsField";
-import SaveButton from "../components/SaveButton";
-import { songSchema } from "../config/schemas";
-import { fetchSongs, persistSong, selectSongById } from "../redux/slices/songs";
-import { useAppDispatch, useAppSelector } from "../redux/store";
-import type { SongDocument } from "../types";
+import TextFieldControl from '../components/controls/TextFieldControl'
+import LyricsField from '../components/fields/LyricsField'
+import SaveButton from '../components/SaveButton'
+import { songSchema } from '../config/schemas'
+import { fetchSongs, persistSong, selectSongById } from '../redux/slices/songs'
+import { useAppDispatch, useAppSelector } from '../redux/store'
+import type { SongDocument } from '../types'
 
 function Block({
-  header = "",
+  header = '',
   children,
   ...props
 }: {
-  header: string;
+  header: string
 } & BoxProps) {
   return (
     <Box
@@ -43,67 +43,69 @@ function Block({
           height={72}
           px={5}
         >
-          {isString(header) ? (
-            <Typography variant="h6">{header}</Typography>
-          ) : (
-            header
-          )}
+          {isString(header)
+            ? (
+              <Typography variant="h6">{header}</Typography>
+              )
+            : (
+                header
+              )}
         </Box>
       )}
       <Box p={5} px={8}>
         {children}
       </Box>
     </Box>
-  );
+  )
 }
 
-type FormValues = InferType<typeof songSchema>;
+type FormValues = InferType<typeof songSchema>
 
 function SongEdit() {
-  const params = useParams();
-  const navigate = useNavigate();
-  const songsStatus = useAppSelector((state) => state.songs.status);
-  const song = useAppSelector((state) =>
+  const params = useParams()
+  const navigate = useNavigate()
+  const songsStatus = useAppSelector(state => state.songs.status)
+  const song = useAppSelector(state =>
     selectSongById(state, `${params.songId}`),
-  );
-  const dispatch = useAppDispatch();
-  const [persisting, setPersisting] = useState(false);
-  const [persisted, setPersisted] = useState(false);
+  )
+  const dispatch = useAppDispatch()
+  const [persisting, setPersisting] = useState(false)
+  const [persisted, setPersisted] = useState(false)
 
   const form = useForm<FormValues>({
-    mode: "onChange",
+    mode: 'onChange',
     resolver: yupResolver(songSchema),
     defaultValues: {
-      lyrics: [{ text: "", type: "verse" }],
+      lyrics: [{ text: '', type: 'verse' }],
     },
-  });
+  })
   const {
     reset,
     handleSubmit: submitForm,
     formState: { isDirty, isSubmitting },
-  } = form;
+  } = form
 
   const handleSubmit = async (data: FormValues) => {
-    setPersisting(true);
+    setPersisting(true)
 
-    const song = songSchema.cast(data);
+    const song = songSchema.cast(data)
 
     const { payload } = await dispatch(
       persistSong({
         ...song,
-        lyrics: song.lyrics.filter((part) => part.text.trim() !== "") || [],
+        lyrics: song.lyrics.filter(part => part.text.trim() !== '') || [],
       }),
-    );
+    )
 
-    setPersisted(true);
-    setPersisting(false);
+    setPersisted(true)
+    setPersisting(false)
 
     if (!params.songId) {
       navigate(`/songs/${(payload as SongDocument).id}/edit`, {
         replace: true,
-      });
+      })
     }
-  };
+  }
 
   useEffect(() => {
     if (song) {
@@ -111,23 +113,23 @@ function SongEdit() {
         ...song,
         lyrics: song.lyrics.length
           ? song.lyrics
-          : [{ text: "", type: "verse" }],
-      });
+          : [{ text: '', type: 'verse' }],
+      })
     }
-  }, [song, reset]);
+  }, [song, reset])
 
   useEffect(() => {
-    if (songsStatus === "idle") {
-      dispatch(fetchSongs());
+    if (songsStatus === 'idle') {
+      dispatch(fetchSongs())
     }
-  }, [dispatch, songsStatus]);
+  }, [dispatch, songsStatus])
 
   if (params.songId && !song) {
     return (
       <Box display="flex" justifyContent="center" m={5}>
         <BeatLoader color="#DDD" />
       </Box>
-    );
+    )
   }
 
   return (
@@ -150,7 +152,7 @@ function SongEdit() {
             disabled={isSubmitting}
             label="Position dans le recueil"
             name="number"
-            transformOut={(value) => (value === "" ? null : value)}
+            transformOut={value => (value === '' ? null : value)}
           />
           <TextFieldControl
             disabled={isSubmitting}
@@ -190,7 +192,7 @@ function SongEdit() {
         />
       </FormProvider>
     </Container>
-  );
+  )
 }
 
-export default SongEdit;
+export default SongEdit

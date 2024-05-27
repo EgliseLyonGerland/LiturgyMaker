@@ -1,36 +1,36 @@
-import { TextField } from "@mui/material";
-import { useController } from "react-hook-form";
+import { TextField } from '@mui/material'
+import { useController } from 'react-hook-form'
 
 interface Props {
-  name: string;
-  label: string;
-  helperText?: string;
-  multiline?: boolean;
-  disabled?: boolean;
-  transformIn?(value: unknown): string;
-  transformOut?(value: string): unknown;
+  name: string
+  label: string
+  helperText?: string
+  multiline?: boolean
+  disabled?: boolean
+  transformIn?: (value: any) => string
+  transformOut?: (value: string) => any
 }
 
 function TextFieldControl({
   name,
   label,
-  helperText = "",
+  helperText = '',
   multiline = false,
   disabled = false,
-  transformIn = (value: string) => value,
-  transformOut = (value) => value,
+  transformIn,
+  transformOut,
 }: Props) {
   const {
     field,
     fieldState: { invalid, error },
-  } = useController({ name });
+  } = useController({ name })
 
-  const { ref, value, onChange, ...rest } = field;
+  const { ref, value, onChange, ...rest } = field
   const params = {
     ...rest,
-    value: transformIn(value) || "",
+    value: transformIn?.(value) || value,
     inputRef: ref,
-  };
+  }
 
   return (
     <TextField
@@ -43,12 +43,12 @@ function TextFieldControl({
       margin="dense"
       multiline={multiline}
       onChange={(e) => {
-        onChange(transformOut(e.target.value));
+        onChange(transformOut?.(e.target.value) || e.target.value)
       }}
       variant="filled"
       {...params}
     />
-  );
+  )
 }
 
-export default TextFieldControl;
+export default TextFieldControl

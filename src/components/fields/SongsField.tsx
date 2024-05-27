@@ -1,37 +1,37 @@
-import { InfoTwoTone } from "@mui/icons-material";
+import { InfoTwoTone } from '@mui/icons-material'
 import {
-  TextField,
+  Alert,
   Box,
   Button,
+  IconButton,
+  TextField,
   useMediaQuery,
   useTheme,
-  IconButton,
-  Alert,
-} from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import find from "lodash/find";
-import get from "lodash/get";
-import { useState } from "react";
-import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { useSelector } from "react-redux";
+} from '@mui/material'
+import Autocomplete from '@mui/material/Autocomplete'
+import Checkbox from '@mui/material/Checkbox'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import find from 'lodash/find'
+import get from 'lodash/get'
+import { useState } from 'react'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 
-import { selectAllSongs } from "../../redux/slices/songs";
-import type { FormFieldProps, SongsItem } from "../../types";
-import ArraySortableControl from "../controls/ArraySortableControl";
-import TextFieldControl from "../controls/TextFieldControl";
-import SongDetailsDrawer from "../SongDetailsDrawer";
+import { selectAllSongs } from '../../redux/slices/songs'
+import type { FormFieldProps, SongsItem } from '../../types'
+import ArraySortableControl from '../controls/ArraySortableControl'
+import TextFieldControl from '../controls/TextFieldControl'
+import SongDetailsDrawer from '../SongDetailsDrawer'
 
-function Item({ name, disabled }: { name: string; disabled: boolean }) {
-  const songs = useSelector(selectAllSongs);
-  const [showDetails, setShowDetails] = useState(false);
-  const id = useWatch({ name: `${name}.id` });
-  const lyrics = useWatch({ name: `${name}.lyrics` });
-  const theme = useTheme();
-  const upSmall = useMediaQuery(theme.breakpoints.up("sm"));
-  const { setValue } = useFormContext();
-  const song = find(songs, ["id", id]);
+function Item({ name, disabled }: { name: string, disabled: boolean }) {
+  const songs = useSelector(selectAllSongs)
+  const [showDetails, setShowDetails] = useState(false)
+  const id = useWatch({ name: `${name}.id` })
+  const lyrics = useWatch({ name: `${name}.lyrics` })
+  const theme = useTheme()
+  const upSmall = useMediaQuery(theme.breakpoints.up('sm'))
+  const { setValue } = useFormContext()
+  const song = find(songs, ['id', id])
 
   return (
     <div>
@@ -45,14 +45,14 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
             <Autocomplete
               autoComplete
               disabled={disabled}
-              getOptionLabel={(option) => option.title}
+              getOptionLabel={option => option.title}
               onBlur={onBlur}
               onChange={(event, option) => {
-                onChange(get(option, "id", null));
-                setValue(`${name}.lyrics`, null);
+                onChange(get(option, 'id', null))
+                setValue(`${name}.lyrics`, null)
               }}
               options={songs}
-              renderInput={(params) => (
+              renderInput={params => (
                 <TextField
                   {...params}
                   error={!!error}
@@ -69,9 +69,9 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
                   component="li"
                   key={option.id}
                   sx={{
-                    "&.MuiAutocomplete-option": {
-                      flexDirection: "column",
-                      alignItems: "flex-start",
+                    '&.MuiAutocomplete-option': {
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
                     },
                   }}
                 >
@@ -86,30 +86,30 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
                     fontStyle="italic"
                     style={{ opacity: 0.7 }}
                   >
-                    {option.authors || "Aucun auteur"}
+                    {option.authors || 'Aucun auteur'}
                     {option.number && ` (${option.number})`}
                   </Box>
                 </Box>
               )}
               value={song || null}
             />
-          );
+          )
         }}
       />
 
       {lyrics && (
         <Alert
-          action={
+          action={(
             <Button
               color="inherit"
               onClick={() => {
-                setValue(`${name}.lyrics`, null);
+                setValue(`${name}.lyrics`, null)
               }}
               size="small"
             >
               Rétablir
             </Button>
-          }
+          )}
           severity="warning"
           sx={{ mt: 1 }}
         >
@@ -124,9 +124,9 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
         name={`${name}.infos`}
       />
 
-      <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <FormControlLabel
-          control={
+          control={(
             <Controller
               name={`${name}.repeat`}
               render={({
@@ -135,26 +135,28 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
                 <Checkbox
                   checked={value}
                   disabled={disabled}
-                  onChange={(e) => onChange(e.target.checked)}
+                  onChange={e => onChange(e.target.checked)}
                   {...{ inputRef, onBlur }}
                 />
               )}
             />
-          }
+          )}
           label="Chanté deux fois ?"
         />
         {song && (
-          <Box sx={{ marginLeft: "auto" }}>
+          <Box sx={{ marginLeft: 'auto' }}>
             <span>
-              {upSmall ? (
-                <Button onClick={() => setShowDetails(true)} size="small">
-                  Informations
-                </Button>
-              ) : (
-                <IconButton onClick={() => setShowDetails(true)} size="small">
-                  <InfoTwoTone />
-                </IconButton>
-              )}
+              {upSmall
+                ? (
+                  <Button onClick={() => setShowDetails(true)} size="small">
+                    Informations
+                  </Button>
+                  )
+                : (
+                  <IconButton onClick={() => setShowDetails(true)} size="small">
+                    <InfoTwoTone />
+                  </IconButton>
+                  )}
             </span>
           </Box>
         )}
@@ -168,20 +170,20 @@ function Item({ name, disabled }: { name: string; disabled: boolean }) {
           onLyricsChanged={(data) => {
             setValue(`${name}.lyrics`, data, {
               shouldDirty: true,
-            });
+            })
           }}
           open={showDetails}
           overridedLyrics={lyrics}
         />
       )}
     </div>
-  );
+  )
 }
 
 function SongsField({ name, disabled = false }: FormFieldProps) {
   return (
     <ArraySortableControl<SongsItem>
-      defaultItem={{ id: "", infos: "", repeat: false, lyrics: null }}
+      defaultItem={{ id: '', infos: '', repeat: false, lyrics: null }}
       disabled={disabled}
       gutters={3}
       name={`${name}.items`}
@@ -189,7 +191,7 @@ function SongsField({ name, disabled = false }: FormFieldProps) {
         <Item disabled={disabled} name={`${name}.items.${index}`} />
       )}
     />
-  );
+  )
 }
 
-export default SongsField;
+export default SongsField

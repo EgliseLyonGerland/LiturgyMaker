@@ -2,6 +2,10 @@
   "name": "functions",
   "version": "0.0.0",
   "private": true,
+  "main": "lib/index.js",
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
     "build": "tsc",
@@ -12,10 +16,6 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
-  "engines": {
-    "node": "18"
-  },
-  "main": "lib/index.js",
   "dependencies": {
     "date-fns": "3.6.0",
     "deep-diff": "1.0.2",

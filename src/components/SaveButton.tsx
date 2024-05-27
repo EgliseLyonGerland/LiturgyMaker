@@ -1,70 +1,72 @@
-import { Check, Save } from "@mui/icons-material";
-import { Box, Fab, useTheme, Zoom } from "@mui/material";
-import { useEffect, useState } from "react";
-import type * as React from "react";
-import { createPortal } from "react-dom";
-import BeatLoader from "react-spinners/BeatLoader";
+import { Check, Save } from '@mui/icons-material'
+import { Box, Fab, Zoom, useTheme } from '@mui/material'
+import { useEffect, useState } from 'react'
+import type * as React from 'react'
+import { createPortal } from 'react-dom'
+import BeatLoader from 'react-spinners/BeatLoader'
 
-type Status = "running" | "done" | "ready" | null;
+type Status = 'running' | 'done' | 'ready' | null
 
 const SaveButton: React.FC<{
-  persisting: boolean;
-  persisted: boolean;
-  dirty: boolean;
-  onClick(): void;
-  onHide(): void;
+  persisting: boolean
+  persisted: boolean
+  dirty: boolean
+  onClick: () => void
+  onHide: () => void
 }> = ({ persisting, persisted, dirty, onClick, onHide }) => {
-  const theme = useTheme();
+  const theme = useTheme()
 
-  const [currentStatus, setCurrentStatus] = useState<Status>(null);
-  const [displayed, setDisplayed] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState<Status>(null)
+  const [displayed, setDisplayed] = useState(false)
 
-  let status: Status = null;
+  let status: Status = null
   if (persisting) {
-    status = "running";
-  } else if (persisted) {
-    status = "done";
-  } else if (dirty) {
-    status = "ready";
+    status = 'running'
+  }
+  else if (persisted) {
+    status = 'done'
+  }
+  else if (dirty) {
+    status = 'ready'
   }
 
   useEffect(() => {
-    if (currentStatus === "done" && displayed) {
-      return;
+    if (currentStatus === 'done' && displayed) {
+      return
     }
 
     switch (status) {
-      case "running":
-      case "ready": {
-        setCurrentStatus(status);
-        setDisplayed(true);
-        break;
+      case 'running':
+      case 'ready': {
+        setCurrentStatus(status)
+        setDisplayed(true)
+        break
       }
-      case "done": {
-        setCurrentStatus("done");
+      case 'done': {
+        setCurrentStatus('done')
 
         setTimeout(() => {
-          setDisplayed(false);
-          onHide();
-        }, 5000);
+          setDisplayed(false)
+          onHide()
+        }, 5000)
 
-        break;
+        break
       }
       default: {
-        setDisplayed(false);
+        setDisplayed(false)
       }
     }
-  }, [currentStatus, displayed, onHide, status]);
+  }, [currentStatus, displayed, onHide, status])
 
   const renderButton = () => {
-    if (currentStatus === "done") {
+    if (currentStatus === 'done') {
       return (
         <Fab
           color="secondary"
           disabled
           style={{
             background: theme.palette.success.main,
-            color: "white",
+            color: 'white',
           }}
           variant="extended"
         >
@@ -73,17 +75,17 @@ const SaveButton: React.FC<{
             <Box ml={2}>Enregistré</Box>
           </Box>
         </Fab>
-      );
+      )
     }
 
-    if (currentStatus === "running") {
+    if (currentStatus === 'running') {
       return (
         <Fab
           color="secondary"
           disabled
           style={{
             background: theme.palette.secondary.main,
-            color: "white",
+            color: 'white',
           }}
           variant="extended"
         >
@@ -91,7 +93,7 @@ const SaveButton: React.FC<{
             <BeatLoader color="white" key="saving" size={8} />
           </Box>
         </Fab>
-      );
+      )
     }
 
     return (
@@ -106,8 +108,8 @@ const SaveButton: React.FC<{
           <Box ml={2}>Enregistrer</Box>
         </Box>
       </Fab>
-    );
-  };
+    )
+  }
 
   return createPortal(
     <Box
@@ -123,7 +125,7 @@ const SaveButton: React.FC<{
       </Zoom>
     </Box>,
     document.body,
-  );
-};
+  )
+}
 
-export default SaveButton;
+export default SaveButton

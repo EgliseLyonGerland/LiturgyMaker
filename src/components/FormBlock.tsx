@@ -1,38 +1,38 @@
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Box } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Typography from "@mui/material/Typography";
-import type * as React from "react";
-import { useState } from "react";
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import { Box } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Typography from '@mui/material/Typography'
+import type * as React from 'react'
+import { useState } from 'react'
 
 interface Props {
-  title: string;
-  subtitle: string;
-  disabled: boolean;
-  children: React.ReactNode;
-  onRemoveBlockClicked(): void;
-  onFillFromLastWeekClicked(): void;
+  title: string
+  subtitle: string
+  disabled: boolean
+  children: React.ReactNode
+  onRemoveBlockClicked: () => void
+  onFillFromLastWeekClicked: () => void
 }
 
 function FormBlock({
   title,
-  subtitle = "",
+  subtitle = '',
   disabled = false,
   onRemoveBlockClicked,
   onFillFromLastWeekClicked,
   children,
 }: Props) {
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
   function handleClose() {
-    setAnchorEl(null);
+    setAnchorEl(null)
   }
 
   function handleClick(fn: () => void) {
-    handleClose();
-    fn();
+    handleClose()
+    fn()
   }
 
   return (
@@ -56,7 +56,7 @@ function FormBlock({
       >
         <Typography variant="h6">
           {title}
-          {" \u00A0"}
+          {' \u00A0'}
           <Typography component="span" variant="subtitle1">
             {subtitle}
           </Typography>
@@ -69,7 +69,7 @@ function FormBlock({
             aria-label="more"
             disabled={disabled}
             onClick={(event) => {
-              setAnchorEl(event.currentTarget);
+              setAnchorEl(event.currentTarget)
             }}
             size="large"
           >
@@ -96,7 +96,7 @@ function FormBlock({
         {children}
       </Box>
     </Box>
-  );
+  )
 }
 
-export default FormBlock;
+export default FormBlock

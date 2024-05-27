@@ -1,16 +1,16 @@
-import type { PaletteMode } from "@mui/material";
-import { createTheme, alpha, darken, lighten } from "@mui/material";
-import { blue, pink } from "@mui/material/colors";
+import type { PaletteMode } from '@mui/material'
+import { alpha, createTheme, darken, lighten } from '@mui/material'
+import { blue, pink } from '@mui/material/colors'
 
 export const background = {
-  light: "#f8f8f8",
-  dark: "#00162d",
-};
+  light: '#f8f8f8',
+  dark: '#00162d',
+}
 
 export const paper = {
-  light: "#fff",
-  dark: "#001e3c",
-};
+  light: '#fff',
+  dark: '#001e3c',
+}
 
 const defaultPalette = {
   primary: {
@@ -19,7 +19,7 @@ const defaultPalette = {
   secondary: {
     main: pink[500],
   },
-};
+}
 
 const lightPalette = {
   text: {
@@ -37,9 +37,9 @@ const lightPalette = {
       dark: darken(paper.light, 0.1),
     },
     header: darken(paper.light, 0.07),
-    border: alpha("#000", 0.03),
+    border: alpha('#000', 0.03),
   },
-};
+}
 
 const darkPalette = {
   background: {
@@ -53,17 +53,19 @@ const darkPalette = {
       dark: darken(paper.dark, 0.1),
     },
     header: darken(paper.dark, 0.1),
-    border: alpha("#fff", 0.08),
+    border: alpha('#fff', 0.08),
   },
-};
+}
 
-export const buildTheme = (mode: PaletteMode) => ({
-  palette: {
-    mode,
-    ...defaultPalette,
-    ...(mode === "light" ? lightPalette : darkPalette),
-  },
-});
+export function buildTheme(mode: PaletteMode) {
+  return {
+    palette: {
+      mode,
+      ...defaultPalette,
+      ...(mode === 'light' ? lightPalette : darkPalette),
+    },
+  }
+}
 
-export const lightTheme = createTheme(buildTheme("light"));
-export const darkTheme = createTheme(buildTheme("dark"));
+export const lightTheme = createTheme(buildTheme('light'))
+export const darkTheme = createTheme(buildTheme('dark'))

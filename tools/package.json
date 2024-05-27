@@ -1,8 +1,8 @@
 {
   "name": "tools",
   "version": "1.0.0",
-  "license": "MIT",
   "private": true,
+  "license": "MIT",
   "dependencies": {
     "@types/google-spreadsheet": "4.0.0",
     "configstore": "6.0.0",

@@ -1,38 +1,38 @@
-import { Box, Button, Drawer, Paper } from "@mui/material";
-import { useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { Box, Button, Drawer, Paper } from '@mui/material'
+import { useEffect } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 
-import LyricsField from "./fields/LyricsField";
-import type { SongDocument } from "../types";
+import type { SongDocument } from '../types'
+import LyricsField from './fields/LyricsField'
 
 interface Props {
-  open: boolean;
-  lyrics: SongDocument["lyrics"];
-  onChange: (lyrics: SongDocument["lyrics"]) => void;
-  onClose: () => void;
+  open: boolean
+  lyrics: SongDocument['lyrics']
+  onChange: (lyrics: SongDocument['lyrics']) => void
+  onClose: () => void
 }
 
 const widthProps = {
   maxWidth: 600,
-  width: "90vw",
-};
+  width: '90vw',
+}
 
-const actionAreaHeight = 11;
+const actionAreaHeight = 11
 
 function LyricsEditDrawer({ open, lyrics, onChange, onClose }: Props) {
-  const form = useForm<{ lyrics: SongDocument["lyrics"] }>({
+  const form = useForm<{ lyrics: SongDocument['lyrics'] }>({
     defaultValues: { lyrics },
-  });
+  })
 
   const {
     handleSubmit,
     reset,
     formState: { isDirty },
-  } = form;
+  } = form
 
   useEffect(() => {
-    reset({ lyrics });
-  }, [lyrics, reset]);
+    reset({ lyrics })
+  }, [lyrics, reset])
 
   return (
     <Drawer anchor="right" onClose={onClose} open={open}>
@@ -49,13 +49,13 @@ function LyricsEditDrawer({ open, lyrics, onChange, onClose }: Props) {
         square
         sx={{
           ...widthProps,
-          position: "fixed",
+          position: 'fixed',
           right: 0,
           bottom: 0,
           height: actionAreaHeight * 8,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <Button onClick={() => onClose()} sx={{ mr: 1 }} variant="outlined">
@@ -65,7 +65,7 @@ function LyricsEditDrawer({ open, lyrics, onChange, onClose }: Props) {
           color="info"
           disabled={!isDirty}
           onClick={handleSubmit((data) => {
-            onChange(data.lyrics);
+            onChange(data.lyrics)
           })}
           variant="contained"
         >
@@ -73,7 +73,7 @@ function LyricsEditDrawer({ open, lyrics, onChange, onClose }: Props) {
         </Button>
       </Paper>
     </Drawer>
-  );
+  )
 }
 
-export default LyricsEditDrawer;
+export default LyricsEditDrawer

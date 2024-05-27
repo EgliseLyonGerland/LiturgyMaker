@@ -1,11 +1,11 @@
-import type { FormFieldProps } from "../../types";
-import ArraySortableControl from "../controls/ArraySortableControl";
-import TextFieldControl from "../controls/TextFieldControl";
+import type { FormFieldProps } from '../../types'
+import ArraySortableControl from '../controls/ArraySortableControl'
+import TextFieldControl from '../controls/TextFieldControl'
 
 function AnnouncementsField({ name, disabled = false }: FormFieldProps) {
   return (
     <ArraySortableControl
-      defaultItem={{ title: "", detail: "" }}
+      defaultItem={{ title: '', detail: '' }}
       disabled={disabled}
       gutters={3}
       name={`${name}.items`}
@@ -25,7 +25,7 @@ function AnnouncementsField({ name, disabled = false }: FormFieldProps) {
         </div>
       )}
     />
-  );
+  )
 }
 
-export default AnnouncementsField;
+export default AnnouncementsField

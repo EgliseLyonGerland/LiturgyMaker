@@ -3,55 +3,55 @@ import {
   DarkModeTwoTone,
   LightModeTwoTone,
   SettingsBrightnessTwoTone,
-} from "@mui/icons-material";
-import type { SvgIcon } from "@mui/material";
+} from '@mui/icons-material'
+import type { SvgIcon } from '@mui/material'
 import {
+  Box,
   IconButton,
   Popover,
-  ToggleButtonGroup,
   ToggleButton,
-  Box,
-} from "@mui/material";
-import * as React from "react";
+  ToggleButtonGroup,
+} from '@mui/material'
+import * as React from 'react'
 
-import useDarkMode from "../libs/hooks/useDarkMode";
+import useDarkMode from '../libs/hooks/useDarkMode'
 
-type Mode = "light" | "dark" | "system";
+type Mode = 'light' | 'dark' | 'system'
 
-const options: { key: Mode; label: string; icon: typeof SvgIcon }[] = [
+const options: { key: Mode, label: string, icon: typeof SvgIcon }[] = [
   {
-    key: "light",
-    label: "Clair",
+    key: 'light',
+    label: 'Clair',
     icon: LightModeTwoTone,
   },
   {
-    key: "system",
-    label: "Système",
+    key: 'system',
+    label: 'Système',
     icon: SettingsBrightnessTwoTone,
   },
   {
-    key: "dark",
-    label: "Sombre",
+    key: 'dark',
+    label: 'Sombre',
     icon: DarkModeTwoTone,
   },
-];
+]
 
 function ModeSwitcher() {
-  const [, mode, setMode] = useDarkMode();
+  const [, mode, setMode] = useDarkMode()
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null,
-  );
+  )
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const open = Boolean(anchorEl)
+  const id = open ? 'simple-popover' : undefined
 
   return (
     <>
@@ -61,8 +61,8 @@ function ModeSwitcher() {
       <Popover
         anchorEl={anchorEl}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
         id={id}
         onClose={handleClose}
@@ -83,20 +83,22 @@ function ModeSwitcher() {
             >
               <Box
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   mx: 1,
                 }}
               >
-                <Icon fontSize="small" sx={{ mr: 1 }} /> {option.label}
+                <Icon fontSize="small" sx={{ mr: 1 }} />
+                {' '}
+                {option.label}
               </Box>
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
       </Popover>
     </>
-  );
+  )
 }
 
-export default ModeSwitcher;
+export default ModeSwitcher

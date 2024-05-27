@@ -1,30 +1,30 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import type { BoxProps } from "@mui/material";
-import { Box, Container, Typography } from "@mui/material";
-import isString from "lodash/isString";
-import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
-import BeatLoader from "react-spinners/BeatLoader";
-import { InferType } from "yup";
+import { yupResolver } from '@hookform/resolvers/yup'
+import type { BoxProps } from '@mui/material'
+import { Box, Container, Typography } from '@mui/material'
+import isString from 'lodash/isString'
+import { useEffect, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { useNavigate, useParams } from 'react-router-dom'
+import BeatLoader from 'react-spinners/BeatLoader'
+import type { InferType } from 'yup'
 
-import TextFieldControl from "../components/controls/TextFieldControl";
-import SaveButton from "../components/SaveButton";
-import { recitationSchema } from "../config/schemas";
+import TextFieldControl from '../components/controls/TextFieldControl'
+import SaveButton from '../components/SaveButton'
+import { recitationSchema } from '../config/schemas'
 import {
   fetchRecitations,
   persistRecitation,
   selectRecitationById,
-} from "../redux/slices/recitations";
-import { useAppDispatch, useAppSelector } from "../redux/store";
-import type { RecitationDocument } from "../types";
+} from '../redux/slices/recitations'
+import { useAppDispatch, useAppSelector } from '../redux/store'
+import type { RecitationDocument } from '../types'
 
 function Block({
-  header = "",
+  header = '',
   children,
   ...props
 }: {
-  header: string;
+  header: string
 } & BoxProps) {
   return (
     <Box
@@ -46,60 +46,62 @@ function Block({
           height={72}
           px={5}
         >
-          {isString(header) ? (
-            <Typography variant="h6">{header}</Typography>
-          ) : (
-            header
-          )}
+          {isString(header)
+            ? (
+              <Typography variant="h6">{header}</Typography>
+              )
+            : (
+                header
+              )}
         </Box>
       )}
       <Box p={5} px={8}>
         {children}
       </Box>
     </Box>
-  );
+  )
 }
 
-type FormValues = InferType<typeof recitationSchema>;
+type FormValues = InferType<typeof recitationSchema>
 
 function RecitationEdit() {
-  const params = useParams();
-  const navigate = useNavigate();
-  const recitationsStatus = useAppSelector((state) => state.recitations.status);
-  const recitation = useAppSelector((state) =>
+  const params = useParams()
+  const navigate = useNavigate()
+  const recitationsStatus = useAppSelector(state => state.recitations.status)
+  const recitation = useAppSelector(state =>
     selectRecitationById(state, `${params.recitationId}`),
-  );
-  const dispatch = useAppDispatch();
-  const [persisting, setPersisting] = useState(false);
-  const [persisted, setPersisted] = useState(false);
+  )
+  const dispatch = useAppDispatch()
+  const [persisting, setPersisting] = useState(false)
+  const [persisted, setPersisted] = useState(false)
 
   const form = useForm<FormValues>({
-    mode: "onChange",
+    mode: 'onChange',
     resolver: yupResolver(recitationSchema),
     defaultValues: {
-      content: [{ text: "" }],
+      content: [{ text: '' }],
     },
-  });
+  })
   const {
     reset,
     handleSubmit: submitForm,
     formState: { isDirty, isSubmitting },
-  } = form;
+  } = form
 
   const handleSubmit = async (data: FormValues) => {
-    setPersisting(true);
+    setPersisting(true)
 
-    const { payload } = await dispatch(persistRecitation(data));
+    const { payload } = await dispatch(persistRecitation(data))
 
-    setPersisted(true);
-    setPersisting(false);
+    setPersisted(true)
+    setPersisting(false)
 
     if (!params.recitationId) {
       navigate(`/recitations/${(payload as RecitationDocument).id}/edit`, {
         replace: true,
-      });
+      })
     }
-  };
+  }
 
   useEffect(() => {
     if (recitation) {
@@ -107,23 +109,23 @@ function RecitationEdit() {
         ...recitation,
         content: recitation.content.length
           ? recitation.content
-          : [{ text: "" }],
-      });
+          : [{ text: '' }],
+      })
     }
-  }, [recitation, reset]);
+  }, [recitation, reset])
 
   useEffect(() => {
-    if (recitationsStatus === "idle") {
-      dispatch(fetchRecitations());
+    if (recitationsStatus === 'idle') {
+      dispatch(fetchRecitations())
     }
-  }, [dispatch, recitationsStatus]);
+  }, [dispatch, recitationsStatus])
 
   if (params.recitationId && !recitation) {
     return (
       <Box display="flex" justifyContent="center" m={5}>
         <BeatLoader color="#DDD" />
       </Box>
-    );
+    )
   }
 
   return (
@@ -140,12 +142,10 @@ function RecitationEdit() {
             label="Texte"
             multiline
             name="content"
-            transformIn={(data: RecitationDocument["content"]) =>
-              data.map((item) => item.text).join("\n\n")
-            }
-            transformOut={(data): RecitationDocument["content"] =>
-              data.split(/\n{2,}/).map((text) => ({ text })) || []
-            }
+            transformIn={(data: RecitationDocument['content']) =>
+              data.map(item => item.text).join('\n\n')}
+            transformOut={(data): RecitationDocument['content'] =>
+              data.split(/\n{2,}/).map(text => ({ text })) || []}
           />
         </Block>
 
@@ -158,7 +158,7 @@ function RecitationEdit() {
         />
       </FormProvider>
     </Container>
-  );
+  )
 }
 
-export default RecitationEdit;
+export default RecitationEdit

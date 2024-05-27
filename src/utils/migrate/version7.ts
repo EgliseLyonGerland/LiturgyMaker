@@ -1,20 +1,20 @@
-import { omit } from "lodash";
+import { omit } from 'lodash'
 
 export default function migrate(doc: any) {
   return {
     ...doc,
     blocks: doc.blocks.map((block: any) => {
       switch (block.type) {
-        case "reading":
+        case 'reading':
           block.data.bibleRefs = block.data.bibleRefs.map((ref: any) =>
-            omit(ref, "template"),
-          );
-          break;
+            omit(ref, 'template'),
+          )
+          break
 
         default:
       }
 
-      return block;
+      return block
     }),
-  };
+  }
 }

@@ -1,7 +1,7 @@
-import type { SectionBlockData } from "../../types";
+import type { SectionBlockData } from '../../types'
 
 interface Props {
-  data: SectionBlockData;
+  data: SectionBlockData
 }
 
 function SectionSlides({ data }: Props) {
@@ -9,7 +9,7 @@ function SectionSlides({ data }: Props) {
     <section>
       <h1>{data.title}</h1>
     </section>
-  );
+  )
 }
 
-export default SectionSlides;
+export default SectionSlides

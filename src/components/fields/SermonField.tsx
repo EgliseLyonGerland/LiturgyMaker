@@ -1,9 +1,9 @@
-import { Box } from "@mui/material";
+import { Box } from '@mui/material'
 
-import BibleRefField from "./BibleRefField";
-import type { FormFieldProps } from "../../types";
-import ArraySortableControl from "../controls/ArraySortableControl";
-import TextFieldControl from "../controls/TextFieldControl";
+import type { FormFieldProps } from '../../types'
+import ArraySortableControl from '../controls/ArraySortableControl'
+import TextFieldControl from '../controls/TextFieldControl'
+import BibleRefField from './BibleRefField'
 
 function SermonField({ name, disabled = false }: FormFieldProps) {
   return (
@@ -24,7 +24,7 @@ function SermonField({ name, disabled = false }: FormFieldProps) {
       </Box>
 
       <ArraySortableControl
-        defaultItem={{ id: "" }}
+        defaultItem={{ id: '' }}
         disabled={disabled}
         name={`${name}.bibleRefs`}
         renderItem={(item, index) => (
@@ -41,7 +41,7 @@ function SermonField({ name, disabled = false }: FormFieldProps) {
       </Box>
 
       <ArraySortableControl
-        defaultItem={{ text: "" }}
+        defaultItem={{ text: '' }}
         disabled={disabled}
         name={`${name}.plan`}
         renderItem={(item, index) => (
@@ -53,7 +53,7 @@ function SermonField({ name, disabled = false }: FormFieldProps) {
         )}
       />
     </div>
-  );
+  )
 }
 
-export default SermonField;
+export default SermonField

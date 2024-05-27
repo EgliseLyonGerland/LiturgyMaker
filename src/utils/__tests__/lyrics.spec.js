@@ -1,63 +1,63 @@
-import { expect, test } from "vitest";
+import { expect, it } from 'vitest'
 
-import { parse, format } from "../lyrics";
+import { format, parse } from '../lyrics'
 
-test("parse() starts by a verse", () => {
+it('parse() starts by a verse', () => {
   const text = `
 [verse]
 Foobar
-`;
+`
 
   expect(parse(text)).toEqual([
     {
-      text: "Foobar",
-      type: "verse",
+      text: 'Foobar',
+      type: 'verse',
     },
-  ]);
-});
+  ])
+})
 
-test("parse() starts by a chorus", () => {
+it('parse() starts by a chorus', () => {
   const text = `
 [chorus]
 Foobar
-`;
+`
 
   expect(parse(text)).toEqual([
     {
-      text: "Foobar",
-      type: "chorus",
+      text: 'Foobar',
+      type: 'chorus',
     },
-  ]);
-});
+  ])
+})
 
-test("parse() without tag", () => {
+it('parse() without tag', () => {
   const text = `
 Foobar
 
 Barfoo
-`;
+`
 
   expect(parse(text)).toEqual([
     {
-      text: "Foobar",
-      type: "verse",
+      text: 'Foobar',
+      type: 'verse',
     },
     {
-      text: "Barfoo",
-      type: "verse",
+      text: 'Barfoo',
+      type: 'verse',
     },
-  ]);
-});
+  ])
+})
 
-test("parse() empty", () => {
+it('parse() empty', () => {
   const text = `
 
-`;
+`
 
-  expect(parse(text)).toEqual([]);
-});
+  expect(parse(text)).toEqual([])
+})
 
-test("format() with trailingBreak removed", () => {
+it('format() with trailingBreak removed', () => {
   const lyrics = [
     {
       text: `${`
@@ -67,7 +67,7 @@ Exercitation ullamco enim occaecat nostrud mollit
 Consequat sunt eu magna enim cupidatat
 Excepteur Lorem labore officia ipsum commodo ea in laborum
       `.trim()}\n`,
-      type: "verse",
+      type: 'verse',
     },
     {
       text: `
@@ -80,14 +80,14 @@ Veniam anim adipisicing cillum tempor
 Nostrud occaecat duis commodo do
 Excepteur fugiat sit deserunt non consectetur
       `.trim(),
-      type: "verse",
+      type: 'verse',
     },
     {
       text: `
       `,
-      type: "verse",
+      type: 'verse',
     },
-  ];
+  ]
 
   expect(format(lyrics)).toEqual([
     {
@@ -97,7 +97,7 @@ Nostrud pariatur mollit incididunt ut
 Consequat sunt eu magna enim cupidatat
 Excepteur Lorem labore officia ipsum commodo ea in laborum
       `.trim(),
-      type: "verse",
+      type: 'verse',
     },
     {
       text: `
@@ -108,14 +108,14 @@ Non est et labore exercitation esse.
 Anim eiusmod Lorem occaecat veniam est
 Veniam anim adipisicing cillum tempor
       `.trim(),
-      type: "verse",
+      type: 'verse',
     },
     {
       text: `
 Nostrud occaecat duis commodo do
 Excepteur fugiat sit deserunt non consectetur
       `.trim(),
-      type: "verse",
+      type: 'verse',
     },
-  ]);
-});
+  ])
+})
