@@ -96,7 +96,7 @@ export const createDefaultLiturgy = (id: string) => ({
     createDefaultReadingBlock({ title: "Grâce de Dieu" }),
     createDefaultReadingBlock({ title: "Inter-chants" }),
     createDefaultSermonBlock(),
-    createDefaultSectionBlock({ title: "Sainte-Cène" }),
+    createDefaultSectionBlock({ title: "Sainte cène" }),
     createDefaultOpenDoorsBlock(),
     createDefaultReadingBlock({ title: "Envoi" }),
   ],
