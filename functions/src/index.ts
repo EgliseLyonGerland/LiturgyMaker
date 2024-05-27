@@ -1,13 +1,30 @@
 import { format, toDate } from "date-fns";
 import { fr as locale } from "date-fns/locale/fr";
 import { diff as deepDiff } from "deep-diff";
-import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
+import { initializeApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+import { defineSecret, defineString } from "firebase-functions/params";
+import { onDocumentWritten } from "firebase-functions/v2/firestore";
+import { setGlobalOptions } from "firebase-functions/v2/options";
 import { createTransport } from "nodemailer";
 
-admin.initializeApp();
+interface LiturgyDocument {
+  uid: string;
+  date: number;
+}
 
-const { gmail } = functions.config();
+const sender = defineString( "GMAIL_SENDER_ADDRESS");
+const recipient = defineString("GMAIL_RECIPIENT_ADDRESS");
+const gmailUser = defineString("GMAIL_AUTH_USER");
+const gmailPassword = defineSecret("GMAIL_AUTH_PASSWORD");
+
+setGlobalOptions({
+  region: "europe-west1",
+  maxInstances: 10,
+});
+
+initializeApp();
+const db = getFirestore();
 
 function formatDate(date: Date) {
   if (date.getDate() === 1) {
@@ -17,22 +34,26 @@ function formatDate(date: Date) {
   return format(date, "d MMMM y", { locale });
 }
 
-export const notifyChanges = functions
-  .region("europe-west1")
-  .firestore.document("liturgies/{liturgyId}")
-  .onWrite(async (change) => {
-    const created = !change.before.exists;
-    const data = change.after.data();
+export const notifyChanges = onDocumentWritten(
+  {
+    document: "liturgies/{liturgyId}",
+    secrets: [gmailPassword],
+  },
+  async (event) => {
+    const snapshot = event.data;
 
-    if (!data) {
+    if (!snapshot) {
       console.log("No data");
       return;
     }
 
+    // const original = snapshot.before.data();
+    const created = !snapshot.before.exists;
+    const data = snapshot.after.data() as LiturgyDocument;
+
     const date = toDate(data.date);
     const formattedDate = formatDate(date);
     const { uid } = data;
-    const db = admin.firestore();
 
     const user = (await db.collection("users").doc(uid).get()).data();
 
@@ -41,17 +62,8 @@ export const notifyChanges = functions
       return;
     }
 
-    const transporter = createTransport({
-      service: "gmail",
-      auth: {
-        user: "egliselyongerland@gmail.com",
-        pass: gmail.pass,
-      },
-    });
-
-    const from =
-      "Église Lyon Gerland - Présidence <egliselyongerland@gmail.com>";
-    const to = "culte@egliselyongerland.org";
+    const from = `Église Lyon Gerland - Présidence <${sender.value()}>`;
+    const to = recipient.value();
 
     let subject = `Présidence du ${formattedDate}`;
     if (!created) {
@@ -60,7 +72,7 @@ export const notifyChanges = functions
 
     let diff;
     if (!created) {
-      diff = deepDiff(change.before.data(), data);
+      diff = deepDiff(snapshot.before.data(), data);
       diff = JSON.stringify(diff, null, "  ");
     }
 
@@ -69,27 +81,40 @@ export const notifyChanges = functions
       verb = "créer";
     }
 
-    const html = [
-      "Bonjour,",
-      "",
-      `${user.displayName} vient de ${verb} les informations sur le culte du ${formattedDate}.`,
-      "",
-      "Rendez vous sur culte.egliselyongerland.org pour visualiser les informations.",
-      "",
-      ...(diff
-        ? [
-            "Vous trouverez ci-dessous le rapport des changements effectués :",
-            `<pre>${diff}</pre>`,
-            "",
-          ]
-        : []),
-      "",
-      "Cordialement,",
-      "Église Lyon Gerland",
-    ].join("<br />");
+    const html = `
+Bonjour,
+<br /><br />
+
+${user.displayName} vient de ${verb} les informations sur le culte du ${formattedDate}.
+<br /><br />
+
+Rendez vous sur culte.egliselyongerland.org pour visualiser les informations.
+<br /><br />
+
+<details>
+  <summary>
+    Vous trouverez ci-dessous le rapport des changements effectués 👇
+  </summary>
+  <pre>${diff}</pre>
+</details>
+<br /><br />
+
+Cordialement,<br />
+Église Lyon Gerland
+    `.trim();
+
+    const transporter = createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: gmailUser.value(),
+        pass: gmailPassword.value(),
+      },
+    });
 
     await transporter.sendMail({ from, to, subject, html });
     console.log("Mail sent");
-  });
-
-export default null;
+  },
+);
