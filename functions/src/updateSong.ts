@@ -1,10 +1,11 @@
-import { env } from 'node:process'
 import { onDocumentWritten } from 'firebase-functions/v2/firestore'
 import { onTaskDispatched } from 'firebase-functions/v2/tasks'
 import { getStorage } from 'firebase-admin/storage'
 import { getFirestore } from 'firebase-admin/firestore'
 import { getFunctions } from 'firebase-admin/functions'
 import { GoogleAuth } from 'google-auth-library'
+import { logger } from 'firebase-functions'
+import deployPraiseExplorerApp from './utils/deployPraiseExplorerApp'
 
 type Maybe<T> = T | undefined
 
@@ -16,30 +17,6 @@ const storage = getStorage()
 const db = getFirestore()
 
 const location = 'europe-west1'
-
-function deployApp() {
-  const myHeaders = new Headers()
-  myHeaders.append('Accept', 'application/vnd.github+json')
-  myHeaders.append('Authorization', `Bearer ${env.GITHUB_TOKEN}`)
-  myHeaders.append('X-GitHub-Api-Version', '2022-11-28')
-  myHeaders.append('Content-Type', 'application/json')
-
-  const raw = JSON.stringify({
-    ref: 'main',
-  })
-
-  const requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow',
-  } as const
-
-  fetch('https://api.github.com/repos/EgliseLyonGerland/PraiseExplorer/actions/workflows/deploy.yml/dispatches', requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.error(error))
-}
 
 async function getFunctionUrl(name: string) {
   const auth = new GoogleAuth({
@@ -110,11 +87,9 @@ export const updateSongTask = onTaskDispatched<{ songId: string }>(
     }
 
     await file.save(JSON.stringify(songs))
+    await deployPraiseExplorerApp()
 
-    // eslint-disable-next-line node/prefer-global/process
-    if (!process.env.FUNCTIONS_EMULATOR) {
-      await deployApp()
-    }
+    logger.log('Done')
   },
 )
 
