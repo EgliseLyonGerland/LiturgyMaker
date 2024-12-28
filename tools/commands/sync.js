@@ -1,15 +1,17 @@
-const { writeFileSync, mkdirSync, readFileSync } = require('node:fs')
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import path, { dirname } from 'node:path'
+import process from 'node:process'
+import { fileURLToPath } from 'node:url'
+import prompt from 'inquirer'
+import ora from 'ora'
+import firebaseAdmin from 'firebase-admin'
 
-const path = require('node:path')
-const process = require('node:process')
-const firebase = require('firebase')
-const { prompt } = require('inquirer')
-const noop = require('lodash/noop')
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
-module.exports.command = 'sync <command>'
-module.exports.desc = 'Sync data'
+export const command = 'sync <command>'
+export const desc = 'Sync data'
 
-const collections = ['liturgies', 'songs', 'recitations', 'users']
+const collections = ['users']
 const backupDir = path.join(__dirname, '../../.firebase/backup')
 
 async function confirm(message) {
@@ -26,23 +28,26 @@ async function confirm(message) {
 }
 
 async function backupCommand() {
-  const db = firebase.firestore()
+  const db = firebaseAdmin.firestore()
 
-  await Promise.all(
-    collections.map(async (name) => {
-      const { docs } = await db.collection(name).get()
+  await collections.reduce(
+    (p, name) =>
+      p.then(async () => {
+        const spinner = ora(`Collection "${name}"`).start()
 
-      const data = docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        const { docs } = await db.collection(name).get()
 
-      mkdirSync(backupDir, { recursive: true })
+        const data = docs.map(doc => ({ id: doc.id, ...doc.data() }))
 
-      writeFileSync(`${backupDir}/${name}.json`, JSON.stringify(data))
+        mkdirSync(backupDir, { recursive: true })
 
-      console.log(`Collection "${name}" backuped`)
-    }),
+        writeFileSync(`${backupDir}/${name}.json`, JSON.stringify(data))
+
+        spinner.succeed()
+      }),
+    Promise.resolve(),
   )
 
-  console.log('Done')
   process.exit()
 }
 
@@ -57,7 +62,7 @@ async function restoreCommand({ env }) {
     process.exit()
   }
 
-  const db = firebase.firestore()
+  const db = firebaseAdmin.firestore()
 
   await Promise.all(
     collections.map((name) => {
@@ -78,7 +83,7 @@ async function restoreCommand({ env }) {
   process.exit()
 }
 
-module.exports.builder = function builder(yargs) {
-  yargs.command('backup', 'backup data', noop, backupCommand)
-  yargs.command('restore', 'Restore backup data', noop, restoreCommand)
+export const builder = function builder(yargs) {
+  yargs.command('backup', 'backup data', () => {}, backupCommand)
+  yargs.command('restore', 'Restore backup data', () => {}, restoreCommand)
 }

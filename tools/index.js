@@ -1,38 +1,26 @@
-const firebase = require('firebase')
-const yargs = require('yargs')
+import process from 'node:process'
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import firebaseAdmin from 'firebase-admin'
 
-const firebaseConfig = require('../config/firebase.json')
-const loginCommand = require('./commands/login')
-const logoutCommand = require('./commands/logout')
-const statsCommand = require('./commands/stats')
-const syncCommand = require('./commands/sync')
-const config = require('./utils/config')
+import * as syncCommand from './commands/sync.js'
+import * as statsCommand from './commands/stats.js'
 
-require('firebase/auth')
-require('firebase/firestore')
+yargs(hideBin(process.argv))
 
-yargs
-  .middleware((argv) => {
-    argv.env = argv.dev ? 'development' : 'production'
-
-    config.setEnv(argv.env)
-  })
-  .middleware(({ env }) => {
-    firebase.initializeApp(firebaseConfig)
-
-    if (env === 'development') {
-      firebase.auth().useEmulator('http://localhost:9099')
-      firebase.firestore().useEmulator('localhost', 8080)
+  .middleware(async () => {
+    try {
+      if (firebaseAdmin.apps.length === 0) {
+        firebaseAdmin.initializeApp({
+          credential: firebaseAdmin.credential.applicationDefault(),
+          projectId: 'liturgymaker',
+        })
+      }
     }
-
-    if (config.has('user')) {
-      const data = JSON.parse(config.get('user'))
-      const user = new firebase.User(data, data.stsTokenManager, data)
-      firebase.auth().updateCurrentUser(user)
+    catch (error) {
+      throw new Error(`Erreur d'initialisation: ${error.message}`)
     }
   })
-  .command(loginCommand)
-  .command(logoutCommand)
   .command(statsCommand)
   .command(syncCommand)
   .option('dev', {

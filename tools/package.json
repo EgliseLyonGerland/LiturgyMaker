@@ -1,17 +1,19 @@
 {
   "name": "tools",
+  "type": "module",
   "version": "1.0.0",
   "private": true,
-  "license": "MIT",
   "dependencies": {
     "@types/google-spreadsheet": "4.0.0",
-    "configstore": "6.0.0",
     "date-fns": "3.6.0",
-    "firebase": "10.9.0",
+    "firebase-admin": "13.0.2",
+    "firebase-tools": "13.29.1",
+    "google-auth-library": "9.15.0",
     "google-spreadsheet": "4.1.1",
     "inquirer": "9.2.16",
-    "lodash": "4.17.21",
+    "lodash-es": "4.17.21",
     "open": "10.1.0",
+    "ora": "8.1.1",
     "table": "6.8.2",
     "yargs": "17.7.2"
   }

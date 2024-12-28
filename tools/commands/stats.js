@@ -1,18 +1,24 @@
-const { readFileSync } = require('node:fs')
+import { readFileSync } from 'node:fs'
 
-const path = require('node:path')
-const { format } = require('date-fns')
-const { GoogleSpreadsheet } = require('google-spreadsheet')
-const { uniq, reduce, map, sum, last } = require('lodash')
-const open = require('open')
-const { table } = require('table')
+import path, { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { format } from 'date-fns'
+import { GoogleSpreadsheet } from 'google-spreadsheet'
+import { last, map, reduce, sum, uniq } from 'lodash-es'
+import open from 'open'
+import { table } from 'table'
+import { JWT } from 'google-auth-library'
 
-const googleServiceCreds = require('../config/~egliselyongerland-642b3dfa5d11.json')
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
-module.exports.command = 'stats <command>'
-module.exports.desc = 'Display stats'
+export const command = 'stats <command>'
+export const desc = 'Display stats'
 
 const backupDir = path.join(__dirname, '../../.firebase/backup')
+
+const creds = JSON.parse(
+  readFileSync(path.join(__dirname, '../../config/~egliselyongerland-642b3dfa5d11.json')),
+)
 
 async function songsCommand({ dryRun }) {
   const liturgies = JSON.parse(readFileSync(`${backupDir}/liturgies.json`))
@@ -27,7 +33,13 @@ async function songsCommand({ dryRun }) {
   )
 
   liturgies.forEach((liturgy) => {
-    const year = new Date(liturgy.date).getFullYear() + 0
+    const date = new Date(liturgy.date)
+
+    if (date.getDay() !== 0) {
+      return
+    }
+
+    const year = date.getFullYear() + 0
 
     liturgy.blocks.forEach((block) => {
       if (block.type !== 'songs') {
@@ -66,11 +78,20 @@ async function songsCommand({ dryRun }) {
     return
   }
 
+  const auth = new JWT({
+    email: creds.client_email,
+    key: creds.private_key,
+    scopes: [
+      'https://www.googleapis.com/auth/spreadsheets',
+      'https://www.googleapis.com/auth/drive.file',
+    ],
+  })
+
   const doc = new GoogleSpreadsheet(
     '16KvjnOV9mygprQv1X47jrJ-jgfJQ9f2pXuA3CJA6Iig',
+    auth,
   )
 
-  await doc.useServiceAccountAuth(googleServiceCreds)
   await doc.loadInfo()
 
   const sheet = doc.sheetsByTitle.Chants
@@ -81,6 +102,7 @@ async function songsCommand({ dryRun }) {
   await sheet.loadCells('A1:A1')
 
   const firstDate = new Date(liturgies[0].date)
+
   const lastDate = new Date(liturgies[liturgies.length - 1].date)
   const b1 = sheet.getCell(0, 0)
   b1.note = `Calculé sur les ${liturgies.length} cultes du ${format(
@@ -95,7 +117,7 @@ async function songsCommand({ dryRun }) {
   )
 }
 
-module.exports.builder = function builder(yargs) {
+export const builder = function builder(yargs) {
   yargs.command(
     'songs',
     'Display stats about songs',
