@@ -8,6 +8,7 @@ import type {
   SongDocument,
   SongsItem,
 } from '../types'
+import { converToDate } from './liturgy'
 
 const isEmpty: {
   [K in BlockType]?: (block: LiturgyBlocks[K]) => boolean;
@@ -34,7 +35,7 @@ export default function generateCode(
     recitations,
   }: { songs: SongDocument[], recitations: RecitationDocument[] },
 ) {
-  const result = doc.blocks.reduce<unknown[]>((acc, block) => {
+  const slides = doc.blocks.reduce<unknown[]>((acc, block) => {
     const { type } = block
 
     // @ts-expect-error This error sucks!
@@ -70,5 +71,8 @@ export default function generateCode(
     return acc.concat(block)
   }, [])
 
-  return JSON.stringify(result, null, '  ')
+  return JSON.stringify({
+    date: converToDate(doc.id),
+    slides,
+  }, null, '  ')
 }
