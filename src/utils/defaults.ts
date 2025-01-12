@@ -108,8 +108,10 @@ export function createDefaultLiturgy(id: string) {
       createDefaultReadingBlock({ title: 'Grâce de Dieu' }),
       createDefaultReadingBlock({ title: 'Inter-chants' }),
       createDefaultSermonBlock(),
+      createDefaultSongsBlock(),
       createDefaultSectionBlock({ title: 'Sainte cène' }),
       createDefaultOpenDoorsBlock(),
+      createDefaultSongsBlock(),
       createDefaultReadingBlock({ title: 'Envoi' }),
     ],
   }
