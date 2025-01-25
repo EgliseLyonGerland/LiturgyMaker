@@ -70,11 +70,9 @@ export const notifyChanges = onDocumentWritten(
       subject = `Re: ${subject}`
     }
 
-    let diff
-    if (!created) {
-      diff = deepDiff(snapshot.before.data(), data)
-      diff = JSON.stringify(diff, null, '  ')
-    }
+    const diff = created
+      ? deepDiff({}, data)
+      : deepDiff(snapshot.before.data(), data)
 
     let verb = 'modifier'
     if (created) {
@@ -95,7 +93,7 @@ Rendez vous sur culte.egliselyongerland.org pour visualiser les informations.
   <summary>
     Vous trouverez ci-dessous le rapport des changements effectués 👇
   </summary>
-  <pre>${diff}</pre>
+  <pre>${JSON.stringify(diff, null, '  ')}</pre>
 </details>
 <br /><br />
 
