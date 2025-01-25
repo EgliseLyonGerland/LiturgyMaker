@@ -1,9 +1,11 @@
+import { uid } from 'uid'
 import { currentVersion } from '../config/global'
 import type { BlockType } from '../types'
 import { converToDate } from './liturgy'
 
 export function createDefaultAnnouncementsBlock() {
   return {
+    id: uid(),
     type: 'announcements',
     title: '',
     data: {
@@ -14,6 +16,7 @@ export function createDefaultAnnouncementsBlock() {
 
 export function createDefaultReadingBlock({ title = '' } = {}) {
   return {
+    id: uid(),
     type: 'reading',
     title,
     data: {
@@ -29,6 +32,7 @@ export function createDefaultReadingBlock({ title = '' } = {}) {
 
 export function createDefaultSermonBlock() {
   return {
+    id: uid(),
     type: 'sermon',
     title: '',
     data: {
@@ -42,6 +46,7 @@ export function createDefaultSermonBlock() {
 
 export function createDefaultOpenDoorsBlock() {
   return {
+    id: uid(),
     type: 'openDoors',
     title: '',
     data: {
@@ -54,6 +59,7 @@ export function createDefaultOpenDoorsBlock() {
 
 export function createDefaultSectionBlock({ title = '' } = {}) {
   return {
+    id: uid(),
     type: 'section',
     title: '',
     data: {
@@ -64,6 +70,7 @@ export function createDefaultSectionBlock({ title = '' } = {}) {
 
 export function createDefaultSongsBlock() {
   return {
+    id: uid(),
     type: 'songs',
     title: '',
     data: {
@@ -74,6 +81,7 @@ export function createDefaultSongsBlock() {
 
 export function createDefaultRecitationBlock() {
   return {
+    id: uid(),
     type: 'recitation',
     title: '',
     data: {

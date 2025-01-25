@@ -62,36 +62,43 @@ export interface SongsBlockData {
 
 export type LiturgyBlock =
   | {
+    id: string
     type: 'announcements'
     title: string
     data: AnnouncementsBlockData
   }
   | {
+    id: string
     type: 'reading'
     title: string
     data: ReadingBlockData
   }
   | {
+    id: string
     type: 'section'
     title: string
     data: SectionBlockData
   }
   | {
+    id: string
     type: 'sermon'
     title: string
     data: SermonBlockData
   }
   | {
+    id: string
     type: 'songs'
     title: string
     data: SongsBlockData
   }
   | {
+    id: string
     type: 'recitation'
     title: string
     data: RecitationBlockData
   }
   | {
+    id: string
     type: 'openDoors'
     title: string
     data: OpenDoorsBlockData

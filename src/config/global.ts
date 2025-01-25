@@ -1,6 +1,6 @@
 import type { BlockType } from '../types'
 
-export const currentVersion = 8
+export const currentVersion = 9
 
 export const blockTypes: Record<BlockType, string> = {
   announcements: 'Annonces',

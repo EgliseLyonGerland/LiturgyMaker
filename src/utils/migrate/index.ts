@@ -9,6 +9,7 @@ import version5 from './version5'
 import version6 from './version6'
 import version7 from './version7'
 import version8 from './version8'
+import version9 from './version9'
 
 function toVersion(version: number, data: any) {
   switch (version) {
@@ -26,6 +27,8 @@ function toVersion(version: number, data: any) {
       return version7(data)
     case 8:
       return version8(data)
+    case 9:
+      return version9(data)
     default:
       return data
   }
