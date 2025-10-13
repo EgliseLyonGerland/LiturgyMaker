@@ -11,7 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 export const command = 'sync <command>'
 export const desc = 'Sync data'
 
-const collections = ['users']
+const collections = ['users', 'liturgies', 'songs', 'recitations']
 const backupDir = path.join(__dirname, '../../.firebase/backup')
 
 async function confirm(message) {
