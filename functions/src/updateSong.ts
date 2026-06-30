@@ -1,4 +1,4 @@
-import { onDocumentWritten } from 'firebase-functions/v2/firestore'
+import { onDocumentCreated, onDocumentDeleted, onDocumentUpdated } from 'firebase-functions/v2/firestore'
 import { onTaskDispatched } from 'firebase-functions/v2/tasks'
 import { getStorage } from 'firebase-admin/storage'
 import { getFirestore } from 'firebase-admin/firestore'
@@ -35,6 +35,26 @@ async function getFunctionUrl(name: string) {
   return uri
 }
 
+async function getSongsFromStorage(): Promise<SongDocument[]> {
+  const file = storage.bucket().file('songs.json')
+
+  try {
+    const result = await file.download()
+    return JSON.parse(result.toString())
+  }
+  catch (error) {
+    const { docs } = await db.collection('songs').get()
+    const data = docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    file.save(JSON.stringify(data))
+    return data
+  }
+}
+
+async function saveSongsToStorage(songs: SongDocument[]) {
+  const file = storage.bucket().file('songs.json')
+  await file.save(JSON.stringify(songs))
+}
+
 export const updateSongTask = onTaskDispatched<{ songId: string }>(
   {
     retryConfig: {
@@ -46,25 +66,7 @@ export const updateSongTask = onTaskDispatched<{ songId: string }>(
     },
   },
   async (req) => {
-    const file = storage.bucket().file('songs.json')
-
-    let songs: SongDocument[] | undefined
-
-    try {
-      const result = await file.download()
-      songs = JSON.parse(result.toString())
-    }
-    catch (error) {
-    }
-
-    if (!songs) {
-      const { docs } = await db.collection('songs').get()
-      const data = docs.map(doc => ({ id: doc.id, ...doc.data() }))
-      file.save(JSON.stringify(data))
-
-      return
-    }
-
+    const songs = await getSongsFromStorage()
     const { songId } = req.data
     const snapshot = await db.collection('songs').doc(songId).get()
 
@@ -86,20 +88,70 @@ export const updateSongTask = onTaskDispatched<{ songId: string }>(
       songs.push(data)
     }
 
-    await file.save(JSON.stringify(songs))
+    await saveSongsToStorage(songs)
     await deployPraiseExplorerApp()
 
     logger.log('Done')
   },
 )
 
-export const onSongUpdated = onDocumentWritten(
+export const deleteSongTask = onTaskDispatched<{ songId: string }>(
+  {
+    retryConfig: {
+      maxAttempts: 5,
+      minBackoffSeconds: 60,
+    },
+    rateLimits: {
+      maxConcurrentDispatches: 1,
+    },
+  },
+  async (req) => {
+    const songs = await getSongsFromStorage()
+    const { songId } = req.data
+    const index = songs.findIndex(item => item.id === songId)
+
+    if (index > -1) {
+      songs.splice(index, 1)
+    }
+
+    await saveSongsToStorage(songs)
+    await deployPraiseExplorerApp()
+
+    logger.log('Done')
+  },
+)
+
+export const onSongUpdated = onDocumentUpdated(
   {
     document: 'songs/{songId}',
   },
   async (event) => {
     const queue = getFunctions().taskQueue(`locations/${location}/functions/updateSongTask`)
     const uri = await getFunctionUrl('updateSongTask')
+    const { songId } = event.params
+    await queue.enqueue({ songId }, { uri })
+  },
+)
+
+export const onSongCreated = onDocumentCreated(
+  {
+    document: 'songs/{songId}',
+  },
+  async (event) => {
+    const queue = getFunctions().taskQueue(`locations/${location}/functions/updateSongTask`)
+    const uri = await getFunctionUrl('updateSongTask')
+    const { songId } = event.params
+    await queue.enqueue({ songId }, { uri })
+  },
+)
+
+export const onSongDeleted = onDocumentDeleted(
+  {
+    document: 'songs/{songId}',
+  },
+  async (event) => {
+    const queue = getFunctions().taskQueue(`locations/${location}/functions/deleteSongTask`)
+    const uri = await getFunctionUrl('deleteSongTask')
     const { songId } = event.params
     await queue.enqueue({ songId }, { uri })
   },
