@@ -1,3 +1,3 @@
 export * from './notifyChanges'
 export * from './updateSong'
-export * from './updateLatestLiturgies'
+export * from './updateLiturgies'
