@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
       - run: yarn install --frozen
       - run: yarn test
       - uses: FirebaseExtended/action-hosting-deploy@v0
