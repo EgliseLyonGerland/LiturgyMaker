@@ -32,7 +32,7 @@ beforeEach(() => {
 it('migrate() from version 1', () => {
   const result = migrate({ version: 1, blocks: [] })
 
-  expect(result).toEqual({ version: 8, blocks: [] })
+  expect(result).toEqual({ version: 9, blocks: [] })
   expect(version2).toHaveBeenCalledTimes(1)
   expect(version3).toHaveBeenCalledTimes(1)
   expect(version4).toHaveBeenCalledTimes(1)
@@ -45,7 +45,7 @@ it('migrate() from version 1', () => {
 it('migrate() from version 5', () => {
   const result = migrate({ version: 5, blocks: [] })
 
-  expect(result).toEqual({ version: 8, blocks: [] })
+  expect(result).toEqual({ version: 9, blocks: [] })
   expect(version2).not.toHaveBeenCalled()
   expect(version3).not.toHaveBeenCalled()
   expect(version4).not.toHaveBeenCalled()
