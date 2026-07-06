@@ -134,7 +134,7 @@ export async function getPassage(ref: string) {
         chapter.chapter === chapterEnd ? verseEnd : chapter.verses.length,
       )
       .map(verse => verse.text)
-      .join(' ')
+      .join('')
 
     return `${acc}\n\n${content}`.trim()
   }, '')
