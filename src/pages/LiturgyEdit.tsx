@@ -3,7 +3,15 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import CodeIcon from '@mui/icons-material/Code'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
-import { Box, Container, Grid, useTheme } from '@mui/material'
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Container,
+  Grid,
+  useTheme,
+} from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import { addDays, format, subDays } from 'date-fns'
@@ -48,9 +56,11 @@ function formatDate(date: Date) {
 
 function Form({
   liturgy,
+  disabled,
   onLiturgyChanged,
 }: {
   liturgy: LiturgyDocument
+  disabled: boolean
   onLiturgyChanged: (liturgy: LiturgyDocument) => void
 }) {
   const store = useAppStore()
@@ -138,17 +148,19 @@ function Form({
   return (
     <FormProvider {...form}>
       <BlocksField
-        disabled={persisting}
+        disabled={disabled || persisting}
         getPreviousWeekBlock={getPreviousWeekBlock}
         name="blocks"
       />
-      <SaveButton
-        dirty={isDirty}
-        onClick={onSubmit(handleSubmit)}
-        onHide={() => setPersisted(false)}
-        persisted={persisted}
-        persisting={persisting}
-      />
+      {!disabled && (
+        <SaveButton
+          dirty={isDirty}
+          onClick={onSubmit(handleSubmit)}
+          onHide={() => setPersisted(false)}
+          persisted={persisted}
+          persisting={persisting}
+        />
+      )}
     </FormProvider>
   )
 }
@@ -158,6 +170,7 @@ function LiturgyEdit() {
   const navigate = useNavigate()
   const { liturgyId } = useParams<{ liturgyId: string }>()
   const [displayCode, setDisplayCode] = useState(false)
+  const [versionNoticeAcknowledged, setVersionNoticeAcknowledged] = useState(false)
   const dispatch = useAppDispatch()
   const liturgyState = useAppSelector(state =>
     selectLiturgyById(state, `${liturgyId}`),
@@ -290,36 +303,79 @@ function LiturgyEdit() {
   )
 
   return (
-    <Container
-      maxWidth={false}
-      sx={{ maxWidth: slideshowEnabled ? 1280 : 900 }}
-    >
-      {renderNavBar()}
+    <>
+      {!versionNoticeAcknowledged && (
+        <Container
+          maxWidth={false}
+          sx={{
+            maxWidth: slideshowEnabled ? 1280 : 900,
+          }}
+        >
+          <Alert
+            severity="warning"
+            sx={{ mt: 2 }}
+            variant="standard"
+          >
+            <AlertTitle sx={{ fontWeight: 700 }}>
+              Nouvelle version disponible
+            </AlertTitle>
+            <Box>
+              Une nouvelle version de la plateforme de saisie des présidences est disponible. Elle remplace cette version, qui sera prochainement supprimée. Merci de ne continuer à utiliser cette version qu’en cas de problème avec la nouvelle.
+            </Box>
+            <Box display="flex" gap={2} justifyContent="flex-start" px={0} mt={2}>
+              <Button
+                onClick={() => setVersionNoticeAcknowledged(true)}
+                variant="contained"
+              >
+                J’ai compris
+              </Button>
+              <Button
+                href="https://culte2.egliselyongerland.org"
+                rel="noopener noreferrer"
+                target="_blank"
+                variant="text"
+              >
+                Accéder à la nouvelle version
+              </Button>
+            </Box>
+          </Alert>
+        </Container>
+      )}
+      <Container
+        maxWidth={false}
+        sx={{
+          maxWidth: slideshowEnabled ? 1280 : 900,
+          opacity: versionNoticeAcknowledged ? 1 : 0.2,
+          pointerEvents: versionNoticeAcknowledged ? 'auto' : 'none',
+        }}
+      >
+        {renderNavBar()}
 
-      {loading
-        ? (
-          <Box display="flex" justifyContent="center" m={5}>
-            <BeatLoader color="#DDD" />
-          </Box>
-          )
-        : (
-          <>
-            <CodeDialog
-              code={generateCode(liturgyState, { songs, recitations })}
-              onHide={() => {
-                setDisplayCode(false)
-              }}
-              open={displayCode}
-            />
+        {loading
+          ? (
+            <Box display="flex" justifyContent="center" m={5}>
+              <BeatLoader color="#DDD" />
+            </Box>
+            )
+          : (
+            <>
+              <CodeDialog
+                code={generateCode(liturgyState, { songs, recitations })}
+                onHide={() => {
+                  setDisplayCode(false)
+                }}
+                open={displayCode}
+              />
 
-            <Form
-              key={liturgyState.id}
-              liturgy={liturgyState}
-              onLiturgyChanged={handleLiturgyChanged}
-            />
-          </>
-          )}
-    </Container>
+              <Form
+                key={liturgyState.id}
+                liturgy={liturgyState}
+                onLiturgyChanged={handleLiturgyChanged}
+              />
+            </>
+            )}
+      </Container>
+    </>
   )
 }
 
